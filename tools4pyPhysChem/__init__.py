@@ -10,7 +10,8 @@ from .core import centerTitle, centertxt, crop_images
 def __getattr__(name):
     modules_to_search = [
         ".ML", ".PeriodicTable", ".Chem3D", 
-        ".aithermo", ".cheminformatics", ".spectra", ".survey", 
+        ".aithermo", ".cheminformatics", ".kinetics"
+        ".spectra", ".survey", 
         ".sympyUtilities", ".tools4AS"
     ]
     
@@ -27,6 +28,3 @@ def __getattr__(name):
 
     raise AttributeError(f"module {__name__} has no attribute {name}")
 
-# Metadata
-__author__ = "Romuald POTEAU"
-__version__ = "0.1.0"

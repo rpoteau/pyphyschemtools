@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*-dev.py
+*.so
+*.pyd
+*.egg-info/
+.eggs/
+build/
+!docs/build/
+dist/
+# *.log
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+*.ipynb~
+
+# VSCode / IDEs
+.vscode/
+.idea/
+
+# Sphinx / mkdocs builds
+_site/
+docs/_build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Custom project
+Biblio/
+tools4pyPhysChem/build/
+
+# Swap and temporary
+*~
+*.swp
+*.swo
+
+

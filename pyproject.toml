@@ -26,7 +26,7 @@ build-backend = "setuptools.build_meta"
 include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["tools4pyPhysChem"]
 
 [tool.setuptools.package-data]
 "hmo" = [
@@ -35,10 +35,10 @@ where = ["src"]
     "icons-logos-banner/**/*"
 ]
 
-[project.urls]
-Documentation = "https://hmo.readthedocs.io/"
-Repository = "https://github.com/rpoteau/HMO"
-Changelog = "https://github.com/rpoteau/HMO/blob/main/CHANGELOG.md"
+#[project.urls]
+#Documentation = "https://hmo.readthedocs.io/"
+#Repository = "https://github.com/rpoteau/HMO"
+#Changelog = "https://github.com/rpoteau/HMO/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 docs = [

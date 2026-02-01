@@ -1,0 +1,51 @@
+[project]
+name = "tools4pyPhysChem"
+version = "0.1.0"
+description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
+authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "scipy",
+    "ipywidgets",
+    "jupyter",
+    "Pillow",
+    "openpyxl",
+    "rdkit",
+    "py3Dmol"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"hmo" = [
+    "DesignOfMOdiagram/*",
+    "Fonts/**/*",
+    "icons-logos-banner/**/*"
+]
+
+[project.urls]
+Documentation = "https://hmo.readthedocs.io/"
+Repository = "https://github.com/rpoteau/HMO"
+Changelog = "https://github.com/rpoteau/HMO/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+docs = [
+  "sphinx",
+  "sphinx_rtd_theme",
+  "myst-parser",
+  "numpydoc"
+]
+
+

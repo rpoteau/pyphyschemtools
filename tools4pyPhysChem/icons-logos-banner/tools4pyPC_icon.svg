@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   viewBox="0 0 64 64"
+   data-name="Layer 1"
+   version="1.1"
+   sodipodi:docname="HMOicon.svg"
+   inkscape:export-filename="HMOicon.png"
+   inkscape:export-xdpi="1536"
+   inkscape:export-ydpi="1536"
+   inkscape:version="1.4.1 (unknown)"
+   width="64"
+   height="64"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="13.044421"
+     inkscape:cx="9.9659464"
+     inkscape:cy="33.424251"
+     inkscape:window-width="2544"
+     inkscape:window-height="1344"
+     inkscape:window-x="83"
+     inkscape:window-y="58"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g6" />
+  <rect
+     style="fill:#f2f2f2;stroke:#000000;stroke-width:1.13386;stroke-linejoin:round;paint-order:stroke markers fill"
+     id="rect1"
+     width="62.866142"
+     height="62.866142"
+     x="0.56693"
+     y="0.56693"
+     rx="6.7450767"
+     ry="6.7450762" />
+  <g
+     id="g6"
+     transform="matrix(0.8660254,0.5,0.5,-0.8660254,-8.125063,49.926978)">
+    <path
+       d="M 36.72,18.648 29.012,32 36.72,45.352 H 52.137 L 59.846,32 52.137,18.648 Z m 7.709,21.447 c -4.464,0 -8.096,-3.632 -8.096,-8.096 0,-4.464 3.632,-8.096 8.096,-8.096 4.464,0 8.096,3.632 8.096,8.096 0,4.464 -3.632,8.096 -8.096,8.096 z"
+       id="path1"
+       style="fill:#666666" />
+    <path
+       d="m 19.663,23.477 c 3.361,0 6.096,-2.734 6.096,-6.096 0,-3.362 -2.734,-6.095 -6.096,-6.095 -3.362,0 -6.096,2.734 -6.096,6.095 0,3.361 2.734,6.096 6.096,6.096 z"
+       id="path2" />
+    <path
+       d="M 27.28,31 34.988,17.648 27.28,4.298 H 11.863 L 4.154,17.649 11.863,31.001 H 27.28 Z M 19.663,9.286 c 4.464,0 8.096,3.631 8.096,8.095 0,4.464 -3.632,8.096 -8.096,8.096 -4.464,0 -8.096,-3.632 -8.096,-8.096 0,-4.464 3.632,-8.095 8.096,-8.095 z"
+       id="path3" />
+    <path
+       d="m 19.663,40.256 c -3.361,0 -6.096,2.734 -6.096,6.096 0,3.362 2.734,6.095 6.096,6.095 3.362,0 6.096,-2.734 6.096,-6.095 0,-3.361 -2.734,-6.096 -6.096,-6.096 z"
+       id="path4" />
+    <circle
+       cx="44.429001"
+       cy="32"
+       r="6.0960002"
+       id="circle4"
+       style="fill:#666666" />
+    <path
+       d="M 11.863,33 4.154,46.352 11.863,59.703 H 27.28 L 34.988,46.353 27.28,33.001 H 11.863 Z m 7.8,21.446 c -4.464,0 -8.096,-3.631 -8.096,-8.095 0,-4.464 3.632,-8.096 8.096,-8.096 4.464,0 8.096,3.632 8.096,8.096 0,4.464 -3.632,8.095 -8.096,8.095 z"
+       id="path5" />
+  </g>
+</svg>

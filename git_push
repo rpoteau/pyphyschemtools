@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -e  # exit on any error
+
+if [ -n "$1" ]; then
+   echo "---------------------------------------------------------------"
+   echo "✅ commit message = "$1
+else
+   echo "❌ commit message must be given as a parameter of this git_push command"
+   echo "exit"
+   exit 1
+fi
+echo "---------------------------------------------------------------"
+echo "First finding if there are large files in [sub]folders"
+find . -size +49M -print | sed 's|^\./||' > .LargeFiles
+/bin/cp .gitignore .gitignore.bak
+cat .gitignore_base .LargeFiles > .gitignore
+echo "Content of the .gitignore file"
+cat .gitignore
+echo "---------------------------------------------------------------"
+echo "now processing git status"
+git status
+echo "---------------------------------------------------------------"
+echo "🛠️  Updating local installation (Editable mode)"
+
+set +e # Désactive temporairement l'arrêt automatique
+pip install -e .
+PIP_STATUS=$?
+set -e # Réactive l'arrêt automatique
+
+if [ $PIP_STATUS -eq 0 ]; then
+    echo "✅ Installation locale réussie."
+else
+    echo "❌ Échec de l'installation locale (vérifiez votre pyproject.toml)."
+    echo "Fermeture du script. Aucun push effectué."
+    exit 1
+fi
+
+while true; do
+    read -p "Do you wish to add > commit > push? (y/n) " yn
+    case $yn in
+        [Yy]* )
+            echo "---------------------------------------------------------------"
+            echo "Now processing git add > commit > push"
+            git add --all
+            git status
+            git commit -m "$1"
+	    git push
+	    break
+            ;;
+        [Nn]* )
+            exit
+            ;;
+        * )
+            echo "Please answer yes (y) or no (n)."
+            ;;
+    esac
+done
+

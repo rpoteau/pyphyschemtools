@@ -1,21 +1,23 @@
 [project]
 name = "pyphyschemtools"
-version = "0.2.1"
+version = "0.3.0"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
-    "numpy",
-    "pandas",
-    "matplotlib",
-    "scipy",
+    "CageCavityCalc",
     "ipywidgets",
     "jupyter",
-    "Pillow",
+    "matplotlib",
+    "numpy",
     "openpyxl",
+    "pandas",
+    "Pillow",
+    "pubchempy"
+    "py3Dmol",
     "rdkit",
-    "py3Dmol"
+    "scipy",
 ]
 
 [project.urls]

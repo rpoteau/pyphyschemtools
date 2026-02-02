@@ -82,7 +82,7 @@ def apply_css_style():
     else:
         print(f"[Warning] CSS file not found at {css_path}")
 
-def init(Research=False):
+def init(which=None):
     """
     Initializes the notebook environment: applies CSS, 
     displays the banner, and shows hostname/time.
@@ -94,7 +94,12 @@ def init(Research=False):
     apply_css_style()
     
     # 2. Display the banner
-    banner = "pyPCBanner.svg" if Research else "pyPhysChemBanner.svg"
+    if which == "Research":
+        banner = "pyPC_LPCNO_Banner.svg"
+    elif which== "t4pPC":
+        banner = "tools4pyPC_banner.svg"
+    else:
+        banner = "pyPhysChemBanner.svg"
     banner_path = os.path.join(_PKG_PATH, "resources", "svg", banner)
     
     if os.path.exists(banner_path):

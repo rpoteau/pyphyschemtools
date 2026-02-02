@@ -283,10 +283,15 @@ class molView:
             and bond orders (detects double/triple bonds). 
             Requires the `rdkit` library. If False, fallback to standard 3Dmol 
             distance-based single bonds.
+        display_now : bool, optional
+                If True (default), renders the molecule immediately. 
+                Set to False to prevent immediate display when you plan to call 
+                further visualization methods provided by the molView class
         viewer : bool, optional
-                If True (default), initializes the py3Dmol viewer and renders the 
-                molecule. If False, operates in 'headless' mode: only coordinates 
-                are processed for calculations (default: True).
+            If True (default), initializes the py3Dmol engine and prepares the 3D model.
+            If False, operates in 'headless' mode: only geometric data is processed 
+            for analysis (volume, CM, etc.), saving significant memory for 
+            high-throughput processing.
         zoom : None, optional
             scaling factor
 
@@ -311,10 +316,12 @@ class molView:
         >>> vol = mv.data.get_cage_volume()
     """
 
-    def __init__(self, mol, source='file', style='bs', displayHbonds=True, cpk_scale=0.6, w=600, h=400,\
+    def __init__(self, mol, source=None, style='bs', displayHbonds=True, cpk_scale=0.6, w=600, h=400,\
                  supercell=(1, 1, 1), display_now=True, detect_BondOrders=True, viewer=True, zoom=None):
+        # For the automatic detection or source validation
+        valid_sources = ['file', 'mol', 'cif', 'cid', 'rscb', 'cod', 'ase']
+
         self.mol = mol
-        self.source = source
         self.style = style
         self.cpk_scale = cpk_scale
         self.displayHbonds = displayHbonds
@@ -324,6 +331,19 @@ class molView:
         self.supercell = supercell
         self.viewer = viewer
         self.zoom = zoom
+        if source is None and os.path.exists(str(mol)):
+            self.source = 'file'
+        elif source in valid_sources:
+            self.source = source
+        else:
+            # Clear error message and early exit if the source is unrecognized
+            error_msg = f"❌ Invalid source: '{source}'. \nAllowed sources are: {', '.join(valid_sources)}"
+            print(error_msg)
+            self.data = None
+            self.v = None
+            return
+        # Viewer initialization and data loading
+        # We only proceed if the source is valid
         self.v = py3Dmol.view(width=self.w, height=self.h) # Création du viewer une seule fois
         self._load_and_display(show=display_now)
 
@@ -670,13 +690,17 @@ class molView:
             try:
                 # On utilise l'alias long d'ASE pour PDB, sinon le format détecté
                 atoms = read(io.StringIO(content), format=fmt)
-            except Exception as e:
+            except (Exception, StopIteration):
                 # Si l'extraction échoue, on tente une dernière fois sans format forcé
                 try:
                     atoms = read(io.StringIO(content))
                 except:
-                    print(f"Extraction of coordinates is impossible ({e})")
-                    atoms = Atoms()
+                    print(f"❌ Extraction of coordinates is impossible for source {self.source}")
+                    self.data = None
+                    # --- CRUCIAL : On arrête tout ici si on n'a pas d'atomes ---
+                    if self.viewer:
+                        self.v.show() # On montre au moins le viewer vide ou l'erreur
+                    return
             
             self.data = XYZData(
                 symbols=atoms.get_chemical_symbols(),

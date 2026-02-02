@@ -25,6 +25,8 @@ DIST_DIR="dist"
 
 project_name="pyphyschemtools"
 
+USER_COMMENT="$1"
+
 # nice utility
 print_padded_line_wbg() {
     # Usage: print_padded_line "your message" width
@@ -131,6 +133,30 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     else
         echo "__last_update__ = \"$today\"" >> "${project_name}/__init__.py"
     fi
+    # Update version in docs/source/conf.py
+    CONF_PY="docs/source/conf.py"
+    if [ -f "$CONF_PY" ]; then
+        # On extrait X.Y pour le paramètre 'version' de Sphinx
+        VERSION_XY=$(echo "$NEW_VERSION" | cut -d'.' -f1,2)
+        
+        # Mise à jour de 'version' (ex: 1.2)
+        sed -i "s/^version *= *\".*\"/version = \"$VERSION_XY\"/" "$CONF_PY"
+        # Mise à jour de 'release' (ex: 1.2.4)
+        sed -i "s/^release *= *\".*\"/release = \"$NEW_VERSION\"/" "$CONF_PY"
+        
+        echo "     - version & release updated in docs/source/conf.py ... Done"
+    else
+        echo -e "${YELLOW}     - Warning: docs/source/conf.py not found, skipping documentation update.${RESET}"
+    fi
+    # --- DOC VALIDATION ---
+    echo -e "${CYAN}Checking documentation health before commit...${RESET}"
+    (cd docs && make clean && make html > /dev/null 2>&1)
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ Sphinx build failed! Please fix docstrings before pushing.${RESET}"
+        exit 1
+    fi
+    echo "     - Documentation build ... OK"
+
     # --- GIT SECTION ---
     echo -e "$SEPARATOR"
     print_padded_line_wbg "Git commit and tag...  " "$SEPARATOR_WIDTH"
@@ -146,7 +172,18 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     echo "Proceed with commit? (y/n)"
     read -r CONFIRM
     if [[ "$CONFIRM" =~ ^[Yy]$ ]]; then
-        git commit -m "Bump version: $CURRENT_VERSION → $NEW_VERSION"
+        # Prepare the commit message
+        COMMIT_MSG="Bump version: $CURRENT_VERSION → $NEW_VERSION"
+        
+        if [ -n "$USER_COMMENT" ]; then
+            # If an argument was provided, append it
+            COMMIT_MSG="$COMMIT_MSG ($USER_COMMENT)"
+        else
+            # Inform the user that no extra comment is being added
+            echo -e "${YELLOW}     - No extra comment provided. Using default version message.${RESET}"
+        fi
+
+        git commit -m "$COMMIT_MSG"
         git tag "v$NEW_VERSION"
         git push
         git push --tags

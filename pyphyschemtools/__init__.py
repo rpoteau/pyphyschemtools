@@ -1,6 +1,6 @@
 # tools4pyPhysChem/__init__.py
-__version__ = "0.3.1"
-__last_update__ = "2026-02-02"
+__version__ = "0.3.2"
+__last_update__ = "2026-02-03"
 
 import importlib
 import importlib.util

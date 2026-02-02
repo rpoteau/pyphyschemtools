@@ -223,14 +223,15 @@ class molView:
     """
     Initializes a molecular/crystal viewer and coordinate extractor.
 
-        This class acts as a bridge between various molecular data sources and 
-        the py3Dmol interactive viewer. It can operate in 'Full' mode (display + 
-        analysis) or 'Headless' mode (analysis only) by toggling the `viewer` parameter.
+    This class acts as a bridge between various molecular data sources and 
+    the py3Dmol interactive viewer. It can operate in 'Full' mode (display + 
+    analysis) or 'Headless' mode (analysis only) by toggling the `viewer` parameter.
 
-        The class automatically extracts geometric data into the `self.data` attribute 
-        (an XYZData object), allowing for volume, dimension, and cavity calculations.
+    The class automatically extracts geometric data into the `self.data` attribute 
+    (an XYZData object), allowing for volume, dimension, and cavity calculations.
         
     Display molecular and crystal structures in py3Dmol from various sources:
+    
     - XYZ/PDB/CIF local files
     - XYZ-format string
     - PubChem CID
@@ -239,9 +240,10 @@ class molView:
     - RSCB PDB ID
 
     Three visualization styles are available:
-      - 'bs'     : ball-and-stick (default)
-      - 'cpk'    : CPK space-filling spheres (with adjustable size)
-      - 'cartoon': protein backbone representation
+    
+    - 'bs'     : ball-and-stick (default)
+    - 'cpk'    : CPK space-filling spheres (with adjustable size)
+    - 'cartoon': protein backbone representation
       
     Upon creation, an interactive 3D viewer is shown directly in a Jupyter notebook cell, unless the headless viewer parameter is set to False.
 
@@ -249,6 +251,7 @@ class molView:
     ----------
         mol : str or ase.Atoms
             The molecular structure to visualize.
+            
             - If `source='file'`, this should be a path to a structure file (XYZ, PDB, etc.)
             - If `source='mol'`, this should be a string containing the structure (XYZ, PDB...)
             - If `source='cif'`, this should be a cif file (string)
@@ -260,6 +263,7 @@ class molView:
             The type of the input `mol` (default: 'file').
         style : {'bs', 'cpk', 'cartoon'}, optional
             Visualization style (default: 'bs').
+            
             - 'bs'  → ball-and-stick
             - 'cpk' → CPK space-filling spheres
             - 'cartoon' → draws a smooth tube or ribbon through the protein backbone

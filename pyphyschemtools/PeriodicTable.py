@@ -47,10 +47,15 @@ class TableauPeriodique:
         Ce patch, appliqué à self.elements, créé par l'appel à create_vis_dataframe(), va servir à :
         - ajouter des informations en français : les noms des éléments et des séries (familles) auxquelles ils appartiennent
         - retirer les éléments du groupe 12 de la famille des métaux de transition, qui est le choix CONTESTABLE par défaut de la bibliothèque mendeleev
-        input : elements est un dataframe pandas préalablement créé par la fonction create_vis_dataframe() de mendeleev.vis
-        output : elements avec deux nouvelles colonnes name_seriesFr et nom, qui contient dorénavant les noms des éléments en français
-                        + correction des données name_series et series_id pour les éléments Zn, Cd, Hg, Cn
-                        + de nouvelles colonnes qui contiennent l'énergie de première ionisation et les isotopes naturels
+        
+        input :
+        elements est un dataframe pandas préalablement créé par la fonction create_vis_dataframe() de mendeleev.vis
+        
+        output :
+        elements avec deux nouvelles colonnes name_seriesFr et nom, qui contient dorénavant les noms des éléments en français
+        + correction des données name_series et series_id pour les éléments Zn, Cd, Hg, Cn
+        + de nouvelles colonnes qui contiennent l'énergie de première ionisation et les isotopes naturels
+                        
         '''
         def series_eng2fr(s):
             '''Correspondance entre nom des séries (familles) en anglais et en français'''

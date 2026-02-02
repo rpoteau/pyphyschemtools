@@ -35,7 +35,7 @@ packages = ["pyphyschemtools"]
 
 [tool.setuptools.package-data]
 "pyphyschemtools" = [
-    "icons-logos-banner/**/*",
+    "icons_logos_banner/**/*",
     "resources/**/*",
 ]
 

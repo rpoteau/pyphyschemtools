@@ -28,7 +28,8 @@ class SpectrumSimulator:
         Returns:
             None: This method initializes the instance attributes.
         Calculates:
-            - sigmanm = half-width of the Gaussian band, in nm
+            sigmanm = half-width of the Gaussian band, in nm
+            
         """
         self.sigma_ev = sigma_ev
         # Conversion constante eV -> nm sigma
@@ -55,15 +56,18 @@ class SpectrumSimulator:
         return fig, graph
     
     def _calc_epsiG(self,lambdaX,lambdai,fi):
-        '''
+        """
         calculates a Gaussian band shape around a vertical transition
+        
         input:
             - lambdaX = wavelength variable, in nm
             - lambdai = vertical excitation wavelength for i_th state, in nm
             - fi = oscillator strength for state i (dimensionless)
+            
         output :
             molar absorption coefficient, in L mol-1 cm-1
-        '''
+            
+        """
         import scipy.constants as sc
         import numpy as np
         c = sc.c*1e2 #cm-1
@@ -78,20 +82,21 @@ class SpectrumSimulator:
         return epsi
     
     def _Absorbance(self,eps,opl,cc):
-        '''
+        """
         Calculates the Absorbance with the Beer-Lambert law
+        
         input:
             - eps = molar absorption coefficient, in L mol-1 cm-1
             - opl = optical path length, in cm
             - cc = concentration of the attenuating species, in mol.L-1
+        
         output :
             Absorbance, A (dimensionless)
-        '''
+            
+        """
         return eps*opl*cc
     
     def _sumStatesWithGf(self,wavel,wavelTAB,feTAB):
-        '''
-        '''
         import numpy as np
         sumInt = np.zeros(len(wavel))
         for l in wavel:
@@ -100,7 +105,7 @@ class SpectrumSimulator:
         return sumInt
     
     def _FindPeaks(self,sumInt,height,prom=1):
-        '''
+        """
         Finds local maxima within the spectrum based on height and prominence.
         
         Prominence is crucial when switching between linear and logarithmic scales:
@@ -117,7 +122,8 @@ class SpectrumSimulator:
         Returns:
             - PeakIndex: Indices of the detected peaks in the wavelength array.
             - PeakHeight: The intensity values at these peak positions.
-        '''
+            
+        """
         from scipy.signal import find_peaks
         peaks = find_peaks(sumInt, height = height, threshold = None, distance = 1, prominence=prom)
         PeakIndex = peaks[0]
@@ -130,8 +136,8 @@ class SpectrumSimulator:
         return PeakIndex,PeakHeight
 
     def _FindShoulders(self, data, tP):
-        '''
-        ###not working
+        """
+        ###not working###
         Detects shoulders using the second derivative.
         A shoulder appears as a peak in the negative second derivative.
         
@@ -145,7 +151,8 @@ class SpectrumSimulator:
             - shoulder_idx (ndarray): Array of indices where shoulders were found.
             - shoulder_heights (ndarray): The intensity values at these positions 
               extracted from the input data.
-        '''
+              
+        """
         import numpy as np
         # Calculate the second derivative (rate of change of the slope)
         d2 = np.gradient(np.gradient(data))
@@ -162,11 +169,13 @@ class SpectrumSimulator:
     
     def _pickPeak(self,wavel,peaksIndex,peaksH,color,\
                   shift=500,height=500,posAnnotation=200, ylog=False):
-        '''
+        """
         Annotates peaks with a small vertical tick and the wavelength value.
         Adjusts offsets based on whether the plot is in log10 scale or linear.
         In log mode, peaksH must already be log10 values.
-        '''
+        
+        """
+        
         s=shift
         h=height
         a=posAnnotation
@@ -202,19 +211,20 @@ class SpectrumSimulator:
     
     def plotTDDFTSpectrum(self,wavel,sumInt,wavelTAB,feTAB,tP,ylog,labelSpectrum,colorS='#0000ff',colorT='#0000cf'):
         
-        '''
+        """
         Called by plotEps_lambda_TDDFT. Plots a single simulated UV-Vis spectrum, i.e. after
         gaussian broadening, together with the TDDFT vertical transitions (i.e. plotted as lines)
         
-        input:
-            - wavel = array of gaussian-broadened wavelengths, in nm
-            - sumInt = corresponding molar absorptiopn coefficients, in L. mol-1 cm-1
-            - wavelTAB = wavelength of TDDFT, e.g. discretized, transitions
-            - ylog = log plot of epsilon
-            - tP: threshold for finding the peaks
-            - feTAB = TDDFT oscillator strength for each transition of wavelTAB
-            - labelSpectrum = title for the spectrum
-        '''
+        Args:
+            wavel: array of gaussian-broadened wavelengths, in nm
+            sumInt: corresponding molar absorptiopn coefficients, in L. mol-1 cm-1
+            wavelTAB: wavelength of TDDFT, e.g. discretized, transitions
+            ylog: log plot of epsilon
+            tP: threshold for finding the peaks
+            feTAB: TDDFT oscillator strength for each transition of wavelTAB
+            labelSpectrum: title for the spectrum
+            
+        """
 
         # # --- DEBUG START ---
         # if ylog:
@@ -261,19 +271,26 @@ class SpectrumSimulator:
                              epsMax=None, titles=None, tP = 10, \
                              ylog=False,\
                              filename=None):
-        '''
+        """
         Plots a TDDFT VUV simulated spectrum (vertical transitions and transitions summed with gaussian functions)
-        between lambdamin and lambdamax (sum of states done in the range [lambdamin-50, lambdamlax+50] nm)
-        input:
-            - datFile: list of pathway/names to "XXX_ExcStab.dat" files generated by 'GParser Gaussian.log -S'
-            - lambdamin, lambdamax: plot range
-            - epsMax: y axis graph limit
-            - titles: list of titles (1 per spectrum plot)
-            - tP: threshold for finding the peaks (default = 10 L. mol-1 cm-1)
-            - ylog: y logarithmic axis (default: False).
-            - save: saves in a png file (300 dpi) if True (default = False)
-            - filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
-        '''
+        between lambdamin and lambdamax
+
+        The sum of states is done in the range
+        [lambdamin-50, lambdamax+50] nm.
+        
+        Args:
+            datFile: list of pathway/names to "XXX_ExcStab.dat" files generated by 'GParser Gaussian.log -S'
+            lambdamin, lambdamax: plot range
+            epsMax: y axis graph limit
+            titles: list of titles (1 per spectrum plot)
+            tP: threshold for finding the peaks (default = 10 L. mol-1 cm-1)
+            ylog: y logarithmic axis (default: False).
+            save: saves in a png file (300 dpi) if True (default = False)
+            filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
+            
+        """
+        import matplotlib.ticker as ticker
+
         if self.fig is not None:
             graph = self.graph
             fig = self.fig
@@ -296,7 +313,6 @@ class SpectrumSimulator:
 
             graph.set_xlim(lambdamin,lambdamax)
 
-            import matplotlib.ticker as ticker
             graph.xaxis.set_major_locator(ticker.MultipleLocator(50)) # sets a tick for every integer multiple of the base (here 250) within the view interval
         
         istate,state,wavel,fe,SSq = np.genfromtxt(datFile,skip_header=1,dtype="<U20,<U20,float,float,<U20",unpack=True)
@@ -333,25 +349,27 @@ class SpectrumSimulator:
                              titles=None, linestyles=[], annotateP=[], tP = 0.1,\
                              resetColors=False,\
                              filename=None):
-        '''
+        """
         Plots a simulated TDDFT VUV absorbance spectrum (transitions summed with gaussian functions)
         between lambdamin and lambdamax (sum of states done in the range [lambdamin-50, lambdamlax+50] nm)
-        input:
-            - datFiles: list of pathway/name to files generated by 'GParser Gaussian.log -S'
-            - C0: list of concentrations needed to calculate A = epsilon x l x c (in mol.L-1)
-            - lambdamin, lambdamax: plot range (x axis)
-            - Amax: y axis graph limit
-            - titles: list of titles (1 per spectrum plot)
-            - linestyles: list of line styles(default = "-", i.e. a continuous line)
-            - annotateP: list of Boolean (annotate lambda max True or False. Default = True)
-            - tP: threshold for finding the peaks (default = 0.1)
-            - resetColors (bool): If True, resets the matplotlib color cycle 
-                                 to the first color. This allows different series 
-                                 (e.g., gas phase vs. solvent) to share the same 
-                                 color coding for each molecule across multiple calls. Default: False
-            - save: saves in a png file (300 dpi) if True (default = False)
-            - filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
-        '''
+        
+        Args:
+            datFiles: list of pathway/name to files generated by 'GParser Gaussian.log -S'
+            C0: list of concentrations needed to calculate A = epsilon x l x c (in mol.L-1)
+            lambdamin, lambdamax: plot range (x axis)
+            Amax: y axis graph limit
+            titles: list of titles (1 per spectrum plot)
+            linestyles: list of line styles(default = "-", i.e. a continuous line)
+            annotateP: list of Boolean (annotate lambda max True or False. Default = True)
+            tP: threshold for finding the peaks (default = 0.1)
+            resetColors (bool): If True, resets the matplotlib color cycle 
+                to the first color. This allows different series 
+                (e.g., gas phase vs. solvent) to share the same 
+                color coding for each molecule across multiple calls. Default: False
+            save: saves in a png file (300 dpi) if True (default = False)
+            filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
+            
+        """
 
         if self.fig is None:
             fig, graph = self._initializePlot()
@@ -394,11 +412,12 @@ class SpectrumSimulator:
     def plotAbs_lambda_exp(self, csvFiles, C0, lambdamin=200, lambdamax=800,\
                              Amax=2.0, titles=None, linestyles=[], annotateP=[], tP = 0.1,\
                              filename=None):
-        '''
+        """
         Plots an experimental VUV absorbance spectrum read from a csv file between lambdamin and lambdamax
-        input:
+        
+        Args:
             - superpose: False = plots a new graph, otherwise the plot is superposed to a previously created one
-                         (probably with plotAbs_lambda_TDDFT())
+              (probably with plotAbs_lambda_TDDFT())
             - csvfiles: list of pathway/name to experimental csvFiles (see examples for the format)
             - C0: list of experimental concentrations, i.e. for each sample
             - lambdamin, lambdamax: plot range (x axis)
@@ -409,7 +428,8 @@ class SpectrumSimulator:
             - tP: threshold for finding the peaks (default = 0.1)
             - save: saves in a png file (300 dpi) if True (default = False)
             - filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
-        '''
+            
+        """
         if linestyles == []: linestyles = len(csvFiles)*['--']
         if annotateP == []: annotateP = len(csvFiles)*[True]
 

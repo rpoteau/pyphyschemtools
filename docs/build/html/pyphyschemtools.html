@@ -1,0 +1,1883 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyphyschemtools.icons_logos_banner package" href="pyphyschemtools.icons_logos_banner.html" />
+    <link rel="prev" title="pyphyschemtools" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyphyschemtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyphyschemtools</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyphyschemtools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.icons_logos_banner.html">pyphyschemtools.icons_logos_banner package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.Chem3D">pyphyschemtools.Chem3D module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.Chem3D.XYZData"><code class="docutils literal notranslate"><span class="pre">XYZData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.Chem3D.molView"><code class="docutils literal notranslate"><span class="pre">molView</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.ML">pyphyschemtools.ML module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.ML.categorizeY_2ohe"><code class="docutils literal notranslate"><span class="pre">categorizeY_2ohe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.ML.y2c"><code class="docutils literal notranslate"><span class="pre">y2c()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.PeriodicTable">pyphyschemtools.PeriodicTable module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.PeriodicTable.TableauPeriodique"><code class="docutils literal notranslate"><span class="pre">TableauPeriodique</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.aithermo">pyphyschemtools.aithermo module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.aithermo.aiThermo"><code class="docutils literal notranslate"><span class="pre">aiThermo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.cheminformatics">pyphyschemtools.cheminformatics module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.cheminformatics.easy_rdkit"><code class="docutils literal notranslate"><span class="pre">easy_rdkit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.core">pyphyschemtools.core module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.centerTitle"><code class="docutils literal notranslate"><span class="pre">centerTitle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.centertxt"><code class="docutils literal notranslate"><span class="pre">centertxt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.crop_images"><code class="docutils literal notranslate"><span class="pre">crop_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.smart_trim"><code class="docutils literal notranslate"><span class="pre">smart_trim()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.kinetics">pyphyschemtools.kinetics module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.kinetics.KORD"><code class="docutils literal notranslate"><span class="pre">KORD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.spectra">pyphyschemtools.spectra module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.spectra.SpectrumSimulator"><code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.survey">pyphyschemtools.survey module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.survey.SurveyApp"><code class="docutils literal notranslate"><span class="pre">SurveyApp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.sympyUtilities">pyphyschemtools.sympyUtilities module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.sympyUtilities.PrintLatexStyleSymPyEquation"><code class="docutils literal notranslate"><span class="pre">PrintLatexStyleSymPyEquation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.sympyUtilities.e2Lists"><code class="docutils literal notranslate"><span class="pre">e2Lists()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.tools4AS">pyphyschemtools.tools4AS module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.ApplySecondeChance"><code class="docutils literal notranslate"><span class="pre">ApplySecondeChance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcours"><code class="docutils literal notranslate"><span class="pre">BoiteAMoustachesByMentionEtParcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcoursHue"><code class="docutils literal notranslate"><span class="pre">BoiteAMoustachesByMentionEtParcoursHue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.ComparaisonMoyennesDMCC"><code class="docutils literal notranslate"><span class="pre">ComparaisonMoyennesDMCC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.CreationDfADMAJGH"><code class="docutils literal notranslate"><span class="pre">CreationDfADMAJGH()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.Histogrammes"><code class="docutils literal notranslate"><span class="pre">Histogrammes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.MentionAuModule"><code class="docutils literal notranslate"><span class="pre">MentionAuModule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.RenameDfHeader"><code class="docutils literal notranslate"><span class="pre">RenameDfHeader()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.ReplaceABSByNan"><code class="docutils literal notranslate"><span class="pre">ReplaceABSByNan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.ReplaceNanBy0"><code class="docutils literal notranslate"><span class="pre">ReplaceNanBy0()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.ReplaceNanBy0OLD"><code class="docutils literal notranslate"><span class="pre">ReplaceNanBy0OLD()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.StackedBarPop"><code class="docutils literal notranslate"><span class="pre">StackedBarPop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.StackedBarPopPO"><code class="docutils literal notranslate"><span class="pre">StackedBarPopPO()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcours"><code class="docutils literal notranslate"><span class="pre">StatsRéussiteParMentionOuParcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcoursWithAb"><code class="docutils literal notranslate"><span class="pre">StatsRéussiteParMentionOuParcoursWithAb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.checkNoID_DuplicateID"><code class="docutils literal notranslate"><span class="pre">checkNoID_DuplicateID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.concat2ApoG"><code class="docutils literal notranslate"><span class="pre">concat2ApoG()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.css_styling"><code class="docutils literal notranslate"><span class="pre">css_styling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.dropColumnsByIndex"><code class="docutils literal notranslate"><span class="pre">dropColumnsByIndex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.kdePlotByMentionEtParcours"><code class="docutils literal notranslate"><span class="pre">kdePlotByMentionEtParcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.mentionD"><code class="docutils literal notranslate"><span class="pre">mentionD()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.parcours"><code class="docutils literal notranslate"><span class="pre">parcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.plotTauxADMasBars"><code class="docutils literal notranslate"><span class="pre">plotTauxADMasBars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.read_excel"><code class="docutils literal notranslate"><span class="pre">read_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.verifNotes"><code class="docutils literal notranslate"><span class="pre">verifNotes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.visualID">pyphyschemtools.visualID module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.chrono_show"><code class="docutils literal notranslate"><span class="pre">chrono_show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.chrono_start"><code class="docutils literal notranslate"><span class="pre">chrono_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.chrono_stop"><code class="docutils literal notranslate"><span class="pre">chrono_stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.color"><code class="docutils literal notranslate"><span class="pre">color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.css_styling"><code class="docutils literal notranslate"><span class="pre">css_styling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.display_md"><code class="docutils literal notranslate"><span class="pre">display_md()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.end"><code class="docutils literal notranslate"><span class="pre">end()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.hdelay"><code class="docutils literal notranslate"><span class="pre">hdelay()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.hdelay_ms"><code class="docutils literal notranslate"><span class="pre">hdelay_ms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.init"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.visualID_Eng">pyphyschemtools.visualID_Eng module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.apply_css_style"><code class="docutils literal notranslate"><span class="pre">apply_css_style()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.bg"><code class="docutils literal notranslate"><span class="pre">bg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.chrono_show"><code class="docutils literal notranslate"><span class="pre">chrono_show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.chrono_start"><code class="docutils literal notranslate"><span class="pre">chrono_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.chrono_stop"><code class="docutils literal notranslate"><span class="pre">chrono_stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.color"><code class="docutils literal notranslate"><span class="pre">color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.display_md"><code class="docutils literal notranslate"><span class="pre">display_md()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.end"><code class="docutils literal notranslate"><span class="pre">end()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.fg"><code class="docutils literal notranslate"><span class="pre">fg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.hdelay"><code class="docutils literal notranslate"><span class="pre">hdelay()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.hdelay_ms"><code class="docutils literal notranslate"><span class="pre">hdelay_ms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.hl"><code class="docutils literal notranslate"><span class="pre">hl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID_Eng.init"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyphyschemtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pyphyschemtools</a></li>
+      <li class="breadcrumb-item active">pyphyschemtools package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pyphyschemtools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyphyschemtools">
+<span id="pyphyschemtools-package"></span><h1>pyphyschemtools package<a class="headerlink" href="#module-pyphyschemtools" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pyphyschemtools.icons_logos_banner.html">pyphyschemtools.icons_logos_banner package</a></li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pyphyschemtools.Chem3D">
+<span id="pyphyschemtools-chem3d-module"></span><h2>pyphyschemtools.Chem3D module<a class="headerlink" href="#module-pyphyschemtools.Chem3D" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.XYZData">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.Chem3D.</span></span><span class="sig-name descname"><span class="pre">XYZData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.XYZData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object containing molecular coordinates and symbols extracted by molView.
+Allows for geometric calculations without reloading data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.XYZData.get_bounding_sphere">
+<span class="sig-name descname"><span class="pre">get_bounding_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_vdw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.XYZData.get_bounding_sphere" title="Link to this definition"></a></dt>
+<dd><p>Calculates the center and radius of the bounding sphere using ASE.
+scale: multiplication factor (e.g., 0.6 to match a reduced CPK style).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.XYZData.get_cage_volume">
+<span class="sig-name descname"><span class="pre">get_cage_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_spheres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.XYZData.get_cage_volume" title="Link to this definition"></a></dt>
+<dd><p>Calculates the internal cavity volume of a molecular cage using CageCavityCalc.</p>
+<p>This method interfaces with the CageCavityCalc library by generating a
+temporary PDB file of the current structure. It can also retrieve the
+coordinates of the ‘dummy atoms’ (points) that fill the detected void.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid_spacing</strong> (<em>float</em><em>, </em><em>optional</em>) – The resolution of the grid used for volume integration in Å.
+Smaller values provide higher precision (default: 0.5).</p></li>
+<li><p><strong>return_spheres</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, returns both the volume and an ase.Atoms object
+containing the dummy atoms representing the cavity (default: False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>volume</strong> (<em>float or None</em>) – The calculated cavity volume in Å³. Returns None if the
+calculation fails.</p></li>
+<li><p><strong>cavity_atoms</strong> (<em>ase.Atoms, optional</em>) – Returned only if return_spheres is True. An ASE Atoms object
+representing the internal void space.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.XYZData.get_cavity_dimensions">
+<span class="sig-name descname"><span class="pre">get_cavity_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cavity_atoms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.XYZData.get_cavity_dimensions" title="Link to this definition"></a></dt>
+<dd><p>Calculates the principal dimensions (Length, Width, Height) of the cavity points.</p>
+<p>This method uses Principal Component Analysis (PCA) to find the natural
+axes of the cavity, making it independent of the molecule’s orientation.
+Percentiles are used instead of absolute Max-Min to filter out
+potential outliers or ‘leaking’ points at the openings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cavity_atoms</strong> (<em>ase.Atoms</em>) – The Atoms object containing the ‘dummy atoms’ generated
+by the cavity calculation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dimensions (L, W, H) sorted from largest to smallest.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple (float, float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.XYZData.get_center_of_geometry">
+<span class="sig-name descname"><span class="pre">get_center_of_geometry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.XYZData.get_center_of_geometry" title="Link to this definition"></a></dt>
+<dd><p>Calculates the arithmetic mean of the atomic positions (Centroid).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.XYZData.get_center_of_mass">
+<span class="sig-name descname"><span class="pre">get_center_of_mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.XYZData.get_center_of_mass" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.Chem3D.</span></span><span class="sig-name descname"><span class="pre">molView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'file'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displayHbonds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpk_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supercell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_now</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_BondOrders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">viewer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Initializes a molecular/crystal viewer and coordinate extractor.</p>
+<p>This class acts as a bridge between various molecular data sources and
+the py3Dmol interactive viewer. It can operate in ‘Full’ mode (display +
+analysis) or ‘Headless’ mode (analysis only) by toggling the <cite>viewer</cite> parameter.</p>
+<p>The class automatically extracts geometric data into the <cite>self.data</cite> attribute
+(an XYZData object), allowing for volume, dimension, and cavity calculations.</p>
+<p>Display molecular and crystal structures in py3Dmol from various sources:</p>
+<ul class="simple">
+<li><p>XYZ/PDB/CIF local files</p></li>
+<li><p>XYZ-format string</p></li>
+<li><p>PubChem CID</p></li>
+<li><p>ASE Atoms object</p></li>
+<li><p>COD ID</p></li>
+<li><p>RSCB PDB ID</p></li>
+</ul>
+<p>Three visualization styles are available:</p>
+<ul class="simple">
+<li><p>‘bs’     : ball-and-stick (default)</p></li>
+<li><p>‘cpk’    : CPK space-filling spheres (with adjustable size)</p></li>
+<li><p>‘cartoon’: protein backbone representation</p></li>
+</ul>
+<p>Upon creation, an interactive 3D viewer is shown directly in a Jupyter notebook cell, unless the headless viewer parameter is set to False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>str</em><em> or </em><em>ase.Atoms</em>) – <p>The molecular structure to visualize.</p>
+<ul>
+<li><p>If <cite>source=’file’</cite>, this should be a path to a structure file (XYZ, PDB, etc.)</p></li>
+<li><p>If <cite>source=’mol’</cite>, this should be a string containing the structure (XYZ, PDB…)</p></li>
+<li><p>If <cite>source=’cif’</cite>, this should be a cif file (string)</p></li>
+<li><p>If <cite>source=’cid’</cite>, this should be a PubChem CID (string or int)</p></li>
+<li><p>If <cite>source=’rscb’</cite>, this should be a RSCB PDB ID (string)</p></li>
+<li><p>If <cite>source=’cod’</cite>, this should be a COD ID (string)</p></li>
+<li><p>If <cite>source=’ase’</cite>, this should be an <cite>ase.Atoms</cite> object</p></li>
+</ul>
+</p></li>
+<li><p><strong>source</strong> (<em>{'file'</em><em>, </em><em>'mol'</em><em>, </em><em>'cif'</em><em>, </em><em>'cid'</em><em>, </em><em>'rscb'</em><em>, </em><em>'ase'}</em><em>, </em><em>optional</em>) – The type of the input <cite>mol</cite> (default: ‘file’).</p></li>
+<li><p><strong>style</strong> (<em>{'bs'</em><em>, </em><em>'cpk'</em><em>, </em><em>'cartoon'}</em><em>, </em><em>optional</em>) – <p>Visualization style (default: ‘bs’).</p>
+<ul>
+<li><p>’bs’  → ball-and-stick</p></li>
+<li><p>’cpk’ → CPK space-filling spheres</p></li>
+<li><dl class="simple">
+<dt>’cartoon’ → draws a smooth tube or ribbon through the protein backbone</dt><dd><p>(default for pdb structures)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>displayHbonds</strong> (<em>plots hydrogen bonds</em><em> (</em><em>default: True</em><em>)</em>)</p></li>
+<li><p><strong>cpk_scale</strong> (<em>float</em><em>, </em><em>optional</em>) – Overall scaling factor for sphere size in CPK style (default: 0.5).
+Ignored when <cite>style=’bs’</cite>.</p></li>
+<li><p><strong>supercell</strong> (<em>tuple</em><em> of </em><em>int</em>) – Repetition of the unit cell (na, nb, nc). Default is (1, 1, 1).</p></li>
+<li><p><strong>w</strong> (<em>int</em><em>, </em><em>optional</em>) – Width of the viewer in pixels (default: 600).</p></li>
+<li><p><strong>h</strong> (<em>int</em><em>, </em><em>optional</em>) – Height of the viewer in pixels (default: 400).</p></li>
+<li><p><strong>detect_BondOrders</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True (default) and input is XYZ, uses RDKit to perceive connectivity
+and bond orders (detects double/triple bonds).
+Requires the <cite>rdkit</cite> library. If False, fallback to standard 3Dmol
+distance-based single bonds.</p></li>
+<li><p><strong>viewer</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True (default), initializes the py3Dmol viewer and renders the
+molecule. If False, operates in ‘headless’ mode: only coordinates
+are processed for calculations (default: True).</p></li>
+<li><p><strong>zoom</strong> (<em>None</em><em>, </em><em>optional</em>) – scaling factor</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView.data" title="Link to this definition"></a></dt>
+<dd><p>Container for atomic symbols and positions, used for geometric analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyphyschemtools.Chem3D.XYZData" title="pyphyschemtools.Chem3D.XYZData">XYZData</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView.v">
+<span class="sig-name descname"><span class="pre">v</span></span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView.v" title="Link to this definition"></a></dt>
+<dd><p>The 3Dmol.js viewer instance (None if viewer=False).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>py3Dmol.view or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">molView</span><span class="p">(</span><span class="s2">&quot;molecule.xyz&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molView</span><span class="p">(</span><span class="n">xyz_string</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;mol&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molView</span><span class="p">(</span><span class="mi">2244</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;cid&quot;</span><span class="p">)</span>   <span class="c1"># PubChem aspirin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ase.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">molecule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molView</span><span class="p">(</span><span class="n">molecule</span><span class="p">(</span><span class="s2">&quot;H2O&quot;</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;ase&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molView</span><span class="o">.</span><span class="n">view_grid</span><span class="p">([</span><span class="mi">2244</span><span class="p">,</span> <span class="mi">2519</span><span class="p">,</span> <span class="mi">702</span><span class="p">],</span> <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;cid&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;bs&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molView</span><span class="o">.</span><span class="n">view_grid</span><span class="p">(</span><span class="n">xyzFiles</span><span class="p">,</span> <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;bs&#39;</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="n">titles</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Headless mode for high-throughput volume calculations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mv</span> <span class="o">=</span> <span class="n">molView</span><span class="p">(</span><span class="s2">&quot;cage.xyz&quot;</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vol</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_cage_volume</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView.show_bounding_sphere">
+<span class="sig-name descname"><span class="pre">show_bounding_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView.show_bounding_sphere" title="Link to this definition"></a></dt>
+<dd><p>Calculates and displays the VdW bounding sphere in one go.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView.show_cage_cavity">
+<span class="sig-name descname"><span class="pre">show_cage_cavity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cyan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView.show_cage_cavity" title="Link to this definition"></a></dt>
+<dd><p>Calculates cavity with CageCavityCalc and displays it as a single model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView.view_grid">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">view_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView.view_grid" title="Link to this definition"></a></dt>
+<dd><p>Displays a list of molecular structures in an interactive n_rows x n_cols grid.</p>
+<p>This method uses ipywidgets.GridspecLayout to organize multiple 3D viewers
+into a clean matrix. It automatically calculates the required number of rows
+based on the length of the input list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol_list</strong> (<em>list</em>) – A list containing the molecular data to visualize. Elements should
+match the expected ‘mol’ input for the class (paths, CIDs, strings, etc.).</p></li>
+<li><p><strong>n_cols</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of columns in the grid (default: 3).</p></li>
+<li><p><strong>titles</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – Custom labels for each cell. If None, the string representation
+of the ‘mol’ input is used as the title.</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Additional arguments passed to the molView constructor:
+- source : {‘file’, ‘mol’, ‘cif’, ‘cid’, ‘rscb’, ‘ase’}
+- style : {‘bs’, ‘cpk’, ‘cartoon’}
+- displayHbonds : plots hydrogen bonds (default: True)
+- w : width of each individual viewer in pixels (default: 300)
+- h : height of each individual viewer in pixels (default: 300)
+- supercell : tuple (na, nb, nc) for crystal structures
+- cpk_scale : scaling factor for space-filling spheres</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A widget object containing the grid of molecular viewers.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ipywidgets.GridspecLayout</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mol1.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;mol2.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;mol3.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;mol4.xyz&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Reactant&quot;</span><span class="p">,</span> <span class="s2">&quot;TS&quot;</span><span class="p">,</span> <span class="s2">&quot;Intermediate&quot;</span><span class="p">,</span> <span class="s2">&quot;Product&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">molView</span><span class="o">.</span><span class="n">view_grid</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">n_cols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.ML">
+<span id="pyphyschemtools-ml-module"></span><h2>pyphyschemtools.ML module<a class="headerlink" href="#module-pyphyschemtools.ML" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.ML.categorizeY_2ohe">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.ML.</span></span><span class="sig-name descname"><span class="pre">categorizeY_2ohe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ctot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.ML.categorizeY_2ohe" title="Link to this definition"></a></dt>
+<dd><p>one-hot-encodes a pandas column of categorical data</p>
+<p>input:
+- Ctot is the reference pandas column, necessary to find all unique categories in this column
+- y1 and y2 are the actual pandas column that will be categorized. y1 and y2 are supposed to be the ytest and ytrain subsets of Ctot
+output:
+- y1ohe and y2ohe are the numpy arrays returned by this routine</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.ML.y2c">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.ML.</span></span><span class="sig-name descname"><span class="pre">y2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc2i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.ML.y2c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.PeriodicTable">
+<span id="pyphyschemtools-periodictable-module"></span><h2>pyphyschemtools.PeriodicTable module<a class="headerlink" href="#module-pyphyschemtools.PeriodicTable" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.PeriodicTable.</span></span><span class="sig-name descname"><span class="pre">TableauPeriodique</span></span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.afficher">
+<span class="sig-name descname"><span class="pre">afficher</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique.afficher" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.nomsFr">
+<span class="sig-name descname"><span class="pre">nomsFr</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['Hydrogène',</span> <span class="pre">'Hélium',</span> <span class="pre">'Lithium',</span> <span class="pre">'Béryllium',</span> <span class="pre">'Bore',</span> <span class="pre">'Carbone',</span> <span class="pre">'Azote',</span> <span class="pre">'Oxygène',</span> <span class="pre">'Fluor',</span> <span class="pre">'Néon',</span> <span class="pre">'Sodium',</span> <span class="pre">'Magnésium',</span> <span class="pre">'Aluminium',</span> <span class="pre">'Silicium',</span> <span class="pre">'Phosphore',</span> <span class="pre">'Soufre',</span> <span class="pre">'Chlore',</span> <span class="pre">'Argon',</span> <span class="pre">'Potassium',</span> <span class="pre">'Calcium',</span> <span class="pre">'Scandium',</span> <span class="pre">'Titane',</span> <span class="pre">'Vanadium',</span> <span class="pre">'Chrome',</span> <span class="pre">'Manganèse',</span> <span class="pre">'Fer',</span> <span class="pre">'Cobalt',</span> <span class="pre">'Nickel',</span> <span class="pre">'Cuivre',</span> <span class="pre">'Zinc',</span> <span class="pre">'Gallium',</span> <span class="pre">'Germanium',</span> <span class="pre">'Arsenic',</span> <span class="pre">'Sélénium',</span> <span class="pre">'Brome',</span> <span class="pre">'Krypton',</span> <span class="pre">'Rubidium',</span> <span class="pre">'Strontium',</span> <span class="pre">'Yttrium',</span> <span class="pre">'Zirconium',</span> <span class="pre">'Niobium',</span> <span class="pre">'Molybdène',</span> <span class="pre">'Technétium',</span> <span class="pre">'Ruthénium',</span> <span class="pre">'Rhodium',</span> <span class="pre">'Palladium',</span> <span class="pre">'Argent',</span> <span class="pre">'Cadmium',</span> <span class="pre">'Indium',</span> <span class="pre">'Étain',</span> <span class="pre">'Antimoine',</span> <span class="pre">'Tellure',</span> <span class="pre">'Iode',</span> <span class="pre">'Xénon',</span> <span class="pre">'Césium',</span> <span class="pre">'Baryum',</span> <span class="pre">'Lanthane',</span> <span class="pre">'Cérium',</span> <span class="pre">'Praséodyme',</span> <span class="pre">'Néodyme',</span> <span class="pre">'Prométhium',</span> <span class="pre">'Samarium',</span> <span class="pre">'Europium',</span> <span class="pre">'Gadolinium',</span> <span class="pre">'Terbium',</span> <span class="pre">'Dysprosium',</span> <span class="pre">'Holmium',</span> <span class="pre">'Erbium',</span> <span class="pre">'Thulium',</span> <span class="pre">'Ytterbium',</span> <span class="pre">'Lutetium',</span> <span class="pre">'Hafnium',</span> <span class="pre">'Tantale',</span> <span class="pre">'Tungstène',</span> <span class="pre">'Rhénium',</span> <span class="pre">'Osmium',</span> <span class="pre">'Iridium',</span> <span class="pre">'Platine',</span> <span class="pre">'Or',</span> <span class="pre">'Mercure',</span> <span class="pre">'Thallium',</span> <span class="pre">'Plomb',</span> <span class="pre">'Bismuth',</span> <span class="pre">'Polonium',</span> <span class="pre">'Astate',</span> <span class="pre">'Radon',</span> <span class="pre">'Francium',</span> <span class="pre">'Radium',</span> <span class="pre">'Actinium',</span> <span class="pre">'Thorium',</span> <span class="pre">'Protactinium',</span> <span class="pre">'Uranium',</span> <span class="pre">'Neptunium',</span> <span class="pre">'Plutonium',</span> <span class="pre">'Americium',</span> <span class="pre">'Curium',</span> <span class="pre">'Berkelium',</span> <span class="pre">'Californium',</span> <span class="pre">'Einsteinium',</span> <span class="pre">'Fermium',</span> <span class="pre">'Mendelevium',</span> <span class="pre">'Nobelium',</span> <span class="pre">'Lawrencium',</span> <span class="pre">'Rutherfordium',</span> <span class="pre">'Dubnium',</span> <span class="pre">'Seaborgium',</span> <span class="pre">'Bohrium',</span> <span class="pre">'Hassium',</span> <span class="pre">'Meitnerium',</span> <span class="pre">'Darmstadtium',</span> <span class="pre">'Roentgenium',</span> <span class="pre">'Copernicium',</span> <span class="pre">'Nihonium',</span> <span class="pre">'Flerovium',</span> <span class="pre">'Moscovium',</span> <span class="pre">'Livermorium',</span> <span class="pre">'Tennesse',</span> <span class="pre">'Oganesson']</span></span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique.nomsFr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.patch_elements">
+<span class="sig-name descname"><span class="pre">patch_elements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique.patch_elements" title="Link to this definition"></a></dt>
+<dd><p>Ce patch, appliqué à self.elements, créé par l’appel à create_vis_dataframe(), va servir à :
+- ajouter des informations en français : les noms des éléments et des séries (familles) auxquelles ils appartiennent
+- retirer les éléments du groupe 12 de la famille des métaux de transition, qui est le choix CONTESTABLE par défaut de la bibliothèque mendeleev</p>
+<p>input :
+elements est un dataframe pandas préalablement créé par la fonction create_vis_dataframe() de mendeleev.vis</p>
+<p>output :
+elements avec deux nouvelles colonnes name_seriesFr et nom, qui contient dorénavant les noms des éléments en français
++ correction des données name_series et series_id pour les éléments Zn, Cd, Hg, Cn
++ de nouvelles colonnes qui contiennent l’énergie de première ionisation et les isotopes naturels</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.prop">
+<span class="sig-name descname"><span class="pre">prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elt_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique.prop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.trad">
+<span class="sig-name descname"><span class="pre">trad</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Actinides':</span> <span class="pre">'Actinide',</span> <span class="pre">'Alkali</span> <span class="pre">metals':</span> <span class="pre">'Métal</span> <span class="pre">alcalin',</span> <span class="pre">'Alkaline</span> <span class="pre">earth</span> <span class="pre">metals':</span> <span class="pre">'Métal</span> <span class="pre">alcalino-terreux',</span> <span class="pre">'Halogens':</span> <span class="pre">'Halogène',</span> <span class="pre">'Lanthanides':</span> <span class="pre">'Lanthanide',</span> <span class="pre">'Metalloids':</span> <span class="pre">'Métalloïde',</span> <span class="pre">'Metals':</span> <span class="pre">'Métal',</span> <span class="pre">'Noble</span> <span class="pre">gases':</span> <span class="pre">'Gaz</span> <span class="pre">noble',</span> <span class="pre">'Nonmetals':</span> <span class="pre">'Non</span> <span class="pre">métal',</span> <span class="pre">'Poor</span> <span class="pre">metals':</span> <span class="pre">'Métal</span> <span class="pre">pauvre',</span> <span class="pre">'Transition</span> <span class="pre">metals':</span> <span class="pre">'Métal</span> <span class="pre">de</span> <span class="pre">transition'}</span></span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique.trad" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.aithermo">
+<span id="pyphyschemtools-aithermo-module"></span><h2>pyphyschemtools.aithermo module<a class="headerlink" href="#module-pyphyschemtools.aithermo" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.aithermo.aiThermo">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.aithermo.</span></span><span class="sig-name descname"><span class="pre">aiThermo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_scales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.aithermo.aiThermo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to handle thermodynamic surface stability analysis and visualization
+within the tools4pyPhysChem framework.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.aithermo.aiThermo.ListOfStableSurfaceCompositions">
+<span class="sig-name descname"><span class="pre">ListOfStableSurfaceCompositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vib</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.aithermo.aiThermo.ListOfStableSurfaceCompositions" title="Link to this definition"></a></dt>
+<dd><p>Identify and list the relevant thermodynamic data files for the current analysis.</p>
+<p>This method scans the working directory for data files matching specific
+naming conventions (TPcoverage or TPcoveragevib). It cross-references
+these with a local configuration file ‘ListOfStableSurfaces.dat’ to
+extract surface names and legend labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vib</strong> (<em>bool</em>) – If True, filters for files including vibrational corrections (prefixed with <code class="docutils literal notranslate"><span class="pre">vib_</span></code>). If False, looks for standard thermodynamic data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A triplet containing:
+- file_paths (list of str): Absolute or relative paths to the .dat files.
+- names (list of str): Internal identifiers for each surface phase.
+- legends (list of str): LaTeX-formatted or plain text labels for graphical legends.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The lists are returned in reverse order to ensure correct layering
+during 3D plotting.</p></li>
+<li><p>Relies on ‘ListOfStableSurfaces.dat’ existing in the folder_path.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.aithermo.aiThermo.plot_palette">
+<span class="sig-name descname"><span class="pre">plot_palette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.aithermo.aiThermo.plot_palette" title="Link to this definition"></a></dt>
+<dd><p>Visualize the 1D color palette used for surface identification.</p>
+<p>This method generates a horizontal bar of colors corresponding to the
+different surface phases defined in the instance. Each color is labeled
+with its numerical index, allowing for quick cross-referencing between
+the palette and the 3D surface plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle</strong> (<em>int</em><em>, </em><em>optional</em>) – Rotation angle of the x-axis tick labels (indices).
+Defaults to 0.</p></li>
+<li><p><strong>save_png</strong> (<em>str</em><em>, </em><em>optional</em>) – Filename (including .png extension) to save
+the palette image to the working directory. Defaults to None
+(display only).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Displays the plot using matplotlib.pyplot.show().</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Requires ‘seaborn’ for the palplot generation.</p></li>
+<li><p>If ‘save_png’ is provided, the image is saved with a resolution of
+300 DPI and a transparent background.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.aithermo.aiThermo.plot_surface">
+<span class="sig-name descname"><span class="pre">plot_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">saveFig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texLegend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xLegend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yLegend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.aithermo.aiThermo.plot_surface" title="Link to this definition"></a></dt>
+<dd><p>Generate an interactive 3D thermodynamic stability map using Plotly.</p>
+<p>This method visualizes multiple Gibbs free energy surfaces as a function of
+Temperature (X) and Pressure (Y). It automatically handles log-scale
+transformations for the pressure axis and projects reference experimental
+conditions and phase boundaries onto the plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>saveFig</strong> (<em>str</em><em>, </em><em>optional</em>) – The filename (without extension) to export
+the resulting plot as a PNG image. Defaults to None (no save).</p></li>
+<li><p><strong>vib</strong> (<em>bool</em>) – Whether to use vibration-corrected data. Defaults to True.</p></li>
+<li><p><strong>texLegend</strong> (<em>bool</em>) – If True, uses LaTeX legends extracted from the
+configuration file. Defaults to False.</p></li>
+<li><p><strong>xLegend</strong> (<em>float</em>) – Horizontal position of the legend box (0 to 1).
+Defaults to 0.5.</p></li>
+<li><p><strong>yLegend</strong> (<em>float</em>) – Vertical position of the legend box (0 to 1).
+Defaults to 0.4.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>An interactive widget containing</dt><dd><p>the 3D surfaces, experimental markers, and reference lines.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.FigureWidget</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Workflow:</dt><dd><ol class="arabic simple">
+<li><p>Scans data files and parses Temperature/Pressure/Energy grids.</p></li>
+<li><p>Traces individual 3D surfaces with mapped color scales.</p></li>
+<li><p>Calculates and plots intersection boundaries between surface phases.</p></li>
+<li><p>Overlays experimental markers (e.g., specific T/P conditions).</p></li>
+<li><p>Optionally exports and crops the resulting image using Pillow.</p></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.cheminformatics">
+<span id="pyphyschemtools-cheminformatics-module"></span><h2>pyphyschemtools.cheminformatics module<a class="headerlink" href="#module-pyphyschemtools.cheminformatics" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.cheminformatics.</span></span><span class="sig-name descname"><span class="pre">easy_rdkit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A helper class to analyze and visualize molecules using RDKit.
+Provides tools for Lewis structure analysis and advanced 2D drawing.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.analyze_lewis">
+<span class="sig-name descname"><span class="pre">analyze_lewis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.analyze_lewis" title="Link to this definition"></a></dt>
+<dd><p>Performs a Lewis structure analysis for each atom in the molecule.
+Calculates valence electrons, lone pairs, formal charges, and octet rule compliance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A table containing detailed Lewis electronic data per atom.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.show_mol">
+<span class="sig-name descname"><span class="pre">show_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(400,</span> <span class="pre">400)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_Lewis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_conjugation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_aromatic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_hybrid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_H</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep3D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macrocycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlightAtoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.show_mol" title="Link to this definition"></a></dt>
+<dd><p>Renders the molecule in 2D SVG format with optional property overlays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>tuple</em>) – Drawing dimensions in pixels.</p></li>
+<li><p><strong>show_Lewis</strong> (<em>bool</em>) – Annotates atoms with Lone Pairs and Vacancies.</p></li>
+<li><p><strong>plot_conjugation</strong> (<em>bool</em>) – Highlights conjugated bonds in blue.</p></li>
+<li><p><strong>plot_aromatic</strong> (<em>bool</em>) – Highlights aromatic rings in red.</p></li>
+<li><p><strong>show_n</strong> (<em>bool</em>) – Displays atom indices.</p></li>
+<li><p><strong>show_hybrid</strong> (<em>bool</em>) – Displays atom hybridization (sp3, sp2, etc.).</p></li>
+<li><p><strong>show_H</strong> (<em>bool</em>) – Adds explicit Hydrogens to the drawing.</p></li>
+<li><p><strong>rep3D</strong> (<em>bool</em>) – Computes a 3D-like conformation before drawing.</p></li>
+<li><p><strong>macrocycle</strong> (<em>bool</em>) – Uses CoordGen for better rendering of large rings (e.g., Cyclodextrins).</p></li>
+<li><p><strong>highlightAtoms</strong> (<em>list</em>) – List of indices to highlight.</p></li>
+<li><p><strong>legend</strong> (<em>str</em>) – Title or legend text for the drawing.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.core">
+<span id="pyphyschemtools-core-module"></span><h2>pyphyschemtools.core module<a class="headerlink" href="#module-pyphyschemtools.core" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.core.centerTitle">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.core.</span></span><span class="sig-name descname"><span class="pre">centerTitle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.core.centerTitle" title="Link to this definition"></a></dt>
+<dd><p>centers and renders as HTML a text in the notebook
+font size = 16px, background color = dark grey, foreground color = white</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.core.centertxt">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.core.</span></span><span class="sig-name descname"><span class="pre">centertxt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#000000'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fgc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#ffffff'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.core.centertxt" title="Link to this definition"></a></dt>
+<dd><p>centers and renders as HTML a text in the notebook</p>
+<p>input:
+- content = the text to render (default: None)
+- font = font family (default: ‘sans’, values allowed =  ‘sans-serif’ | ‘serif’ | ‘monospace’ | ‘cursive’ | ‘fantasy’ | …)
+- size = font size (default: 12)
+- weight = font weight (default: ‘normal’, values allowed = ‘normal’ | ‘bold’ | ‘bolder’ | ‘lighter’ | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 )
+- bgc = background color (name or hex code, default = ‘#ffffff’)
+- fgc = foreground color (name or hex code, default = ‘#000000’)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.core.crop_images">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.core.</span></span><span class="sig-name descname"><span class="pre">crop_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.core.crop_images" title="Link to this definition"></a></dt>
+<dd><p>Trims whitespace or transparency from image files and saves the results.</p>
+<p>If process_folder is True, input_files is treated as a directory path,
+and all images within (excluding those ending in -C) are processed.
+Otherwise, input_files is treated as a single file path or a list of paths.</p>
+<p>The function preserves original image metadata (DPI, ICC profiles).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_files</strong> (<em>str</em><em>, </em><em>Path</em><em>, or </em><em>list</em>) – File path(s) or a directory path.</p></li>
+<li><p><strong>process_folder</strong> (<em>bool</em>) – If True, treats input_files as a directory to crawl.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Prints status messages to the console for each file processed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.core.smart_trim">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.core.</span></span><span class="sig-name descname"><span class="pre">smart_trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.core.smart_trim" title="Link to this definition"></a></dt>
+<dd><p>Determines the bounding box of the meaningful content in an image.</p>
+<p>This function automatically detects if the image has transparency (Alpha channel).
+If it does, it calculates the bounding box based on non-transparent pixels.
+If the image is opaque, it assumes a white background and calculates the
+bounding box by detecting differences from a pure white canvas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> (<em>PIL.Image.Image</em>) – The source image object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A 4-tuple (left, upper, right, lower) defining the crop box,</dt><dd><p>or None if the image is uniform/empty.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.kinetics">
+<span id="pyphyschemtools-kinetics-module"></span><h2>pyphyschemtools.kinetics module<a class="headerlink" href="#module-pyphyschemtools.kinetics" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.kinetics.</span></span><span class="sig-name descname"><span class="pre">KORD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G0_theo">
+<span class="sig-name descname"><span class="pre">G0_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G0_theo" title="Link to this definition"></a></dt>
+<dd><p>Model for Order 0 kinetics.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G1_theo">
+<span class="sig-name descname"><span class="pre">G1_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G1_theo" title="Link to this definition"></a></dt>
+<dd><p>Model for Order 1 kinetics.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G2_theo">
+<span class="sig-name descname"><span class="pre">G2_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G2_theo" title="Link to this definition"></a></dt>
+<dd><p>Model for Order 2 kinetics.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits the chosen kinetic model to the experimental data, with order=order (Default: 1)
+verbose=True: prints the initial guess vector p0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.get_best_order">
+<span class="sig-name descname"><span class="pre">get_best_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.get_best_order" title="Link to this definition"></a></dt>
+<dd><p>Determines and prints the best model based on the lowest RMSD.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.load_from_excel">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_from_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.load_from_excel" title="Link to this definition"></a></dt>
+<dd><p>Static method to extract data from an Excel file.
+Selects the pair of columns (t, G) corresponding to the experiment number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.plot_all_fits">
+<span class="sig-name descname"><span class="pre">plot_all_fits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.plot_all_fits" title="Link to this definition"></a></dt>
+<dd><p>Plots experimental data and all three kinetic models for visual comparison.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.spectra">
+<span id="pyphyschemtools-spectra-module"></span><h2>pyphyschemtools.spectra module<a class="headerlink" href="#module-pyphyschemtools.spectra" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.spectra.</span></span><span class="sig-name descname"><span class="pre">SpectrumSimulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma_ev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotWH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_axisText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_axisLabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_legends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#3e89be'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorVT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#469cd6'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT">
+<span class="sig-name descname"><span class="pre">plotAbs_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resetColors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT" title="Link to this definition"></a></dt>
+<dd><p>Plots a simulated TDDFT VUV absorbance spectrum (transitions summed with gaussian functions)
+between lambdamin and lambdamax (sum of states done in the range [lambdamin-50, lambdamlax+50] nm)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datFiles</strong> – list of pathway/name to files generated by ‘GParser Gaussian.log -S’</p></li>
+<li><p><strong>C0</strong> – list of concentrations needed to calculate A = epsilon x l x c (in mol.L-1)</p></li>
+<li><p><strong>lambdamin</strong> – plot range (x axis)</p></li>
+<li><p><strong>lambdamax</strong> – plot range (x axis)</p></li>
+<li><p><strong>Amax</strong> – y axis graph limit</p></li>
+<li><p><strong>titles</strong> – list of titles (1 per spectrum plot)</p></li>
+<li><p><strong>linestyles</strong> – list of line styles(default = “-”, i.e. a continuous line)</p></li>
+<li><p><strong>annotateP</strong> – list of Boolean (annotate lambda max True or False. Default = True)</p></li>
+<li><p><strong>tP</strong> – threshold for finding the peaks (default = 0.1)</p></li>
+<li><p><strong>resetColors</strong> (<em>bool</em>) – If True, resets the matplotlib color cycle
+to the first color. This allows different series
+(e.g., gas phase vs. solvent) to share the same
+color coding for each molecule across multiple calls. Default: False</p></li>
+<li><p><strong>save</strong> – saves in a png file (300 dpi) if True (default = False)</p></li>
+<li><p><strong>filename</strong> – saves figure in a 300 dpi png file if not None (default), with filename=full pathway</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_exp">
+<span class="sig-name descname"><span class="pre">plotAbs_lambda_exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csvFiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_exp" title="Link to this definition"></a></dt>
+<dd><p>Plots an experimental VUV absorbance spectrum read from a csv file between lambdamin and lambdamax</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>superpose</strong> (<em>-</em>) – False = plots a new graph, otherwise the plot is superposed to a previously created one
+(probably with plotAbs_lambda_TDDFT())</p></li>
+<li><p><strong>csvfiles</strong> (<em>-</em>) – list of pathway/name to experimental csvFiles (see examples for the format)</p></li>
+<li><p><strong>C0</strong> (<em>-</em>) – list of experimental concentrations, i.e. for each sample</p></li>
+<li><p><strong>lambdamin</strong> (<em>-</em>) – plot range (x axis)</p></li>
+<li><p><strong>lambdamax</strong> – plot range (x axis)</p></li>
+<li><p><strong>Amax</strong> (<em>-</em>) – graph limit (y axis)</p></li>
+<li><p><strong>titles</strong> (<em>-</em>) – list of titles (1 per spectrum plot)</p></li>
+<li><p><strong>linestyles</strong> (<em>-</em>) – list of line styles(default = “–”, i.e. a dashed line)</p></li>
+<li><p><strong>annotateP</strong> (<em>-</em>) – list of Boolean (annotate lambda max True or False. Default = True)</p></li>
+<li><p><strong>tP</strong> (<em>-</em>) – threshold for finding the peaks (default = 0.1)</p></li>
+<li><p><strong>save</strong> (<em>-</em>) – saves in a png file (300 dpi) if True (default = False)</p></li>
+<li><p><strong>filename</strong> (<em>-</em>) – saves figure in a 300 dpi png file if not None (default), with filename=full pathway</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotEps_lambda_TDDFT">
+<span class="sig-name descname"><span class="pre">plotEps_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotEps_lambda_TDDFT" title="Link to this definition"></a></dt>
+<dd><p>Plots a TDDFT VUV simulated spectrum (vertical transitions and transitions summed with gaussian functions)
+between lambdamin and lambdamax</p>
+<p>The sum of states is done in the range
+[lambdamin-50, lambdamax+50] nm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datFile</strong> – list of pathway/names to “XXX_ExcStab.dat” files generated by ‘GParser Gaussian.log -S’</p></li>
+<li><p><strong>lambdamin</strong> – plot range</p></li>
+<li><p><strong>lambdamax</strong> – plot range</p></li>
+<li><p><strong>epsMax</strong> – y axis graph limit</p></li>
+<li><p><strong>titles</strong> – list of titles (1 per spectrum plot)</p></li>
+<li><p><strong>tP</strong> – threshold for finding the peaks (default = 10 L. mol-1 cm-1)</p></li>
+<li><p><strong>ylog</strong> – y logarithmic axis (default: False).</p></li>
+<li><p><strong>save</strong> – saves in a png file (300 dpi) if True (default = False)</p></li>
+<li><p><strong>filename</strong> – saves figure in a 300 dpi png file if not None (default), with filename=full pathway</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotTDDFTSpectrum">
+<span class="sig-name descname"><span class="pre">plotTDDFTSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sumInt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelTAB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feTAB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelSpectrum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#0000ff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#0000cf'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotTDDFTSpectrum" title="Link to this definition"></a></dt>
+<dd><p>Called by plotEps_lambda_TDDFT. Plots a single simulated UV-Vis spectrum, i.e. after
+gaussian broadening, together with the TDDFT vertical transitions (i.e. plotted as lines)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavel</strong> – array of gaussian-broadened wavelengths, in nm</p></li>
+<li><p><strong>sumInt</strong> – corresponding molar absorptiopn coefficients, in L. mol-1 cm-1</p></li>
+<li><p><strong>wavelTAB</strong> – wavelength of TDDFT, e.g. discretized, transitions</p></li>
+<li><p><strong>ylog</strong> – log plot of epsilon</p></li>
+<li><p><strong>tP</strong> – threshold for finding the peaks</p></li>
+<li><p><strong>feTAB</strong> – TDDFT oscillator strength for each transition of wavelTAB</p></li>
+<li><p><strong>labelSpectrum</strong> – title for the spectrum</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.survey">
+<span id="pyphyschemtools-survey-module"></span><h2>pyphyschemtools.survey module<a class="headerlink" href="#module-pyphyschemtools.survey" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.survey.</span></span><span class="sig-name descname"><span class="pre">SurveyApp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'participant'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ML-survey'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.analyze_text_columns">
+<span class="sig-name descname"><span class="pre">analyze_text_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.analyze_text_columns" title="Link to this definition"></a></dt>
+<dd><p>Basic textual analysis: show frequent words, word clouds, and per-question summary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.build_admin_dashboard">
+<span class="sig-name descname"><span class="pre">build_admin_dashboard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.build_admin_dashboard" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.build_participant_form">
+<span class="sig-name descname"><span class="pre">build_participant_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.build_participant_form" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.enable_slider_css">
+<span class="sig-name descname"><span class="pre">enable_slider_css</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.enable_slider_css" title="Link to this definition"></a></dt>
+<dd><p>Inject CSS for hover/active color effects on sliders.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.get_or_create_user_id">
+<span class="sig-name descname"><span class="pre">get_or_create_user_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.get_or_create_user_id" title="Link to this definition"></a></dt>
+<dd><p>Return a persistent anonymous ID (stored in .survey_id).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.list_drafts">
+<span class="sig-name descname"><span class="pre">list_drafts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.list_drafts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.load_all_responses">
+<span class="sig-name descname"><span class="pre">load_all_responses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.load_all_responses" title="Link to this definition"></a></dt>
+<dd><p>Load and merge all .csv survey responses into a DataFrame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.load_draft">
+<span class="sig-name descname"><span class="pre">load_draft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.load_draft" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.load_questions">
+<span class="sig-name descname"><span class="pre">load_questions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.load_questions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.plot_spider_multi">
+<span class="sig-name descname"><span class="pre">plot_spider_multi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Participant</span> <span class="pre">and</span> <span class="pre">Mean</span> <span class="pre">Scores</span> <span class="pre">per</span> <span class="pre">Block'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.plot_spider_multi" title="Link to this definition"></a></dt>
+<dd><p>Draw radar (spider) chart with per-participant transparency
+and block names instead of A–F.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.print_questions_summary">
+<span class="sig-name descname"><span class="pre">print_questions_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.print_questions_summary" title="Link to this definition"></a></dt>
+<dd><p>Affiche la liste des questions par bloc et leur type (Numérique/Texte).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.save_draft">
+<span class="sig-name descname"><span class="pre">save_draft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.save_draft" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.semantic_analysis">
+<span class="sig-name descname"><span class="pre">semantic_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.semantic_analysis" title="Link to this definition"></a></dt>
+<dd><p>Perform semantic clustering on open-ended responses using sentence-transformers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.submit_form">
+<span class="sig-name descname"><span class="pre">submit_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.submit_form" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.survey.SurveyApp.summarize_by_block">
+<span class="sig-name descname"><span class="pre">summarize_by_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.survey.SurveyApp.summarize_by_block" title="Link to this definition"></a></dt>
+<dd><p>Compute average score per block (A–F) for numeric questions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.sympyUtilities">
+<span id="pyphyschemtools-sympyutilities-module"></span><h2>pyphyschemtools.sympyUtilities module<a class="headerlink" href="#module-pyphyschemtools.sympyUtilities" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.sympyUtilities.PrintLatexStyleSymPyEquation">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.sympyUtilities.</span></span><span class="sig-name descname"><span class="pre">PrintLatexStyleSymPyEquation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.sympyUtilities.PrintLatexStyleSymPyEquation" title="Link to this definition"></a></dt>
+<dd><p>Function that displays a SymPy expression (spe) in a jupyter notebbok after its conversion into a LaTeX / Math output</p>
+<p>Input: spe= SymPy expression</p>
+<p>Output: Pretty printing of spe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.sympyUtilities.e2Lists">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.sympyUtilities.</span></span><span class="sig-name descname"><span class="pre">e2Lists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigenvectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.sympyUtilities.e2Lists" title="Link to this definition"></a></dt>
+<dd><p>returns two separate lists from the list of tuples returned by the eigenvects() function of SymPy</p>
+<p>input:
+- the list of tuples returned by eigenvects
+- sort (default: False): returns sorted eigenvalues and corresponding eigenvectors if True</p>
+<p>output
+- list of eigenvalues, sorted or not
+- list of corresponding eigenvectors</p>
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.tools4AS">
+<span id="pyphyschemtools-tools4as-module"></span><h2>pyphyschemtools.tools4AS module<a class="headerlink" href="#module-pyphyschemtools.tools4AS" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.ApplySecondeChance">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">ApplySecondeChance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCCSC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCCdelaSC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.ApplySecondeChance" title="Link to this definition"></a></dt>
+<dd><p>modification du dataframe df</p>
+<dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df = dataframe auquel on va ajouter une nouvelle colonne nomCCSC qui va contenir la note de la colonne nomCC soit celle de la colonne nomCCdelaSC, si cell-ci est supérieure à la notede nomCC</p></li>
+<li><p>nomCC = nom de la colonne à laquelle on applique la seconde chance</p></li>
+<li><p>nomCCSC = nom de la nouvelle colonne qui contient la note du CC après application de la seconde chance</p></li>
+<li><p>nomCCdelaSC = nom de la colonne qui contient la note “seconde chance</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>moyenne après application de la seconde chance</p></li>
+<li><p>écart-type  après application de la seconde chance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcours">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">BoiteAMoustachesByMentionEtParcours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Moyenne</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mention</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Parcours</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomGraphique</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcours" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcoursHue">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">BoiteAMoustachesByMentionEtParcoursHue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Moyenne</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mention</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Parcours</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomGraphique</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcoursHue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.ComparaisonMoyennesDMCC">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">ComparaisonMoyennesDMCC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SeuilBadDMCC1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SeuilGoodDMCC1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.ComparaisonMoyennesDMCC" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df = dataframe avec uniquement les étudiants AJ ou ADM, c’est-à-dire qu’il n’y a aucun fantôme</p></li>
+<li><p>nomCC1 = en-tête de la colonne de df qui contient la note du premier CC</p></li>
+<li><p>nomCC2 = en-tête de la colonne de df qui contient la note du 2nd CC</p></li>
+<li><p>SeuilBadDMCC1 = Seuil en-dessous duquel la note au nomCC1 est considérée comme médiocre</p></li>
+<li><p>SeuilGoodDMCC1 = Seuil au-deçà duquel la note au nomCC1 est considérée comme bonne</p></li>
+</ul>
+</dd>
+<dt>affichage :</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>moyenne au nomCC2 de la cohorte d’étudiant(e)s</dt><dd><ul>
+<li><p>en-dessous du SeuilBadDMCC1 au nomCC1</p></li>
+<li><p>au-dessus du SeuilGoodDMCC1 au nomCC1</p></li>
+<li><p>entre les deux seuils au nomCC1</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>jointplot entre nomCC1 et nomCC2 uniquement pour les étudiant(e)s dont la note au CC1 est considérée comme médiocre</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.CreationDfADMAJGH">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">CreationDfADMAJGH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Seuil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Parc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IDApoG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.CreationDfADMAJGH" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df = dataframe avec les mentions/parcours/moyennes</p></li>
+<li><p>note = nom de la colonne qui contient la moyenne globale</p></li>
+<li><p>Seuil = seuil de réussite pour départager ADM &amp; AJ</p></li>
+<li><p>prefix = préfixe du nom de fichier temporaire, incluant ou nom le nom d’un sous-répertoire de sauvegarde</p></li>
+<li><p>MD = nom de la colonne qui contient la dénomination simplifiée de la mention de diplôme (“MentionD”)</p></li>
+<li><p>Parc = nom de la colonne qui contient le parcours</p></li>
+<li><p>IDApoG = nom de la colonne qui contient l’ID des étudiants</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>dfADM = dataframe des admis</p></li>
+<li><p>dfAJ = dataframe des ajournés</p></li>
+<li><p>dfGhosts = dataframe des fantômes (aka Ghosts ; i.e. n’ont passé aucun des CC)</p></li>
+</ul>
+</dd>
+</dl>
+<p>affichage : stats rapides (describe &amp; sum) de chacun des sous-ensembles ADM, AJ, Ghosts</p>
+<p>sauvegarde : fichier excel tmp{Note}.xlsx avec 3 onglets (ADM, AJ, Ghosts)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.Histogrammes">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">Histogrammes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Moyenne</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomGraphique</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moyT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stdT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legende</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.Histogrammes" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df = dataframe qui contient ID, Noms, Prénoms, notes de CC, et Moyenne pondérée</p></li>
+<li><p>nomCC = liste qui contient noms d’en-têtes des colonnes qui contiennent les notes de CC</p></li>
+<li><p>Moyenne = nom de l’en-tête de la colonne qui contient la moyenne</p></li>
+<li><p>NomGraphique = nom du fichier png qui va contenir la figure</p></li>
+<li><p>w = liste qui contient les coeffs des CC</p></li>
+<li><p>moy = liste qui contient la moyenne de chaque CC</p></li>
+<li><p>std = liste qui contient l’écart-type calculé pour chaque CC</p></li>
+<li><p>moyT = moyenne des 4 CC</p></li>
+<li><p>stdT = écart-type calculé pour la note globale</p></li>
+<li><p>legende = titre qui sera affiché sur l’histogramme principal</p></li>
+</ul>
+</dd>
+<dt>affichage :</dt><dd><ul class="simple">
+<li><p>1 petit histogramme /CC</p></li>
+<li><p>1 grand histogramme avec la moyenne</p></li>
+</ul>
+</dd>
+<dt>sauvegarde :</dt><dd><ul class="simple">
+<li><p>fichier graphique ‘NomGraphique’ avec 1 petit histogramme par CC + 1 grand histogramme avec la moyenne</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.MentionAuModule">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">MentionAuModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">note</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Seuil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.MentionAuModule" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>note = valeur numérique ou NaN</p></li>
+<li><p>Seuil = seuil de réussite</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>m = mention au module (AJ, P, AB, B, TB ou PB!! dans le cas où la colonne contiendrait une valeur numérique non comprise entre 0 et 20, ou bien toute autre contenu (caractères etc)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.RenameDfHeader">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">RenameDfHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfCCname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelNoteCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.RenameDfHeader" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>dfCC = dataframe dont 1 colonne contient les notes de CC</p></li>
+<li><p>dfCCname = nom (string) du dataframe. Il est recommandé d’utiliser f’{dfCC=}’.split(‘=’)[0]</p></li>
+<li><p>labelNoteCC = label de la colonne qui contient les notes</p></li>
+<li><p>nomCC = label de l’épreuve de CC (ex CC1), utilisé pour l’affichage</p></li>
+</ul>
+</dd>
+</dl>
+<p>sortie : aucune</p>
+<p>la fonction change le nom ‘labelNoteCC’ en ‘nomCC’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.ReplaceABSByNan">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">ReplaceABSByNan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.ReplaceABSByNan" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>dataframe qui contient les notes</p></li>
+<li><p>nom des colonnes qui contiennent les notes</p></li>
+</ul>
+</dd>
+<dt>sortie</dt><dd><ul class="simple">
+<li><p>nouveau dataframe où toutes les notes des colonnes nomCC = ABS sont remplacées par des nan</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.ReplaceNanBy0">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">ReplaceNanBy0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.ReplaceNanBy0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.ReplaceNanBy0OLD">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">ReplaceNanBy0OLD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.ReplaceNanBy0OLD" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df = dataframe avec les notes</p></li>
+<li><p>nomCC = liste des en-têtes de colonnes qui contiennt les notes</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>le dataframe avec Nan remplacé par 0 pour chaque étudiant qui a au moins une note de CC</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.StackedBarPop">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">StackedBarPop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ListCols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomGraphique</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.StackedBarPop" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df : dataframe contenant l’analyse statistique globale, dont les moyennes, effectifs, etc. i.e. le dataframe renvoyé par StatsRéussiteParMentionOuParcours()</p></li>
+<li><p>ListCols = liste avecles labels des colonnes contenant les valeurs numériques qu’on veut tracer comme un histogramme empilé</p></li>
+<li><p>ylabel = label de l’axe des y</p></li>
+<li><p>NomGraphique = nom du fichier png qui va être sauvé</p></li>
+</ul>
+</dd>
+<dt>affichage :</dt><dd><ul class="simple">
+<li><p>bar plot empilé de pandas</p></li>
+</ul>
+</dd>
+<dt>sauvegarde :</dt><dd><p>fichier graphique ‘NomGraphique’ au format png</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.StackedBarPopPO">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">StackedBarPopPO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfRef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mention</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Parcours</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomGraphique</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.StackedBarPopPO" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>dfRef : dataframe contenant la liste des étudiants avec leur Mention et leur otpion, tel que généré par mentionD()</p></li>
+<li><p>Mention = nom de la colonne qui contient le nom simplifié d’une Mention</p></li>
+<li><p>Parcours = nom de la colonne qui contient la version simplifiée d’un Parcours</p></li>
+<li><p>NomGraphique = nom du fichier png qui va être sauvé</p></li>
+</ul>
+</dd>
+<dt>affichage :</dt><dd><ul class="simple">
+<li><p>histplot “hue” de seaborn, càd les effectifs par Parcours empilés pour chaque Mention</p></li>
+</ul>
+</dd>
+<dt>sauvegarde :</dt><dd><p>fichier graphique ‘NomGraphique’ au format png</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcours">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">StatsRéussiteParMentionOuParcours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfADM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfAJ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfGhosts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcours" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>dfT = dataframe qui contient toutes les notes, ainsi qu’au moins une catégorisation (exemple : Mention ou Parcours ou Section etc…)</p></li>
+<li><p>dfADM = dataframe qui contient uniquement les étudiants admis</p></li>
+<li><p>dfAJ = dataframe qui contient uniquement les étudiants ajournés (sans les fantômes)</p></li>
+<li><p>dfGhosts = dataframe qui contient la liste des fantômes</p></li>
+<li><p>Category = nom de la colonne sur laquelle on veut faire des analyses statistiques</p></li>
+<li><p>note = nom de la colonne qui contient la note qu’on veut analyser par catégorie (généralement la moyenne finale)</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>dfStats</p></li>
+</ul>
+</dd>
+</dl>
+<p>affichage :</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcoursWithAb">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">StatsRéussiteParMentionOuParcoursWithAb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfADM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfAJ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfGhosts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfAb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcoursWithAb" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>dfT = dataframe qui contient toutes les notes, ainsi qu’au moins une catégorisation (exemple : Mention ou Parcours ou Section etc…)</p></li>
+<li><p>dfADM = dataframe qui contient uniquement les étudiants admis</p></li>
+<li><p>dfAJ = dataframe qui contient uniquement les étudiants ajournés (sans les fantômes)</p></li>
+<li><p>dfGhosts = dataframe qui contient la liste des fantômes</p></li>
+<li><p>dfAb = dataframe qui contient la liste des étudiants qui ont abandonné</p></li>
+<li><p>Category = nom de la colonne sur laquelle on veut faire des analyses statistiques</p></li>
+<li><p>note = nom de la colonne qui contient la note qu’on veut analyser par catégorie (généralement la moyenne finale)</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>dfStats</p></li>
+</ul>
+</dd>
+</dl>
+<p>affichage :</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.checkNoID_DuplicateID">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">checkNoID_DuplicateID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomPrenom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.checkNoID_DuplicateID" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.concat2ApoG">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">concat2ApoG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df2Complete</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ID_ApoG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Col2SaveInCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IDCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.concat2ApoG" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>df2Complete = dataframe à compléter (merge = ‘left’)</dt><dd><ul>
+<li><p>au premier appel, ce soit être le fichier de Référence</p></li>
+<li><p>ensuite c’est le fichier de notes lui-même, en cours d’update</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>ID_ApoG = label de la colonne qui contient les numéros étudiants dans le fichier de référence</p></li>
+<li><p>dfCC = dataframe dont 1 colonne contient les notes de CC</p></li>
+<li><p>Col2SaveInCC = liste avec les en-têtes de colonnes qui contiennent les colonnes de dfCC à reporter dans dfNotes</p></li>
+<li><p>IDCC = label de la colonne qui contient les numéros étudiants dans le fichier de notes</p></li>
+<li><p>nomCC = à ce stade, c’est aussi bien le label de la colonne qui contient les notes que le label de l’épreuve de CC (ex CC1), utilisé pour l’affichage</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>le dataframe dfNotes. Contient la version concaténée du dataframe d’entrée df2complete et certaines colonnes du dataframe des notes dfCC
+([Col2SaveInCC + IDCC + nomCC])</p></li>
+<li><p>un dataframe dfnotFoundInRef qui contient la liste des étudiants qui sont dans le fichier de notes et pas dans le fichier de référence</p></li>
+</ul>
+</dd>
+<dt>affichages :</dt><dd><ul class="simple">
+<li><p>liste des étudiants qui sont dans le fichier de notes et pas dans le fichier de référence</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.css_styling">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">css_styling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.css_styling" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.dropColumnsByIndex">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">dropColumnsByIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idropC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.dropColumnsByIndex" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df = dataframe dont on veut supprimer des colonnes</p></li>
+<li><p>idropC = indices des colonnes dont on veut se débarasser</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>dfCleaned = dataframe originel dont les colonnes indexées par idropC ont été supprimées</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.kdePlotByMentionEtParcours">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">kdePlotByMentionEtParcours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Moyenne</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mention</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Parcours</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomGraphique</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.kdePlotByMentionEtParcours" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>df = dataframe qui contient ID, Noms, Prénoms, notes de CC, Moyenne pondérée, Mention et Parcours</p></li>
+<li><p>Mention = nom de l’en-tête de la colonne qui contient la Mention de diplôme simplifiée d’un étudiant</p></li>
+<li><p>Parcours = nom de l’en-tête de la colonne qui contient le parcours suivi par un étudiant</p></li>
+</ul>
+</dd>
+<dt>affichage :</dt><dd><ul class="simple">
+<li><p>1 graphe avec des plots kde par Mention</p></li>
+<li><p>1 graphe avec des plots kde par Parcours</p></li>
+</ul>
+</dd>
+<dt>sauvegarde :</dt><dd><ul class="simple">
+<li><p>fichier graphique ‘NomGraphique’ avec les 2 graphes</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.mentionD">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">mentionD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mention</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.mentionD" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.parcours">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">parcours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Parcours</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.parcours" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.plotTauxADMasBars">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">plotTauxADMasBars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfwoSC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfwSC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xCol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hueCol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NomGraphique</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.plotTauxADMasBars" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>dfwoSC = dataframe contenant les stats ADM/AJ/Ghosts avant l’application de la seconde chance</p></li>
+<li><p>dfwSC = dataframe contenant les stats ADM/AJ/Ghosts après l’application de la seconde chance</p></li>
+<li><p>xCol = nom de la colonne qui contient les taux de réussite</p></li>
+<li><p>hueCol = nom de la colonne qui contient les paramètres avant ou après seconde chance</p></li>
+<li><p>NomGraphique = nom du fichier png qui va être sauvé</p></li>
+</ul>
+</dd>
+<dt>affichage :</dt><dd><ul class="simple">
+<li><p>bar plot de seaborn</p></li>
+</ul>
+</dd>
+<dt>sauvegarde :</dt><dd><p>fichier graphique ‘NomGraphique’ au format png</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.read_excel">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">read_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xlFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.read_excel" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>entrée :</dt><dd><ul class="simple">
+<li><p>xlFile = nom du ficher excel</p></li>
+<li><p>decimal = “.” ou “,” selon le cas</p></li>
+<li><p>name = label du dataframe, utilisé pour l’affichage</p></li>
+</ul>
+</dd>
+<dt>sortie :</dt><dd><ul class="simple">
+<li><p>le dataframe qui contient l’intégralité du fichier excel</p></li>
+<li><p>le nombre de lignes de ce tableau (à l’exclusion de l’en-tête des colonnes)</p></li>
+</ul>
+</dd>
+<dt>affichage :</dt><dd><ul class="simple">
+<li><p>statistiques descriptives (describe) de toutes les colonnes, y compris celles qui ne contiennent pas de valeurs numériques</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.tools4AS.verifNotes">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.tools4AS.</span></span><span class="sig-name descname"><span class="pre">verifNotes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelNoteCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomCC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aabs'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.tools4AS.verifNotes" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>CC</strong> (<em>- nomCC = label de l'épreuve de</em>)</p></li>
+<li><p><strong>notes</strong> (<em>- labelNoteCC = label de la colonne qui contient les</em>)</p></li>
+<li><p><strong>CC</strong></p></li>
+<li><p><strong>module</strong> (<em>- NI = nombre d'inscrits dans le</em>)</p></li>
+<li><p><strong>absents</strong> (<em>-</em>) – <ul>
+<li><p>‘aabs’ : analyser s’il y a des étudiants qui n’ont pas été pointés au CC (défaut)</p></li>
+<li><dl class="simple">
+<dt>’noabs’<span class="classifier">ne pas analyser s’il y a des étudiants qui n’ont pas été pointés au CC</span></dt><dd><p>(ça n’a plus de sens une fois les fichiers concaténés)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>la moyenne et la déviation standard de liste de notes contenues dans le dataframe dfCC</p></li>
+<li><p>le nombre d’étudiants qui n’ont pas composé au CC</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Affiche le nombre d’étudiants avec le label ‘ABS’ et signale les
+étudiants sans note ni label, ce qui nécessite une vérification du PV.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.visualID">
+<span id="pyphyschemtools-visualid-module"></span><h2>pyphyschemtools.visualID module<a class="headerlink" href="#module-pyphyschemtools.visualID" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.chrono_show">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">chrono_show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.chrono_show" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.chrono_start">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">chrono_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.chrono_start" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.chrono_stop">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">chrono_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdelay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.chrono_stop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.BLUE">
+<span class="sig-name descname"><span class="pre">BLUE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.BLUE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.BOLD">
+<span class="sig-name descname"><span class="pre">BOLD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.BOLD" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.CYAN">
+<span class="sig-name descname"><span class="pre">CYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.CYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.DARKCYAN">
+<span class="sig-name descname"><span class="pre">DARKCYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[36m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.DARKCYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.GREEN">
+<span class="sig-name descname"><span class="pre">GREEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.GREEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.OFF">
+<span class="sig-name descname"><span class="pre">OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.OFF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.PURPLE">
+<span class="sig-name descname"><span class="pre">PURPLE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.PURPLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.RED">
+<span class="sig-name descname"><span class="pre">RED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.RED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.UNDERLINE">
+<span class="sig-name descname"><span class="pre">UNDERLINE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.UNDERLINE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.YELLOW">
+<span class="sig-name descname"><span class="pre">YELLOW</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.YELLOW" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.css_styling">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">css_styling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.css_styling" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.display_md">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">display_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.display_md" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.end">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.end" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.hdelay">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">hdelay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.hdelay" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.hdelay_ms">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">hdelay_ms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.hdelay_ms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID.init">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.init" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.visualID_Eng">
+<span id="pyphyschemtools-visualid-eng-module"></span><h2>pyphyschemtools.visualID_Eng module<a class="headerlink" href="#module-pyphyschemtools.visualID_Eng" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.apply_css_style">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">apply_css_style</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.apply_css_style" title="Link to this definition"></a></dt>
+<dd><p>Explicitly reads and applies the visualID CSS stylesheet
+from the package resources.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">bg</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.DARKRED">
+<span class="sig-name descname"><span class="pre">DARKRED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[38;5;231;48;5;52m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.DARKRED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.DARKREDB">
+<span class="sig-name descname"><span class="pre">DARKREDB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[38;5;231;48;5;52;1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.DARKREDB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTBLUE">
+<span class="sig-name descname"><span class="pre">LIGHTBLUE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;117m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTBLUE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTBLUEB">
+<span class="sig-name descname"><span class="pre">LIGHTBLUEB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;117;1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTBLUEB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTGREEN">
+<span class="sig-name descname"><span class="pre">LIGHTGREEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;156m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTGREEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTGREENB">
+<span class="sig-name descname"><span class="pre">LIGHTGREENB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;156;1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTGREENB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTRED">
+<span class="sig-name descname"><span class="pre">LIGHTRED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;217m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTRED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTREDB">
+<span class="sig-name descname"><span class="pre">LIGHTREDB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;217;1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTREDB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTYELLOW">
+<span class="sig-name descname"><span class="pre">LIGHTYELLOW</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;228m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTYELLOW" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.LIGHTYELLOWB">
+<span class="sig-name descname"><span class="pre">LIGHTYELLOWB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[48;5;228;1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.LIGHTYELLOWB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.bg.OFF">
+<span class="sig-name descname"><span class="pre">OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.bg.OFF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.chrono_show">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">chrono_show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.chrono_show" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.chrono_start">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">chrono_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.chrono_start" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.chrono_stop">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">chrono_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdelay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.chrono_stop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.BLUE">
+<span class="sig-name descname"><span class="pre">BLUE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.BLUE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.BOLD">
+<span class="sig-name descname"><span class="pre">BOLD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.BOLD" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.CYAN">
+<span class="sig-name descname"><span class="pre">CYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.CYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.DARKCYAN">
+<span class="sig-name descname"><span class="pre">DARKCYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[36m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.DARKCYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.GREEN">
+<span class="sig-name descname"><span class="pre">GREEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.GREEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.OFF">
+<span class="sig-name descname"><span class="pre">OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.OFF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.PURPLE">
+<span class="sig-name descname"><span class="pre">PURPLE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.PURPLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.RED">
+<span class="sig-name descname"><span class="pre">RED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.RED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.UNDERLINE">
+<span class="sig-name descname"><span class="pre">UNDERLINE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.UNDERLINE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.color.YELLOW">
+<span class="sig-name descname"><span class="pre">YELLOW</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.color.YELLOW" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.display_md">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">display_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.display_md" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.end">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.end" title="Link to this definition"></a></dt>
+<dd><p>Terminates the notebook session: displays duration,
+end time, and the termination logo from package resources.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">fg</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.BLACK">
+<span class="sig-name descname"><span class="pre">BLACK</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[30m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.BLACK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.BLUE">
+<span class="sig-name descname"><span class="pre">BLUE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.BLUE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.CYAN">
+<span class="sig-name descname"><span class="pre">CYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.CYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.DARKCYAN">
+<span class="sig-name descname"><span class="pre">DARKCYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[36m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.DARKCYAN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.DARKGRAY">
+<span class="sig-name descname"><span class="pre">DARKGRAY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[90m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.DARKGRAY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.GREEN">
+<span class="sig-name descname"><span class="pre">GREEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.GREEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.LIGHTGRAY">
+<span class="sig-name descname"><span class="pre">LIGHTGRAY</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[37m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.LIGHTGRAY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.OFF">
+<span class="sig-name descname"><span class="pre">OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.OFF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.PURPLE">
+<span class="sig-name descname"><span class="pre">PURPLE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.PURPLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.RED">
+<span class="sig-name descname"><span class="pre">RED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.RED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.WHITE">
+<span class="sig-name descname"><span class="pre">WHITE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[38;5;231m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.WHITE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.fg.YELLOW">
+<span class="sig-name descname"><span class="pre">YELLOW</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.fg.YELLOW" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hdelay">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">hdelay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hdelay" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hdelay_ms">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">hdelay_ms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hdelay_ms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">hl</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.BLINK">
+<span class="sig-name descname"><span class="pre">BLINK</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[5m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.BLINK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.BOLD">
+<span class="sig-name descname"><span class="pre">BOLD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.BOLD" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.ITALIC">
+<span class="sig-name descname"><span class="pre">ITALIC</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[3m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.ITALIC" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.OFF">
+<span class="sig-name descname"><span class="pre">OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.OFF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.UNDERL">
+<span class="sig-name descname"><span class="pre">UNDERL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.UNDERL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.blink">
+<span class="sig-name descname"><span class="pre">blink</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[25m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.blink" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.bold">
+<span class="sig-name descname"><span class="pre">bold</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[21m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.bold" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.italic">
+<span class="sig-name descname"><span class="pre">italic</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[23m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.italic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.hl.underl">
+<span class="sig-name descname"><span class="pre">underl</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[24m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.hl.underl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.init">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Research</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.init" title="Link to this definition"></a></dt>
+<dd><p>Initializes the notebook environment: applies CSS,
+displays the banner, and shows hostname/time.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="pyphyschemtools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pyphyschemtools.icons_logos_banner.html" class="btn btn-neutral float-right" title="pyphyschemtools.icons_logos_banner package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Romuald Poteau.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

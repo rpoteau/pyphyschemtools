@@ -1,4 +1,7 @@
 # tools4pyPhysChem/__init__.py
+__version__ = "0.1.0"
+__last_update__ = "2026-02-01"
+
 import importlib
 import importlib.util
 
@@ -23,7 +26,7 @@ def __getattr__(name):
 
     modules_to_search = [
         ".ML", ".PeriodicTable", ".Chem3D",  
-        ".aithermo", ".cheminformatics", ".kinetics", # Virgule corrigée ici
+        ".aithermo", ".cheminformatics", ".kinetics", 
         ".spectra", ".survey",  
         ".sympyUtilities", ".tools4AS"
     ]

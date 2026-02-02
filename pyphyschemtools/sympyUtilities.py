@@ -8,11 +8,9 @@ def PrintLatexStyleSymPyEquation(spe):
     """
     Function that displays a SymPy expression (spe) in a jupyter notebbok after its conversion into a LaTeX / Math output
 
-    Input:
-    spe: SymPy expression
+    Input: spe= SymPy expression
 
-    Output:
-    Pretty printing of spe
+    Output: Pretty printing of spe
 
     """
     from IPython.display import display,Math
@@ -23,12 +21,14 @@ def PrintLatexStyleSymPyEquation(spe):
 def e2Lists(eigenvectors, sort=False):
     '''
     returns two separate lists from the list of tuples returned by the eigenvects() function of SymPy
-    input
-        - the list of tuples returned by eigenvects
-        - sort (default: False): returns sorted eigenvalues and corresponding eigenvectors if True
+    
+    input:
+    - the list of tuples returned by eigenvects
+    - sort (default: False): returns sorted eigenvalues and corresponding eigenvectors if True
+    
     output
-        - list of eigenvalues, sorted or not
-        - list of corresponding eigenvectors
+    - list of eigenvalues, sorted or not
+    - list of corresponding eigenvectors
     '''
     import numpy as np
     eps = list()

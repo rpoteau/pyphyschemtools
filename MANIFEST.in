@@ -1,0 +1,30 @@
+include README.md
+include CHANGELOG.md
+include pyproject.toml
+include MANIFEST.in
+include LICENSE
+
+# Include everything inside docs and doc-latex
+recursive-include docs *
+
+# Include all source code inside pyphyschemtools
+recursive-include pyphyschemtools *
+
+# Include example notebooks
+include *.ipynb
+
+# Include md files
+include *.md
+
+# Exclude python compilation files
+global-exclude *.py[cod]
+global-exclude __pycache__/*
+global-exclude .DS_Store
+global-exclude *dev.py
+
+# Do not include additional graphic material, for developpers (but available on github)
+# Do not include the pyInstaller-related stuff
+prune pyphyschemtools/build
+prune pyphyschemtools/dist
+prune pyphyschemtools/archives
+prune Biblio

@@ -36,6 +36,18 @@ else
     exit 1
 fi
 
+# --- NEW DOCUMENTATION SECTION ---
+echo "---------------------------------------------------------------"
+echo "📚 Updating API Documentation (sphinx-apidoc)"
+# -f force overwrite, -M modules at top
+sphinx-apidoc -f -M -o docs/source/ ./pyphyschemtools/
+
+echo "🏗️  Building HTML Documentation"
+cd docs
+make html
+cd ..
+# ---------------------------------
+
 while true; do
     read -p "Do you wish to add > commit > push? (y/n) " yn
     case $yn in

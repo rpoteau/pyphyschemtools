@@ -30,22 +30,24 @@ import seaborn as sns
 
 def verifNotes(dfCC,labelNoteCC,nomCC,NI,absents='aabs'):
     """
-    entrée :
+    Args:
         - dfCC = dataframe dont 1 colonne contient les notes de CC
         - labelNoteCC = label de la colonne qui contient les notes
         - nomCC = label de l'épreuve de CC (ex CC1), utilisé pour l'affichage
         - NI = nombre d'inscrits dans le module
-        - absents = 'aabs' : analyser s'il y a des étudiants qui n'ont pas été pointés au CC (défaut)
-                  = 'noabs' : ne pas analyser s'il y a des étudiants qui n'ont pas été pointés au CC
-                              (ça n'a plus de sens une fois les fichiers concaténés)
+        - absents:
+            * 'aabs' : analyser s'il y a des étudiants qui n'ont pas été pointés au CC (défaut)
+            * 'noabs' : ne pas analyser s'il y a des étudiants qui n'ont pas été pointés au CC
+                        (ça n'a plus de sens une fois les fichiers concaténés)
         
-    sortie :
+    Returns:
         - la moyenne et la déviation standard de liste de notes contenues dans le dataframe dfCC
         - le nombre d'étudiants qui n'ont pas composé au CC
     
-    affichages :
-        - nombre d'étudiants avec label 'ABS'|'Abs'|'abs'
-        - nombre d'étudiants sans note ni label ABS. En général c'est problématique. Vérifier le PV 
+    Note:
+        Affiche le nombre d'étudiants avec le label 'ABS' et signale les 
+        étudiants sans note ni label, ce qui nécessite une vérification du PV.
+        
     """
     print()
     #pd.set_option("display.max_rows", len(dfCC))
@@ -81,9 +83,11 @@ def RenameDfHeader(dfCC,dfCCname,labelNoteCC,nomCC):
         - dfCCname = nom (string) du dataframe. Il est recommandé d'utiliser f'{dfCC=}'.split('=')[0]
         - labelNoteCC = label de la colonne qui contient les notes
         - nomCC = label de l'épreuve de CC (ex CC1), utilisé pour l'affichage
+        
     sortie : aucune
 
     la fonction change le nom 'labelNoteCC' en 'nomCC'
+    
     """
     print(f"{hl.BOLD}{fg.BLUE}Normalisation du nom des colonnes de notes{fg.OFF}")
     print(f"{hl.BOLD}Dataframe = {dfCCname}.{fg.OFF} {labelNoteCC} --> {nomCC}")

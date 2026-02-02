@@ -53,20 +53,19 @@ class aiThermo:
         extract surface names and legend labels.
 
         Args:
-            vib (bool): If True, filters for files including vibrational corrections 
-                (prefixed with 'vib_'). If False, looks for standard thermodynamic data.
+            vib (bool): If True, filters for files including vibrational corrections (prefixed with ``vib_``). If False, looks for standard thermodynamic data.
 
         Returns:
             tuple: A triplet containing:
-                - file_paths (list of str): Absolute or relative paths to the .dat files.
-                - names (list of str): Internal identifiers for each surface phase.
-                - legends (list of str): LaTeX-formatted or plain text labels for 
-                  graphical legends.
+            - file_paths (list of str): Absolute or relative paths to the .dat files.
+            - names (list of str): Internal identifiers for each surface phase.
+            - legends (list of str): LaTeX-formatted or plain text labels for graphical legends.
 
         Notes:
             - The lists are returned in reverse order to ensure correct layering 
               during 3D plotting.
             - Relies on 'ListOfStableSurfaces.dat' existing in the folder_path.
+            
         """
         self._check_folder()
         from .core import centertxt

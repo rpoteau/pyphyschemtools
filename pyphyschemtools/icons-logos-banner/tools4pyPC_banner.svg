@@ -30,7 +30,7 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.5144774"
-     inkscape:cx="258.50501"
+     inkscape:cx="258.83516"
      inkscape:cy="-125.45582"
      inkscape:window-width="2544"
      inkscape:window-height="1344"
@@ -153,14 +153,14 @@
        inkscape:export-ydpi="300.008" /><text
        xml:space="preserve"
        style="font-weight:bold;font-size:12.7px;line-height:0px;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;fill:#550000;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
-       x="125.39015"
+       x="127.50679"
        y="37.797546"
        id="text1"><tspan
          sodipodi:role="line"
          id="tspan1"
          style="font-size:12.7px;fill:#550000;stroke:none;stroke-width:0.264583px"
-         x="125.39015"
-         y="37.797546">tools4pyPhysChem</tspan></text><g
+         x="127.50679"
+         y="37.797546">pyPhysChemTools</tspan></text><g
        id="g1"
        transform="matrix(0.8125002,0,0,0.8125002,18.162517,8.4196315)"
        style="stroke-width:1.23077"><path

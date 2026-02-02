@@ -1,5 +1,5 @@
 [project]
-name = "tools4pyPhysChem"
+name = "pyphyschemtools"
 version = "0.1.0"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
@@ -18,27 +18,26 @@ dependencies = [
     "py3Dmol"
 ]
 
+[project.urls]
+Homepage = "https://github.com/rpoteau/pyphyschemtools"
+Repository = "https://github.com/rpoteau/pyphyschemtools"
+Changelog = "https://github.com/rpoteau/pyphyschemtools/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/rpoteau/pyphyschemtools/blob/main/README.md"
+Issues = "https://github.com/rpoteau/pyphyschemtools/issues"
+
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 include-package-data = true
-
-[tool.setuptools.packages.find]
-where = ["tools4pyPhysChem"]
+packages = ["pyphyschemtools"]
 
 [tool.setuptools.package-data]
-"hmo" = [
-    "DesignOfMOdiagram/*",
-    "Fonts/**/*",
-    "icons-logos-banner/**/*"
+"pyphyschemtools" = [
+    "icons-logos-banner/**/*",
+    "resources/**/*",
 ]
-
-#[project.urls]
-#Documentation = "https://hmo.readthedocs.io/"
-#Repository = "https://github.com/rpoteau/HMO"
-#Changelog = "https://github.com/rpoteau/HMO/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 docs = [

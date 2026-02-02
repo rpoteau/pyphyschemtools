@@ -183,7 +183,7 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
             echo -e "${YELLOW}     - No extra comment provided. Using default version message.${RESET}"
         fi
 
-	echo -e "${YELLOW}Commit message: $COMMIT_MSG${RESET}"
+	echo -e "${RED}Commit message: $COMMIT_MSG${RESET}"
         git commit -m "$COMMIT_MSG"
         git tag "v$NEW_VERSION"
         git push

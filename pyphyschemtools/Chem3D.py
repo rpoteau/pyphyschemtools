@@ -615,7 +615,9 @@ class molView:
             response = requests.get(url)
             if response.status_code == 200:
                 content = response.text
-                fmt = "pdb"
+                fmt = "proteindatabank"
+            else:
+                raise ValueError(f"Could not find PDB ID: {self.mol} on RSCB")
                 
         elif self.source == 'cod':
             url = f"https://www.crystallography.net/cod/{self.mol}.cif"
@@ -634,8 +636,21 @@ class molView:
         if self.source == 'file':
             if not os.path.exists(self.mol):
                 raise FileNotFoundError(f"File not found: {self.mol}")
+            
+            # Extraction de l'extension sans le point
             ext = os.path.splitext(self.mol)[1].lower().replace('.', '')
-            fmt = 'cif' if ext == 'cif' else ext
+            
+            # Mapping explicite pour ASE
+            if ext == 'pdb':
+                fmt = 'proteindatabank'
+            elif ext == 'xyz':
+                fmt = 'xyz'
+            elif ext == 'cif':
+                fmt = 'cif'
+            else:
+                # Fallback sur l'extension si format exotique
+                fmt = ext
+                
             with open(self.mol, 'r') as f:
                 content = f.read()
         
@@ -649,19 +664,24 @@ class molView:
 
         # --- EXTRACTION XYZData (Interne) ---
         # On extrait les données ici avant toute modification (RDKit ou Supercell)
-        try:
-            if self.source == 'ase':
-                temp_atoms = self.mol
-            else:
-                temp_atoms = read(io.StringIO(content), format=fmt)
+        if self.source == 'ase':
+            atoms = self.mol
+        else:
+            try:
+                # On utilise l'alias long d'ASE pour PDB, sinon le format détecté
+                atoms = read(io.StringIO(content), format=fmt)
+            except Exception as e:
+                # Si l'extraction échoue, on tente une dernière fois sans format forcé
+                try:
+                    atoms = read(io.StringIO(content))
+                except:
+                    print(f"Extraction of coordinates is impossible ({e})")
+                    atoms = Atoms()
             
             self.data = XYZData(
-                symbols=temp_atoms.get_chemical_symbols(),
-                positions=temp_atoms.get_positions()
+                symbols=atoms.get_chemical_symbols(),
+                positions=atoms.get_positions()
             )
-        except Exception as e:
-            print(f"Note: Extraction des coordonnées impossible ({e})")
-            self.data = None            
             
         # --- Modern Bond Perception with RDKit ---
         if self.detect_bonds and self.source in ['file', 'mol', 'xyz'] and fmt == 'xyz':

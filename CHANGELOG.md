@@ -4,5 +4,9 @@
 
 # Changelog
 
+## Version 0.2.0 - 2026-02-02
+### changed
+- `chem3D.py`. Wrong treatment of pdb coordinates by ase. Main change is `fmt="pdb"` replaced with `fmt="proteindatabank"` in `Chem3D.py`
+
 ## Version 0.1.0 - 2026-02-01
 first commit

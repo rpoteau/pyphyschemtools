@@ -4,6 +4,11 @@
 
 # Changelog
 
+## Version 0.3.3 - 2026-02-03
+### added
+- `Examples.ipynb` notebook, new examples of use for:
+    - **easy_rdkit** class of `cheminformatics.py`
+
 ## Version 0.3.0 - 2026-02-02
 ### changed
 - `chem3D.py`

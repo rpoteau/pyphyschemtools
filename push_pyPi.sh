@@ -88,7 +88,7 @@ fi
 echo -e "$SEPARATOR"
 print_padded_line_wbg "Do you want to increment the $CURRENT_VERSION version? (y/n) "  "$SEPARATOR_WIDTH"
 echo -e "$SEPARATOR"
-read -r REPLY
+read -r REPLY < /dev/tty
 
 if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     echo -e "${CYAN}Which level? ([p]atch / [m]inor / [M]ajor)${RESET}"
@@ -183,6 +183,7 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
             echo -e "${YELLOW}     - No extra comment provided. Using default version message.${RESET}"
         fi
 
+	echo -e "${YELLOW}Commit message: $COMMIT_MSG${RESET}"
         git commit -m "$COMMIT_MSG"
         git tag "v$NEW_VERSION"
         git push

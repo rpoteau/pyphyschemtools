@@ -1,6 +1,6 @@
 [project]
 name = "pyphyschemtools"
-version = "0.1.4"
+version = "0.1.5"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
@@ -19,7 +19,6 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/rpoteau/pyphyschemtools"
 Repository = "https://github.com/rpoteau/pyphyschemtools"
 Changelog = "https://github.com/rpoteau/pyphyschemtools/blob/main/CHANGELOG.md"
 Documentation = "https://pyphyschemtools.readthedocs.io/en/latest/"

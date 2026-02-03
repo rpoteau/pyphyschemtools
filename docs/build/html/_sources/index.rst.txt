@@ -15,8 +15,16 @@ pyphyschemtools documentation
 
     <br>
 
+Welcome to **pyphyschemtools**. This documentation combines computational tools with scientific theoretical reviews to support your chemical and physical chemistry workflows.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: 📚 Theoretical background
+
+   theory/Kinetics_KORD
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 🛠 API Reference (Technical)
 
    modules

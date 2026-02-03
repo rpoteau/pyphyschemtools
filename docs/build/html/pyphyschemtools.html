@@ -9,6 +9,7 @@
   <title>pyphyschemtools package &mdash; pyphyschemtools 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/visualID.css?v=8e30d5fa" />
 
   
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
@@ -17,6 +18,7 @@
       <script src="_static/documentation_options.js?v=01f34227"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -43,7 +45,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">📚 Theoretical background</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/Kinetics_KORD.html">kinetics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyphyschemtools</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyphyschemtools package</a><ul>
@@ -746,36 +752,66 @@ bounding box by detecting differences from a pure white canvas.</p>
 <span id="pyphyschemtools-kinetics-module"></span><h2>pyphyschemtools.kinetics module<a class="headerlink" href="#module-pyphyschemtools.kinetics" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.kinetics.</span></span><span class="sig-name descname"><span class="pre">KORD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.kinetics.</span></span><span class="sig-name descname"><span class="pre">KORD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_0_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_inf_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Initialize the kinetic study with experimental data.
+Reaction: alpha A = beta B</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_exp</strong> (<em>-</em>) – Time values.</p></li>
+<li><p><strong>G_exp</strong> (<em>-</em>) – Measured physical quantity (Absorbance, Conductivity, etc.).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Fixed Parameters:</dt><dd><ul class="simple">
+<li><p>alpha (float): Stoichiometric coefficient for A reactant (smallest positive integer). Default is 1.0.</p></li>
+<li><p>beta (float): Stoichiometric coefficient for B product (smallest positive integer). Default is 1.0.</p></li>
+<li><p>A0 (float): Initial concentration. Note: G_theo is independent of A0 for Order 1. Default is 1.0.</p></li>
+</ul>
+</dd>
+<dt>Adjustable Variables (Initial Guesses):</dt><dd><ul class="simple">
+<li><p>k_guess (float, optional): Initial estimate for the rate constant. Default is 0.01.</p></li>
+<li><p>G_0_guess (float, optional): Initial estimate for the initial measured value (G at t=0). if None, it will be initialized as G_exp[0]</p></li>
+<li><p>G_inf_guess (float, optional): Initial estimate for the final measured value (G at infinity). if None, it will be initialized as G_exp[-1]</p></li>
+</ul>
+</dd>
+<dt>Other Args:</dt><dd><ul class="simple">
+<li><p>verbose (bool): If True, enables debug messages and detailed optimization logs.</p></li>
+<li><p>headers (tuple of strings): headers of the t_exp and G_exp arrays read in the excel file</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G0_theo">
 <span class="sig-name descname"><span class="pre">G0_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G0_theo" title="Link to this definition"></a></dt>
-<dd><p>Model for Order 0 kinetics.</p>
+<dd><p>Continuous linear model for optimization.
+Allows A(t) to be negative so curve_fit can find the gradient.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G1_theo">
 <span class="sig-name descname"><span class="pre">G1_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G1_theo" title="Link to this definition"></a></dt>
-<dd><p>Model for Order 1 kinetics.</p>
+<dd><p>Model for Order 1 kinetics</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G2_theo">
 <span class="sig-name descname"><span class="pre">G2_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G2_theo" title="Link to this definition"></a></dt>
-<dd><p>Model for Order 2 kinetics.</p>
+<dd><p>Model for Order 2 kinetics</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.fit" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_0_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_inf_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.fit" title="Link to this definition"></a></dt>
 <dd><p>Fits the chosen kinetic model to the experimental data, with order=order (Default: 1)
 verbose=True: prints the initial guess vector p0</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.get_best_order">
-<span class="sig-name descname"><span class="pre">get_best_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.get_best_order" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_best_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.get_best_order" title="Link to this definition"></a></dt>
 <dd><p>Determines and prints the best model based on the lowest RMSD.</p>
 </dd></dl>
 
@@ -783,7 +819,16 @@ verbose=True: prints the initial guess vector p0</p>
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.load_from_excel">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_from_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.load_from_excel" title="Link to this definition"></a></dt>
 <dd><p>Static method to extract data from an Excel file.
-Selects the pair of columns (t, G) corresponding to the experiment number.</p>
+Selects the pair of columns (t, G) corresponding to the experiment number.
+Also loads parameters (A0, alpha, beta)
+Format:</p>
+<blockquote>
+<div><p>Row 1: Headers for t and G
+Row 2: [A]0 value (in the G column)
+Row 3: alpha value (in the G column)
+Row 4: beta value (in the G column)
+Row 5+: [t, G] data points</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py method">

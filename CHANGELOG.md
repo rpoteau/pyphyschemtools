@@ -4,6 +4,25 @@
 
 # Changelog
 
+## Version 0.3.4 - 2026-02-03
+
+### Added
+- **Automatic Parameter Extraction**: `load_from_excel` now automatically parses $A_0$, $\alpha$, and $\beta$ from the Excel file (Rows 2, 3, and 4 in the $G$ column).
+- **Dynamic Visualization**: Added color-matched horizontal dashed lines for fitted $G_0$ and $G_{\infty}$ values on the plots.
+- **Dual Y-Axis**: Implemented a secondary y-axis on fits to display precise numerical values for the extrapolated limits ($G_0$ and $G_{\infty}$).
+- **Documentation**: Added notes on the physical validity of Order 0 models regarding mathematical artifacts (e.g., negative absorbance) after reaction completion.
+
+### Changed
+- **Type Safety**: Forced explicit `float64` conversion for `t_exp` and `G_exp` arrays to resolve `ufunc` errors and "object" dtype issues from Excel imports.
+- **Optimization Strategy**: Refactored the Order 0 fitting model to use a continuous linear function. This ensures non-zero gradients for the optimizer, significantly improving convergence when initial guesses are poor.
+- **API Refactoring**: Grouped physical parameters into a dedicated tuple `(a0, alpha, beta)` in the `load_from_excel` return signature.
+- **Docstring Relocation**: Moved parameter descriptions to the class level to ensure full visibility on **Read the Docs**.
+
+### Fixed
+- **Attribute Logic**: Corrected an assignment error where `self.alpha` was being used for both reactant and product coefficients (now correctly uses `self.beta`).
+- **Stability**: Added safety checks in `plot_all_fits` to prevent `KeyError` crashes when specific kinetic orders fail to converge.
+- **Gradient Stalling**: Fixed the "stuck" optimizer for Order 0 by removing the time-completion plateau during the fitting phase.
+
 ## Version 0.3.3 - 2026-02-03
 ### added
 - `Examples.ipynb` notebook, new examples of use for:

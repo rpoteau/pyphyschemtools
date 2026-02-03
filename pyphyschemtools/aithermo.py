@@ -13,16 +13,14 @@ class aiThermo:
     """
     A class to handle thermodynamic surface stability analysis and visualization
     within the tools4pyPhysChem framework.
+    Initialize the aiThermo object.
+    
+    Args:
+        folder_path (str or Path): Path to the working directory.
+        color_scales (list, optional): List of plotly-compatible color scales.
     """
 
     def __init__(self, folder_path=None, color_scales=None):
-        """
-        Initialize the aiThermo object.
-
-        Args:
-            folder_path (str or Path): Path to the working directory.
-            color_scales (list, optional): List of plotly-compatible color scales.
-        """
         self.folder_path = Path(folder_path) if folder_path else None
         self.color_scales = color_scales or [
             [[0, "#dadada"], [1, "#dadada"]], [[0, "#99daaf"], [1, "#99daaf"]],

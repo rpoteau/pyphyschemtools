@@ -16,17 +16,15 @@ class easy_rdkit():
     """
     A helper class to analyze and visualize molecules using RDKit.
     Provides tools for Lewis structure analysis and advanced 2D drawing.
+    Initialize the molecule object from a SMILES string.
+    
+    Args:
+        smiles (str): The SMILES representation of the molecule.
+        canonical (bool): If True, converts the SMILES to its canonical form 
+                          to ensure consistent atom numbering and uniqueness.
     """
 
     def __init__(self,smiles, canonical=True):
-        """
-        Initialize the molecule object from a SMILES string.
-        
-        Args:
-            smiles (str): The SMILES representation of the molecule.
-            canonical (bool): If True, converts the SMILES to its canonical form 
-                              to ensure consistent atom numbering and uniqueness.
-        """
         from rdkit import Chem
         
         mol = Chem.MolFromSmiles(smiles)

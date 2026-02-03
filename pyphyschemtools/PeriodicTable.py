@@ -7,6 +7,16 @@ from .core import centerTitle, centertxt
 import mendeleev
 
 class TableauPeriodique:
+    """
+    Classe permettant de manipuler et d'afficher les données du tableau périodique.
+    
+    Cette classe utilise la bibliothèque 'mendeleev' pour récupérer les données chimiques
+    et 'bokeh' pour la visualisation interactive. Elle francise les noms et corrige
+    certaines classifications de familles chimiques.
+
+    Initialise l'objet TableauPeriodique en chargeant les données de la bibliothèque mendeleev.
+    """
+    
     nomsFr=['Hydrogène','Hélium','Lithium','Béryllium','Bore','Carbone','Azote','Oxygène',
             'Fluor','Néon','Sodium','Magnésium','Aluminium','Silicium','Phosphore','Soufre',
             'Chlore','Argon','Potassium','Calcium','Scandium','Titane','Vanadium','Chrome',
@@ -63,10 +73,12 @@ class TableauPeriodique:
             return s
 
         def name_eng2fr():
+            """Remplace les noms anglais des éléments par leurs équivalents français."""
             self.elements["nom"] = TableauPeriodique.nomsFr
             return
 
         def ajouter_donnees():
+            """Récupère et fusionne des données supplémentaires comme l'énergie de première ionisation."""
             import numpy as np
             from mendeleev.fetch import fetch_table, fetch_ionization_energies
             import pandas as pd
@@ -99,6 +111,12 @@ class TableauPeriodique:
         return
 
     def prop(self,elt_id):
+        """
+        Affiche les propriétés détaillées d'un élément chimique.
+
+        Args:
+            elt_id (str ou int): Symbole de l'élément (ex: 'O') ou numéro atomique (ex: 8).
+        """
         from mendeleev import element
 
         elt = element(elt_id)
@@ -137,6 +155,11 @@ class TableauPeriodique:
         print()
 
     def afficher(self):
+        """
+        Génère et affiche le tableau périodique interactif dans un notebook Jupyter.
+        
+        Le tableau permet de visualiser les propriétés au survol de la souris.
+        """
         from bokeh.plotting import show, output_notebook
         from mendeleev.vis import periodic_table_bokeh
         

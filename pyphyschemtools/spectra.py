@@ -10,27 +10,29 @@ import scipy.constants as sc
 
 class SpectrumSimulator:
 
+    """
+    Initializes the spectrum simulator
+
+    Args:
+        - sigma_ev (float): Gaussian half-width at half-maximum in electron-volts (eV).
+                            Default is 0.3 eV (GaussView default is 0.4 eV).
+        - plotWH (tuple(int,int)): Width and Height of the matplotlib figures in inches. Default is (12,8).
+        - colorS: color of the simulated spectrum (default ='#3e89be')
+        - colorVT: color of the vertical transition line (default = '#469cd6')
+
+    Returns:
+        None: This method initializes the instance attributes.
+    Calculates:
+        sigmanm = half-width of the Gaussian band, in nm
+        
+    """
+    
     def __init__(self, sigma_ev=0.3, plotWH=(12,8), \
                  fontSize_axisText=14, fontSize_axisLabels=14, fontSize_legends=12,
                  fontsize_peaks=12,
                  colorS='#3e89be',colorVT='#469cd6'
                 ):
-        """
-        Initializes the spectrum simulator
 
-        Args:
-            - sigma_ev (float): Gaussian half-width at half-maximum in electron-volts (eV).
-                                Default is 0.3 eV (GaussView default is 0.4 eV).
-            - plotWH (tuple(int,int)): Width and Height of the matplotlib figures in inches. Default is (12,8).
-            - colorS: color of the simulated spectrum (default ='#3e89be')
-            - colorVT: color of the vertical transition line (default = '#469cd6')
-
-        Returns:
-            None: This method initializes the instance attributes.
-        Calculates:
-            sigmanm = half-width of the Gaussian band, in nm
-            
-        """
         self.sigma_ev = sigma_ev
         # Conversion constante eV -> nm sigma
         self.ev2nm_const = (sc.h * sc.c) * 1e9 / sc.e

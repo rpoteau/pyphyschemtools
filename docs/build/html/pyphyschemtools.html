@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.3.6 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.3.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/visualID.css?v=8e30d5fa" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=8da8c241"></script>
+      <script src="_static/documentation_options.js?v=29d04658"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -471,10 +471,17 @@ output:
 <dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.PeriodicTable.</span></span><span class="sig-name descname"><span class="pre">TableauPeriodique</span></span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Classe permettant de manipuler et d’afficher les données du tableau périodique.</p>
+<p>Cette classe utilise la bibliothèque ‘mendeleev’ pour récupérer les données chimiques
+et ‘bokeh’ pour la visualisation interactive. Elle francise les noms et corrige
+certaines classifications de familles chimiques.</p>
+<p>Initialise l’objet TableauPeriodique en chargeant les données de la bibliothèque mendeleev.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.afficher">
 <span class="sig-name descname"><span class="pre">afficher</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique.afficher" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Génère et affiche le tableau périodique interactif dans un notebook Jupyter.</p>
+<p>Le tableau permet de visualiser les propriétés au survol de la souris.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.nomsFr">
@@ -498,7 +505,13 @@ elements avec deux nouvelles colonnes name_seriesFr et nom, qui contient doréna
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.prop">
 <span class="sig-name descname"><span class="pre">prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elt_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.PeriodicTable.TableauPeriodique.prop" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Affiche les propriétés détaillées d’un élément chimique.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>elt_id</strong> (<em>str ou int</em>) – Symbole de l’élément (ex: ‘O’) ou numéro atomique (ex: 8).</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyphyschemtools.PeriodicTable.TableauPeriodique.trad">
@@ -515,7 +528,16 @@ elements avec deux nouvelles colonnes name_seriesFr et nom, qui contient doréna
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.aithermo.</span></span><span class="sig-name descname"><span class="pre">aiThermo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_scales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.aithermo.aiThermo" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to handle thermodynamic surface stability analysis and visualization
-within the tools4pyPhysChem framework.</p>
+within the tools4pyPhysChem framework.
+Initialize the aiThermo object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder_path</strong> (<em>str</em><em> or </em><em>Path</em>) – Path to the working directory.</p></li>
+<li><p><strong>color_scales</strong> (<em>list</em><em>, </em><em>optional</em>) – List of plotly-compatible color scales.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.aithermo.aiThermo.ListOfStableSurfaceCompositions">
 <span class="sig-name descname"><span class="pre">ListOfStableSurfaceCompositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vib</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.aithermo.aiThermo.ListOfStableSurfaceCompositions" title="Link to this definition"></a></dt>
@@ -634,7 +656,17 @@ Defaults to 0.4.</p></li>
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.cheminformatics.</span></span><span class="sig-name descname"><span class="pre">easy_rdkit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A helper class to analyze and visualize molecules using RDKit.
-Provides tools for Lewis structure analysis and advanced 2D drawing.</p>
+Provides tools for Lewis structure analysis and advanced 2D drawing.
+Initialize the molecule object from a SMILES string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smiles</strong> (<em>str</em>) – The SMILES representation of the molecule.</p></li>
+<li><p><strong>canonical</strong> (<em>bool</em>) – If True, converts the SMILES to its canonical form
+to ensure consistent atom numbering and uniqueness.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.analyze_lewis">
 <span class="sig-name descname"><span class="pre">analyze_lewis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.analyze_lewis" title="Link to this definition"></a></dt>
@@ -848,6 +880,28 @@ Also loads parameters (A0, alpha, beta)</p>
 <dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.spectra.</span></span><span class="sig-name descname"><span class="pre">SpectrumSimulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma_ev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotWH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_axisText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_axisLabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_legends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#3e89be'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorVT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#469cd6'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Initializes the spectrum simulator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sigma_ev</strong> (<em>-</em>) – Gaussian half-width at half-maximum in electron-volts (eV).
+Default is 0.3 eV (GaussView default is 0.4 eV).</p></li>
+<li><p><strong>plotWH</strong> (<em>-</em>) – Width and Height of the matplotlib figures in inches. Default is (12,8).</p></li>
+<li><p><strong>colorS</strong> (<em>-</em>) – color of the simulated spectrum (default =’#3e89be’)</p></li>
+<li><p><strong>colorVT</strong> (<em>-</em>) – color of the vertical transition line (default = ‘#469cd6’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>This method initializes the instance attributes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Calculates:</dt><dd><p>sigmanm = half-width of the Gaussian band, in nm</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT">
 <span class="sig-name descname"><span class="pre">plotAbs_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resetColors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT" title="Link to this definition"></a></dt>

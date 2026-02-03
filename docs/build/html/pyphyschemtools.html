@@ -820,13 +820,17 @@ verbose=True: prints the initial guess vector p0</p>
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_from_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.load_from_excel" title="Link to this definition"></a></dt>
 <dd><p>Static method to extract data from an Excel file.
 Selects the pair of columns (t, G) corresponding to the experiment number.
-Also loads parameters (A0, alpha, beta)
-Format:
-- Row 1: Headers for t and G
-- Row 2: [A]0 value (in the G column)
-- Row 3: alpha value (in the G column)
-- Row 4: beta value (in the G column)
-- Row 5+: [t, G] data points</p>
+Also loads parameters (A0, alpha, beta)</p>
+<dl class="simple">
+<dt>Format:</dt><dd><ul class="simple">
+<li><p>Row 1: Headers for t and G</p></li>
+<li><p>Row 2: [A]0 value (in the G column)</p></li>
+<li><p>Row 3: alpha value (in the G column)</p></li>
+<li><p>Row 4: beta value (in the G column)</p></li>
+<li><p>Row 5+: [t, G] data points</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

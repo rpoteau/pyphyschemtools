@@ -62,12 +62,14 @@ class KORD:
         Static method to extract data from an Excel file.
         Selects the pair of columns (t, G) corresponding to the experiment number.
         Also loads parameters (A0, alpha, beta)
+        
         Format:
-        - Row 1: Headers for t and G
-        - Row 2: [A]0 value (in the G column)
-        - Row 3: alpha value (in the G column)
-        - Row 4: beta value (in the G column)
-        - Row 5+: [t, G] data points
+            - Row 1: Headers for t and G
+            - Row 2: [A]0 value (in the G column)
+            - Row 3: alpha value (in the G column)
+            - Row 4: beta value (in the G column)
+            - Row 5+: [t, G] data points
+        
         """
         # 1. Check if file exists
         if not os.path.exists(file_path):

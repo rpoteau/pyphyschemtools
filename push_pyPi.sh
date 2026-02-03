@@ -140,11 +140,14 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
         VERSION_XY=$(echo "$NEW_VERSION" | cut -d'.' -f1,2)
         
         # Mise à jour de 'version' (ex: 1.2)
-        sed -i "s/^version *= *\".*\"/version = \"$VERSION_XY\"/" "$CONF_PY"
-        # Mise à jour de 'release' (ex: 1.2.4)
-        sed -i "s/^release *= *\".*\"/release = \"$NEW_VERSION\"/" "$CONF_PY"
-        
-        echo "     - version & release updated in docs/source/conf.py ... Done"
+        if grep -q "^version =" "$CONF_PY"; then
+            sed -i "s/^version *= *['\"].*['\"]/version = '$VERSION_XY'/" "$CONF_PY"
+        else
+            sed -i "/^project *=/a version = '$VERSION_XY'" "$CONF_PY"
+        fi
+        # 2. Update 'release' (supports both ' and " quotes)
+        sed -i "s/^release *= *['\"].*['\"]/release = '$NEW_VERSION'/" "$CONF_PY"
+            echo "     - version & release updated in docs/source/conf.py ... Done"
     else
         echo -e "${YELLOW}     - Warning: docs/source/conf.py not found, skipping documentation update.${RESET}"
     fi

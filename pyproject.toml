@@ -34,7 +34,10 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 include-package-data = true
-packages = ["pyphyschemtools"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pyphyschemtools*"]
 
 [tool.setuptools.package-data]
 "pyphyschemtools" = [
@@ -47,6 +50,9 @@ docs = [
   "sphinx",
   "sphinx_rtd_theme",
   "myst-parser",
+  "nbsphinx",
+  "ipykernel",
+  "pandoc",
   "numpydoc"
 ]
 

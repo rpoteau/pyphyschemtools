@@ -4,7 +4,22 @@
 
 # Changelog
 
-## Version 0.3.4 - 2026-02-03
+## [0.3.8] - 2026-02-03
+
+### Fixed
+- **Packaging**: Resolved `setuptools` warnings regarding "Package would be ignored" by replacing explicit package declaration with automatic discovery (`find_namespace`).
+- **Metadata**: Fixed a syntax error in `pyproject.toml` (missing comma in dependencies) that prevented package building.
+
+## [0.3.7] - 2026-02-03
+
+### Added
+- **Dependencies**: Added `bokeh`, `mendeleev`, and `ipykernel` to the core and documentation requirements.
+- **Documentation Build**: Added `nbsphinx` and `pandoc` to `optional-dependencies[docs]` to support Jupyter Notebook integration on ReadTheDocs.
+
+### Fixed
+- **ReadTheDocs**: Updated `.readthedocs.yaml` to ensure all optional documentation dependencies are installed during the build process.
+
+## [0.3.4] - 2026-02-03
 
 ### Added
 - **Automatic Parameter Extraction**: `load_from_excel` now automatically parses $A_0$, $\alpha$, and $\beta$ from the Excel file (Rows 2, 3, and 4 in the $G$ column).
@@ -23,12 +38,12 @@
 - **Stability**: Added safety checks in `plot_all_fits` to prevent `KeyError` crashes when specific kinetic orders fail to converge.
 - **Gradient Stalling**: Fixed the "stuck" optimizer for Order 0 by removing the time-completion plateau during the fitting phase.
 
-## Version 0.3.3 - 2026-02-03
+## [0.3.3] - 2026-02-03
 ### added
 - `Examples.ipynb` notebook, new examples of use for:
     - **easy_rdkit** class of `cheminformatics.py`
 
-## Version 0.3.0 - 2026-02-02
+## [0.3.0] - 2026-02-02
 ### changed
 - `chem3D.py`
     -  Source Validation & Auto-detection: Improved `molView.__init__` to automatically detect local file paths if source is not specified. Added a strict validation check against a list of allowed sources ('file', 'mol', 'cif', 'cid', 'rscb', 'cod', 'ase') with an early exit and clear error messaging to prevent kernel crashes
@@ -41,12 +56,12 @@
     - **molView** class of `chem3D.py`
     - **KORD** class of `kinetics.py`
 
-## Version 0.2.1 - 2026-02-02
+## [0.2.1] - 2026-02-02
 - `chem3D.py`. Enabled multi-line titles in `view_grid()` using HTML and CSS white-space properties 
 
-## Version 0.2.0 - 2026-02-02
+## [0.2.0] - 2026-02-02
 ### changed
 - `chem3D.py`. Wrong treatment of pdb coordinates by ase. Main change is `fmt="pdb"` replaced with `fmt="proteindatabank"` in `Chem3D.py`
 
-## Version 0.1.0 - 2026-02-01
+## [0.1.0] - 2026-02-01
 first commit

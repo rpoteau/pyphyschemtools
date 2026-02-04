@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>kinetics &mdash; pyphyschemtools 0.3.11 documentation</title>
+  <title>kinetics &mdash; pyphyschemtools 0.3.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/visualID.css?v=8e30d5fa" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theory/Kinetics_KORD.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3b0e221d"></script>
+      <script src="../_static/documentation_options.js?v=0cf6a877"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -153,7 +153,7 @@ The model fits the experimental data by adjusting the following:</p>
 </ul>
 <p>The optimization is performed for a specific reaction order at a time to determine which model best describes the experimental data.</p>
 <div class="rqE">
-<p>Ensure your starting values for <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(A_{0}\)</span>, <span class="math notranslate nohighlight">\(G_{0}\)</span> and <span class="math notranslate nohighlight">\(G_{\infty}\)</span> are realistic to help the algorithm converge.</p>
+<p>By default, KORD chooses the first and last G_\mathrm{EXP} values as <span class="math notranslate nohighlight">\(G_{0}\)</span> and <span class="math notranslate nohighlight">\(G_{\infty}\)</span>. And a default value is also setup by KORD. If you need to change that because of a convergence issue, ensure your starting values for <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(G_{0}\)</span> and <span class="math notranslate nohighlight">\(G_{\infty}\)</span> are realistic to help the algorithm converge.</p>
 </div>
 </div>
 </section>

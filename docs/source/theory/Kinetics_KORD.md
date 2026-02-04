@@ -29,7 +29,22 @@ In chemical kinetics, we track the evolution of molar concentrations over time: 
 
 <div class="intro">
 
-The model $G_\mathrm{THEO}$ is defined by two types of values: **fixed parameters** (input by the user) and **adjustable variables** (optimized by the algorithm).
+The model has three different expressions (see <a href="#theoretical-model">Theoretical model section</a>), depending on the order of the reaction:
+
+**Standard Formula for Order 0**:
+
+$$G_{\mathrm{THEO}}(t)=G_{0}+\frac{\alpha kt}{A_{0}}(G_{\infty}-G_{0})$$
+
+**Standard Formula for Order 1**:
+
+$$G_\mathrm{THEO}(t) = G_{\infty} + \exp(-\alpha kt)(G_{0} - G_{\infty})$$
+
+**Standard Formula for Order 2**:
+
+$$G_{\mathrm{THEO}}(t)=G_{\infty}-\frac{1}{1+A_{0}\alpha kt}(G_{\infty}-G_{0})$$
+
+
+$G_\mathrm{THEO}$ is defined by two types of values: **fixed parameters** (input by the user) and **adjustable variables** (optimized by the algorithm).
 
 **<u>Fixed Parameters</u>:**
 * **Reaction Order**: $n \in \{0, 1, 2\}$ (The user selects the order to test).

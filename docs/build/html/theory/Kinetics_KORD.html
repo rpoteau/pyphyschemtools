@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>kinetics &mdash; pyphyschemtools 0.3.13 documentation</title>
+  <title>kinetics &mdash; pyphyschemtools 0.3.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/visualID.css?v=8e30d5fa" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theory/Kinetics_KORD.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=a88e2c6e"></script>
+      <script src="../_static/documentation_options.js?v=6307bca3"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -127,7 +127,17 @@
 <section id="theoretical-model-g-mathrm-theo">
 <h4>1.2 Theoretical Model (<span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span>)<a class="headerlink" href="#theoretical-model-g-mathrm-theo" title="Link to this heading"></a></h4>
 <div class="intro">
-<p>The model <span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span> is defined by two types of values: <strong>fixed parameters</strong> (input by the user) and <strong>adjustable variables</strong> (optimized by the algorithm).</p>
+<p>The model has three different expressions (see <a href="#theoretical-model">Theoretical model section</a>), depending on the order of the reaction:</p>
+<p><strong>Standard Formula for Order 0</strong>:</p>
+<div class="math notranslate nohighlight">
+\[G_{\mathrm{THEO}}(t)=G_{0}+\frac{\alpha kt}{A_{0}}(G_{\infty}-G_{0})\]</div>
+<p><strong>Standard Formula for Order 1</strong>:</p>
+<div class="math notranslate nohighlight">
+\[G_\mathrm{THEO}(t) = G_{\infty} + \exp(-\alpha kt)(G_{0} - G_{\infty})\]</div>
+<p><strong>Standard Formula for Order 2</strong>:</p>
+<div class="math notranslate nohighlight">
+\[G_{\mathrm{THEO}}(t)=G_{\infty}-\frac{1}{1+A_{0}\alpha kt}(G_{\infty}-G_{0})\]</div>
+<p><span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span> is defined by two types of values: <strong>fixed parameters</strong> (input by the user) and <strong>adjustable variables</strong> (optimized by the algorithm).</p>
 <p><strong><u>Fixed Parameters</u>:</strong></p>
 <ul>
 <li><p><strong>Reaction Order</strong>: <span class="math notranslate nohighlight">\(n \in \{0, 1, 2\}\)</span> (The user selects the order to test).</p></li>

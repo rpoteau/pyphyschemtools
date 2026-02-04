@@ -57,7 +57,7 @@ The optimization is performed for a specific reaction order at a time to determi
 
 <div class="rqE">
 
-By default, KORD chooses the first and last G_\mathrm{EXP} values as $G_{0}$ and $G_{\infty}$. And a default value is also setup by KORD. If you need to change that because of a convergence issue, ensure your starting values for $k$, $G_{0}$ and $G_{\infty}$ are realistic to help the algorithm converge. 
+By default, KORD chooses the first and last $G_\mathrm{EXP}$ values as $G_{0}$ and $G_{\infty}$. And a default $k$ value is also setup by KORD. If you need to change that because of a convergence issue, ensure your starting values for $k$, $G_{0}$ and $G_{\infty}$ are realistic to help the algorithm converge. 
 
 </div>
 

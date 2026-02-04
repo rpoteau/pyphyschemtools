@@ -33,18 +33,12 @@ The model $G_\mathrm{THEO}$ is defined by two types of values: **fixed parameter
 
 **<u>Fixed Parameters</u>:**
 * **Reaction Order**: $n \in \{0, 1, 2\}$ (The user selects the order to test).
-* **Stoichiometry**: $\alpha$ and $\beta$ are known constants.
+* **Stoichiometry**: $\alpha$ and $\beta$ are known constants, provided by the user.
   <div class="rqE">
       
   $\alpha$ and $\beta$ must be the smallest possible positive integers
   </div>
-
-**<u>Adjustable Variables</u>:**
-The model fits the experimental data by adjusting the following:
-* **Rate Constant**: $k$
-* **Final Value**: $G_{\infty}$
-* **Initial Value**: $G_{0}$ (While $G_{0}$ is measured, the algorithm also adjusts it to ensure the best fit starting point).
-* **Initial Concentration**: $A_{0}$ (Note: For Order 1, $G_{THEO}$ is independent of $A_{0}$).
+* **Initial Concentration**: $A_{0}$ (Note: For Order 1, $G_{THEO}$ is independent of $A_{0}$). The concentration must also be provided by the user
 
   <div class="rqE">
         
@@ -52,6 +46,12 @@ The model fits the experimental data by adjusting the following:
 
   $$\frac{A_0}{\alpha} = \frac{B_{\infty}}{\beta}$$
   </div>
+
+**<u>Adjustable Variables</u>:**
+The model fits the experimental data by adjusting the following:
+* **Rate Constant**: $k$
+* **Final Value**: $G_{\infty}$
+* **Initial Value**: $G_{0}$ (While $G_{0}$ is measured, the algorithm also adjusts it to ensure the best fit starting point).
 
 The optimization is performed for a specific reaction order at a time to determine which model best describes the experimental data.
 
@@ -72,6 +72,15 @@ The algorithm minimizes the **Root-Mean-Square Deviation** to fit the theoretica
 $$RMSD = \sqrt{\frac{1}{n} \sum_{k=1}^{n} \{G_\mathrm{EXP}(t_{k}) - G_\mathrm{THEO}(t_{k})\}^{2}}$$
 
 </div>
+
+#### 1.4 Input
+
+<div class="intro">
+
+Data input is performed through a structured Excel file. Users simply provide the kinetic parameters ($\alpha$, $\beta$), the initial concentration $[A]_0$, and the experimental data series (time $t$ and property $G_{\mathrm{exp}}$). 
+
+</div>
+
 
 ---
 

@@ -33,15 +33,19 @@ The model has three different expressions (see <a href="#theoretical-model">Theo
 
 **Standard Formula for Order 0**:
 
-$$G_{\mathrm{THEO}}(t)=G_{0}+\frac{\alpha kt}{A_{0}}(G_{\infty}-G_{0})$$
+$$\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) & t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} & t>\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}$$
 
 **Standard Formula for Order 1**:
 
-$$G_\mathrm{THEO}(t) = G_{\infty} + \exp(-\alpha kt)(G_{0} - G_{\infty})$$
+$$\hat{G}^{[1]}(t)=G_{\infty}+\exp\left(-\alpha kt\right)\left(G_{0}-G_{\infty}\right)$$
 
 **Standard Formula for Order 2**:
 
-$$G_{\mathrm{THEO}}(t)=G_{\infty}-\frac{1}{1+A_{0}\alpha kt}(G_{\infty}-G_{0})$$
+$$\hat{G}^{[2]}(t)=
+G_{0}+\dfrac{\left(G_{\infty}-G_{0}\right)}{1+\dfrac{\beta}{b_{\infty}\alpha^{2}kt}}=G_{0}+\frac{\left(G_{\infty}-G_{0}\right)b_{\infty}\alpha^{2}kt}{b_{\infty}\alpha^{2}kt+\beta}$$
 
 
 $G_\mathrm{THEO}$ is defined by two types of values: **fixed parameters** (input by the user) and **adjustable variables** (optimized by the algorithm).
@@ -53,13 +57,13 @@ $G_\mathrm{THEO}$ is defined by two types of values: **fixed parameters** (input
       
   $\alpha$ and $\beta$ must be the smallest possible positive integers
   </div>
-* **Initial Concentration**: $A_{0}$ (Note: For Order 1, $G_{THEO}$ is independent of $A_{0}$). The concentration must also be provided by the user
+* **Initial Concentration**: $a_{0}$ (Note: For Order 1, $G_{THEO}$ is independent of $a_{0}$). The concentration must also be provided by the user
 
   <div class="rqE">
         
-  The final concentration of B, $B_{\infty}$ is related to $A_0$ by the relation:
+  The final concentration of B, $b_{\infty}$ is related to $a_0$ by the relation:
 
-  $$\frac{A_0}{\alpha} = \frac{B_{\infty}}{\beta}$$
+  $$\frac{a_0}{\alpha} = \frac{b_{\infty}}{\beta}$$
   </div>
 
 **<u>Adjustable Variables</u>:**
@@ -106,33 +110,36 @@ Data input is performed through a structured Excel file. Users simply provide th
 
 The reaction model used in KORD is designed to be as simple as possible based on the following criteria:
 
-- Single-component reaction: A unique reactant $A$ transforms into a unique product $B$ ($\alpha A \rightarrow \beta B$)
-- Total reaction: The reaction goes to completion (the extent of reaction is 100%)
-- Closed system: No exchange of matter occurs between the system and its environment; only energy exchanges are possible
-- Homogeneous system: The concentration of any compound $C_i$ is uniform throughout the entire system
-- Isochoric system: The volume of the system remains constant throughout the reaction.
+- Single-component reaction: A **unique reactant** $A$ transforms into a **unique product** $B$ ($\alpha A \rightarrow \beta B$)
+- **Total reaction**: The reaction goes to completion (the extent of reaction is 100%)
+- **Closed system**: No exchange of matter occurs between the system and its environment; only energy exchanges are possible
+- **Homogeneous system**: The concentration of any compound $C_i$ is uniform throughout the entire system
+- **Isochoric system**: The volume of the system remains constant throughout the reaction.
 
 </div>
 
-#### 2.1 Reactant Expression $A(t)$
-
-<div class="intro">
+#### 2.1 Reactant Expression $a(t)$
 
 The rate law is defined as:
 
-$$v = -\frac{1}{\alpha} \frac{dA}{dt} = k A^{n}$$
+$$v = -\frac{1}{\alpha} \frac{d[A]}{dt} = k [A]^{n}$$
+
+<div class="intro">
 
 * **Order 0**: 
 
-$$A(t)=A_{0}-\alpha kt$$
+$$a(t)=\begin{cases}
+a_{0}-\alpha kt & t\leq\frac{a_{0}}{\alpha k}\\
+0 & t>\frac{a_{0}}{\alpha k}
+\end{cases}$$
 
 * **Order 1**: 
 
-$$A(t) = A_{0} \exp(-\alpha kt)$$
+$$a(t) = a_{0} \exp(-\alpha kt)$$
 
 * **Order 2**: 
 
-$$A(t) = \frac{1}{\frac{1}{A_{0}} + \alpha kt}$$
+$$a(t) = \frac{1}{\frac{1}{a_{0}} + \alpha kt}$$
 
 </div>
 
@@ -140,18 +147,21 @@ $$A(t) = \frac{1}{\frac{1}{A_{0}} + \alpha kt}$$
 
 <div class="intro">
 
-Derived from mass balance ($M_{A} A(t) + M_{B} B(t) = M_{A} A_{0} = M_{B} B_{\infty}$):
+Derived from mass balance ($M_{A} a(t) + M_{B} b(t) = M_{A} a_{0} = M_{B} b_{\infty}$):
 * **Order 0**:
 
-$$B(t)=\beta kt$$
+$$b(t)=\begin{cases}
+\beta kt & t\leq\frac{b_{\infty}}{\beta k}\\
+0 & t>\frac{b_{\infty}}{\beta k}
+\end{cases}$$
 
 * **Order 1**:
 
-$$B(t) = B_{\infty} \{1 - \exp(-\alpha kt)\}$$
+$$b(t) = b_{\infty} \{1 - \exp(-\alpha kt)\}$$
 
 * **Order 2**:
 
-$$B(t)=B_{\infty}\left(\frac{1}{1+\frac{\alpha}{A_{0}\alpha^{2}kt}}\right)$$
+$$b(t)=\frac{b_{\infty}}{1+\frac{\beta}{b_{\infty}\alpha^{2}kt}}$$
 
 </div>
 
@@ -159,28 +169,34 @@ $$B(t)=B_{\infty}\left(\frac{1}{1+\frac{\alpha}{A_{0}\alpha^{2}kt}}\right)$$
 
 <div class="intro">
 
-The theoretical quantity is a linear combination of $A(t)$ and $B(t)$:
+The theoretical quantity is a linear combination of $a(t)$ and $b(t)$:
 
-$$G_\mathrm{THEO}(t) = \frac{G_{0}}{A_{0}} \cdot A(t) + \frac{G_{\infty}}{B_{\infty}} \cdot B(t)$$
+$$G_\mathrm{THEO}(t) = \frac{G_{0}}{a_{0}} \cdot a(t) + \frac{G_{\infty}}{b_{\infty}} \cdot b(t)$$
 
 **Standard Formula for Order 0**:
 
-$$G_{\mathrm{THEO}}(t)=G_{0}+\frac{\alpha kt}{A_{0}}(G_{\infty}-G_{0})$$
+$$\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) & t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} & t>\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}$$
 
 <div class="rqE">
     
-Warning: This mathematical model for Order 0 is a linear equation. Unlike Order 1 or 2, this linear model does not naturally plateau. Depending on the values of $k$ and $t$, the model may predict non-physical values (e.g., negative absorbance or negative concentration) if the time $t$ exceeds the theoretical completion time $t_{end} = \frac{A_{0}}{\alpha k}$. These values are mathematical artifacts and should be ignored.
+Warning: This mathematical model for Order 0 is a linear equation. Unlike Order 1 or 2, this linear model does not naturally plateau. Depending on the values of $k$ and $t$, the model may predict non-physical values (e.g., negative absorbance or negative concentration) if the time $t$ exceeds the theoretical completion time $t_{\mathrm{end}} = \frac{a_{0}}{\alpha k}=\frac{b_{\infty}}{\beta k}$. These values are mathematical artifacts and should be ignored.
     
 </div>
 <br>
 
 **Standard Formula for Order 1**:
 
-$$G_\mathrm{THEO}(t) = G_{\infty} + \exp(-\alpha kt)(G_{0} - G_{\infty})$$
+$$\hat{G}^{[1]}(t)=G_{\infty}+\exp\left(-\alpha kt\right)\left(G_{0}-G_{\infty}\right)$$
 
 **Standard Formula for Order 2**:
 
-$$G_{\mathrm{THEO}}(t)=G_{\infty}-\frac{1}{1+A_{0}\alpha kt}(G_{\infty}-G_{0})$$
+$$\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) & t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} & t>\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}$$
 
 </div>
 

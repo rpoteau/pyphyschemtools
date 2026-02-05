@@ -4,6 +4,25 @@
 
 # Changelog
 
+## [0.4.0] - 2026-02-05. KORD. Kinetic Optimization & Visualization Overhaul & BIC
+
+### Added
+- **Smart Rate Constant Guessing**: Implemented an "Initial Slope" logic in the `fit` method. The starting $k$ is now dynamically calculated based on the first 10% of experimental data, ensuring improved convergence.
+- **Mosaic Visualization**: Replaced single plots with a complex `subplot_mosaic` layout. It now displays a "Global Comparison" alongside individual concentration profiles for $[A]$ and $[B]$.
+- **Interactive Overwrite Protection**: Added a console prompt with ANSI color coding to prevent accidentally overwriting existing `.svg` or `.png` files when saving plots.
+- **Physical Constraints**: Integrated parameter `bounds` into `curve_fit` to enforce $k > 0$ and $b_{\infty} > 0$, preventing mathematically "correct" but physically impossible negative rates.
+- **Information Criteria (AIC & BIC)**: Integrated Akaike and Bayesian Information Criteria into the fitting pipeline. These metrics allow for objective model selection by penalizing over-parameterization (complexity taken into account by BIC).
+- **Statistical Verdict**: Added a "Confidence Verdict" in `get_best_order` based on the Kass & Raftery scale (ΔBIC), classifying model preference from "Weak" to "Decisive."
+
+### Fixed
+- **Order 1 Covariance Error**: Resolved the "rank deficient" error by correctly managing the redundancy of $b_{\infty}$ in first-order kinetic models.
+- **F-string LaTeX Conflicts**: Fixed `SyntaxError` by using raw strings and doubling curly braces for LaTeX annotations (e.g., $t_{1/2}$ and $b_{\infty}$).
+- **Zero-Order Stagnation**: Improved the sensitivity of Order 0 fits by scaling the initial guess to the experimental time window and signal magnitude.
+
+### Changed
+- **Docstring Standard**: Adopted NumPy/Google style docstrings in English for better code maintainability.
+- **Export Quality**: Plot saving now defaults to `dpi=300` with `bbox_inches='tight'` for publication-ready graphics in both raster (.png) and vector (.svg) formats.
+
 ## [0.3.8] - 2026-02-03
 
 ### Fixed

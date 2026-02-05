@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>kinetics &mdash; pyphyschemtools 0.3.15 documentation</title>
+  <title>kinetics &mdash; pyphyschemtools 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/visualID.css?v=8e30d5fa" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theory/Kinetics_KORD.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c77f38ba"></script>
+      <script src="../_static/documentation_options.js?v=1dd76d02"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +60,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#theoretical-model">2. Theoretical Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#reactant-expression-a-t">2.1 Reactant Expression <span class="math notranslate nohighlight">\(A(t)\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reactant-expression-a-t">2.1 Reactant Expression <span class="math notranslate nohighlight">\(a(t)\)</span></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#product-expression-b-t">2.2 Product Expression <span class="math notranslate nohighlight">\(B(t)\)</span></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#global-expression-g-mathrm-theo-t">2.3 Global Expression <span class="math notranslate nohighlight">\(G_\mathrm{THEO}(t)\)</span></a></li>
 </ul>
@@ -130,13 +130,17 @@
 <p>The model has three different expressions (see <a href="#theoretical-model">Theoretical model section</a>), depending on the order of the reaction:</p>
 <p><strong>Standard Formula for Order 0</strong>:</p>
 <div class="math notranslate nohighlight">
-\[G_{\mathrm{THEO}}(t)=G_{0}+\frac{\alpha kt}{A_{0}}(G_{\infty}-G_{0})\]</div>
+\[\begin{split}\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) &amp; t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} &amp; t&gt;\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
 <p><strong>Standard Formula for Order 1</strong>:</p>
 <div class="math notranslate nohighlight">
-\[G_\mathrm{THEO}(t) = G_{\infty} + \exp(-\alpha kt)(G_{0} - G_{\infty})\]</div>
+\[\hat{G}^{[1]}(t)=G_{\infty}+\exp\left(-\alpha kt\right)\left(G_{0}-G_{\infty}\right)\]</div>
 <p><strong>Standard Formula for Order 2</strong>:</p>
 <div class="math notranslate nohighlight">
-\[G_{\mathrm{THEO}}(t)=G_{\infty}-\frac{1}{1+A_{0}\alpha kt}(G_{\infty}-G_{0})\]</div>
+\[\hat{G}^{[2]}(t)=
+G_{0}+\dfrac{\left(G_{\infty}-G_{0}\right)}{1+\dfrac{\beta}{b_{\infty}\alpha^{2}kt}}=G_{0}+\frac{\left(G_{\infty}-G_{0}\right)b_{\infty}\alpha^{2}kt}{b_{\infty}\alpha^{2}kt+\beta}\]</div>
 <p><span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span> is defined by two types of values: <strong>fixed parameters</strong> (input by the user) and <strong>adjustable variables</strong> (optimized by the algorithm).</p>
 <p><strong><u>Fixed Parameters</u>:</strong></p>
 <ul>
@@ -146,11 +150,11 @@
 <p><span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> must be the smallest possible positive integers</p>
 </div>
 </li>
-<li><p><strong>Initial Concentration</strong>: <span class="math notranslate nohighlight">\(A_{0}\)</span> (Note: For Order 1, <span class="math notranslate nohighlight">\(G_{THEO}\)</span> is independent of <span class="math notranslate nohighlight">\(A_{0}\)</span>). The concentration must also be provided by the user</p>
+<li><p><strong>Initial Concentration</strong>: <span class="math notranslate nohighlight">\(a_{0}\)</span> (Note: For Order 1, <span class="math notranslate nohighlight">\(G_{THEO}\)</span> is independent of <span class="math notranslate nohighlight">\(a_{0}\)</span>). The concentration must also be provided by the user</p>
 <div class="rqE">
-<p>The final concentration of B, <span class="math notranslate nohighlight">\(B_{\infty}\)</span> is related to <span class="math notranslate nohighlight">\(A_0\)</span> by the relation:</p>
+<p>The final concentration of B, <span class="math notranslate nohighlight">\(b_{\infty}\)</span> is related to <span class="math notranslate nohighlight">\(a_0\)</span> by the relation:</p>
 <div class="math notranslate nohighlight">
-\[\frac{A_0}{\alpha} = \frac{B_{\infty}}{\beta}\]</div>
+\[\frac{a_0}{\alpha} = \frac{b_{\infty}}{\beta}\]</div>
 </div>
 </li>
 </ul>
@@ -189,76 +193,88 @@ The model fits the experimental data by adjusting the following:</p>
 <div class="intro">
 <p>The reaction model used in KORD is designed to be as simple as possible based on the following criteria:</p>
 <ul class="simple">
-<li><p>Single-component reaction: A unique reactant <span class="math notranslate nohighlight">\(A\)</span> transforms into a unique product <span class="math notranslate nohighlight">\(B\)</span> (<span class="math notranslate nohighlight">\(\alpha A \rightarrow \beta B\)</span>)</p></li>
-<li><p>Total reaction: The reaction goes to completion (the extent of reaction is 100%)</p></li>
-<li><p>Closed system: No exchange of matter occurs between the system and its environment; only energy exchanges are possible</p></li>
-<li><p>Homogeneous system: The concentration of any compound <span class="math notranslate nohighlight">\(C_i\)</span> is uniform throughout the entire system</p></li>
-<li><p>Isochoric system: The volume of the system remains constant throughout the reaction.</p></li>
+<li><p>Single-component reaction: A <strong>unique reactant</strong> <span class="math notranslate nohighlight">\(A\)</span> transforms into a <strong>unique product</strong> <span class="math notranslate nohighlight">\(B\)</span> (<span class="math notranslate nohighlight">\(\alpha A \rightarrow \beta B\)</span>)</p></li>
+<li><p><strong>Total reaction</strong>: The reaction goes to completion (the extent of reaction is 100%)</p></li>
+<li><p><strong>Closed system</strong>: No exchange of matter occurs between the system and its environment; only energy exchanges are possible</p></li>
+<li><p><strong>Homogeneous system</strong>: The concentration of any compound <span class="math notranslate nohighlight">\(C_i\)</span> is uniform throughout the entire system</p></li>
+<li><p><strong>Isochoric system</strong>: The volume of the system remains constant throughout the reaction.</p></li>
 </ul>
 </div>
 <section id="reactant-expression-a-t">
-<h4>2.1 Reactant Expression <span class="math notranslate nohighlight">\(A(t)\)</span><a class="headerlink" href="#reactant-expression-a-t" title="Link to this heading"></a></h4>
-<div class="intro">
+<h4>2.1 Reactant Expression <span class="math notranslate nohighlight">\(a(t)\)</span><a class="headerlink" href="#reactant-expression-a-t" title="Link to this heading"></a></h4>
 <p>The rate law is defined as:</p>
 <div class="math notranslate nohighlight">
-\[v = -\frac{1}{\alpha} \frac{dA}{dt} = k A^{n}\]</div>
+\[v = -\frac{1}{\alpha} \frac{d[A]}{dt} = k [A]^{n}\]</div>
+<div class="intro">
 <ul class="simple">
 <li><p><strong>Order 0</strong>:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
-\[A(t)=A_{0}-\alpha kt\]</div>
+\[\begin{split}a(t)=\begin{cases}
+a_{0}-\alpha kt &amp; t\leq\frac{a_{0}}{\alpha k}\\
+0 &amp; t&gt;\frac{a_{0}}{\alpha k}
+\end{cases}\end{split}\]</div>
 <ul class="simple">
 <li><p><strong>Order 1</strong>:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
-\[A(t) = A_{0} \exp(-\alpha kt)\]</div>
+\[a(t) = a_{0} \exp(-\alpha kt)\]</div>
 <ul class="simple">
 <li><p><strong>Order 2</strong>:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
-\[A(t) = \frac{1}{\frac{1}{A_{0}} + \alpha kt}\]</div>
+\[a(t) = \frac{1}{\frac{1}{a_{0}} + \alpha kt}\]</div>
 </div>
 </section>
 <section id="product-expression-b-t">
 <h4>2.2 Product Expression <span class="math notranslate nohighlight">\(B(t)\)</span><a class="headerlink" href="#product-expression-b-t" title="Link to this heading"></a></h4>
 <div class="intro">
-<p>Derived from mass balance (<span class="math notranslate nohighlight">\(M_{A} A(t) + M_{B} B(t) = M_{A} A_{0} = M_{B} B_{\infty}\)</span>):</p>
+<p>Derived from mass balance (<span class="math notranslate nohighlight">\(M_{A} a(t) + M_{B} b(t) = M_{A} a_{0} = M_{B} b_{\infty}\)</span>):</p>
 <ul class="simple">
 <li><p><strong>Order 0</strong>:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
-\[B(t)=\beta kt\]</div>
+\[\begin{split}b(t)=\begin{cases}
+\beta kt &amp; t\leq\frac{b_{\infty}}{\beta k}\\
+0 &amp; t&gt;\frac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
 <ul class="simple">
 <li><p><strong>Order 1</strong>:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
-\[B(t) = B_{\infty} \{1 - \exp(-\alpha kt)\}\]</div>
+\[b(t) = b_{\infty} \{1 - \exp(-\alpha kt)\}\]</div>
 <ul class="simple">
 <li><p><strong>Order 2</strong>:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
-\[B(t)=B_{\infty}\left(\frac{1}{1+\frac{\alpha}{A_{0}\alpha^{2}kt}}\right)\]</div>
+\[b(t)=\frac{b_{\infty}}{1+\frac{\beta}{b_{\infty}\alpha^{2}kt}}\]</div>
 </div>
 </section>
 <section id="global-expression-g-mathrm-theo-t">
 <h4>2.3 Global Expression <span class="math notranslate nohighlight">\(G_\mathrm{THEO}(t)\)</span><a class="headerlink" href="#global-expression-g-mathrm-theo-t" title="Link to this heading"></a></h4>
 <div class="intro">
-<p>The theoretical quantity is a linear combination of <span class="math notranslate nohighlight">\(A(t)\)</span> and <span class="math notranslate nohighlight">\(B(t)\)</span>:</p>
+<p>The theoretical quantity is a linear combination of <span class="math notranslate nohighlight">\(a(t)\)</span> and <span class="math notranslate nohighlight">\(b(t)\)</span>:</p>
 <div class="math notranslate nohighlight">
-\[G_\mathrm{THEO}(t) = \frac{G_{0}}{A_{0}} \cdot A(t) + \frac{G_{\infty}}{B_{\infty}} \cdot B(t)\]</div>
+\[G_\mathrm{THEO}(t) = \frac{G_{0}}{a_{0}} \cdot a(t) + \frac{G_{\infty}}{b_{\infty}} \cdot b(t)\]</div>
 <p><strong>Standard Formula for Order 0</strong>:</p>
 <div class="math notranslate nohighlight">
-\[G_{\mathrm{THEO}}(t)=G_{0}+\frac{\alpha kt}{A_{0}}(G_{\infty}-G_{0})\]</div>
+\[\begin{split}\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) &amp; t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} &amp; t&gt;\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
 <div class="rqE">
-<p>Warning: This mathematical model for Order 0 is a linear equation. Unlike Order 1 or 2, this linear model does not naturally plateau. Depending on the values of <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(t\)</span>, the model may predict non-physical values (e.g., negative absorbance or negative concentration) if the time <span class="math notranslate nohighlight">\(t\)</span> exceeds the theoretical completion time <span class="math notranslate nohighlight">\(t_{end} = \frac{A_{0}}{\alpha k}\)</span>. These values are mathematical artifacts and should be ignored.</p>
+<p>Warning: This mathematical model for Order 0 is a linear equation. Unlike Order 1 or 2, this linear model does not naturally plateau. Depending on the values of <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(t\)</span>, the model may predict non-physical values (e.g., negative absorbance or negative concentration) if the time <span class="math notranslate nohighlight">\(t\)</span> exceeds the theoretical completion time <span class="math notranslate nohighlight">\(t_{\mathrm{end}} = \frac{a_{0}}{\alpha k}=\frac{b_{\infty}}{\beta k}\)</span>. These values are mathematical artifacts and should be ignored.</p>
 </div>
 <br>
 <p><strong>Standard Formula for Order 1</strong>:</p>
 <div class="math notranslate nohighlight">
-\[G_\mathrm{THEO}(t) = G_{\infty} + \exp(-\alpha kt)(G_{0} - G_{\infty})\]</div>
+\[\hat{G}^{[1]}(t)=G_{\infty}+\exp\left(-\alpha kt\right)\left(G_{0}-G_{\infty}\right)\]</div>
 <p><strong>Standard Formula for Order 2</strong>:</p>
 <div class="math notranslate nohighlight">
-\[G_{\mathrm{THEO}}(t)=G_{\infty}-\frac{1}{1+A_{0}\alpha kt}(G_{\infty}-G_{0})\]</div>
+\[\begin{split}\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) &amp; t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} &amp; t&gt;\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
 </div>
 </section>
 </section>

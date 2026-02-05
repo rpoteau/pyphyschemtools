@@ -1,6 +1,6 @@
 [project]
 name = "pyphyschemtools"
-version = "0.3.15"
+version = "0.5.0"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
@@ -19,6 +19,7 @@ dependencies = [
     "pubchempy",
     "py3Dmol",
     "rdkit",
+    "scikit-learn",
     "scipy"
 ]
 

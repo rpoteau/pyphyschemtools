@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.3.15 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/visualID.css?v=8e30d5fa" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=c77f38ba"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -784,7 +784,7 @@ bounding box by detecting differences from a pure white canvas.</p>
 <span id="pyphyschemtools-kinetics-module"></span><h2>pyphyschemtools.kinetics module<a class="headerlink" href="#module-pyphyschemtools.kinetics" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.kinetics.</span></span><span class="sig-name descname"><span class="pre">KORD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_exp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_0_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_inf_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.kinetics.</span></span><span class="sig-name descname"><span class="pre">KORD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_exp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_exp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('Time</span> <span class="pre">/</span> <span class="pre">s',</span> <span class="pre">'G')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_0_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_inf_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_inf_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_simul_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Initialize the kinetic study with experimental data.
 Reaction: alpha A = beta B</p>
@@ -796,30 +796,32 @@ Reaction: alpha A = beta B</p>
 </ul>
 </dd>
 </dl>
-<dl class="simple">
+<dl>
 <dt>Fixed Parameters:</dt><dd><ul class="simple">
 <li><p>alpha (float): Stoichiometric coefficient for A reactant (smallest positive integer). Default is 1.0.</p></li>
 <li><p>beta (float): Stoichiometric coefficient for B product (smallest positive integer). Default is 1.0.</p></li>
-<li><p>A0 (float): Initial concentration. Note: G_theo is independent of A0 for Order 1. Default is 1.0.</p></li>
+<li><p>a0 (float): Initial concentration. Note: G_theo is independent of a0 for Order 1. Default is 1.0.</p></li>
 </ul>
 </dd>
 <dt>Adjustable Variables (Initial Guesses):</dt><dd><ul class="simple">
 <li><p>k_guess (float, optional): Initial estimate for the rate constant. Default is 0.01.</p></li>
 <li><p>G_0_guess (float, optional): Initial estimate for the initial measured value (G at t=0). if None, it will be initialized as G_exp[0]</p></li>
 <li><p>G_inf_guess (float, optional): Initial estimate for the final measured value (G at infinity). if None, it will be initialized as G_exp[-1]</p></li>
+<li><p>b_inf_guess (float, optional): Initial estimate for the final concentration of B ([B] at infinity). if None, it will be initialized as [A](t=0), i.e. a0</p></li>
 </ul>
 </dd>
 <dt>Other Args:</dt><dd><ul class="simple">
-<li><p>verbose (bool): If True, enables debug messages and detailed optimization logs.</p></li>
-<li><p>headers (tuple of strings): headers of the t_exp and G_exp arrays read in the excel file</p></li>
+<li><p>t_simul_max (float): the maximum time duration for theoretical simulations.</p></li>
 </ul>
+<p>It defines the range of the time vector [0, t_simul_max}] used to simulate and plot kinetic curves with simulate_plot
+- verbose (bool): If True defaulk), enables detailed optimization logs (recommended).
+- headers (tuple of strings): headers of the t_exp and G_exp arrays read in the excel file</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G0_theo">
-<span class="sig-name descname"><span class="pre">G0_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G0_theo" title="Link to this definition"></a></dt>
-<dd><p>Continuous linear model for optimization.
-Allows A(t) to be negative so curve_fit can find the gradient.</p>
+<span class="sig-name descname"><span class="pre">G0_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G0_theo" title="Link to this definition"></a></dt>
+<dd><p>Model for Order 0 kinetics</p>
 </dd></dl>
 
 <dl class="py method">
@@ -830,21 +832,119 @@ Allows A(t) to be negative so curve_fit can find the gradient.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.G2_theo">
-<span class="sig-name descname"><span class="pre">G2_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G2_theo" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">G2_theo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ginf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.G2_theo" title="Link to this definition"></a></dt>
 <dd><p>Model for Order 2 kinetics</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.concentrations">
+<span class="sig-name descname"><span class="pre">concentrations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.concentrations" title="Link to this definition"></a></dt>
+<dd><p>Calculate the time-dependent concentrations of reactant A and product B.</p>
+<p>This method derives the initial concentration (a0) from the fitted
+final product concentration (binf) using the stoichiometric ratio alpha/beta.
+It then computes the concentration profiles based on the integrated
+rate laws for the specified kinetic order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order</strong> (<em>int</em>) – Kinetic order (0, 1, or 2).</p></li>
+<li><p><strong>t</strong> (<em>array-like</em>) – Time vector for the calculation.</p></li>
+<li><p><strong>binf</strong> (<em>float</em>) – Final concentration of product B at t=infinity.</p></li>
+<li><p><strong>k</strong> (<em>float</em>) – Rate constant.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>(a, b) where ‘a’ is the concentration array of reactant A</dt><dd><p>and ‘b’ is the concentration array of product B.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Order 0: Linear decay/formation until reactant exhaustion.</p></li>
+<li><p>Order 1: Exponential decay/formation.</p></li>
+<li><p>Order 2: Hyperbolic progression based on the 1/[A] linear relationship.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_0_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_inf_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.fit" title="Link to this definition"></a></dt>
-<dd><p>Fits the chosen kinetic model to the experimental data, with order=order (Default: 1)
-verbose=True: prints the initial guess vector p0</p>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_0_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_inf_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A_0_guess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits the selected kinetic model (Order 0, 1, or 2) to the experimental data.</p>
+<p>This method uses non-linear least squares (scipy.optimize.curve_fit) to
+simultaneously optimize the rate constant (k), the initial and final
+physical property values (G0, Ginf), and the final product concentration (binf).
+Physical constraints are applied via parameter bounds to ensure k and binf
+remain positive.</p>
+<p>It includes automated ‘Smart Guessing’ for k, based on initial rates and computes
+information criteria (AIC/BIC) for model selection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k_guess</strong> (<em>float</em>) – Initial estimate for the rate constant (k).</p></li>
+<li><p><strong>G_0_guess</strong> (<em>float</em>) – Initial estimate for the physical property at t=0.</p></li>
+<li><p><strong>G_inf_guess</strong> (<em>float</em>) – Initial estimate for the physical property at t=infinity.</p></li>
+<li><p><strong>b_inf_guess</strong> (<em>float</em>) – Initial estimate for the final product concentration [B].</p></li>
+<li><p><strong>order</strong> (<em>int</em><em>, </em><em>optional</em>) – Kinetic order of the reaction (0, 1, or 2). Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A dictionary containing the optimized parameters (‘k’, ‘G0’, ‘Ginf’, ‘binf’)</dt><dd><p>and statistical metrics (‘RMSE’, ‘R2’, ‘t_half’). Returns None if
+optimization fails to converge.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>For Order 1, the timing is independent of binf, and alpha is coupled with k; hence binf is kept fixed during optimization.</p></li>
+<li><p>For Orders 0 and 2, binf and stoichiometry (alpha, beta) explicitly define the reaction’s capacity and end-point timing,
+ensuring physical consistency between the plateau and the slope.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.get_best_order">
 <span class="sig-name descname"><span class="pre">get_best_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.get_best_order" title="Link to this definition"></a></dt>
-<dd><p>Determines and prints the best model based on the lowest RMSD.</p>
+<dd><p>Determines and prints the best model based on the lowest RMSE.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.halflife">
+<span class="sig-name descname"><span class="pre">halflife</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.halflife" title="Link to this definition"></a></dt>
+<dd><p>Calculate the half-life (t1/2) for the reaction based on the kinetic order.</p>
+<p>The half-life represents the time required for the reactant concentration
+to reach half of its initial value (a0/2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order</strong> (<em>int</em>) – Kinetic order (0, 1, or 2).</p></li>
+<li><p><strong>k</strong> (<em>float</em>) – The optimized or guessed rate constant.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The calculated half-life value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Order 0: t1/2 = a0 / (2 * alpha * k) -&gt; Dependent on a0.</p></li>
+<li><p>Order 1: t1/2 = ln(2) / (alpha * k) -&gt; Independent of a0.</p></li>
+<li><p>Order 2: t1/2 = 1 / (alpha * k * a0) -&gt; Inversely proportional to a0.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
@@ -852,7 +952,7 @@ verbose=True: prints the initial guess vector p0</p>
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_from_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.load_from_excel" title="Link to this definition"></a></dt>
 <dd><p>Static method to extract data from an Excel file.
 Selects the pair of columns (t, G) corresponding to the experiment number.
-Also loads parameters (A0, alpha, beta)</p>
+Also loads parameters (a0, alpha, beta)</p>
 <dl class="simple">
 <dt>Format:</dt><dd><ul class="simple">
 <li><p>Row 1: Headers for t and G</p></li>
@@ -867,8 +967,19 @@ Also loads parameters (A0, alpha, beta)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.plot_all_fits">
-<span class="sig-name descname"><span class="pre">plot_all_fits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.plot_all_fits" title="Link to this definition"></a></dt>
-<dd><p>Plots experimental data and all three kinetic models for visual comparison.</p>
+<span class="sig-name descname"><span class="pre">plot_all_fits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.plot_all_fits" title="Link to this definition"></a></dt>
+<dd><p>Plots experimental data and all three kinetic models for visual comparison.
+If filename is provided, saves the plot (png, svg, jpg, pdf according to the extension).
+Vectorial svg is recommended</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.simulate_plot">
+<span class="sig-name descname"><span class="pre">simulate_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.simulate_plot" title="Link to this definition"></a></dt>
+<dd><p>Plots the initial guesses for all three kinetic orders (0, 1, 2),
+for example to visualize the starting point of a fit.</p>
+<p>If filename is provided, saves the plot (png, svg, jpg, pdf according to the extension).
+Vectorial svg is recommended</p>
 </dd></dl>
 
 </dd></dl>

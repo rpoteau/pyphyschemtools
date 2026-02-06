@@ -4,6 +4,26 @@
 
 # Changelog
 
+## [0.5.4] - 2026-02-06. new units module
+
+### Added
+* **New `units` module**: Introduced the `Energy` class for high-level physical chemistry unit management.
+    * **Spectroscopic Equivalence**: Native support for conversions between energy ($E$), wavelength ($\lambda$), and wavenumbers ($\bar{\nu}$) based on fundamental relationships:
+    $$E = \frac{hc}{\lambda} \quad \text{and} \quad E = hc\bar{\nu}$$
+    * **Thermal & Molar Scaling**: Integrated Boltzmann relationship ($E = k_B T$) and dynamic molar conversions for units like `kJ/mol` and `kcal/mol`.
+    * **Recursive Prefix Manager**: Dynamic handling of SI prefixes ranging from **yocto** ($10^{-24}$) to **quetta** ($10^{30}$) across all supported base units.
+    * **Vectorization**: Comprehensive support for **NumPy arrays**, enabling batch processing of energy levels, spectra, or thermodynamic datasets.
+    * **Metadata & Inspection Tools**: 
+        * `Energy.show_constants_metadata()`: Displays CODATA values and uncertainties for used physical constants.
+        * `Energy.show_available_tools()`: Provides an interactive table of all supported units and prefixes.
+    * **Robust Parsing**: Improved `Energy.parse()` regex logic to better support scientific notation, signed exponents, and varying whitespace.
+    * **Unit Safety**: Added descriptive error messages and suggestions when a user provides a prefix (e.g., `k`) without a base unit (e.g., `kJ`).
+    * **New associated documentation (`docs/source/theory/Units.md`)**
+        * **ReadTheDocs Integration**: Updated `pyphyschemtools.rst` to include the new `units` module.
+        * **Improved Discoverability**: Exposed the `Energy` class at the package root for simplified imports (`from pyphyschemtools import Energy`).
+        * **User Manual**: Added a comprehensive Markdown-based manual featuring LaTeX-rendered physical principles and code examples.
+        * **Interactive Code Blocks**: Integrated `sphinx-copybutton` to allow one-click copying of examples from the documentation.
+
 ## [0.5.0] - 2026-02-05. KORD. Kinetic Optimization & Visualization Overhaul & BIC
 
 ### Added

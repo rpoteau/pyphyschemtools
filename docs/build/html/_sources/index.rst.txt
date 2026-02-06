@@ -22,6 +22,7 @@ Welcome to **pyphyschemtools**. This documentation combines computational tools 
    :caption: 📚 Theoretical background
 
    theory/Kinetics_KORD
+   theory/Units
 
 .. toctree::
    :maxdepth: 2

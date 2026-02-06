@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>units &mdash; pyphyschemtools 0.5.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/visualID.css?v=8e30d5fa" />
+
+  
+    <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theory/Units.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=e1a677a5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyphyschemtools" href="../modules.html" />
+    <link rel="prev" title="kinetics" href="Kinetics_KORD.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyphyschemtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">📚 Theoretical background</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Kinetics_KORD.html">kinetics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">units</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#energy">Energy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#exploring-capabilities">Exploring Capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#traceability-of-constants">Traceability of Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-energy-objects">Creating Energy Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectroscopic-molar-conversions">Spectroscopic &amp; Molar Conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#universal-prefix-support">Universal Prefix Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integration-with-variables">Integration with Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#batch-processing-vectorization">Batch Processing (Vectorization)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">pyphyschemtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyphyschemtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">units</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/Units.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="units">
+<h1>units<a class="headerlink" href="#units" title="Link to this heading"></a></h1>
+<p>So far, it only contains the <code class="docutils literal notranslate"><span class="pre">Energy</span></code> class</p>
+<section id="energy">
+<h2>Energy<a class="headerlink" href="#energy" title="Link to this heading"></a></h2>
+<div class="intro">
+<p>The <code class="docutils literal notranslate"><span class="pre">Energy</span></code> class is a high-level physical chemistry utility designed to handle the complex conversions between energy, wavelength, temperature, and molar quantities. It features a recursive prefix manager and native support for different energy contexts:</p>
+<ul class="simple">
+<li><p>Photon Energy: Relates energy to wavelength (<span class="math notranslate nohighlight">\(\lambda\)</span>) or frequency (<span class="math notranslate nohighlight">\(\nu\)</span>):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[E = h\nu = \frac{hc}{\lambda}\]</div>
+<ul class="simple">
+<li><p>Wavenumbers: Handles reciprocal length units (<span class="math notranslate nohighlight">\(\text{cm}^{-1}\)</span>):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[E = hc\bar{\nu}\]</div>
+<ul class="simple">
+<li><p>Thermal Energy: Relates temperature (<span class="math notranslate nohighlight">\(T\)</span>) to energy via the Boltzmann constant (<span class="math notranslate nohighlight">\(k_B\)</span>):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[E = k_B T\]</div>
+<ul class="simple">
+<li><p>Molar Quantities: Bridges single-particle energy (<span class="math notranslate nohighlight">\(E_{particle}\)</span>) and macroscopic thermodynamic properties using the Avogadro constant (<span class="math notranslate nohighlight">\(N_A\)</span>):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[E_\mathrm{molar} = E_\mathrm{particle} \cdot N_A\]</div>
+<p>To use the energy unit conversion engine, import the <code class="docutils literal notranslate"><span class="pre">Energy</span></code> class as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Energy</span>
+</pre></div>
+</div>
+<section id="exploring-capabilities">
+<h3>Exploring Capabilities<a class="headerlink" href="#exploring-capabilities" title="Link to this heading"></a></h3>
+<p>To inspect the internal logic and supported units, you can display the built-in reference tables. This provides a live view of all supported SI prefixes (from <strong>yocto</strong> <span class="math notranslate nohighlight">\(10^{-30}\)</span> to <strong>quetta</strong> <span class="math notranslate nohighlight">\(10^{30}\)</span>) and recognized base units.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">show_available_tools</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="traceability-of-constants">
+<h3>Traceability of Constants<a class="headerlink" href="#traceability-of-constants" title="Link to this heading"></a></h3>
+<p>The class ensures scientific rigor by using the latest CODATA values via <code class="docutils literal notranslate"><span class="pre">scipy.constants</span></code>. You can query the metadata to see the exact values, units, and uncertainties for the constants used in the background.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Energy</span><span class="o">.</span><span class="n">show_constants_metadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-energy-objects">
+<h3>Creating Energy Objects<a class="headerlink" href="#creating-energy-objects" title="Link to this heading"></a></h3>
+<p>You can instantiate an <code class="docutils literal notranslate"><span class="pre">Energy</span></code> object using two different methods depending on your data source.</p>
+<p><strong>String Parsing</strong>.
+Useful for user inputs or reading from text files.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;13.59844 eV&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;hartree&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Direct Instantiation</strong>. Recommended for programmatic usage and mathematical variables.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="p">(</span><span class="mf">13.59844</span><span class="p">,</span> <span class="s1">&#39;eV&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;hartree&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="spectroscopic-molar-conversions">
+<h3>Spectroscopic &amp; Molar Conversions<a class="headerlink" href="#spectroscopic-molar-conversions" title="Link to this heading"></a></h3>
+<p>The class automatically detects whether a unit is an energy, a length (wavelength), or a reciprocal length (wavenumber). It also handles the conversion from single-particle energy to molar energy.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;4000 cm-1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;eV&#39;</span><span class="p">))</span>      <span class="c1"># Wavenumber to Energy</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;1 MeV&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;kJ/mol&#39;</span><span class="p">))</span>      <span class="c1"># Nuclear Energy to Molar Energy</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;656 nm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;eV&#39;</span><span class="p">))</span>         <span class="c1"># Wavelength to Energy</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;1 kcal/mol&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;kJ/mol&#39;</span><span class="p">))</span> <span class="c1"># Thermochemical conversion</span>
+</pre></div>
+</div>
+</section>
+<section id="universal-prefix-support">
+<h3>Universal Prefix Support<a class="headerlink" href="#universal-prefix-support" title="Link to this heading"></a></h3>
+<p>The recursive prefix manager allows for extreme physical scales. It treats prefixes like <strong>da</strong> (<strong>deca</strong>) or <strong>y</strong> (<strong>yocto</strong>) as dynamic multipliers applicable to any base unit.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;4000 ym-1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;GeV&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;4000 ym-1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;ZJ/mol&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="integration-with-variables">
+<h3>Integration with Variables<a class="headerlink" href="#integration-with-variables" title="Link to this heading"></a></h3>
+<p>Using Python f-strings, you can easily inject variables into the parsing logic for dynamic workflows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">e</span> <span class="o">=</span> <span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;1 kcal/mol&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;kJ/mol&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>        <span class="c1"># Formatted Output: 4.1840 kJ/mol</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># Numerical Output: 4.184</span>
+</pre></div>
+</div>
+</section>
+<section id="batch-processing-vectorization">
+<h3>Batch Processing (Vectorization)<a class="headerlink" href="#batch-processing-vectorization" title="Link to this heading"></a></h3>
+<p>The class is fully compatible with <code class="docutils literal notranslate"><span class="pre">NumPy</span></code>. You can pass a list or array of values (such as the energy levels of the Hydrogen atom) to perform batch conversions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">K</span> <span class="o">=</span> <span class="mf">13.59844</span>
+<span class="n">Etab_eV</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">K</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">25</span><span class="p">]</span>
+
+<span class="c1"># Convert the entire list from eV to hartree</span>
+<span class="n">Etab_hartree</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="n">Etab_eV</span><span class="p">,</span> <span class="s1">&#39;eV&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;hartree&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Etab_hartree</span><span class="p">)</span> <span class="c1"># Formatted output: Energy Array (hartree, shape=(5,))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Etab_hartree</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="c1"># Formatted output: [-0.49973345 -0.12493336 -0.05552594 -0.03123334 -0.01998934]</span>
+</pre></div>
+</div>
+<p>`</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Kinetics_KORD.html" class="btn btn-neutral float-left" title="kinetics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../modules.html" class="btn btn-neutral float-right" title="pyphyschemtools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Romuald Poteau.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

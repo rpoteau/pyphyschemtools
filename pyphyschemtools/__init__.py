@@ -1,5 +1,9 @@
 # tools4pyPhysChem/__init__.py
-__version__ = "0.5.2"
+"""
+The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.
+"""
+
+__version__ = "0.5.4"
 __last_update__ = "2026-02-06"
 
 import importlib
@@ -28,7 +32,7 @@ def __getattr__(name):
         ".ML", ".PeriodicTable", ".Chem3D",  
         ".aithermo", ".cheminformatics", ".kinetics", 
         ".spectra", ".survey",  
-        ".sympyUtilities", ".tools4AS"
+        ".sympyUtilities", ".tools4AS", ".units"
     ]
     
     for mod_name in modules_to_search:

@@ -6,24 +6,27 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools &mdash; pyphyschemtools 0.5.2 documentation</title>
+  <title>pyphyschemtools &mdash; pyphyschemtools 0.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/visualID.css?v=8e30d5fa" />
 
   
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/modules.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=8e576371"></script>
+      <script src="_static/documentation_options.js?v=e1a677a5"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pyphyschemtools package" href="pyphyschemtools.html" />
-    <link rel="prev" title="kinetics" href="theory/Kinetics_KORD.html" /> 
+    <link rel="prev" title="units" href="theory/Units.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,6 +51,7 @@
               <p class="caption" role="heading"><span class="caption-text">📚 Theoretical background</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="theory/Kinetics_KORD.html">kinetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/Units.html">units</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
 <ul class="current">
@@ -86,10 +90,6 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pyphyschemtools.html">pyphyschemtools package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pyphyschemtools.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.icons_logos_banner.html">pyphyschemtools.icons_logos_banner package</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="pyphyschemtools.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.Chem3D">pyphyschemtools.Chem3D module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.Chem3D.XYZData"><code class="docutils literal notranslate"><span class="pre">XYZData</span></code></a><ul>
@@ -231,6 +231,18 @@
 <li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.verifNotes"><code class="docutils literal notranslate"><span class="pre">verifNotes()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.units">pyphyschemtools.units module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy.list_prefixes"><code class="docutils literal notranslate"><span class="pre">Energy.list_prefixes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy.list_units"><code class="docutils literal notranslate"><span class="pre">Energy.list_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy.parse"><code class="docutils literal notranslate"><span class="pre">Energy.parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy.show_available_tools"><code class="docutils literal notranslate"><span class="pre">Energy.show_available_tools()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy.show_constants_metadata"><code class="docutils literal notranslate"><span class="pre">Energy.show_constants_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy.to"><code class="docutils literal notranslate"><span class="pre">Energy.to()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.visualID">pyphyschemtools.visualID module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID.chrono_show"><code class="docutils literal notranslate"><span class="pre">chrono_show()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID.chrono_start"><code class="docutils literal notranslate"><span class="pre">chrono_start()</span></code></a></li>
@@ -332,7 +344,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="theory/Kinetics_KORD.html" class="btn btn-neutral float-left" title="kinetics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="theory/Units.html" class="btn btn-neutral float-left" title="units" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pyphyschemtools.html" class="btn btn-neutral float-right" title="pyphyschemtools package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

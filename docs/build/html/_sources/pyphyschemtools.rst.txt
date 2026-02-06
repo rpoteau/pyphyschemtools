@@ -6,14 +6,6 @@ pyphyschemtools package
    :show-inheritance:
    :undoc-members:
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   pyphyschemtools.icons_logos_banner
-
 Submodules
 ----------
 
@@ -101,6 +93,14 @@ pyphyschemtools.tools4AS module
 -------------------------------
 
 .. automodule:: pyphyschemtools.tools4AS
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+pyphyschemtools.units module
+----------------------------
+
+.. automodule:: pyphyschemtools.units
    :members:
    :show-inheritance:
    :undoc-members:

@@ -10,14 +10,15 @@ project = 'pyphyschemtools'
 version = '0.5'
 copyright = '2026, Romuald Poteau'
 author = 'Romuald Poteau'
-release = '0.5.2'
+release = '0.5.4'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     'myst_parser', # Markdown
-    'sphinx.ext.autodoc', # Docstrings extraction
+    'sphinx.ext.autodoc', # Docstriogs extraction
+    'sphinx_copybutton',
     'sphinx.ext.napoleon', # Support Google/NumPy docstrings format
     "sphinx.ext.githubpages",
     'nbsphinx', # Notebooks

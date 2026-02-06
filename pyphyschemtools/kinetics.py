@@ -31,9 +31,10 @@ class KORD:
         
     Other Args:
         - t_simul_max (float): the maximum time duration for theoretical simulations.
-        It defines the range of the time vector [0, t_simul_max}] used to simulate and plot kinetic curves with simulate_plot
+          It defines the range of the time vector [0, t_simul_max}] used to simulate and plot kinetic curves with simulate_plot
         - verbose (bool): If True defaulk), enables detailed optimization logs (recommended).
         - headers (tuple of strings): headers of the t_exp and G_exp arrays read in the excel file
+
     """
     
     def __init__(self, t_exp=None, G_exp=None, headers=("Time / s", "G"), a0=1.0, alpha=1.0, beta=1.0, k_guess=None,

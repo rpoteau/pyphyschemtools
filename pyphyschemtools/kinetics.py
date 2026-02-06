@@ -492,7 +492,17 @@ class KORD:
         
         Graph['fit'].axhline(best_res['G0'], color=best_color, linestyle='--', alpha=0.6)
         Graph['fit'].axhline(best_res['Ginf'], color=best_color, linestyle='--', alpha=0.6)
-
+        Graph['fit'].yaxis.grid(
+            True, 
+            which='major', 
+            linestyle='--',   # Ligne hachurée
+            linewidth=0.8,    # Épaisseur
+            color='gray',     # Couleur discrète
+            alpha=0.5         # Transparence pour ne pas surcharger
+        )
+        # Désactiver la grille verticale (optionnel, pour garder le focus sur G)
+        Graph['fit'].xaxis.grid(False)
+        
         # Add the second axis for the fitted values
         ax2 = Graph['fit'].twinx()
         ax2.set_ylim(Graph['fit'].get_ylim()) # Keep scales aligned
@@ -589,7 +599,7 @@ class KORD:
             if verbose:
                 print(f"\n{hl.BOLD}--- Final Statistical Verdict ---{hl.bold}")
                 print(f"Model Selection Confidence: {verdict}")
-                print(f"ΔBIC (Best {best} vs 2nd Best {second}): {delta_bic:.2f}")
+                print(f"ΔBIC (Best [order {best}] vs 2nd Best [order {second}]): {delta_bic:.2f}")
                 print(f"--------------------------------{self.reset}")
                 return 
         else:

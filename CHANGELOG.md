@@ -1,10 +1,10 @@
 <div style="text-align:center">
-<img src="https://raw.githubusercontent.com/rpoteau/pyphyschemtools/main/pyphyschemtools/icons_logos_banner/tools4pyPC_banner.png" alt="t4pyPCbanner" width="800"/>
+<img src="https://raw.githubusercontent.com/rpoteau/pyphyschemtools/main/pyphyschemtools/resources/svg/tools4pyPC_banner.png" alt="t4pyPCbanner" width="800"/>
 </div>
 
 # Changelog
 
-## [0.4.0] - 2026-02-05. KORD. Kinetic Optimization & Visualization Overhaul & BIC
+## [0.5.0] - 2026-02-05. KORD. Kinetic Optimization & Visualization Overhaul & BIC
 
 ### Added
 - **Smart Rate Constant Guessing**: Implemented an "Initial Slope" logic in the `fit` method. The starting $k$ is now dynamically calculated based on the first 10% of experimental data, ensuring improved convergence.

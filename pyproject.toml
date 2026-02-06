@@ -20,7 +20,7 @@ dependencies = [
     "py3Dmol",
     "rdkit",
     "scikit-learn",
-    "scipy",
+    "scipy"
 ]
 
 [project.urls]
@@ -53,7 +53,7 @@ docs = [
   "nbsphinx",
   "ipykernel",
   "pandoc",
-  "numpydoc"
+  "numpydoc",
   "sphinx-copybutton"
 ]
 

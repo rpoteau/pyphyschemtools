@@ -47,6 +47,12 @@ SEPARATOR_RAW="-----------------------------------------------------------------
 SEPARATOR_WIDTH=${#SEPARATOR_RAW}
 SEPARATOR="${WHITE_BG_BLACK_TEXT}${SEPARATOR_RAW}${RESET}"
 
+# Validate pyproject.toml syntax before proceeding
+if ! python3 -c "import tomllib; tomllib.load(open('$PYPROJECT', 'rb'))" 2>/dev/null; then
+    echo -e "${RED}❌ Syntax error in $PYPROJECT detected! Please fix it before running the script.${RESET}"
+    exit 1
+fi
+
 # Read current version from pyproject.toml
 CURRENT_VERSION=$(grep "^version" $PYPROJECT | head -n1 | cut -d '"' -f2)
 echo -e "$SEPARATOR"
@@ -192,8 +198,17 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
         git push
         git push --tags
     else
-        echo "Commit cancelled."
-        exit 1
+        echo -e "${RED}Commit cancelled. Reverting version numbers only...${RESET}"
+	sed -i "s/^version = \"$NEW_VERSION\"/version = \"$CURRENT_VERSION\"/" "$PYPROJECT"
+	sed -i "s/^__version__ = \"$NEW_VERSION\"/__version__ = \"$CURRENT_VERSION\"/" "${project_name}/__init__.py"
+	if [ -f "docs/source/conf.py" ]; then
+            VERSION_XY_OLD=$(echo "$CURRENT_VERSION" | cut -d'.' -f1,2)
+	    sed -i "s/^version = '$VERSION_XY'/version = '$VERSION_XY_OLD'/" "docs/source/conf.py"
+            sed -i "s/^release = '$NEW_VERSION'/release = '$CURRENT_VERSION'/" "docs/source/conf.py"
+	fi
+	echo -e "${GREEN}Rollback complete. Version numbers are back to $CURRENT_VERSION.${RESET}"
+        echo -e "${GREEN}All your other changes (dependencies, README, notebooks) are safe.${RESET}"
+        exit 1 
     fi
     echo
 

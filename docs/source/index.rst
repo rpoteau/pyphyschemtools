@@ -19,10 +19,15 @@ Welcome to **pyphyschemtools**. This documentation combines computational tools 
 
 .. toctree::
    :maxdepth: 2
-   :caption: 📚 Theoretical background
+   :caption: 📚 Docs and Theory
 
-   theory/Kinetics_KORD
-   theory/Units
+   theoryDocs/Cheminformatics
+   theoryDocs/Chem3D
+   theoryDocs/Kinetics
+   theoryDocs/PeriodicTable
+   theoryDocs/Spectra
+   theoryDocs/Units
+   theoryDocs/Misc
 
 .. toctree::
    :maxdepth: 2

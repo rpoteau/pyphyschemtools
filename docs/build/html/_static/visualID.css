@@ -1,12 +1,20 @@
-<style>
 h1, h2, h3, h4, h5, h6 {
-  font-family: Verdana, "DejaVu Sans", "Bitstream Vera Sans", Geneva, sans-serif;
+  font-family: "Calibri", "Candara", "Segoe UI", sans-serif;
   font-weight: bold;
 }
-body, intro, introE, introT, rq, rqE, rqT, ex, exE, app, appE, sol, todo, hint, hintE, figure  {
-  font-family: Verdana, "DejaVu Sans", "Bitstream Vera Sans", Geneva, sans-serif;
+body, .wy-nav-content, intro, introE, introT, rq, rqE, rqT, ex, exE, app, appE, sol, todo, hint, hintE, figure  {
+  font-family: "Calibri", "Candara", "Segoe UI", sans-serif;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 13px;
+}
+/* Only target text elements inside math, not the symbols themselves */
+mjx-utext, mjx-mtext {
+    font-family: "Calibri", "Candara", "Segoe UI", sans-serif !important;
+}
+
+/* Optional: Make the math slightly larger to match Calibri's visual size */
+mjx-container[jax="CHTML"] {
+    font-size: 110% !important;
 }
 h1 {
   border: 0 solid #333;
@@ -322,4 +330,3 @@ figure figcaption {
     margin: auto;
 }
 
-</style>

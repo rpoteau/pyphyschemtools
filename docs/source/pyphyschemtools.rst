@@ -89,14 +89,6 @@ pyphyschemtools.sympyUtilities module
    :show-inheritance:
    :undoc-members:
 
-pyphyschemtools.tools4AS module
--------------------------------
-
-.. automodule:: pyphyschemtools.tools4AS
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 pyphyschemtools.units module
 ----------------------------
 
@@ -105,10 +97,18 @@ pyphyschemtools.units module
    :show-inheritance:
    :undoc-members:
 
-pyphyschemtools.visualID module
+pyphyschemtools.misc module
+----------------------------
+
+.. automodule:: pyphyschemtools.misc
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+pyphyschemtools.tools4AS module
 -------------------------------
 
-.. automodule:: pyphyschemtools.visualID
+.. automodule:: pyphyschemtools.tools4AS
    :members:
    :show-inheritance:
    :undoc-members:

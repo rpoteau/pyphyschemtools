@@ -200,11 +200,14 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     else
         echo -e "${RED}Commit cancelled. Reverting version numbers only...${RESET}"
 	sed -i "s/^version = \"$NEW_VERSION\"/version = \"$CURRENT_VERSION\"/" "$PYPROJECT"
+	echo "     - pyproject.toml version number reverted"
 	sed -i "s/^__version__ = \"$NEW_VERSION\"/__version__ = \"$CURRENT_VERSION\"/" "${project_name}/__init__.py"
+	echo "     - pyphyschemtools/__init__.py version number reverted"
 	if [ -f "docs/source/conf.py" ]; then
             VERSION_XY_OLD=$(echo "$CURRENT_VERSION" | cut -d'.' -f1,2)
 	    sed -i "s/^version = '$VERSION_XY'/version = '$VERSION_XY_OLD'/" "docs/source/conf.py"
             sed -i "s/^release = '$NEW_VERSION'/release = '$CURRENT_VERSION'/" "docs/source/conf.py"
+	    echo "     - docs/source/conf.py version number reverted"
 	fi
 	echo -e "${GREEN}Rollback complete. Version numbers are back to $CURRENT_VERSION.${RESET}"
         echo -e "${GREEN}All your other changes (dependencies, README, notebooks) are safe.${RESET}"

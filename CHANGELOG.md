@@ -4,6 +4,22 @@
 
 # Changelog
 
+## [0.5.5] - 2026-02-07. "qrcode and docs"
+
+### Added
+- New `QRCodeGenerator` class in `pyphyschemtools.misc` for generating branded QR codes with embedded logos.
+- Integrated automatic surgical rollback logic in `push_pyPi.sh` to revert version numbers if a Git commit is cancelled.
+- Documentation skeletons for core modules: `Misc`, `Chem3D`, `Spectra`, `Cheminformatics`, and `PeriodicTable`
+
+### Changed
+- Updated documentation typography to a modern **Calibri-like** (humanist sans-serif) stack via `visualID.css`.
+- Refined MathJax configuration in `conf.py` to support left-alignment and improved font scaling for better readability of LaTeX formulas.
+- Enhanced `push_pyPi.sh` with `tomllib` validation to catch syntax errors in `pyproject.toml` before processing.
+
+### Fixed
+- Corrected logic in the maintenance script to ensure `docs/source/conf.py` versioning is properly reverted during interrupted releases.
+- Fixed font inheritance issues where LaTeX formulas were not scaling correctly with custom CSS.
+
 ## [0.5.4] - 2026-02-06. new units module
 
 ### Added

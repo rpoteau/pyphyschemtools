@@ -10,7 +10,7 @@ project = 'pyphyschemtools'
 version = '0.5'
 copyright = '2026, Romuald Poteau'
 author = 'Romuald Poteau'
-release = '0.5.4'
+release = '0.5.5'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -55,3 +55,25 @@ source_suffix = {
 # Prevents notebook execution if they are already saved with their outputs.
 # (Useful for long calculations or complex widgets)
 nbsphinx_execute = 'never'
+
+mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+
+mathjax3_config = {
+    'chtml': {
+        'fontURL': 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2',
+        'scale': 1.15,
+        'mtextInheritFont': True,  # Text inside math will look like Calibri
+        'merrorInheritFont': True,
+        # REMOVED: fontContext: 'inherit' (this was making symbols look weird)
+    },
+    'tex': {
+        'macros': {
+            'RR': '{\\bf R}',
+        }
+    },
+    'options': {
+        'renderActions': {
+            'addMenu': []
+        }
+    },
+}

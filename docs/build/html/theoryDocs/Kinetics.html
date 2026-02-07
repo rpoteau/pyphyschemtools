@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chemical Kinetics &mdash; pyphyschemtools 0.5.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/visualID.css?v=3107c110" />
+
+  
+    <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/Kinetics.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=45def3bc"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"chtml": {"fontURL": "https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2", "scale": 1.15, "mtextInheritFont": true, "merrorInheritFont": true}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "macros": {"RR": "{\\bf R}"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area", "renderActions": {"addMenu": []}}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Periodic Table" href="PeriodicTable.html" />
+    <link rel="prev" title="Structural Chemistry - Chemistry in 3 dimensions" href="Chem3D.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyphyschemtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">📚 Docs and Theory</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Cheminformatics.html">Cheminformatics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Chemical Kinetics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#kinetic-order-of-reaction-determination-kord">Kinetic Order of Reaction Determination, KORD</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#principle">1. Principle</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#experimental-measurements-g-mathrm-exp">1.1 Experimental Measurements (<span class="math notranslate nohighlight">\(G_\mathrm{EXP}\)</span>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#theoretical-model-g-mathrm-theo">1.2 Theoretical Model (<span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#optimization-rmsd">1.3 Optimization (RMSD)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#input">1.4 Input</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#theoretical-model">2. Theoretical Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reactant-expression-a-t">2.1 Reactant Expression <span class="math notranslate nohighlight">\(a(t)\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#product-expression-b-t">2.2 Product Expression <span class="math notranslate nohighlight">\(B(t)\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-expression-g-mathrm-theo-t">2.3 Global Expression <span class="math notranslate nohighlight">\(G_\mathrm{THEO}(t)\)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PeriodicTable.html">Periodic Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Units.html">Fundamental Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Misc.html">Miscellaneous tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">pyphyschemtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyphyschemtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Chemical Kinetics</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theoryDocs/Kinetics.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="chemical-kinetics">
+<h1>Chemical Kinetics<a class="headerlink" href="#chemical-kinetics" title="Link to this heading"></a></h1>
+<p><strong><code class="docutils literal notranslate"><span class="pre">kinetics.py</span></code> module</strong></p>
+<p>So far, it only contains the <code class="docutils literal notranslate"><span class="pre">KORD</span></code> class</p>
+<section id="kinetic-order-of-reaction-determination-kord">
+<h2>Kinetic Order of Reaction Determination, KORD<a class="headerlink" href="#kinetic-order-of-reaction-determination-kord" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#principle"><span class="std std-ref">1. Principle</span></a></p></li>
+<li><p><a class="reference internal" href="#theoretical-model"><span class="std std-ref">2. Theoretical Model</span></a></p></li>
+</ul>
+<hr class="docutils" />
+<p><a id="principle"></a></p>
+<section id="principle">
+<h3>1. Principle<a class="headerlink" href="#principle" title="Link to this heading"></a></h3>
+<section id="experimental-measurements-g-mathrm-exp">
+<h4>1.1 Experimental Measurements (<span class="math notranslate nohighlight">\(G_\mathrm{EXP}\)</span>)<a class="headerlink" href="#experimental-measurements-g-mathrm-exp" title="Link to this heading"></a></h4>
+<p>In chemical kinetics, we track the evolution of molar concentrations over time: <span class="math notranslate nohighlight">\(C_{i}(t)\)</span>. Experimentally, we measure a physical quantity proportional to these concentrations: <span class="math notranslate nohighlight">\(G_\mathrm{EXP}(t)\)</span>.</p>
+<ul class="simple">
+<li><p><strong>Spectrophotometry</strong>: <span class="math notranslate nohighlight">\(G_\mathrm{EXP} = A = \sum_{i} \epsilon_{i} \cdot l \cdot C_{i}\)</span>, where <span class="math notranslate nohighlight">\(A\)</span> is the absorbance</p></li>
+<li><p><strong>Polarimetry</strong>: <span class="math notranslate nohighlight">\(G_\mathrm{EXP} = \alpha = \sum_{i} [\alpha]_{i} \cdot l \cdot C_{i}^{w}\)</span></p></li>
+<li><p><strong>Conductivity</strong>: <span class="math notranslate nohighlight">\(G_\mathrm{EXP} = \sigma = \sum_{i} \lambda_{i} \cdot C_{i}\)</span></p></li>
+</ul>
+<p><strong>General Form:</strong> <span class="math notranslate nohighlight">\(G_\mathrm{EXP}(t) = \sum_{i} \eta_{i} \cdot C_{i}(t)\)</span></p>
+<p><a id="theoretical-model-principle"></a></p>
+</section>
+<section id="theoretical-model-g-mathrm-theo">
+<h4>1.2 Theoretical Model (<span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span>)<a class="headerlink" href="#theoretical-model-g-mathrm-theo" title="Link to this heading"></a></h4>
+<p>The model has three different expressions (see <a href="#theoretical-model">Theoretical model section</a>), depending on the order of the reaction:</p>
+<p><strong>Standard Formula for Order 0</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) &amp; t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} &amp; t&gt;\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
+<p><strong>Standard Formula for Order 1</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\hat{G}^{[1]}(t)=G_{\infty}+\exp\left(-\alpha kt\right)\left(G_{0}-G_{\infty}\right)\]</div>
+<p><strong>Standard Formula for Order 2</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\hat{G}^{[2]}(t)=
+G_{0}+\dfrac{\left(G_{\infty}-G_{0}\right)}{1+\dfrac{\beta}{b_{\infty}\alpha^{2}kt}}=G_{0}+\frac{\left(G_{\infty}-G_{0}\right)b_{\infty}\alpha^{2}kt}{b_{\infty}\alpha^{2}kt+\beta}\]</div>
+<p><span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span> is defined by two types of values: <strong>fixed parameters</strong> (input by the user) and <strong>adjustable variables</strong> (optimized by the algorithm).</p>
+<p><strong><u>Fixed Parameters</u>:</strong></p>
+<ul>
+<li><p><strong>Reaction Order</strong>: <span class="math notranslate nohighlight">\(n \in \{0, 1, 2\}\)</span> (The user selects the order to test).</p></li>
+<li><p><strong>Stoichiometry</strong>: <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are known constants, provided by the user.</p>
+<p><span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> must be the smallest possible positive integers</p>
+</li>
+<li><p><strong>Initial Concentration</strong>: <span class="math notranslate nohighlight">\(a_{0}\)</span> (Note: For Order 1, <span class="math notranslate nohighlight">\(G_{THEO}\)</span> is independent of <span class="math notranslate nohighlight">\(a_{0}\)</span>). The concentration must also be provided by the user</p>
+<p>The final concentration of B, <span class="math notranslate nohighlight">\(b_{\infty}\)</span> is related to <span class="math notranslate nohighlight">\(a_0\)</span> by the relation:</p>
+<div class="math notranslate nohighlight">
+\[\frac{a_0}{\alpha} = \frac{b_{\infty}}{\beta}\]</div>
+</li>
+</ul>
+<p><strong><u>Adjustable Variables</u>:</strong>
+The model fits the experimental data by adjusting the following:</p>
+<ul class="simple">
+<li><p><strong>Rate Constant</strong>: <span class="math notranslate nohighlight">\(k\)</span></p></li>
+<li><p><strong>Final Value</strong>: <span class="math notranslate nohighlight">\(G_{\infty}\)</span></p></li>
+<li><p><strong>Initial Value</strong>: <span class="math notranslate nohighlight">\(G_{0}\)</span> (While <span class="math notranslate nohighlight">\(G_{0}\)</span> is measured, the algorithm also adjusts it to ensure the best fit starting point).</p></li>
+</ul>
+<p>The optimization is performed for a specific reaction order at a time to determine which model best describes the experimental data.</p>
+<div class="rqE">
+<p>By default, KORD chooses the first and last <span class="math notranslate nohighlight">\(G_\mathrm{EXP}\)</span> values as <span class="math notranslate nohighlight">\(G_{0}\)</span> and <span class="math notranslate nohighlight">\(G_{\infty}\)</span>. And a default <span class="math notranslate nohighlight">\(k\)</span> value is also setup by KORD. If you need to change that because of a convergence issue, ensure your starting values for <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(G_{0}\)</span> and <span class="math notranslate nohighlight">\(G_{\infty}\)</span> are realistic to help the algorithm converge.</p>
+</div>
+</section>
+<section id="optimization-rmsd">
+<h4>1.3 Optimization (RMSD)<a class="headerlink" href="#optimization-rmsd" title="Link to this heading"></a></h4>
+<p>The algorithm minimizes the <strong>Root-Mean-Square Deviation</strong> to fit the theoretical curve to the experimental data:</p>
+<div class="math notranslate nohighlight">
+\[RMSD = \sqrt{\frac{1}{n} \sum_{k=1}^{n} \{G_\mathrm{EXP}(t_{k}) - G_\mathrm{THEO}(t_{k})\}^{2}}\]</div>
+</section>
+<section id="input">
+<h4>1.4 Input<a class="headerlink" href="#input" title="Link to this heading"></a></h4>
+<p>Data input is performed through a structured Excel file. Users simply provide the kinetic parameters (<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>), the initial concentration <span class="math notranslate nohighlight">\([A]_0\)</span>, and the experimental data series (time <span class="math notranslate nohighlight">\(t\)</span> and property <span class="math notranslate nohighlight">\(G_{\mathrm{exp}}\)</span>).</p>
+<hr class="docutils" />
+<p><a id="theoretical-model"></a></p>
+</section>
+</section>
+<section id="theoretical-model">
+<h3>2. Theoretical Model<a class="headerlink" href="#theoretical-model" title="Link to this heading"></a></h3>
+<p>The reaction model used in KORD is designed to be as simple as possible based on the following criteria:</p>
+<ul class="simple">
+<li><p>Single-component reaction: A <strong>unique reactant</strong> <span class="math notranslate nohighlight">\(A\)</span> transforms into a <strong>unique product</strong> <span class="math notranslate nohighlight">\(B\)</span> (<span class="math notranslate nohighlight">\(\alpha A \rightarrow \beta B\)</span>)</p></li>
+<li><p><strong>Total reaction</strong>: The reaction goes to completion (the extent of reaction is 100%)</p></li>
+<li><p><strong>Closed system</strong>: No exchange of matter occurs between the system and its environment; only energy exchanges are possible</p></li>
+<li><p><strong>Homogeneous system</strong>: The concentration of any compound <span class="math notranslate nohighlight">\(C_i\)</span> is uniform throughout the entire system</p></li>
+<li><p><strong>Isochoric system</strong>: The volume of the system remains constant throughout the reaction.</p></li>
+</ul>
+<section id="reactant-expression-a-t">
+<h4>2.1 Reactant Expression <span class="math notranslate nohighlight">\(a(t)\)</span><a class="headerlink" href="#reactant-expression-a-t" title="Link to this heading"></a></h4>
+<p>The rate law is defined as:</p>
+<div class="math notranslate nohighlight">
+\[v = -\frac{1}{\alpha} \frac{d[A]}{dt} = k [A]^{n}\]</div>
+<ul class="simple">
+<li><p><strong>Order 0</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}a(t)=\begin{cases}
+a_{0}-\alpha kt &amp; t\leq\frac{a_{0}}{\alpha k}\\
+0 &amp; t&gt;\frac{a_{0}}{\alpha k}
+\end{cases}\end{split}\]</div>
+<ul class="simple">
+<li><p><strong>Order 1</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[a(t) = a_{0} \exp(-\alpha kt)\]</div>
+<ul class="simple">
+<li><p><strong>Order 2</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[a(t) = \frac{1}{\frac{1}{a_{0}} + \alpha kt}\]</div>
+</section>
+<section id="product-expression-b-t">
+<h4>2.2 Product Expression <span class="math notranslate nohighlight">\(B(t)\)</span><a class="headerlink" href="#product-expression-b-t" title="Link to this heading"></a></h4>
+<p>Derived from mass balance (<span class="math notranslate nohighlight">\(M_{A} a(t) + M_{B} b(t) = M_{A} a_{0} = M_{B} b_{\infty}\)</span>):</p>
+<ul class="simple">
+<li><p><strong>Order 0</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}b(t)=\begin{cases}
+\beta kt &amp; t\leq\frac{b_{\infty}}{\beta k}\\
+0 &amp; t&gt;\frac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
+<ul class="simple">
+<li><p><strong>Order 1</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[b(t) = b_{\infty} \{1 - \exp(-\alpha kt)\}\]</div>
+<ul class="simple">
+<li><p><strong>Order 2</strong>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[b(t)=\frac{b_{\infty}}{1+\frac{\beta}{b_{\infty}\alpha^{2}kt}}\]</div>
+</section>
+<section id="global-expression-g-mathrm-theo-t">
+<h4>2.3 Global Expression <span class="math notranslate nohighlight">\(G_\mathrm{THEO}(t)\)</span><a class="headerlink" href="#global-expression-g-mathrm-theo-t" title="Link to this heading"></a></h4>
+<p>The theoretical quantity is a linear combination of <span class="math notranslate nohighlight">\(a(t)\)</span> and <span class="math notranslate nohighlight">\(b(t)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[G_\mathrm{THEO}(t) = \frac{G_{0}}{a_{0}} \cdot a(t) + \frac{G_{\infty}}{b_{\infty}} \cdot b(t)\]</div>
+<p><strong>Standard Formula for Order 0</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) &amp; t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} &amp; t&gt;\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
+<div class="rqE">
+<p>Warning: This mathematical model for Order 0 is a linear equation. Unlike Order 1 or 2, this linear model does not naturally plateau. Depending on the values of <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(t\)</span>, the model may predict non-physical values (e.g., negative absorbance or negative concentration) if the time <span class="math notranslate nohighlight">\(t\)</span> exceeds the theoretical completion time <span class="math notranslate nohighlight">\(t_{\mathrm{end}} = \frac{a_{0}}{\alpha k}=\frac{b_{\infty}}{\beta k}\)</span>. These values are mathematical artifacts and should be ignored.</p>
+</div>
+<br>
+<p><strong>Standard Formula for Order 1</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\hat{G}^{[1]}(t)=G_{\infty}+\exp\left(-\alpha kt\right)\left(G_{0}-G_{\infty}\right)\]</div>
+<p><strong>Standard Formula for Order 2</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{G}^{[0]}(t)=\begin{cases}
+G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) &amp; t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+G_{\infty} &amp; t&gt;\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}\end{split}\]</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Chem3D.html" class="btn btn-neutral float-left" title="Structural Chemistry - Chemistry in 3 dimensions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PeriodicTable.html" class="btn btn-neutral float-right" title="Periodic Table" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Romuald Poteau.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.5.4 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.5.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="_static/visualID.css?v=8e30d5fa" />
+      <link rel="stylesheet" type="text/css" href="_static/visualID.css?v=3107c110" />
 
   
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e1a677a5"></script>
+      <script src="_static/documentation_options.js?v=45def3bc"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -47,10 +47,15 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">📚 Theoretical background</span></p>
+              <p class="caption" role="heading"><span class="caption-text">📚 Docs and Theory</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="theory/Kinetics_KORD.html">kinetics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theory/Units.html">units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Cheminformatics.html">Cheminformatics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Kinetics.html">Chemical Kinetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/PeriodicTable.html">Periodic Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Units.html">Fundamental Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Misc.html">Miscellaneous tools</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
 <ul class="current">
@@ -103,6 +108,14 @@
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.sympyUtilities.e2Lists"><code class="docutils literal notranslate"><span class="pre">e2Lists()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.units">pyphyschemtools.units module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.misc">pyphyschemtools.misc module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.misc.QRCodeGenerator"><code class="docutils literal notranslate"><span class="pre">QRCodeGenerator</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.tools4AS">pyphyschemtools.tools4AS module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.ApplySecondeChance"><code class="docutils literal notranslate"><span class="pre">ApplySecondeChance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcours"><code class="docutils literal notranslate"><span class="pre">BoiteAMoustachesByMentionEtParcours()</span></code></a></li>
@@ -129,23 +142,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.plotTauxADMasBars"><code class="docutils literal notranslate"><span class="pre">plotTauxADMasBars()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.read_excel"><code class="docutils literal notranslate"><span class="pre">read_excel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.tools4AS.verifNotes"><code class="docutils literal notranslate"><span class="pre">verifNotes()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.units">pyphyschemtools.units module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.visualID">pyphyschemtools.visualID module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.chrono_show"><code class="docutils literal notranslate"><span class="pre">chrono_show()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.chrono_start"><code class="docutils literal notranslate"><span class="pre">chrono_start()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.chrono_stop"><code class="docutils literal notranslate"><span class="pre">chrono_stop()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.color"><code class="docutils literal notranslate"><span class="pre">color</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.css_styling"><code class="docutils literal notranslate"><span class="pre">css_styling()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.display_md"><code class="docutils literal notranslate"><span class="pre">display_md()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.end"><code class="docutils literal notranslate"><span class="pre">end()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.hdelay"><code class="docutils literal notranslate"><span class="pre">hdelay()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.hdelay_ms"><code class="docutils literal notranslate"><span class="pre">hdelay_ms()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.visualID.init"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.visualID_Eng">pyphyschemtools.visualID_Eng module</a><ul>
@@ -1230,6 +1226,128 @@ and block names instead of A–F.</p>
 </dd></dl>
 
 </section>
+<section id="module-pyphyschemtools.units">
+<span id="pyphyschemtools-units-module"></span><h2>pyphyschemtools.units module<a class="headerlink" href="#module-pyphyschemtools.units" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Energy">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'J'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An advanced utility class for Energy management in Physical Chemistry.</p>
+<p>This class handles the conversion between standard energy units (J, eV),
+thermal energy (K), and spectroscopic units (wavelengths in m/nm/Å or
+wavenumbers in cm-1).</p>
+<p>Features:
+- Supports scalar values and NumPy arrays.
+- Automatic handling of SI prefixes (milli, micro, kilo, etc.).
+- Seamless conversion between energy (E) and wavelength (lambda) using E = hc/lambda.
+- Support for reciprocal space units (unit-1) and molar units (unit/mol).
+- Integrated error guidance for users</p>
+<p>Accessing numerical values:
+- Use float(obj) to get the scalar value.
+- Use obj.value to get the NumPy array.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.list_prefixes">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">list_prefixes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.list_prefixes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.list_units">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">list_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.list_units" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.parse">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.parse" title="Link to this definition"></a></dt>
+<dd><p>Parses strings like ‘13.6 eV’ or ‘500 nm’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.show_available_tools">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_available_tools</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.show_available_tools" title="Link to this definition"></a></dt>
+<dd><p>Displays available units and prefixes as styled DataFrames.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.show_constants_metadata">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_constants_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.show_constants_metadata" title="Link to this definition"></a></dt>
+<dd><p>Displays a styled table of the physical constants used for calculations,
+including their current CODATA values, units, and uncertainties.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.to" title="Link to this definition"></a></dt>
+<dd><p>Converts the current Energy instance to a target unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target</strong> (<em>str</em>) – Target unit string.
+Examples:
+- Any SI prefix + ‘J’, ‘eV’, ‘cal’, or ‘m’ (e.g., ‘fJ’, ‘PeV’, ‘ym’, ‘dam’)
+- Molar versions (e.g., ‘MJ/mol’, ‘ueV/mol’, ‘ncal/mol’)
+- Reciprocal versions (e.g., ‘cm-1’, ‘pm-1’, ‘am-1’)
+- Special units: ‘K’, ‘hartree’, ‘Å’, ‘Å-1’</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;nm&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;eV&#39;</span><span class="p">)</span>
+<span class="go">2.4798 eV</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.misc">
+<span id="pyphyschemtools-misc-module"></span><h2>pyphyschemtools.misc module<a class="headerlink" href="#module-pyphyschemtools.misc" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.misc.QRCodeGenerator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.misc.</span></span><span class="sig-name descname"><span class="pre">QRCodeGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">box_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.misc.QRCodeGenerator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A utility class to generate QR codes with embedded logos for pyphyschemtools.
+Initialize the generator with specific QR parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>box_size</strong> (<em>int</em>) – The size of each box in the QR code grid.</p></li>
+<li><p><strong>border</strong> (<em>int</em>) – The thickness of the white border.</p></li>
+<li><p><strong>version</strong> (<em>int</em>) – The complexity of the QR code (1 to 40).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.misc.QRCodeGenerator.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#1a525f'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">back_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'white'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flatten</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.misc.QRCodeGenerator.generate" title="Link to this definition"></a></dt>
+<dd><p>Creates a QR code with a centered logo, saves it to disk, and displays it.</p>
+<p>If save_path is not provided, the image is saved in the logo’s directory
+with a <code class="docutils literal notranslate"><span class="pre">qrcode_</span></code> prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The target URL for the QR code.</p></li>
+<li><p><strong>logo_path</strong> (<em>str</em>) – Path to the logo image file.</p></li>
+<li><p><strong>fill_color</strong> (<em>str</em>) – Hex code or name for the QR code color.</p></li>
+<li><p><strong>back_color</strong> (<em>str</em>) – Background color.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Custom path to save the PNG. Defaults to None.</p></li>
+<li><p><strong>logo_ratio</strong> (<em>float</em>) – Ratio of logo size relative to QR code size (default 1/4).</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – Display width for Jupyter Notebook rendering.</p></li>
+<li><p><strong>flatten</strong> (<em>bool</em>) – If True, removes transparency by placing the logo on a
+solid white background. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated QR code image object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PIL.Image</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-pyphyschemtools.tools4AS">
 <span id="pyphyschemtools-tools4as-module"></span><h2>pyphyschemtools.tools4AS module<a class="headerlink" href="#module-pyphyschemtools.tools4AS" title="Link to this heading"></a></h2>
 <dl class="py function">
@@ -1665,183 +1783,6 @@ and block names instead of A–F.</p>
 étudiants sans note ni label, ce qui nécessite une vérification du PV.</p>
 </div>
 </dd></dl>
-
-</section>
-<section id="module-pyphyschemtools.units">
-<span id="pyphyschemtools-units-module"></span><h2>pyphyschemtools.units module<a class="headerlink" href="#module-pyphyschemtools.units" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'J'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>An advanced utility class for Energy management in Physical Chemistry.</p>
-<p>This class handles the conversion between standard energy units (J, eV),
-thermal energy (K), and spectroscopic units (wavelengths in m/nm/Å or
-wavenumbers in cm-1).</p>
-<p>Features:
-- Supports scalar values and NumPy arrays.
-- Automatic handling of SI prefixes (milli, micro, kilo, etc.).
-- Seamless conversion between energy (E) and wavelength (lambda) using E = hc/lambda.
-- Support for reciprocal space units (unit-1) and molar units (unit/mol).
-- Integrated error guidance for users</p>
-<p>Accessing numerical values:
-- Use float(obj) to get the scalar value.
-- Use obj.value to get the NumPy array.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.list_prefixes">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">list_prefixes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.list_prefixes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.list_units">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">list_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.list_units" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.parse">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.parse" title="Link to this definition"></a></dt>
-<dd><p>Parses strings like ‘13.6 eV’ or ‘500 nm’.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.show_available_tools">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_available_tools</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.show_available_tools" title="Link to this definition"></a></dt>
-<dd><p>Displays available units and prefixes as styled DataFrames.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.show_constants_metadata">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_constants_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.show_constants_metadata" title="Link to this definition"></a></dt>
-<dd><p>Displays a styled table of the physical constants used for calculations,
-including their current CODATA values, units, and uncertainties.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.to">
-<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.to" title="Link to this definition"></a></dt>
-<dd><p>Converts the current Energy instance to a target unit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>str</em>) – Target unit string.
-Examples:
-- Any SI prefix + ‘J’, ‘eV’, ‘cal’, or ‘m’ (e.g., ‘fJ’, ‘PeV’, ‘ym’, ‘dam’)
-- Molar versions (e.g., ‘MJ/mol’, ‘ueV/mol’, ‘ncal/mol’)
-- Reciprocal versions (e.g., ‘cm-1’, ‘pm-1’, ‘am-1’)
-- Special units: ‘K’, ‘hartree’, ‘Å’, ‘Å-1’</p>
-</dd>
-</dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;nm&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;eV&#39;</span><span class="p">)</span>
-<span class="go">2.4798 eV</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pyphyschemtools.visualID">
-<span id="pyphyschemtools-visualid-module"></span><h2>pyphyschemtools.visualID module<a class="headerlink" href="#module-pyphyschemtools.visualID" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.chrono_show">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">chrono_show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.chrono_show" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.chrono_start">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">chrono_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.chrono_start" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.chrono_stop">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">chrono_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdelay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.chrono_stop" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.BLUE">
-<span class="sig-name descname"><span class="pre">BLUE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.BLUE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.BOLD">
-<span class="sig-name descname"><span class="pre">BOLD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.BOLD" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.CYAN">
-<span class="sig-name descname"><span class="pre">CYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.CYAN" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.DARKCYAN">
-<span class="sig-name descname"><span class="pre">DARKCYAN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[36m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.DARKCYAN" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.GREEN">
-<span class="sig-name descname"><span class="pre">GREEN</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.GREEN" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.OFF">
-<span class="sig-name descname"><span class="pre">OFF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.OFF" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.PURPLE">
-<span class="sig-name descname"><span class="pre">PURPLE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.PURPLE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.RED">
-<span class="sig-name descname"><span class="pre">RED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.RED" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.UNDERLINE">
-<span class="sig-name descname"><span class="pre">UNDERLINE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.UNDERLINE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.color.YELLOW">
-<span class="sig-name descname"><span class="pre">YELLOW</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></span><a class="headerlink" href="#pyphyschemtools.visualID.color.YELLOW" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.css_styling">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">css_styling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.css_styling" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.display_md">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">display_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.display_md" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.end">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.end" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.hdelay">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">hdelay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.hdelay" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.hdelay_ms">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">hdelay_ms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.hdelay_ms" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyphyschemtools.visualID.init">
-<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID.init" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 <section id="module-pyphyschemtools.visualID_Eng">

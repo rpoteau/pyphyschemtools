@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="200"
+   height="200"
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="logo_gear.svg"
+   inkscape:version="1.4.3 (unknown)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="5.71"
+     inkscape:cx="100"
+     inkscape:cy="100"
+     inkscape:window-width="2544"
+     inkscape:window-height="1344"
+     inkscape:window-x="83"
+     inkscape:window-y="58"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3" />
+  <path
+     d="M100 25 L110 5 L130 5 L135 28 A75 75 0 0 1 155 40 L175 30 L188 43 L178 63 A75 75 0 0 1 188 85 L211 90 L211 110 L188 115 A75 75 0 0 1 178 137 L188 157 L175 170 L155 160 A75 75 0 0 1 135 172 L130 195 L110 195 L100 175 L90 195 L70 195 L65 172 A75 75 0 0 1 45 160 L25 170 L12 157 L22 137 A75 75 0 0 1 12 115 L-11 110 L-11 90 L12 85 A75 75 0 0 1 22 63 L12 43 L25 30 L45 40 A75 75 0 0 1 65 28 L70 5 L90 5 Z"
+     fill="#2c3e50"
+     stroke="#34495e"
+     stroke-width="2"
+     transform="translate(50, 50) scale(0.5)"
+     id="path1"
+     style="fill:#006680;stroke:#004455" />
+  <ellipse
+     cx="100"
+     cy="100"
+     fill="#ffffff"
+     stroke="#2c3e50"
+     stroke-width="5.28"
+     id="circle1"
+     rx="34.488621"
+     ry="33"
+     style="stroke:#006680" />
+  <circle
+     cx="100"
+     cy="100"
+     r="10"
+     fill="#3498db"
+     id="circle2"
+     style="fill:#0088aa;stroke:#006680" />
+</svg>

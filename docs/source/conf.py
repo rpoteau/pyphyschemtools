@@ -10,7 +10,7 @@ project = 'pyphyschemtools'
 version = '0.5'
 copyright = '2026, Romuald Poteau'
 author = 'Romuald Poteau'
-release = '0.5.5'
+release = '0.5.6'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

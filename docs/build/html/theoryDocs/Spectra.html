@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spectra &mdash; pyphyschemtools 0.5.5 documentation</title>
+  <title>Spectra &mdash; pyphyschemtools 0.5.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -16,12 +16,14 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/Spectra.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=45def3bc"></script>
+      <script src="../_static/documentation_options.js?v=722679d6"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"chtml": {"fontURL": "https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2", "scale": 1.15, "mtextInheritFont": true, "merrorInheritFont": true}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "macros": {"RR": "{\\bf R}"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area", "renderActions": {"addMenu": []}}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -54,7 +56,28 @@
 <li class="toctree-l1"><a class="reference internal" href="Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Kinetics.html">Chemical Kinetics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PeriodicTable.html">Periodic Table</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Spectra</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spectra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simulation-of-vuv-spectra-by-tddft-calculations">Simulation of VUV spectra by TDDFT calculations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#principle">Principle</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pre-requisite-the-jablonski-energy-diagram">Pre-requisite: the Jablonski energy diagram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vertical-transitions">Vertical transitions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#from-quantum-chemistry-to-uv-vis-spectra">From Quantum Chemistry to UV-Vis Spectra</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-nature-of-tddft-results">The Nature of TDDFT Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#basic-equations">Basic equations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#practical-examples">Practical examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-data-input-format">A. Data Input Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b-basic-td-dft-simulation">B. Basic TD-DFT Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-comparative-absorbance-analysis">C. Comparative Absorbance Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Units.html">Fundamental Units</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Misc.html">Miscellaneous tools</a></li>
 </ul>
@@ -90,6 +113,208 @@
   <section class="tex2jax_ignore mathjax_ignore" id="spectra">
 <h1>Spectra<a class="headerlink" href="#spectra" title="Link to this heading"></a></h1>
 <p><strong><code class="docutils literal notranslate"><span class="pre">spectra.py</span></code> module</strong></p>
+<p>So far, it contains only the <code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code> class</p>
+<section id="simulation-of-vuv-spectra-by-tddft-calculations">
+<h2>Simulation of VUV spectra by TDDFT calculations<a class="headerlink" href="#simulation-of-vuv-spectra-by-tddft-calculations" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code> is a high-level orchestration engine designed to bridge the gap between TD-DFT quantum chemical calculations and experimental laboratory data. It automates the Gaussian broadening of discrete electronic transitions, converting dimensionless oscillator strengths into physically meaningful molar absorption coefficients (<span class="math notranslate nohighlight">\(\epsilon\)</span>) and Absorbance (<span class="math notranslate nohighlight">\(A\)</span>).</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#principle"><span class="std std-ref">Principle</span></a></p></li>
+<li><p>From Quantum Chemistry to UV-Vis Spectra</p></li>
+<li><p>Practical examples</p></li>
+</ul>
+<hr class="docutils" />
+<p><a id="principle"></a></p>
+<section id="principle">
+<h3>Principle<a class="headerlink" href="#principle" title="Link to this heading"></a></h3>
+<section id="pre-requisite-the-jablonski-energy-diagram">
+<h4>Pre-requisite: the Jablonski energy diagram<a class="headerlink" href="#pre-requisite-the-jablonski-energy-diagram" title="Link to this heading"></a></h4>
+<p>The Jablonski Diagram is a conceptual energy diagram that illustrates the various electronic states of a molecule and the different pathways by which a molecule can absorb energy (usually light) and subsequently dissipate that energy. It’s an indispensable tool in photochemistry and photophysics for understanding light-matter interactions.</p>
+<p>It organizes electronic states by energy, with higher states typically having higher energy. It represents different electronic configurations, primarily focusing on singlet states (S) and triplet states (T).</p>
+<ul class="simple">
+<li><p>Singlet states (S0, S1, S2…): All electron spins are paired. The ground state is almost always S0.</p></li>
+<li><p>Triplet states (T1, T2…): Two electrons have parallel spins. These states are generally lower in energy than their corresponding singlet excited states (e.g., T1 is typically below S1).</p></li>
+</ul>
+<p>It also shows transitions between states, under the form of vertical lines or horizontal wavy lines.</p>
+<ul class="simple">
+<li><p>Vertical lines usually denote absorption and emission (fast processes)</p>
+<ul>
+<li><p><strong>Fluorescence</strong>: Emission of a photon from an excited singlet state (S1) back to the ground singlet state (S0). It’s typically fast (~10-9 to 10-7 s) and occurs at a longer wavelength than absorption (Stokes shift).</p></li>
+<li><p><strong>Phosphorescence</strong>: Emission of a photon from an excited triplet state (T1) back to the ground singlet state (S0). Due to the spin-forbidden nature of the transition, it’s a much slower process (~10-3 to 10 s or even hours), giving rise to a long-lived afterglow</p></li>
+</ul>
+</li>
+<li><p>Horizontal wavy lines denote non-radiative transitions (slower processes). These are processes where energy is lost without emitting light:</p>
+<ul>
+<li><p><strong>Vibrational Relaxation (VR)</strong>: Rapid energy loss within an electronic state as the molecule dissipates excess vibrational energy to its surroundings.</p></li>
+<li><p><strong>Internal Conversion (IC)</strong>: A non-radiative transition between electronic states of the same spin multiplicity (e.g., S2 to S1 or S1 to S0). This is also very fast.</p></li>
+<li><p><strong>Intersystem Crossing (ISC)</strong>: A non-radiative transition between electronic states of different spin multiplicity (e.g., S1 to T1). This involves a spin flip and is typically slower than IC.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="vertical-transitions">
+<h4>Vertical transitions<a class="headerlink" href="#vertical-transitions" title="Link to this heading"></a></h4>
+<p>In computational chemistry, a vertical transition refers to an electronic excitation that occurs without any change in the positions of the nuclei in a molecular system. This concept is rooted in the Born-Oppenheimer Approximation and the Franck-Condon Principle. A illustration is given in <strong>Figure a)</strong> for a transition between a singlet ground state (<em>S</em><sub>0</sub>) to the first singlet excited state (<em>S</em><sub>1</sub>). Because electrons are much lighter and move much faster than nuclei, an electronic transition happens so rapidly that the molecular geometry remains “frozen” during the process.</p>
+<p>Electronic vertical transitions can be calculated in the framework of the so-called Time-Dependent Density Functional Theory (TDDFT). While standard Density Functional Theory (DFT) is designed for ground-state properties, TDDFT is a standard tool for calculating electronic excited states. It allows us to determine:</p>
+<ul class="simple">
+<li><p><strong>Vertical Transition Energies</strong> (<em>T<sub>e</sub></em>): The energy required to excite an electron from the ground state to an excited state.</p></li>
+<li><p><strong>Oscillator Strengths</strong> (<em>f</em>): A dimensionless quantity that indicates the probability (intensity) of the transition.</p></li>
+</ul>
+<p>In the gas phase or solution, electronic transitions are not infinitely sharp, as shown by the vertical red transition in <strong>Figure b)</strong>. They are broadened by vibrational effects and solvent interactions. The <code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code> models this by applying a Gaussian convolution to each transition, with a default standard deviation related to the spectral bandwidth σ = 0.3 eV. This matches standard international practices (like those used in GaussView), ensuring that the generated spectra are comparable to those generated by other tools.</p>
+<div style="display: flex; gap: 20px; align-items: flex-end; justify-content: center; max-width: 800px; margin: 0 auto;">
+  <figure style="flex: 1; text-align: center; margin: 0;">
+    <img src="../_static/spectra/S0-S1-FranckCondon-classik.svg" alt="FranckCondon" style="width: 300px;">
+    <figcaption style="margin-top: 8px;"><b>Figure a)</b>. Franck-Condon principle within the Born-Oppenheimer approximation applied to the ground state to first singlet excited state electronic transition</figcaption>
+  </figure>
+  <figure style="flex: 1; text-align: center; margin: 0;">
+    <img src="../_static/spectra/TDDFT-Spectrum.svg" alt="Spectrum" style="width: 400px;">
+    <figcaption style="margin-top: 8px;"><b>Figure b)</b>. TDDFT calculation and relation with en experimental band (cyan curve)</figcaption>
+  </figure>
+</div>
+<br> 
+<div class="rqE">
+<p>In electronic states calculations, it is essential to distinguish between computational efficiency and absolute accuracy. While TDDFT is the most widely used tool for large-scale vertical transitions, it is often viewed as a “semi-quantitative” method due to its inherent approximations.</p>
+<p>Here is a comparison between TDDFT and Wave Function Theory (WFT) to help you understand their respective roles in calculating electronic transitions. TDDFT is the “standard” or “state-of-the-art” method for excited states because it strikes a nearly perfect balance between computational speed and predictive power for most organic molecules.</p>
+<ul class="simple">
+<li><p><strong>TDDFT</strong></p>
+<ul>
+<li><p>Speed: Its computational cost scales similarly to ground-state DFT. This allows it to handle systems with hundreds of atoms (e.g., proteins, polymers, large dyes).</p></li>
+<li><p>The “State-of-the-Art” status: For “well-behaved” valence transitions (like π → π<sup>*</sup>), TDDFT usually gives errors within 0.1–0.3 eV, which is sufficient for interpreting experimental UV-Vis spectra.</p></li>
+</ul>
+</li>
+<li><p><strong>WFT</strong>. When high precision is required, or when TDDFT fails (like in CT or double excitations), we turn to Wave Function Theory (WFT) methods. Examples: CC2, CCSD(T), CASPT2, or ADC(2).</p>
+<ul>
+<li><p>Why they are more accurate: These methods systematically solve the Schrödinger equation by adding correlation effects explicitly. They can handle complex transitions (like double excitations) that TDDFT misses entirely.</p></li>
+<li><p>But these methods are extremely expensive. While TDDFT can handle 10<sup>2</sup> atoms, a high-level WFT method like CCSD(T) might be restricted to 10–20 atoms because the calculation time increases “exponentially” with the number of electrons.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<p><a id="FromQuantumChem2VUV"></a></p>
+</section>
+</section>
+<section id="from-quantum-chemistry-to-uv-vis-spectra">
+<h3>From Quantum Chemistry to UV-Vis Spectra<a class="headerlink" href="#from-quantum-chemistry-to-uv-vis-spectra" title="Link to this heading"></a></h3>
+<section id="the-nature-of-tddft-results">
+<h4>The Nature of TDDFT Results<a class="headerlink" href="#the-nature-of-tddft-results" title="Link to this heading"></a></h4>
+<p>Time-Dependent Density Functional Theory (TDDFT) provides a “stick spectrum”. For each electronic transition i, it calculates:</p>
+<ul class="simple">
+<li><p>An excitation energy, <em>T<sub>e,i</sub></em></p></li>
+<li><p>An oscillator strength, <em>f<sub>i</sub></em></p></li>
+</ul>
+<p>In practice, we do not observe sharp lines (sticks) but broad bands. This broadening is due to:</p>
+<ul class="simple">
+<li><p>Vibrational effects: each electronic state has associated vibrational and rotational levels.</p></li>
+<li><p>Environmental effects: interactions with solvent molecules or thermal fluctuations.</p></li>
+</ul>
+<p>To simulate this envelope, we broaden each “stick” using a Gaussian distribution function. This function distributes the intensity (all <em>f<sub>i</sub></em>) over a range of wavenumbers around the central transition <em>T<sub>e,i</sub></em></p>
+</section>
+<section id="basic-equations">
+<h4>Basic equations<a class="headerlink" href="#basic-equations" title="Link to this heading"></a></h4>
+<div class="math notranslate nohighlight">
+\[\varepsilon_{i}(\bar{\nu})=\varepsilon_{i}^{\mathrm{max}}\exp\left[-\left(\frac{\bar{\nu}-\bar{\nu}_{i}}{\sigma}\right)^{2}\right]\]</div>
+<p>It is demonstrated, in a <a class="reference external" href="https://gaussian.com/uvvisplot/">Gaussian whitepaper</a>, that the previous equation becomes, in the cgs units system:
+$<span class="math notranslate nohighlight">\(\varepsilon_{i}(\bar{\nu})=\frac{\sqrt{\pi}e^{2}N_{\mathrm{A}}}{1000\ln(10)c^{2}m_{e}}\frac{f_{i}}{\sigma}\exp\left[-\left(\frac{\bar{\nu}-\bar{\nu}_{i}}{\sigma}\right)^{2}\right]\)</span>$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\varepsilon_i\)</span> is the molar absorption coefficient, in units of L∙mol<span class="math notranslate nohighlight">\(^{-1}\)</span>∙cm<span class="math notranslate nohighlight">\(^{-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(f_i\)</span> is the dimensionless oscillator strength</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span>, the half-width of the Gaussian band at each <span class="math notranslate nohighlight">\(\varepsilon^{\mathrm{max}}\)</span>, is in cm<span class="math notranslate nohighlight">\(^{-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(c\)</span> is the speed of light in cm∙s<span class="math notranslate nohighlight">\(^{-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(N_\mathrm{A}\)</span> is the Avogadro number, in mol<span class="math notranslate nohighlight">\(^{-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m_e\)</span> is the electron mass in g</p></li>
+<li><p><span class="math notranslate nohighlight">\(e\)</span> is the elementary charge, in electrostatic unit of charge (esu)</p></li>
+</ul>
+<p>In most cases, there will be more than one electronic excitation in the region of interest. The overall spectrum is obtained from the sum of all the individual bands:</p>
+<div class="math notranslate nohighlight">
+\[\varepsilon(\bar{\nu}) = \sum_{i}^{N}\varepsilon_{i}(\bar{\nu})\]</div>
+<hr class="docutils" />
+<p><a id="PracticalExamples"></a></p>
+</section>
+</section>
+<section id="practical-examples">
+<h3>Practical examples<a class="headerlink" href="#practical-examples" title="Link to this heading"></a></h3>
+<p>As expalined above, the simulator does not simply draw lines; it simulates the vibronic envelope by applying a Gaussian convolution to each vertical transition.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">pathlib</span></code> for robust file management, the following examples demonstrate the “one-line” power of the API</p>
+<section id="a-data-input-format">
+<h4>A. Data Input Format<a class="headerlink" href="#a-data-input-format" title="Link to this heading"></a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code> is designed to parse <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files generated from Gaussian TD-DFT calculations. To be processed correctly, your input file must follow this specific tabular structure:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>iState</p></th>
+<th class="head text-left"><p>State</p></th>
+<th class="head text-left"><p>lambda/nm</p></th>
+<th class="head text-left"><p>fe</p></th>
+<th class="head text-left"><p>S^2</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>1:</p></td>
+<td class="text-left"><p>Singlet-A</p></td>
+<td class="text-left"><p>386.34</p></td>
+<td class="text-left"><p>0.0612</p></td>
+<td class="text-left"><p>0.000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2:</p></td>
+<td class="text-left"><p>Singlet-A</p></td>
+<td class="text-left"><p>353.53</p></td>
+<td class="text-left"><p>1.0775</p></td>
+<td class="text-left"><p>0.000</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>3:</p></td>
+<td class="text-left"><p>Singlet-A</p></td>
+<td class="text-left"><p>325.70</p></td>
+<td class="text-left"><p>0.0048</p></td>
+<td class="text-left"><p>0.000</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>iState: Transition index (e.g., 1:)</p></li>
+<li><p>State: Electronic state symmetry (e.g., Singlet-A)</p></li>
+<li><p>lambda/nm: Vertical excitation wavelength in nanometers</p></li>
+<li><p>fe: Oscillator strength (dimensionless)</p></li>
+<li><p>S^2: Spin contamination (usually 0.000 for singlets)</p></li>
+</ul>
+</section>
+<section id="b-basic-td-dft-simulation">
+<h4>B. Basic TD-DFT Simulation<a class="headerlink" href="#b-basic-td-dft-simulation" title="Link to this heading"></a></h4>
+<p>This workflow reads a <code class="docutils literal notranslate"><span class="pre">.dat</span></code> file, simulates the spectrum, and saves a 300 DPI figure</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectrumSimulator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./data_examples/Spectra/&quot;</span><span class="p">)</span>
+<span class="n">file</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">/</span> <span class="s2">&quot;DBA-syn-syn-TDDFT_ethanol_ExcStab.dat&quot;</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">SpectrumSimulator</span><span class="p">(</span><span class="n">plotWH</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">plotEps_lambda_TDDFT</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="s2">&quot;DBA in ethanol&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">prefix</span><span class="o">/</span><span class="s2">&quot;output.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure>
+<img src="../_static/spectra/DBA-syn-syn-TDDFT_ethanol.png" alt="TDDFT spectrum of DBA" style="width:600dpi;">
+<figcaption>TDDFT spectrum of DBA</figcaption>
+</figure>
+</section>
+<section id="c-comparative-absorbance-analysis">
+<h4>C. Comparative Absorbance Analysis<a class="headerlink" href="#c-comparative-absorbance-analysis" title="Link to this heading"></a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">plotAbs_lambda_TDDFT</span></code> method allows for the superposition of the simulated spectra of multiple chemical species, applying the Beer-Lambert law</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectrumSimulator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./data_examples/Spectra/&quot;</span><span class="p">)</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span> <span class="o">/</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;DBA-syn.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6-syn.dat&quot;</span><span class="p">]]</span>
+<span class="n">C0_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2e-5</span><span class="p">,</span> <span class="mf">2.5e-5</span><span class="p">]</span> <span class="c1"># Concentrations in mol/L</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">SpectrumSimulator</span><span class="p">(</span><span class="n">plotWH</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">plotAbs_lambda_TDDFT</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">C0_list</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">Amax</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DBA&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<figure>
+<img src="../_static/spectra/DBAxx_ethanol.png" alt="TDDFT simulated spectra" style="width:600dpi;">
+<figcaption>TDDFT simulated absorbance spectra of DBA and DBA6</figcaption>
+</figure></section>
+</section>
+</section>
 </section>
 
 

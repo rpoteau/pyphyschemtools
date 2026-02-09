@@ -4,6 +4,14 @@
 
 # Changelog
 
+## [0.5.6] - 2026-02-09. "SpectrumSimulator doc"
+
+### Added
+- **Documentation**: New introduction and technical sections in `Spectra.md`, related to the `SpectrumSimulator` class
+
+### Fixed
+- Resolved Sphinx build error: `Unknown target name: "qrcode"` by escaping underscores in docstrings.
+
 ## [0.5.5] - 2026-02-07. "qrcode and docs"
 
 ### Added

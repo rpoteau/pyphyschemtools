@@ -25,3 +25,5 @@ pip install pyphyschemtools
 [![Documentation Status](https://readthedocs.org/projects/pyphyschemtools/badge/?version=latest)](https://pyphyschemtools.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/rpoteau/pyphyschemtools)](https://github.com/rpoteau/pyphyschemtools/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/pyphyschemtools)](https://pypi.org/project/pyphyschemtools/)
+
+**Main Tutorial**: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb)

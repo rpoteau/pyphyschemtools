@@ -31,6 +31,12 @@ Welcome to **pyphyschemtools**. This documentation combines computational tools 
 
 .. toctree::
    :maxdepth: 2
+   :caption: 🚀 Interactive Examples
+
+   Examples (Google Colab) <https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb> 
+
+.. toctree::
+   :maxdepth: 2
    :caption: 🛠 API Reference (Technical)
 
    modules

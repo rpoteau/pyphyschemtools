@@ -4,6 +4,23 @@
 
 # Changelog
 
+## [0.5.7] - 2026-02-10. "easy_rdkit"
+
+### Added
+- **PubChem Integration in easy_rdkit**: Introduced `@classmethod` `easy_rdkit.from_cid(cid)` to instantiate molecular objects directly using PubChem Compound IDs.
+- **easy_rdkit**: Added `descriptors` property and `show_descriptors()` method.
+- **easy_rdkit**: Added `to_dict()` and `fetch_pubchem_data()` for seamless DataFrame integration.
+- **Documentation & Tutorials**: Launched interactive **Google Colab** badges in the README for instant access to tutorials.
+- **Documentation**: Integrated direct Google Colab links into the Sphinx documentation (`.rst` files) to allow users to jump from API docs to live examples.
+- **easy_rdkit (Batch Visualization)**: 
+    - Added `plot_grid_from_df()` static method.
+    - Supports multi-line legends using a list of column names (e.g., `legend_cols=['Name', 'MW', 'LogP']`).
+
+### Fixed
+- **Dependencies**: Added `ase`, `keras`, and `tensorflow` to `pyproject.toml` to ensure full environment compatibility (especially for Google Colab).
+- **Lazy Loading System**: Enhanced `__init__.py` with a robust `__getattr__` mechanism. It now captures and reports specific `ImportError` messages (e.g., missing `ase` or `tensorflow`) during the module scan, providing clear diagnostic feedback to the user..
+- **Data Bundling**: Updated `pyproject.toml` to ensure the `data_examples` folder (Excel, SVG) is physically included in the PyPI distribution.
+
 ## [0.5.6] - 2026-02-09. "SpectrumSimulator doc"
 
 ### Added

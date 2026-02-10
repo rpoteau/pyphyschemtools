@@ -2,7 +2,7 @@
 
 **`misc.py` module**
 
-The `misc` module contains general-purpose helper tools that support the broader ecosystem of `pyphyschemtools`. This includes automation for visual identification, file handling, and project branding.
+The `misc` module contains general-purpose helper tools that support the broader ecosystem of `pyphyschemtools`. This includes project branding.
 
 So far, it only contains the `QRcodeGenerator` class
 

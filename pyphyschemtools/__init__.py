@@ -3,8 +3,8 @@
 The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.
 """
 
-__version__ = "0.5.6"
-__last_update__ = "2026-02-09"
+__version__ = "0.5.7"
+__last_update__ = "2026-02-10"
 
 import importlib
 import importlib.util
@@ -35,6 +35,8 @@ def __getattr__(name):
         ".spectra", ".survey",  
         ".sympyUtilities", ".tools4AS", ".units"
     ]
+
+    import_errors = []
     
     for mod_name in modules_to_search:
         try:
@@ -42,7 +44,16 @@ def __getattr__(name):
             module = importlib.import_module(mod_name, __package__)
             if hasattr(module, name):
                 return getattr(module, name)
-        except (ImportError, AttributeError):
+        except (ImportError, AttributeError) as e:
+            # Track errors to help the user diagnose missing dependencies
+            import_errors.append(f"  - In {mod_name}: {e}")
             continue
 
-    raise AttributeError(f"module {__name__} has no attribute {name}")
+    # Final error message if the attribute is not found
+    error_msg = f"module {__name__} has no attribute '{name}'."
+    if import_errors:
+        error_msg += "\nPossible causes (errors encountered during scan):"
+        for err in import_errors:
+            error_msg += f"\n{err}"
+
+    raise AttributeError(error_msg)

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cheminformatics &mdash; pyphyschemtools 0.5.6 documentation</title>
+  <title>Cheminformatics &mdash; pyphyschemtools 0.5.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -16,12 +16,14 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/Cheminformatics.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=722679d6"></script>
+      <script src="../_static/documentation_options.js?v=d65efdcf"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"chtml": {"fontURL": "https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2", "scale": 1.15, "mtextInheritFont": true, "merrorInheritFont": true}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "macros": {"RR": "{\\bf R}"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area", "renderActions": {"addMenu": []}}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,13 +52,38 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">📚 Docs and Theory</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Cheminformatics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cheminformatics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#d-representation-of-organic-and-inorganic-compounds">2D representation of organic and inorganic compounds</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#principle">Principle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#molecular-descriptors-reference">Molecular Descriptors Reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#physico-chemical-properties-lipinski-veber-criteria">Physico-chemical Properties (Lipinski &amp; Veber Criteria)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#topological-structural-indices">Topological &amp; Structural Indices</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#practical-examples">Practical examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-basic-use">A. Basic use</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b-comprehensive-electronic-view-lewis-structure">B. Comprehensive Electronic View: Lewis structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-fetching-a-smiles-from-its-pubchem-cid">C. Fetching a SMILES from its PubChem CID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#d-mastering-complex-geometry">D. Mastering Complex Geometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#e-calculation-of-descriptors">E. Calculation of descriptors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#f-store-descriptors-in-a-dataframe">F. Store descriptors in a dataframe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#g-display-the-smiles-of-a-dataframe-on-a-grid-with-legends">G. Display the smiles of a dataframe on a grid, with legends</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Kinetics.html">Chemical Kinetics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PeriodicTable.html">Periodic Table</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Units.html">Fundamental Units</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Misc.html">Miscellaneous tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🚀 Interactive Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb">Examples (Google Colab)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
 <ul>
@@ -90,6 +117,165 @@
   <section class="tex2jax_ignore mathjax_ignore" id="cheminformatics">
 <h1>Cheminformatics<a class="headerlink" href="#cheminformatics" title="Link to this heading"></a></h1>
 <p><strong><code class="docutils literal notranslate"><span class="pre">cheminformatics.py</span></code> module</strong></p>
+<p>So far, it only contains the <code class="docutils literal notranslate"><span class="pre">easy_rdkit</span></code> class</p>
+<section id="d-representation-of-organic-and-inorganic-compounds">
+<h2>2D representation of organic and inorganic compounds<a class="headerlink" href="#d-representation-of-organic-and-inorganic-compounds" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#principle"><span class="std std-ref">Principle</span></a></p></li>
+<li><p><a class="reference internal" href="#molecular-descriptors-reference"><span class="std std-ref">Molecular Descriptors Reference</span></a></p></li>
+<li><p><a class="reference internal" href="#practical-examples"><span class="std std-ref">Practical examples</span></a></p></li>
+</ul>
+<section id="principle">
+<h3>Principle<a class="headerlink" href="#principle" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">easy_rdkit</span></code> class acts as a high-level wrapper around the RDKit library, specifically tailored for chemical education. It allows for the immediate visualization of chemical bond properties that are usually hidden in standard molecular representations. It is built on the SMILES (Simplified Molecular Input Line Entry System) standard. By providing a simple text string as input, the class automatically generates a full molecular object, calculates electronic properties and descriptors - useful for machine learning, and handles 2D coordinate generation. This approach allows students to bridge the gap between chemical notation and computational representation instantaneously.</p>
+</section>
+<section id="molecular-descriptors-reference">
+<h3>Molecular Descriptors Reference<a class="headerlink" href="#molecular-descriptors-reference" title="Link to this heading"></a></h3>
+<p>Each descriptor provided by <code class="docutils literal notranslate"><span class="pre">easy_rdkit</span></code> captures a specific aspect of the molecule’s nature, from its physical bulk to its potential as a drug candidate.</p>
+<section id="physico-chemical-properties-lipinski-veber-criteria">
+<h4>Physico-chemical Properties (Lipinski &amp; Veber Criteria)<a class="headerlink" href="#physico-chemical-properties-lipinski-veber-criteria" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>MW (Molecular Weight)</strong>: The sum of atomic masses in the molecule (g/mol). It is a primary indicator of molecular size and its ability to diffuse across biological membranes.</p></li>
+<li><p><strong>LogP (Partition Coefficient)</strong>: A measure of lipophilicity (octanol/water partition). A high LogP indicates a hydrophobic molecule, while a low LogP suggests hydrophilicity.</p></li>
+<li><p><strong>QED (Quantitative Estimate of Drug-likeness)</strong>: A score between 0 and 1 that reflects how much a molecule “looks like” a drug based on its underlying properties.</p></li>
+<li><p><strong>HBA (Hydrogen Bond Acceptors)</strong>: The number of electronegative atoms (typically N or O) that can accept a hydrogen bond.</p></li>
+<li><p><strong>HBD (Hydrogen Bond Donors)</strong>: The number of hydrogen atoms attached to electronegative atoms (N-H or O-H) that can be donated to form a hydrogen bond.</p></li>
+<li><p><strong>RotB (Rotatable Bonds)</strong>: A measure of molecular flexibility. Note that terminal groups like Methyl (-CH<sub>3</sub>) are <strong>not</strong> counted as they do not change the overall conformation upon rotation.</p></li>
+<li><p><strong>TPSA (Topological Polar Surface Area)</strong>: The surface area (Å<sup>2</sup>) contributed by polar atoms (N, O and their attached H). It is a key metric for the optimization of a drug’s ability to permeate cells.</p></li>
+</ul>
+</section>
+<section id="topological-structural-indices">
+<h4>Topological &amp; Structural Indices<a class="headerlink" href="#topological-structural-indices" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Aromatic / Non-Aromatic Rings</strong>: Distinguishes between stabilized aromatic systems (like benzene) and aliphatic or saturated rings (like cyclohexane).</p></li>
+<li><p><strong>Fsp3 (Fraction of <span class="math notranslate nohighlight">\(sp^3\)</span> Carbons)</strong>: The ratio of <em>sp</em><sup>3</sup> hybridized carbons to the total carbon count. It measures the “3D-ness” or saturation of a molecule. Higher values often correlate with better solubility and success in clinical trials.</p></li>
+<li><p><strong>Connectivity Indices (Chi0 &amp; Chi1)</strong>:</p>
+<ul>
+<li><p><strong>Chi0</strong>: Focuses on individual atoms to estimate molecular volume and atomic crowding.</p></li>
+<li><p><strong>Chi1</strong>: Focuses on bonds and branching patterns. It is used in QSAR models to predict physical properties like boiling points and density.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="practical-examples">
+<h3>Practical examples<a class="headerlink" href="#practical-examples" title="Link to this heading"></a></h3>
+<section id="a-basic-use">
+<h4>A. Basic use<a class="headerlink" href="#a-basic-use" title="Link to this heading"></a></h4>
+<p>While standard chemical drawings often omit conjugation or hybridization states, easy_rdkit allows for their explicit visualization, making it an ideal tool for teaching structural organic chemistry.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">t4pPC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">easy_rdkit</span>
+
+<span class="c1"># Initialize with a SMILES string (Paracetamol)</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">easy_rdkit</span><span class="p">(</span><span class="s2">&quot;CC(=O)NC1=CC=C(C=C1)O&quot;</span><span class="p">)</span>
+
+<span class="c1"># 1. Highlight Aromaticity</span>
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Aromatic part&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_mol</span><span class="p">(</span><span class="n">plot_aromatic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 2. Highlight Conjugation and Lone Pairs</span>
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Conjugated part&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_mol</span><span class="p">(</span><span class="n">plot_conjugation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_n</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="b-comprehensive-electronic-view-lewis-structure">
+<h4>B. Comprehensive Electronic View: Lewis structure<a class="headerlink" href="#b-comprehensive-electronic-view-lewis-structure" title="Link to this heading"></a></h4>
+<p>This example showcases how <code class="docutils literal notranslate"><span class="pre">easy_rdkit</span></code> simplifies the transition from a SMILES string to a detailed basic electronic analysis. By enabling the Lewis and hybridization flags, the library automatically calculates and overlays lone pairs, electron vacancies, and orbital states directly onto the molecular graph, providing a clear visual bridge between chemical structure and bonding theory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">t4pPC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">easy_rdkit</span>
+
+<span class="n">mol</span> <span class="o">=</span> <span class="n">easy_rdkit</span><span class="p">(</span><span class="s2">&quot;CC(=O)NC1=CC=C(C=C1)O&quot;</span><span class="p">)</span>
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Lewis &amp; hybridization&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_mol</span><span class="p">(</span><span class="n">show_Lewis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_n</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_hybrid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="c-fetching-a-smiles-from-its-pubchem-cid">
+<h4>C. Fetching a SMILES from its PubChem CID<a class="headerlink" href="#c-fetching-a-smiles-from-its-pubchem-cid" title="Link to this heading"></a></h4>
+<p>PubChem is the world’s largest collection of freely accessible chemical information, maintained by the National Institutes of Health (NIH). It serves as a comprehensive authority for chemical structures, identifiers, and biological activities.</p>
+<p>By integrating the PubChem Compound ID (CID) system, easy_rdkit allows you to bypass manual string entry. This ensures that the molecular structure is retrieved directly from a standardized, peer-reviewed source, significantly reducing errors for complex scaffolds.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">t4pPC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">easy_rdkit</span>
+
+<span class="n">mol</span> <span class="o">=</span> <span class="n">easy_rdkit</span><span class="o">.</span><span class="n">from_cid</span><span class="p">(</span><span class="mi">2519</span><span class="p">)</span> <span class="c1">#cafeine</span>
+
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Caffeine from PubChem&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_mol</span><span class="p">(</span><span class="n">plot_conjugation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;compound </span><span class="si">{</span><span class="n">mol</span><span class="o">.</span><span class="n">cid</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">mol</span><span class="o">.</span><span class="n">iupac_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">RDKit-canonicalized SMILES = </span><span class="si">{</span><span class="n">mol</span><span class="o">.</span><span class="n">smiles</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="d-mastering-complex-geometry">
+<h4>D. Mastering Complex Geometry<a class="headerlink" href="#d-mastering-complex-geometry" title="Link to this heading"></a></h4>
+<p>Macrocycles (large rings) are notoriously difficult to represent clearly in 2D. Using the <code class="docutils literal notranslate"><span class="pre">macrocycle=True</span></code> flag triggers an optimized coordinate generation algorithm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">t4pPC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">easy_rdkit</span>
+
+<span class="c1"># Cyclosporine: A challenging macrocycle for standard layout engines</span>
+<span class="n">smiles_cyc</span> <span class="o">=</span> <span class="s2">&quot;C/C=C/CC(C)C(O)C1C(=O)NC(CC)C(=O)N(C)CC(=O)N(C)C(CC(C)C)C(=O)NC(C(C)C)C(=O)N(C)C(CC(C)C)C(=O)NC(C)C(=O)NC(C)C(=O)N(C)C(CC(C)C)C(=O)N(C)C(CC(C)C)C(=O)N(C)C(C(C)C)C(=O)N1C&quot;</span>
+<span class="n">mol</span> <span class="o">=</span> <span class="n">easy_rdkit</span><span class="p">(</span><span class="n">smiles_cyc</span><span class="p">)</span>
+
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Better representation of macrocycles&quot;</span><span class="p">)</span>
+
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centertxt</span><span class="p">(</span><span class="s2">&quot;without the &#39;macrocycle&#39; option&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_mol</span><span class="p">()</span>
+
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centertxt</span><span class="p">(</span><span class="s2">&quot;with the &#39;macrocycle&#39; option&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_mol</span><span class="p">(</span><span class="n">macrocycle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="e-calculation-of-descriptors">
+<h4>E. Calculation of descriptors<a class="headerlink" href="#e-calculation-of-descriptors" title="Link to this heading"></a></h4>
+<p>This example highlights the seamless integration with PubChem and the automated extraction of molecular properties. By initializing a molecule via its Compound ID (CID), the library automatically retrieves the official IUPAC name and canonical SMILES, while providing a clear visualization of chemical features like π-conjugation and a comprehensive table of calculated physicochemical descriptors.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">t4pPC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">easy_rdkit</span>
+
+<span class="n">mol</span> <span class="o">=</span> <span class="n">easy_rdkit</span><span class="o">.</span><span class="n">from_cid</span><span class="p">(</span><span class="mi">3672</span><span class="p">)</span> <span class="c1">#ibuprofen</span>
+
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Ibuprofen from PubChem&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_mol</span><span class="p">(</span><span class="n">plot_conjugation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;compound </span><span class="si">{</span><span class="n">mol</span><span class="o">.</span><span class="n">cid</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">mol</span><span class="o">.</span><span class="n">iupac_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">RDKit-canonicalized SMILES = </span><span class="si">{</span><span class="n">mol</span><span class="o">.</span><span class="n">smiles</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">mol</span><span class="o">.</span><span class="n">show_descriptors</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="f-store-descriptors-in-a-dataframe">
+<h4>F. Store descriptors in a dataframe<a class="headerlink" href="#f-store-descriptors-in-a-dataframe" title="Link to this heading"></a></h4>
+<p>This example demonstrates how to efficiently transform a chemical library into a structured dataset. By consolidating multiple <code class="docutils literal notranslate"><span class="pre">easy_rdkit</span></code> instances into a pandas DataFrame, you can automatically aggregate IUPAC names, PubChem IDs, and molecular descriptors into a single table, creating a powerful foundation for data analysis or machine learning workflows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">t4pPC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">easy_rdkit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># A list of molecules (some from CID, some from SMILES)</span>
+<span class="n">my_mols</span> <span class="o">=</span> <span class="p">[</span><span class="n">easy_rdkit</span><span class="o">.</span><span class="n">from_cid</span><span class="p">(</span><span class="mi">3672</span><span class="p">),</span> <span class="n">easy_rdkit</span><span class="p">(</span><span class="s2">&quot;CC(C1=CC(=CC=C1)C(=O)C2=CC=CC=C2)C(=O)O&quot;</span><span class="p">)]</span>
+
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Store descriptors in dataframes&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">auto_fetch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">my_mols</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="g-display-the-smiles-of-a-dataframe-on-a-grid-with-legends">
+<h4>G. Display the smiles of a dataframe on a grid, with legends<a class="headerlink" href="#g-display-the-smiles-of-a-dataframe-on-a-grid-with-legends" title="Link to this heading"></a></h4>
+<p>This final step illustrates the automated generation of a molecular gallery, translating your DataFrame back into a clean, visual grid. By specifying multiple legend columns, the method creates high-quality SVG panels with vertically stacked properties, providing an ideal format for data comparison and high-resolution export for scientific publications or student report.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Draw molecules on a grid&quot;</span><span class="p">)</span>
+<span class="c1"># Create a grid showing Name, Molecular Weight, and LogP</span>
+<span class="n">easy_rdkit</span><span class="o">.</span><span class="n">plot_grid_from_df</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> 
+    <span class="n">smiles_col</span><span class="o">=</span><span class="s1">&#39;SMILES&#39;</span><span class="p">,</span> 
+    <span class="n">legend_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CID&#39;</span><span class="p">,</span> <span class="s1">&#39;MW&#39;</span><span class="p">],</span>
+    <span class="n">mols_per_row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">350</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span>
+    <span class="n">save_img</span><span class="o">=</span><span class="s2">&quot;./data_examples/Molecules/gridMol.svg&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
 </section>
 
 

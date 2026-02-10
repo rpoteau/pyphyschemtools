@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.5.6 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.5.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=722679d6"></script>
+      <script src="_static/documentation_options.js?v=d65efdcf"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,6 +56,10 @@
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Units.html">Fundamental Units</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Misc.html">Miscellaneous tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🚀 Interactive Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb">Examples (Google Colab)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
 <ul class="current">
@@ -674,6 +678,79 @@ Calculates valence electrons, lone pairs, formal charges, and octet rule complia
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.descriptors">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">descriptors</span></span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.descriptors" title="Link to this definition"></a></dt>
+<dd><p>Compute and return a dictionary of key molecular descriptors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.fetch_pubchem_data">
+<span class="sig-name descname"><span class="pre">fetch_pubchem_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.fetch_pubchem_data" title="Link to this definition"></a></dt>
+<dd><p>Retrieves CID and IUPAC name from PubChem based on the current SMILES.
+Useful for molecules initialized directly via SMILES.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.from_cid">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_cid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.from_cid" title="Link to this definition"></a></dt>
+<dd><p>Create an easy_rdkit instance directly from a PubChem CID.</p>
+<section id="parameters">
+<h3>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>cid<span class="classifier">int or str</span></dt><dd><p>The PubChem Compound ID.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.plot_grid_from_df">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">plot_grid_from_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SMILES'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IUPAC</span> <span class="pre">Name'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mols_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(250,</span> <span class="pre">250)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.plot_grid_from_df" title="Link to this definition"></a></dt>
+<dd><p>Generates a grid image of molecular structures from a pandas DataFrame.</p>
+<p>This method extracts SMILES strings from the specified column, generates 2D
+representations, and arranges them in a grid. It supports multi-line legends
+by passing a list of column names, and can export the result to external files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing the molecular data.</p></li>
+<li><p><strong>smiles_col</strong> (<em>str</em>) – Name of the column containing SMILES strings.
+Defaults to ‘SMILES’.</p></li>
+<li><p><strong>legend_cols</strong> (<em>str</em><em> or </em><em>list</em>) – Column name(s) to display as legends
+below each molecule. If a list is provided, each value is
+displayed on a new line (e.g., [‘IUPAC Name’, ‘MW’, ‘LogP’]).
+Defaults to ‘IUPAC Name’.</p></li>
+<li><p><strong>mols_per_row</strong> (<em>int</em>) – Number of molecules to display in each row.
+Defaults to 4.</p></li>
+<li><p><strong>size</strong> (<em>tuple</em>) – Dimensions (width, height) in pixels for each
+individual molecule panel. Defaults to (250, 250).</p></li>
+<li><p><strong>save_img</strong> (<em>str</em><em>, </em><em>optional</em>) – File path to save the resulting image.
+Supports ‘.svg’ (vector) and ‘.png’ (raster) extensions.
+Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An SVG object for rich display in Jupyter/Colab
+environments.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>IPython.display.SVG</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>PNG export requires the Cairo backend to be available in the
+RDKit installation.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.show_descriptors">
+<span class="sig-name descname"><span class="pre">show_descriptors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.show_descriptors" title="Link to this definition"></a></dt>
+<dd><p>Print all computed descriptors in a formatted table.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.show_mol">
 <span class="sig-name descname"><span class="pre">show_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(400,</span> <span class="pre">400)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_Lewis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_conjugation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_aromatic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_hybrid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_H</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep3D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macrocycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlightAtoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.show_mol" title="Link to this definition"></a></dt>
@@ -695,6 +772,13 @@ Calculates valence electrons, lone pairs, formal charges, and octet rule complia
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto_fetch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Export identity and descriptors as a flat dictionary.
+If auto_fetch is True, it will attempt to find missing CID/Name on PubChem.</p>
 </dd></dl>
 
 </dd></dl>

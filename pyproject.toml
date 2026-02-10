@@ -1,15 +1,17 @@
 [project]
 name = "pyphyschemtools"
-version = "0.5.6"
+version = "0.5.7"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
+    "ase",
     "bokeh",
     "CageCavityCalc",
     "ipywidgets",
     "jupyter",
+    "keras",
     "matplotlib",
     "mendeleev",
     "numpy",
@@ -22,7 +24,8 @@ dependencies = [
     "rdkit",
     "scikit-learn",
     "scipy",
-    "sympy"
+    "sympy",
+    "tensorflow"
 ]
 
 [project.urls]
@@ -45,6 +48,8 @@ include = ["pyphyschemtools*"]
 [tool.setuptools.package-data]
 "pyphyschemtools" = [
     "resources/**/*",
+    "data_examples/**/*",
+    "example.ipynb",
 ]
 
 [project.optional-dependencies]

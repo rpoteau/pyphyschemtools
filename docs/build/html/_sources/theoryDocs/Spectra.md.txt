@@ -9,8 +9,8 @@ So far, it contains only the `SpectrumSimulator` class
 `SpectrumSimulator` is a high-level orchestration engine designed to bridge the gap between TD-DFT quantum chemical calculations and experimental laboratory data. It automates the Gaussian broadening of discrete electronic transitions, converting dimensionless oscillator strengths into physically meaningful molar absorption coefficients ($\epsilon$) and Absorbance ($A$).
 
 * [Principle](#principle)
-* [From Quantum Chemistry to UV-Vis Spectra](#FromQuantumChem2VUV)
-* [Practical examples](#PracticalExamples)
+* [From Quantum Chemistry to UV-Vis Spectra](#from-quantum-chemistry-to-uv-vis-spectra)
+* [Practical examples](#practical-examples)
 
 ---
 
@@ -93,7 +93,9 @@ To simulate this envelope, we broaden each "stick" using a Gaussian distribution
 #### Basic equations
 
 $$\varepsilon_{i}(\bar{\nu})=\varepsilon_{i}^{\mathrm{max}}\exp\left[-\left(\frac{\bar{\nu}-\bar{\nu}_{i}}{\sigma}\right)^{2}\right]$$
+
 It is demonstrated, in a [Gaussian whitepaper](https://gaussian.com/uvvisplot/), that the previous equation becomes, in the cgs units system:
+
 $$\varepsilon_{i}(\bar{\nu})=\frac{\sqrt{\pi}e^{2}N_{\mathrm{A}}}{1000\ln(10)c^{2}m_{e}}\frac{f_{i}}{\sigma}\exp\left[-\left(\frac{\bar{\nu}-\bar{\nu}_{i}}{\sigma}\right)^{2}\right]$$
 
 where:
@@ -111,13 +113,11 @@ $$\varepsilon(\bar{\nu}) = \sum_{i}^{N}\varepsilon_{i}(\bar{\nu})$$
 
 ---
 
-<a id="PracticalExamples"></a>
-
 ### Practical examples
 
-As expalined above, the simulator does not simply draw lines; it simulates the vibronic envelope by applying a Gaussian convolution to each vertical transition.
+As explained above, the simulator does not simply draw lines; it simulates the vibronic envelope by applying a Gaussian convolution to each vertical transition.
 
-Using `pathlib` for robust file management, the following examples demonstrate the "one-line" power of the API
+Using `pathlib` for robust file management, the following examples demonstrate the "one-line" power of the `SpectrumSimulator` API.
 
 #### A. Data Input Format
 
@@ -147,7 +147,8 @@ prefix = Path("./data_examples/Spectra/")
 file = prefix / "DBA-syn-syn-TDDFT_ethanol_ExcStab.dat"
 
 sim = SpectrumSimulator(plotWH=(8,6))
-sim.plotEps_lambda_TDDFT(file, titles="DBA in ethanol", filename=prefix/"output.png")
+sim.plotEps_lambda_TDDFT(file, titles="DBA in ethanol",
+                         filename=prefix/"DBA_simul.png")
 ```
 
 <figure>
@@ -166,9 +167,11 @@ from pathlib import Path
 prefix = Path("./data_examples/Spectra/")
 files = [prefix / f for f in ["DBA-syn.dat", "DBA6-syn.dat"]]
 C0_list = [2e-5, 2.5e-5] # Concentrations in mol/L
+titles = ["DBA in ethanol", "DBA6 in ethanol"]
 
 sim = SpectrumSimulator(plotWH=(9,6))
-sim.plotAbs_lambda_TDDFT(files, C0_list, 200, 500, Amax=1.9, titles=["DBA", "DBA6"])
+sim.plotAbs_lambda_TDDFT(files, C0_list, 200, 500, Amax=1.8, titles=titles,
+                         filename=prefix/"DBAxx_simul.png")
 ```
 
 <figure>

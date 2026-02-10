@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spectra &mdash; pyphyschemtools 0.5.6 documentation</title>
+  <title>Spectra &mdash; pyphyschemtools 0.5.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/Spectra.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=722679d6"></script>
+      <script src="../_static/documentation_options.js?v=d65efdcf"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -81,6 +81,10 @@
 <li class="toctree-l1"><a class="reference internal" href="Units.html">Fundamental Units</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Misc.html">Miscellaneous tools</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">🚀 Interactive Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb">Examples (Google Colab)</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">🛠 API Reference (Technical)</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">pyphyschemtools</a></li>
@@ -119,8 +123,8 @@
 <p><code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code> is a high-level orchestration engine designed to bridge the gap between TD-DFT quantum chemical calculations and experimental laboratory data. It automates the Gaussian broadening of discrete electronic transitions, converting dimensionless oscillator strengths into physically meaningful molar absorption coefficients (<span class="math notranslate nohighlight">\(\epsilon\)</span>) and Absorbance (<span class="math notranslate nohighlight">\(A\)</span>).</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#principle"><span class="std std-ref">Principle</span></a></p></li>
-<li><p>From Quantum Chemistry to UV-Vis Spectra</p></li>
-<li><p>Practical examples</p></li>
+<li><p><a class="reference internal" href="#from-quantum-chemistry-to-uv-vis-spectra"><span class="std std-ref">From Quantum Chemistry to UV-Vis Spectra</span></a></p></li>
+<li><p><a class="reference internal" href="#practical-examples"><span class="std std-ref">Practical examples</span></a></p></li>
 </ul>
 <hr class="docutils" />
 <p><a id="principle"></a></p>
@@ -213,8 +217,9 @@
 <h4>Basic equations<a class="headerlink" href="#basic-equations" title="Link to this heading"></a></h4>
 <div class="math notranslate nohighlight">
 \[\varepsilon_{i}(\bar{\nu})=\varepsilon_{i}^{\mathrm{max}}\exp\left[-\left(\frac{\bar{\nu}-\bar{\nu}_{i}}{\sigma}\right)^{2}\right]\]</div>
-<p>It is demonstrated, in a <a class="reference external" href="https://gaussian.com/uvvisplot/">Gaussian whitepaper</a>, that the previous equation becomes, in the cgs units system:
-$<span class="math notranslate nohighlight">\(\varepsilon_{i}(\bar{\nu})=\frac{\sqrt{\pi}e^{2}N_{\mathrm{A}}}{1000\ln(10)c^{2}m_{e}}\frac{f_{i}}{\sigma}\exp\left[-\left(\frac{\bar{\nu}-\bar{\nu}_{i}}{\sigma}\right)^{2}\right]\)</span>$</p>
+<p>It is demonstrated, in a <a class="reference external" href="https://gaussian.com/uvvisplot/">Gaussian whitepaper</a>, that the previous equation becomes, in the cgs units system:</p>
+<div class="math notranslate nohighlight">
+\[\varepsilon_{i}(\bar{\nu})=\frac{\sqrt{\pi}e^{2}N_{\mathrm{A}}}{1000\ln(10)c^{2}m_{e}}\frac{f_{i}}{\sigma}\exp\left[-\left(\frac{\bar{\nu}-\bar{\nu}_{i}}{\sigma}\right)^{2}\right]\]</div>
 <p>where:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(\varepsilon_i\)</span> is the molar absorption coefficient, in units of L∙mol<span class="math notranslate nohighlight">\(^{-1}\)</span>∙cm<span class="math notranslate nohighlight">\(^{-1}\)</span></p></li>
@@ -228,14 +233,13 @@ $<span class="math notranslate nohighlight">\(\varepsilon_{i}(\bar{\nu})=\frac{\
 <p>In most cases, there will be more than one electronic excitation in the region of interest. The overall spectrum is obtained from the sum of all the individual bands:</p>
 <div class="math notranslate nohighlight">
 \[\varepsilon(\bar{\nu}) = \sum_{i}^{N}\varepsilon_{i}(\bar{\nu})\]</div>
+</section>
+</section>
 <hr class="docutils" />
-<p><a id="PracticalExamples"></a></p>
-</section>
-</section>
 <section id="practical-examples">
 <h3>Practical examples<a class="headerlink" href="#practical-examples" title="Link to this heading"></a></h3>
-<p>As expalined above, the simulator does not simply draw lines; it simulates the vibronic envelope by applying a Gaussian convolution to each vertical transition.</p>
-<p>Using <code class="docutils literal notranslate"><span class="pre">pathlib</span></code> for robust file management, the following examples demonstrate the “one-line” power of the API</p>
+<p>As explained above, the simulator does not simply draw lines; it simulates the vibronic envelope by applying a Gaussian convolution to each vertical transition.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">pathlib</span></code> for robust file management, the following examples demonstrate the “one-line” power of the <code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code> API.</p>
 <section id="a-data-input-format">
 <h4>A. Data Input Format<a class="headerlink" href="#a-data-input-format" title="Link to this heading"></a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code> is designed to parse <code class="docutils literal notranslate"><span class="pre">.dat</span></code> files generated from Gaussian TD-DFT calculations. To be processed correctly, your input file must follow this specific tabular structure:</p>
@@ -287,7 +291,8 @@ $<span class="math notranslate nohighlight">\(\varepsilon_{i}(\bar{\nu})=\frac{\
 <span class="n">file</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">/</span> <span class="s2">&quot;DBA-syn-syn-TDDFT_ethanol_ExcStab.dat&quot;</span>
 
 <span class="n">sim</span> <span class="o">=</span> <span class="n">SpectrumSimulator</span><span class="p">(</span><span class="n">plotWH</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">plotEps_lambda_TDDFT</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="s2">&quot;DBA in ethanol&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">prefix</span><span class="o">/</span><span class="s2">&quot;output.png&quot;</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">plotEps_lambda_TDDFT</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="s2">&quot;DBA in ethanol&quot;</span><span class="p">,</span>
+                         <span class="n">filename</span><span class="o">=</span><span class="n">prefix</span><span class="o">/</span><span class="s2">&quot;DBA_simul.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure>
@@ -304,9 +309,11 @@ $<span class="math notranslate nohighlight">\(\varepsilon_{i}(\bar{\nu})=\frac{\
 <span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./data_examples/Spectra/&quot;</span><span class="p">)</span>
 <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span> <span class="o">/</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;DBA-syn.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6-syn.dat&quot;</span><span class="p">]]</span>
 <span class="n">C0_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2e-5</span><span class="p">,</span> <span class="mf">2.5e-5</span><span class="p">]</span> <span class="c1"># Concentrations in mol/L</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DBA in ethanol&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6 in ethanol&quot;</span><span class="p">]</span>
 
 <span class="n">sim</span> <span class="o">=</span> <span class="n">SpectrumSimulator</span><span class="p">(</span><span class="n">plotWH</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">plotAbs_lambda_TDDFT</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">C0_list</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">Amax</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DBA&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6&quot;</span><span class="p">])</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">plotAbs_lambda_TDDFT</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">C0_list</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">Amax</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="n">titles</span><span class="p">,</span>
+                        <span class="n">filename</span><span class="o">=</span><span class="n">prefix</span><span class="o">/</span><span class="s2">&quot;DBAxx_simul.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure>

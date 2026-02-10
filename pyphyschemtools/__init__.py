@@ -3,7 +3,7 @@
 The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.
 """
 
-__version__ = "0.5.7"
+__version__ = "0.6.0"
 __last_update__ = "2026-02-10"
 
 import importlib
@@ -11,7 +11,7 @@ import importlib.util
 
 # 1. FAST IMPORTS
 from .visualID_Eng import fg, hl, bg, color, init, apply_css_style, chrono_start, chrono_stop, end
-from .core import centerTitle, centertxt, crop_images
+from .core import centerTitle, centertxt, crop_images, save_fig, save_data
 
 # On définit explicitement ce qui est déjà importé pour que __getattr__ ne s'en mêle pas
 _EXPLICIT_EXPORTS = {
@@ -57,3 +57,37 @@ def __getattr__(name):
             error_msg += f"\n{err}"
 
     raise AttributeError(error_msg)
+
+
+from pathlib import Path
+from importlib import resources
+
+def get_ppct_data(file: str, main_folder: str="data_examples") -> Path:
+    """
+    Retrieves the absolute path to a pyphyschemtools resource.
+    Compatible with Python 3.11+ using importlib.resources.
+    Works across all platforms (Windows, Linux, MacOS) and Google Colab.
+    
+    Args:
+        file (str): The path and name of the file (e.g., "Molecules/betaCD-closed.xyz").
+        main_folder (str): The resource subfolder inside the package (defaults to "data_examples").
+    
+    Returns:
+        Path: A pathlib.Path object pointing to the absolute location of the file.
+    """
+    # Access the data_examples directory inside the installed pyphyschemtools package
+    # .files() returns a Traversable object (behaving much like a Path object)
+    data_dir = resources.files("pyphyschemtools") / main_folder
+    
+    # Construct the full internal path
+    file_path = data_dir.joinpath(file)
+    
+    # Verify if the file actually exists
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"❌ Resource not found: {file}\n"
+            f"Expected internal location: pyphyschemtools/{main_folder}/{file}"
+        )
+        
+    # Convert to a standard pathlib.Path object for the user
+    return Path(str(file_path))

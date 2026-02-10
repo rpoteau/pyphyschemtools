@@ -272,7 +272,7 @@ class SpectrumSimulator:
     def plotEps_lambda_TDDFT(self,datFile,lambdamin=200,lambdamax=800,\
                              epsMax=None, titles=None, tP = 10, \
                              ylog=False,\
-                             filename=None):
+                             save_img=None):
         """
         Plots a TDDFT VUV simulated spectrum (vertical transitions and transitions summed with gaussian functions)
         between lambdamin and lambdamax
@@ -288,7 +288,7 @@ class SpectrumSimulator:
             tP: threshold for finding the peaks (default = 10 L. mol-1 cm-1)
             ylog: y logarithmic axis (default: False).
             save: saves in a png file (300 dpi) if True (default = False)
-            filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
+            save_img: saves figure in a 300 dpi png file if not None (default), with save_img=full pathway
             
         """
         import matplotlib.ticker as ticker
@@ -333,7 +333,13 @@ class SpectrumSimulator:
             graph.set_yscale('linear')
             graph.set_ylabel('molar absorption coefficient / L mol$^{-1}$ cm$^{-1}$',size=self.fontSize_axisLabels,fontweight='bold',color='#2f6b91')
             graph.set_ylim(0, epsMax if epsMax else np.max(sumInt)*1.18)
-        if filename is not None: self.fig.savefig(filename, dpi=300, bbox_inches='tight')
+        # Around line 336, replace the save_img logic with this:
+        if save_img is not None:
+            from pathlib import Path
+            save_path = Path(save_img)
+            if save_path.parent:
+                save_path.parent.mkdir(parents=True, exist_ok=True) # This creates the folder!
+            self.fig.savefig(save_path, dpi=300, bbox_inches='tight')
         plt.show()
 
         peaksI, peaksH = self._FindPeaks(sumInt,tP)
@@ -350,7 +356,7 @@ class SpectrumSimulator:
     def plotAbs_lambda_TDDFT(self, datFiles=None, C0=1e-5, lambdamin=200, lambdamax=800, Amax=2.0,\
                              titles=None, linestyles=[], annotateP=[], tP = 0.1,\
                              resetColors=False,\
-                             filename=None):
+                             save_img=None):
         """
         Plots a simulated TDDFT VUV absorbance spectrum (transitions summed with gaussian functions)
         between lambdamin and lambdamax (sum of states done in the range [lambdamin-50, lambdamlax+50] nm)
@@ -369,7 +375,7 @@ class SpectrumSimulator:
                 (e.g., gas phase vs. solvent) to share the same 
                 color coding for each molecule across multiple calls. Default: False
             save: saves in a png file (300 dpi) if True (default = False)
-            filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
+            save_img: saves figure in a 300 dpi png file if not None (default), with save_img=full pathway
             
         """
 
@@ -407,13 +413,18 @@ class SpectrumSimulator:
                 
         self.graph.legend(fontsize=self.fontSize_legends)
 
-        if filename is not None: self.fig.savefig(filename, dpi=300, bbox_inches='tight')
-
+        if save_img is not None:
+            from pathlib import Path
+            save_path = Path(save_img)
+            if save_path.parent:
+                save_path.parent.mkdir(parents=True, exist_ok=True) # This creates the folder!
+            self.fig.savefig(save_path, dpi=300, bbox_inches='tight')
+        
         return
     
     def plotAbs_lambda_exp(self, csvFiles, C0, lambdamin=200, lambdamax=800,\
                              Amax=2.0, titles=None, linestyles=[], annotateP=[], tP = 0.1,\
-                             filename=None):
+                             save_img=None):
         """
         Plots an experimental VUV absorbance spectrum read from a csv file between lambdamin and lambdamax
         
@@ -429,7 +440,7 @@ class SpectrumSimulator:
             - annotateP: list of Boolean (annotate lambda max True or False. Default = True)
             - tP: threshold for finding the peaks (default = 0.1)
             - save: saves in a png file (300 dpi) if True (default = False)
-            - filename: saves figure in a 300 dpi png file if not None (default), with filename=full pathway
+            - save_img: saves figure in a 300 dpi png file if not None (default), with save_img=full pathway
             
         """
         if linestyles == []: linestyles = len(csvFiles)*['--']
@@ -466,8 +477,12 @@ class SpectrumSimulator:
                 print(f"peak {i:3}. {wavel[peaksI[i]]:4} nm. A = {peaksH[i]:.2f}")
 
         graph.legend(fontsize=self.fontSize_legends)
-
-        if filename is not None: self.fig.savefig(filename, dpi=300, bbox_inches='tight')
+        if save_img is not None:
+            from pathlib import Path
+            save_path = Path(save_img)
+            if save_path.parent:
+                save_path.parent.mkdir(parents=True, exist_ok=True) # This creates the folder!
+            self.fig.savefig(save_path, dpi=300, bbox_inches='tight')
     
         return
         

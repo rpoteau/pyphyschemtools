@@ -140,15 +140,18 @@ The `SpectrumSimulator` is designed to parse `.dat` files generated from Gaussia
 This workflow reads a `.dat` file, simulates the spectrum, and saves a 300 DPI figure
 
 ```python
+import pyphyschemtools as t4pPC
 from pyphyschemtools import SpectrumSimulator
-from pathlib import Path
 
-prefix = Path("./data_examples/Spectra/")
-file = prefix / "DBA-syn-syn-TDDFT_ethanol_ExcStab.dat"
+t4pPC.centerTitle("Basic simulation. Superposotion of the vertical transitions and the similated spectrum")
+
+file = get_ppct_data("Spectra/DBA-syn-syn-TDDFT_ethanol_ExcStab.dat")
+fig = "fig_examples/Spectra/DBA-syn-syn-TDDFT_ethanol.png"
+title = "DBA in ethanol"
 
 sim = SpectrumSimulator(plotWH=(8,6))
-sim.plotEps_lambda_TDDFT(file, titles="DBA in ethanol",
-                         filename=prefix/"DBA_simul.png")
+sim.plotEps_lambda_TDDFT(file,lambdamin=200, lambdamax=800, titles=title, tP=10, ylog=False, save_img=fig)
+
 ```
 
 <figure>
@@ -161,17 +164,20 @@ sim.plotEps_lambda_TDDFT(file, titles="DBA in ethanol",
 The `plotAbs_lambda_TDDFT` method allows for the superposition of the simulated spectra of multiple chemical species, applying the Beer-Lambert law
 
  ```python
-from pyphyschemtools import SpectrumSimulator
-from pathlib import Path
+t4pPC.centerTitle("Superpose several simulated spectra")
 
-prefix = Path("./data_examples/Spectra/")
-files = [prefix / f for f in ["DBA-syn.dat", "DBA6-syn.dat"]]
-C0_list = [2e-5, 2.5e-5] # Concentrations in mol/L
-titles = ["DBA in ethanol", "DBA6 in ethanol"]
+files = ["DBA-syn-syn-TDDFT_ethanol_ExcStab.dat", "DBA6-syn-syn-TDDFT_ethanol_ExcStab.dat"]
+files_TDDFT = [get_ppct_data(f, main_folder="data_examples/Spectra") for f in files]
+titles=["DBA in ethanol","DBA6 in ethanol"]
+fig = "fig_examples/Spectra/DBAxx_ethanol.png"
 
-sim = SpectrumSimulator(plotWH=(9,6))
-sim.plotAbs_lambda_TDDFT(files, C0_list, 200, 500, Amax=1.8, titles=titles,
-                         filename=prefix/"DBAxx_simul.png")
+sim = SpectrumSimulator(plotWH=(9,6),fontSize_axisLabels=12,fontSize_axisText=12,fontsize_peaks=10,fontSize_legends=8)
+lambdaMin = 200
+lambdaMax = 500
+Amax = 1.9
+C0theo = [2e-5, 2.5e-5]
+sim.plotAbs_lambda_TDDFT(files_TDDFT, C0theo, lambdaMin, lambdaMax, Amax, titles, save_img=fig)
+
 ```
 
 <figure>

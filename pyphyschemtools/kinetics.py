@@ -152,12 +152,12 @@ class KORD:
         """
         return re.sub(r'\.\d+$', '', str(name))
         
-    def simulate_plot(self, filename=None):
+    def simulate_plot(self, save_img=None):
         """
         Plots the initial guesses for all three kinetic orders (0, 1, 2),
         for example to visualize the starting point of a fit.
 
-        If filename is provided, saves the plot (png, svg, jpg, pdf according to the extension).
+        If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
         Vectorial svg is recommended
         """
         plt.figure(figsize=(10, 6))
@@ -207,11 +207,11 @@ class KORD:
         
         plt.legend(loc='lower right')
         plt.grid(True, linestyle=':', alpha=0.6)
-        if filename:
+        if save_img:
             # Check if the file already exists to prevent accidental overwrite
-            if os.path.exists(filename):
+            if os.path.exists(save_img):
                 # Prompt the user for confirmation
-                print(f"{color.RED}{hl.BOLD}⚠️ File '{filename}' already exists. Overwrite? (y/n): {color.OFF}", end="")
+                print(f"{color.RED}{hl.BOLD}⚠️ File '{save_img}' already exists. Overwrite? (y/n): {color.OFF}", end="")
                 # Then call input
                 response = input().lower().strip()
                 if response != 'y':
@@ -219,15 +219,15 @@ class KORD:
                     plt.show() # Display anyway without saving
                     return # Exit the save logic
 
-            # Security: ensure the target directory exists (e.g., if filename="export/graph.svg")
-            directory = os.path.dirname(filename)
+            # Security: ensure the target directory exists (e.g., if save_img="export/graph.svg")
+            directory = os.path.dirname(save_img)
             if directory and not os.path.exists(directory):
                 os.makedirs(directory)
             
             # Universal save (supports SVG, PNG, PDF, etc. based on extension)
             # bbox_inches='tight' prevents labels or secondary axes from being cropped
-            plt.savefig(filename, dpi=300, bbox_inches='tight')
-            print(f"💾 Plot saved as: {hl.BOLD}{filename}{hl.bold}")
+            plt.savefig(save_img, dpi=300, bbox_inches='tight')
+            print(f"💾 Plot saved as: {hl.BOLD}{save_img}{hl.bold}")
             
         plt.show()        
         
@@ -437,10 +437,10 @@ class KORD:
             print(f"Could not fit order {order}: {e}")
             return None
 
-    def plot_all_fits(self, filename=None):
+    def plot_all_fits(self, save_img=None):
         """
         Plots experimental data and all three kinetic models for visual comparison.
-        If filename is provided, saves the plot (png, svg, jpg, pdf according to the extension).
+        If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
         Vectorial svg is recommended
         """
         mosaic = [['fit','o0'],
@@ -521,11 +521,11 @@ class KORD:
 
         plt.tight_layout()
         
-        if filename:
+        if save_img:
             # Check if the file already exists to prevent accidental overwrite
-            if os.path.exists(filename):
+            if os.path.exists(save_img):
                 # Prompt the user for confirmation
-                print(f"{color.RED}{hl.BOLD}⚠️ File '{filename}' already exists. Overwrite? (y/n): {color.OFF}", end="")
+                print(f"{color.RED}{hl.BOLD}⚠️ File '{save_img}' already exists. Overwrite? (y/n): {color.OFF}", end="")
                 # Then call input
                 response = input().lower().strip()
                 if response != 'y':
@@ -533,15 +533,15 @@ class KORD:
                     plt.show() # Display anyway without saving
                     return # Exit the save logic
 
-            # Security: ensure the target directory exists (e.g., if filename="export/graph.svg")
-            directory = os.path.dirname(filename)
+            # Security: ensure the target directory exists (e.g., if save_img="export/graph.svg")
+            directory = os.path.dirname(save_img)
             if directory and not os.path.exists(directory):
                 os.makedirs(directory)
             
             # Universal save (supports SVG, PNG, PDF, etc. based on extension)
             # bbox_inches='tight' prevents labels or secondary axes from being cropped
-            plt.savefig(filename, dpi=300, bbox_inches='tight')
-            print(f"💾 Plot saved as: {hl.BOLD}{filename}{hl.bold}")
+            plt.savefig(save_img, dpi=300, bbox_inches='tight')
+            print(f"💾 Plot saved as: {hl.BOLD}{save_img}{hl.bold}")
         plt.show()
         
     def get_best_order(self, verbose=True):

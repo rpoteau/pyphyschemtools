@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.5.7 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=d65efdcf"></script>
+      <script src="_static/documentation_options.js?v=8fa8b3e9"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -65,6 +65,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyphyschemtools</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyphyschemtools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyphyschemtools.get_ppct_data"><code class="docutils literal notranslate"><span class="pre">get_ppct_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.Chem3D">pyphyschemtools.Chem3D module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.Chem3D.XYZData"><code class="docutils literal notranslate"><span class="pre">XYZData</span></code></a></li>
@@ -92,6 +93,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.centerTitle"><code class="docutils literal notranslate"><span class="pre">centerTitle()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.centertxt"><code class="docutils literal notranslate"><span class="pre">centertxt()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.crop_images"><code class="docutils literal notranslate"><span class="pre">crop_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.save_fig"><code class="docutils literal notranslate"><span class="pre">save_fig()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.core.smart_trim"><code class="docutils literal notranslate"><span class="pre">smart_trim()</span></code></a></li>
 </ul>
 </li>
@@ -198,6 +201,28 @@
   <section id="module-pyphyschemtools">
 <span id="pyphyschemtools-package"></span><h1>pyphyschemtools package<a class="headerlink" href="#module-pyphyschemtools" title="Link to this heading"></a></h1>
 <p>The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.get_ppct_data">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.</span></span><span class="sig-name descname"><span class="pre">get_ppct_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">main_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data_examples'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="headerlink" href="#pyphyschemtools.get_ppct_data" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the absolute path to a pyphyschemtools resource.
+Compatible with Python 3.11+ using importlib.resources.
+Works across all platforms (Windows, Linux, MacOS) and Google Colab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – The path and name of the file (e.g., “Molecules/betaCD-closed.xyz”).</p></li>
+<li><p><strong>main_folder</strong> (<em>str</em>) – The resource subfolder inside the package (defaults to “data_examples”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pathlib.Path object pointing to the absolute location of the file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
@@ -649,7 +674,7 @@ Defaults to 0.4.</p></li>
 <span id="pyphyschemtools-cheminformatics-module"></span><h2>pyphyschemtools.cheminformatics module<a class="headerlink" href="#module-pyphyschemtools.cheminformatics" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.cheminformatics.</span></span><span class="sig-name descname"><span class="pre">easy_rdkit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.cheminformatics.</span></span><span class="sig-name descname"><span class="pre">easy_rdkit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'En'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A helper class to analyze and visualize molecules using RDKit.
 Provides tools for Lewis structure analysis and advanced 2D drawing.
@@ -660,6 +685,7 @@ Initialize the molecule object from a SMILES string.</p>
 <li><p><strong>smiles</strong> (<em>str</em>) – The SMILES representation of the molecule.</p></li>
 <li><p><strong>canonical</strong> (<em>bool</em>) – If True, converts the SMILES to its canonical form
 to ensure consistent atom numbering and uniqueness.</p></li>
+<li><p><strong>lang</strong> (<em>str</em>) – Language for headers and messages of the Lewis analyzis(“En” (default) or “Fr”).</p></li>
 </ul>
 </dd>
 </dl>
@@ -826,6 +852,39 @@ Otherwise, input_files is treated as a single file path or a list of paths.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.core.save_data">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.core.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_with_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.core.save_data" title="Link to this definition"></a></dt>
+<dd><p>Saves a Pandas DataFrame to CSV or Excel, automatically creating missing directories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame to save.</p></li>
+<li><p><strong>path_with_name</strong> (<em>str</em>) – The path and filename (e.g., “data/results.csv”).</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to to_csv or to_excel (e.g., index=True).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.core.save_fig">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.core.</span></span><span class="sig-name descname"><span class="pre">save_fig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_with_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.core.save_fig" title="Link to this definition"></a></dt>
+<dd><p>Saves a figure to a path, automatically creating missing directories.
+Works with the current plt or a specific figure object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_with_name</strong> (<em>str</em>) – The path and filename (e.g., “results/plots/energy.svg”).</p></li>
+<li><p><strong>fig</strong> (<em>matplotlib.figure.Figure</em><em>, </em><em>optional</em>) – A specific figure object.
+If None, uses plt.gcf().</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – Resolution for raster formats. Defaults to 300.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments passed to savefig (e.g., transparent=True).</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1043,18 +1102,18 @@ Also loads parameters (a0, alpha, beta)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.plot_all_fits">
-<span class="sig-name descname"><span class="pre">plot_all_fits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.plot_all_fits" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_all_fits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.plot_all_fits" title="Link to this definition"></a></dt>
 <dd><p>Plots experimental data and all three kinetic models for visual comparison.
-If filename is provided, saves the plot (png, svg, jpg, pdf according to the extension).
+If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
 Vectorial svg is recommended</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.kinetics.KORD.simulate_plot">
-<span class="sig-name descname"><span class="pre">simulate_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.simulate_plot" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">simulate_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.kinetics.KORD.simulate_plot" title="Link to this definition"></a></dt>
 <dd><p>Plots the initial guesses for all three kinetic orders (0, 1, 2),
 for example to visualize the starting point of a fit.</p>
-<p>If filename is provided, saves the plot (png, svg, jpg, pdf according to the extension).
+<p>If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
 Vectorial svg is recommended</p>
 </dd></dl>
 
@@ -1091,7 +1150,7 @@ Default is 0.3 eV (GaussView default is 0.4 eV).</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT">
-<span class="sig-name descname"><span class="pre">plotAbs_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resetColors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plotAbs_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resetColors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT" title="Link to this definition"></a></dt>
 <dd><p>Plots a simulated TDDFT VUV absorbance spectrum (transitions summed with gaussian functions)
 between lambdamin and lambdamax (sum of states done in the range [lambdamin-50, lambdamlax+50] nm)</p>
 <dl class="field-list simple">
@@ -1111,7 +1170,7 @@ to the first color. This allows different series
 (e.g., gas phase vs. solvent) to share the same
 color coding for each molecule across multiple calls. Default: False</p></li>
 <li><p><strong>save</strong> – saves in a png file (300 dpi) if True (default = False)</p></li>
-<li><p><strong>filename</strong> – saves figure in a 300 dpi png file if not None (default), with filename=full pathway</p></li>
+<li><p><strong>save_img</strong> – saves figure in a 300 dpi png file if not None (default), with save_img=full pathway</p></li>
 </ul>
 </dd>
 </dl>
@@ -1119,7 +1178,7 @@ color coding for each molecule across multiple calls. Default: False</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_exp">
-<span class="sig-name descname"><span class="pre">plotAbs_lambda_exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csvFiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_exp" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plotAbs_lambda_exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csvFiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_exp" title="Link to this definition"></a></dt>
 <dd><p>Plots an experimental VUV absorbance spectrum read from a csv file between lambdamin and lambdamax</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1136,7 +1195,7 @@ color coding for each molecule across multiple calls. Default: False</p></li>
 <li><p><strong>annotateP</strong> (<em>-</em>) – list of Boolean (annotate lambda max True or False. Default = True)</p></li>
 <li><p><strong>tP</strong> (<em>-</em>) – threshold for finding the peaks (default = 0.1)</p></li>
 <li><p><strong>save</strong> (<em>-</em>) – saves in a png file (300 dpi) if True (default = False)</p></li>
-<li><p><strong>filename</strong> (<em>-</em>) – saves figure in a 300 dpi png file if not None (default), with filename=full pathway</p></li>
+<li><p><strong>save_img</strong> (<em>-</em>) – saves figure in a 300 dpi png file if not None (default), with save_img=full pathway</p></li>
 </ul>
 </dd>
 </dl>
@@ -1144,7 +1203,7 @@ color coding for each molecule across multiple calls. Default: False</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotEps_lambda_TDDFT">
-<span class="sig-name descname"><span class="pre">plotEps_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotEps_lambda_TDDFT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plotEps_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotEps_lambda_TDDFT" title="Link to this definition"></a></dt>
 <dd><p>Plots a TDDFT VUV simulated spectrum (vertical transitions and transitions summed with gaussian functions)
 between lambdamin and lambdamax</p>
 <p>The sum of states is done in the range
@@ -1160,7 +1219,7 @@ between lambdamin and lambdamax</p>
 <li><p><strong>tP</strong> – threshold for finding the peaks (default = 10 L. mol-1 cm-1)</p></li>
 <li><p><strong>ylog</strong> – y logarithmic axis (default: False).</p></li>
 <li><p><strong>save</strong> – saves in a png file (300 dpi) if True (default = False)</p></li>
-<li><p><strong>filename</strong> – saves figure in a 300 dpi png file if not None (default), with filename=full pathway</p></li>
+<li><p><strong>save_img</strong> – saves figure in a 300 dpi png file if not None (default), with save_img=full pathway</p></li>
 </ul>
 </dd>
 </dl>

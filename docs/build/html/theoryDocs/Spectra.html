@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spectra &mdash; pyphyschemtools 0.5.7 documentation</title>
+  <title>Spectra &mdash; pyphyschemtools 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/Spectra.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=d65efdcf"></script>
+      <script src="../_static/documentation_options.js?v=8fa8b3e9"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -284,15 +284,18 @@
 <section id="b-basic-td-dft-simulation">
 <h4>B. Basic TD-DFT Simulation<a class="headerlink" href="#b-basic-td-dft-simulation" title="Link to this heading"></a></h4>
 <p>This workflow reads a <code class="docutils literal notranslate"><span class="pre">.dat</span></code> file, simulates the spectrum, and saves a 300 DPI figure</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectrumSimulator</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">t4pPC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectrumSimulator</span>
 
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./data_examples/Spectra/&quot;</span><span class="p">)</span>
-<span class="n">file</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">/</span> <span class="s2">&quot;DBA-syn-syn-TDDFT_ethanol_ExcStab.dat&quot;</span>
+<span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Basic simulation. Superposotion of the vertical transitions and the similated spectrum&quot;</span><span class="p">)</span>
+
+<span class="n">file</span> <span class="o">=</span> <span class="n">get_ppct_data</span><span class="p">(</span><span class="s2">&quot;Spectra/DBA-syn-syn-TDDFT_ethanol_ExcStab.dat&quot;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="s2">&quot;fig_examples/Spectra/DBA-syn-syn-TDDFT_ethanol.png&quot;</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;DBA in ethanol&quot;</span>
 
 <span class="n">sim</span> <span class="o">=</span> <span class="n">SpectrumSimulator</span><span class="p">(</span><span class="n">plotWH</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">plotEps_lambda_TDDFT</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="s2">&quot;DBA in ethanol&quot;</span><span class="p">,</span>
-                         <span class="n">filename</span><span class="o">=</span><span class="n">prefix</span><span class="o">/</span><span class="s2">&quot;DBA_simul.png&quot;</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">plotEps_lambda_TDDFT</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="n">lambdamin</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">lambdamax</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">tP</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ylog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_img</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+
 </pre></div>
 </div>
 <figure>
@@ -303,17 +306,20 @@
 <section id="c-comparative-absorbance-analysis">
 <h4>C. Comparative Absorbance Analysis<a class="headerlink" href="#c-comparative-absorbance-analysis" title="Link to this heading"></a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">plotAbs_lambda_TDDFT</span></code> method allows for the superposition of the simulated spectra of multiple chemical species, applying the Beer-Lambert law</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectrumSimulator</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">t4pPC</span><span class="o">.</span><span class="n">centerTitle</span><span class="p">(</span><span class="s2">&quot;Superpose several simulated spectra&quot;</span><span class="p">)</span>
 
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./data_examples/Spectra/&quot;</span><span class="p">)</span>
-<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span> <span class="o">/</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;DBA-syn.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6-syn.dat&quot;</span><span class="p">]]</span>
-<span class="n">C0_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2e-5</span><span class="p">,</span> <span class="mf">2.5e-5</span><span class="p">]</span> <span class="c1"># Concentrations in mol/L</span>
-<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DBA in ethanol&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6 in ethanol&quot;</span><span class="p">]</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DBA-syn-syn-TDDFT_ethanol_ExcStab.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;DBA6-syn-syn-TDDFT_ethanol_ExcStab.dat&quot;</span><span class="p">]</span>
+<span class="n">files_TDDFT</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_ppct_data</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">main_folder</span><span class="o">=</span><span class="s2">&quot;data_examples/Spectra&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+<span class="n">titles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DBA in ethanol&quot;</span><span class="p">,</span><span class="s2">&quot;DBA6 in ethanol&quot;</span><span class="p">]</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="s2">&quot;fig_examples/Spectra/DBAxx_ethanol.png&quot;</span>
 
-<span class="n">sim</span> <span class="o">=</span> <span class="n">SpectrumSimulator</span><span class="p">(</span><span class="n">plotWH</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">plotAbs_lambda_TDDFT</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">C0_list</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">Amax</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="n">titles</span><span class="p">,</span>
-                        <span class="n">filename</span><span class="o">=</span><span class="n">prefix</span><span class="o">/</span><span class="s2">&quot;DBAxx_simul.png&quot;</span><span class="p">)</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">SpectrumSimulator</span><span class="p">(</span><span class="n">plotWH</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="n">fontSize_axisLabels</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">fontSize_axisText</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">fontsize_peaks</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">fontSize_legends</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">lambdaMin</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">lambdaMax</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">Amax</span> <span class="o">=</span> <span class="mf">1.9</span>
+<span class="n">C0theo</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2e-5</span><span class="p">,</span> <span class="mf">2.5e-5</span><span class="p">]</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">plotAbs_lambda_TDDFT</span><span class="p">(</span><span class="n">files_TDDFT</span><span class="p">,</span> <span class="n">C0theo</span><span class="p">,</span> <span class="n">lambdaMin</span><span class="p">,</span> <span class="n">lambdaMax</span><span class="p">,</span> <span class="n">Amax</span><span class="p">,</span> <span class="n">titles</span><span class="p">,</span> <span class="n">save_img</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+
 </pre></div>
 </div>
 <figure>

@@ -118,3 +118,65 @@ def crop_images(input_files, process_folder=False):
 
         except Exception as e:
             print(f"❌ Error processing {path.name}: {e}")
+
+############################################################
+#          Export Utilities
+############################################################
+
+def save_fig(path_with_name: str, fig=None, dpi: int = 300, **kwargs):
+    """
+    Saves a figure to a path, automatically creating missing directories.
+    Works with the current plt or a specific figure object.
+
+    Args:
+        path_with_name (str): The path and filename (e.g., "results/plots/energy.svg").
+        fig (matplotlib.figure.Figure, optional): A specific figure object. 
+                                                  If None, uses plt.gcf().
+        dpi (int): Resolution for raster formats. Defaults to 300.
+        **kwargs: Additional arguments passed to savefig (e.g., transparent=True).
+    """
+    import matplotlib.pyplot as plt
+    from pathlib import Path
+
+    # 1. Parse path and filename
+    full_path = Path(path_with_name)
+    
+    # 2. Automatically create the directory structure
+    if full_path.parent:
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # 3. Determine if we use a specific fig object or the global plt
+    # If no fig is provided, we use the 'Current Figure' (gcf)
+    target = fig if fig is not None else plt.gcf()
+
+    # 4. Save the figure
+    target.savefig(full_path, dpi=dpi, bbox_inches='tight', **kwargs)
+    print(f"✅ Figure saved to: {full_path}")
+
+def save_data(df, path_with_name: str, **kwargs):
+    """
+    Saves a Pandas DataFrame to CSV or Excel, automatically creating missing directories.
+
+    Args:
+        df (pd.DataFrame): The DataFrame to save.
+        path_with_name (str): The path and filename (e.g., "data/results.csv").
+        **kwargs: Additional arguments passed to to_csv or to_excel (e.g., index=True).
+    """
+    from pathlib import Path
+    
+    full_path = Path(path_with_name)
+    if full_path.parent:
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    ext = full_path.suffix.lower()
+    # Default index to False unless specified by the user
+    index_option = kwargs.pop('index', False)
+
+    if ext == '.csv':
+        df.to_csv(full_path, index=index_option, **kwargs)
+    elif ext in ['.xlsx', '.xls']:
+        df.to_excel(full_path, index=index_option, **kwargs)
+    else:
+        raise ValueError(f"Unsupported file extension: {ext}. Use .csv, .xlsx, or .xls")
+    
+    print(f"✅ Data saved to: {full_path}")

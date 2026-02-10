@@ -13,6 +13,7 @@ from rdkit.Chem.Draw import rdMolDraw2D
 from IPython.display import SVG
 from PIL import Image
 import os, math
+from pathlib import Path
 
 class easy_rdkit():
     """
@@ -24,9 +25,10 @@ class easy_rdkit():
         smiles (str): The SMILES representation of the molecule.
         canonical (bool): If True, converts the SMILES to its canonical form 
                           to ensure consistent atom numbering and uniqueness.
+        lang (str): Language for headers and messages of the Lewis analyzis("En" (default) or "Fr"). 
     """
 
-    def __init__(self,smiles, canonical=True):
+    def __init__(self,smiles, canonical=True, lang="En"):
         from rdkit import Chem
 
         self.cid = None
@@ -45,6 +47,7 @@ class easy_rdkit():
         else:
             self.mol=mol
             self.smiles = smiles
+        self.lang = lang.lower().capitalize()
 
     @classmethod
     def from_cid(cls, cid):
@@ -145,8 +148,10 @@ class easy_rdkit():
         Returns:
             pd.DataFrame: A table containing detailed Lewis electronic data per atom.
         """
-        if self.mol is None:
-            raise ValueError(f"Molécule invalide pour {self.smiles} (SMILES incorrect ?)")
+        if self.mol is None and self.lang == "En":
+            raise ValueError(f"Invalid molecule for {self.smiles} (Check if SMILES is correct) ")
+        if self.mol is None and self.lang == "Fr":
+            raise ValueError(f"Molécule invalide pour {self.smiles} (Vérifier si le SMILES est correct) ")
         
         pt = GetPeriodicTable()
         rows = []
@@ -170,29 +175,56 @@ class easy_rdkit():
             missing_e = max(0, target/2 - (bonding_e + 2*lone_pairs))
             vacancies = int(missing_e)
             total_e = 2*(lone_pairs + bonding_e)
-    
-            if total_e > 8:
-                octet_msg = "❌ hypercoordiné"
-            elif total_e < 8 and Z > 2:
-                octet_msg = "❌ électron-déficient"
-            elif total_e == 8:
-                octet_msg = "✅ octet"    
-            elif total_e == 2 and (Z == 1 or Z == 2):
-                octet_msg = "✅ duet"
-            else:
-                octet_msg = "🤔"
-            rows.append({
-                "index atome": atom.GetIdx(),
-                "symbole": atom.GetSymbol(),
-                "e- valence": valence_e,
-                "e- liants": bonding_e,
-                "charge formelle": formal_charge,
-                "doublets non-liants (DNL)": lone_pairs,
-                "lacunes ([])": vacancies,
-                "nombre de liaisons": num_bonds,
-                "e- total (octet ?)": total_e,
-                "O/H/D ?": octet_msg
-            })
+
+            
+            if self.lang == 'En':
+                if total_e > 8:
+                    octet_msg = "❌ hypervalent"
+                elif total_e < 8 and Z > 2:
+                    octet_msg = "❌ electron-deficient"
+                elif total_e == 8:
+                    octet_msg = "✅ octet"    
+                elif total_e == 2 and (Z == 1 or Z == 2):
+                    octet_msg = "✅ duet"
+                else:
+                    octet_msg = "🤔"
+                    
+                rows.append({
+                    "Atom Index": atom.GetIdx(),
+                    "Symbol": atom.GetSymbol(),
+                    "Valence e-": valence_e,
+                    "Bonding e-": bonding_e,
+                    "Formal Charge": formal_charge,
+                    "Lone Pairs (LP)": lone_pairs,
+                    "Vacancies ([])": vacancies,
+                    "Number of Bonds": num_bonds,
+                    "Total e- (octet?)": total_e,
+                    "Octet Status (O/H/D)": octet_msg
+                })
+            elif self.lang == "Fr":
+                if total_e > 8:
+                    octet_msg = "❌ hypercoordiné"
+                elif total_e < 8 and Z > 2:
+                    octet_msg = "❌ électron-déficient"
+                elif total_e == 8:
+                    octet_msg = "✅ octet"    
+                elif total_e == 2 and (Z == 1 or Z == 2):
+                    octet_msg = "✅ duet"
+                else:
+                    octet_msg = "🤔"
+                rows.append({
+                    "index atome": atom.GetIdx(),
+                    "symbole": atom.GetSymbol(),
+                    "e- valence": valence_e,
+                    "e- liants": bonding_e,
+                    "charge formelle": formal_charge,
+                    "doublets non-liants (DNL)": lone_pairs,
+                    "lacunes ([])": vacancies,
+                    "nombre de liaisons": num_bonds,
+                    "e- total (octet ?)": total_e,
+                    "O/H/D ?": octet_msg
+                })
+            
         return pd.DataFrame(rows)    
             
     def show_mol(self,
@@ -240,8 +272,12 @@ class easy_rdkit():
             mol = safe_add_hs()
             self.mol = mol
             df = self.analyze_lewis()
-            lewis_info = {row["index atome"]: (row["doublets non-liants (DNL)"], row["lacunes ([])"])
-                          for _, row in df.iterrows()}
+            if self.lang == "Fr":
+                lewis_info = {row["index atome"]: (row["doublets non-liants (DNL)"], row["lacunes ([])"])
+                              for _, row in df.iterrows()}
+            elif self.lang == "En":
+                lewis_info = {row["Atom Index"]: (row["Lone Pairs (LP)"], row["Vacancies ([])"])
+                              for _, row in df.iterrows()}
         else:
             df = None
             
@@ -301,7 +337,10 @@ class easy_rdkit():
                 if show_Lewis and i in lewis_info:
                     lp, vac = lewis_info[i]
                     if lp > 0:
-                        note_parts.append(f" {lp}DNL")
+                        if self.lang == "Fr":
+                            note_parts.append(f" {lp}DNL")
+                        elif self.lang == "En":
+                            note_parts.append(f" {lp}LP")
                     if vac > 0:
                         note_parts.append(f" {vac}[]")
                 if note_parts:
@@ -395,6 +434,13 @@ class easy_rdkit():
         # --- NEW SAVING LOGIC STARTS HERE ---
         if save_img:
             ext = os.path.splitext(save_img)[1].lower()
+            # 1. Ensure the directory exists (Works for Colab and Local)
+            save_path = Path(save_img)
+            if save_path.parent:
+                save_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            ext = save_path.suffix.lower()
+            
             # Generate SVG specifically for saving
             svg_to_save = Draw.MolsToGridImage(
                     mols, molsPerRow=mols_per_row, subImgSize=size, 

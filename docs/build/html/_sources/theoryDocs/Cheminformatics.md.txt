@@ -68,9 +68,9 @@ This example showcases how `easy_rdkit` simplifies the transition from a SMILES 
 import pyphyschemtools as t4pPC
 from pyphyschemtools import easy_rdkit
 
-mol = easy_rdkit("CC(=O)NC1=CC=C(C=C1)O")
 t4pPC.centerTitle("Lewis & hybridization")
-mol.show_mol(show_Lewis=True, show_n=True, show_hybrid=True)
+mol = easy_rdkit("CC(=O)NC1=CC=C(C=C1)O", lang="Fr")
+mol.show_mol(show_Lewis=True, show_n=True, show_hybrid=True, size=(600,400))
 ```
 
 #### C. Fetching a SMILES from its PubChem CID
@@ -137,7 +137,7 @@ from pyphyschemtools import easy_rdkit
 import pandas as pd
 
 # A list of molecules (some from CID, some from SMILES)
-my_mols = [easy_rdkit.from_cid(3672), easy_rdkit("CC(C1=CC(=CC=C1)C(=O)C2=CC=CC=C2)C(=O)O")]
+my_mols = [easy_rdkit.from_cid(3672), easy_rdkit("CC(C1=CC(=CC=C1)C(=O)C2=CC=CC=C2)C(=O)O"), easy_rdkit.from_cid(156391), easy_rdkit.from_cid(3033)]
 
 t4pPC.centerTitle("Store descriptors in dataframes")
 df = pd.DataFrame([m.to_dict(auto_fetch=True) for m in my_mols])
@@ -154,9 +154,9 @@ t4pPC.centerTitle("Draw molecules on a grid")
 easy_rdkit.plot_grid_from_df(
     df, 
     smiles_col='SMILES', 
-    legend_cols=['CID', 'MW'],
+    legend_cols=['CID', 'MW', 'LogP'],
     mols_per_row=2,
     size=(350, 400),
-    save_img="./data_examples/Molecules/gridMol.svg"
+    save_img="fig_examples/Molecules/gridMol.svg"
 )
 ```

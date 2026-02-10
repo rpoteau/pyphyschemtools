@@ -4,7 +4,7 @@
 
 # Changelog
 
-## [0.5.7] - 2026-02-10. "easy_rdkit"
+## [0.6.0] - 2026-02-10. "easy_rdkit, built-in data management, new core tools"
 
 ### Added
 - **PubChem Integration in easy_rdkit**: Introduced `@classmethod` `easy_rdkit.from_cid(cid)` to instantiate molecular objects directly using PubChem Compound IDs.
@@ -15,10 +15,24 @@
 - **easy_rdkit (Batch Visualization)**: 
     - Added `plot_grid_from_df()` static method.
     - Supports multi-line legends using a list of column names (e.g., `legend_cols=['Name', 'MW', 'LogP']`).
+- **Data Reorganization**: Migrated `data_examples/` folder inside the `pyphyschemtools/` source directory. *Rationale*: This ensures that Excel files and graphical resources are correctly bundled and installed into the user's `site-packages` during a `pip install`.
+- **Data Access Utility**: Introduced `get_ppct_data()` in `__init__.py`, a helper function to easily retrieve absolute paths for built-in example files (XYZ, Excel, etc.) available in pyphyschemtools/data_examples.
+- **Modern Path Management**: Switched to `pathlib` and `importlib.resources` for robust, cross-platform file handling, ensuring compatibility with Python 3.11+.
+- two powerful utilities to help organize the output results have been created in `.core.py`
+- **`save_fig("path/to/plot.svg")`**: 
+  - Automatically creates missing directories.
+  - Supports both `plt` and `fig, ax` objects.
+  - Automatically detects format (SVG, PNG, PDF, etc.) from the filename.
+- **`save_data(df, "path/to/data.xlsx")`**: 
+  - Save pandas DataFrames to CSV or Excel with one line.
+  - Automatically handles folder creation to keep the workspace tidy.
+- **Added analyze_lewis(lang='En')**: A full electronic audit of atoms (valence e-, bonding e-, formal charges, lone pairs, and vacancies).
+- **Localization Engine**: Added a translation dictionary to support both English (lang="En") and French (lang="Fr") output for DataFrame headers and octet/duet status messages.
+- **Smart Validation**: Standardized error messages to be language-aware (e.g., "Invalid molecule" vs "Molécule invalide").
 
 ### Fixed
 - **Dependencies**: Added `ase`, `keras`, and `tensorflow` to `pyproject.toml` to ensure full environment compatibility (especially for Google Colab).
-- **Lazy Loading System**: Enhanced `__init__.py` with a robust `__getattr__` mechanism. It now captures and reports specific `ImportError` messages (e.g., missing `ase` or `tensorflow`) during the module scan, providing clear diagnostic feedback to the user..
+- **Lazy Loading System**: Enhanced `__init__.py` with a robust `__getattr__` mechanism. It now captures and reports specific `ImportError` messages (e.g., missing `ase` or `tensorflow`) during the module scan, providing clear diagnostic feedback to the user.
 - **Data Bundling**: Updated `pyproject.toml` to ensure the `data_examples` folder (Excel, SVG) is physically included in the PyPI distribution.
 
 ## [0.5.6] - 2026-02-09. "SpectrumSimulator doc"

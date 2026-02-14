@@ -1,0 +1,625 @@
+#!/bin/bash
+COff='\033[0m'             # Text Reset
+# Regular Colors
+BlackC='\033[0;30m'        # Black
+RedC='\033[0;31m'          # Red
+GreenC='\033[0;32m'        # Green
+YellowC='\033[0;33m'       # Yellow
+BlueC='\033[0;34m'         # Blue
+PurpleC='\033[0;35m'       # Purple
+CyanC='\033[0;36m'         # Cyan
+WhiteC='\033[0;37m'        # White
+# Bold
+BBlackC='\033[1;30m'       # Black
+BRedC='\033[1;31m'         # Red
+BGreenC='\033[1;32m'       # Green
+BYellowC='\033[1;33m'      # Yellow
+BBlueC='\033[1;34m'        # Blue
+BPurpleC='\033[1;35m'      # Purple
+BCyanC='\033[1;36m'        # Cyan
+BWhiteC='\033[1;37m'       # White
+# Bold High Intensity
+BIBlackC='\033[1;90m'      # Black
+BIRedC='\033[1;91m'        # Red
+BIGreenC='\033[1;92m'      # Green
+BIYellowC='\033[1;93m'     # Yellow
+BIBlueC='\033[1;94m'       # Blue
+BIPurpleC='\033[1;95m'     # Purple
+BICyanC='\033[1;96m'       # Cyan
+BIWhiteC='\033[1;97m'      # White
+# Background
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
+#
+Symbols=('H ' 'He'  'Li' 'Be' 'B ' 'C ' 'N ' 'O ' 'F ' 'Ne' 'Na' 'Mg' 'Al' 'Si' 'P ' 'S ' 'Cl' 'Ar' 'K ' 'Ca' 'Sc' 'Ti' 'V ' 'Cr' 'Mn' 'Fe' 'Co' 'Ni' 'Cu' 'Zn' 'Ga' 'Ge' 'As' 'Se' 'Br' 'Kr' 'Rb' 'Sr' 'Y ' 'Zr' 'Nb' 'Mo' 'Tc' 'Ru' 'Rh' 'Pd' 'Ag' 'Cd' 'In' 'Sn' 'Sb' 'Te' 'I ' 'Xe' 'Cs' 'Ba' 'La' 'Ce' 'Pr' 'Nd' 'Pm' 'Sm' 'Eu' 'Gd' 'Tb' 'Dy' 'Ho' 'Er' 'Tm' 'Yb' 'Lu' 'Hf' 'Ta' 'W ' 'Re' 'Os' 'Ir' 'Pt' 'Au' 'Hg' 'Tl' 'Pb' 'Bi' 'Po' 'At' 'Rn' 'Fr' 'Ra' 'Ac' 'Th' 'Pa' 'U ' 'Np' 'Pu' 'Am' 'Cm' 'Bk' 'Cf' 'Es' 'Fm' 'Md' 'No' 'Lr' 'Rf' 'Db' 'Sg' 'Bh' 'Hs' 'Mt' 'Ds' 'Rg' 'Cn' 'Nh' 'Fl' 'Mc' 'Lv' 'Ts' 'Og')
+#
+clear
+version="20250709"
+author="romuald.poteau@univ-tlse3.fr"
+echo -e              $RedC'--------------------------------------------------------------------------------------------'$COff
+echo -e $BIWhiteC$On_Black"                                 GParser v.$version                               "$COff
+echo -e              $RedC"--------------------------------------------------------------------------------------------"$COff
+echo
+flog="default.log"
+sf=1.0
+srH=31.76
+srC=191.81
+srN=242.8
+srO=280.2
+nbo=0
+tnbo=0.0
+help="NO"
+printfreq="NO"
+pf=""
+savef="NO"
+svf=""
+tdlastStateOnly="YES"
+
+options="$@"
+
+if [ -z "$options" ]; then
+   options="-h"
+fi
+
+set_options(){
+
+    for option in $options;
+    do
+        case $prev_option in
+            "-f")
+	       flog="$option"
+            ;;
+            "-s")
+               sf="$option"
+            ;;
+            "-srH")
+               srH="$option"
+            ;;
+            "-srC")
+               srC="$option"
+            ;;
+            "-srN")
+               srN="$option"
+            ;;
+            "-srO")
+               srO="$option"
+            ;;
+            "-nbo")
+               nbo="$option"
+            ;;
+            "-t")
+               tnbo="$option"
+            ;;
+        esac
+        prev_option="$option"
+	case $option in
+            "-h")
+               help="YES"
+            ;;
+            "-pf")
+               printfreq="YES"
+	       pf="-pf"
+            ;;
+            "-S")
+               savef="YES"
+	       svf="-S"
+            ;;
+            "-atd")
+               tdlastStateOnly="NO"
+	       atd="-atd"
+               savef="YES"
+               svf="-S"
+            ;;
+	esac
+    done
+}
+
+set_options
+
+echo "Options:  $@"
+if [ $help == "YES" ]; then
+   echo 
+   echo -e $BlueC"Available options:"$COff
+   echo "Command: GParser -f file.log -s float_number -srH float_number -srC float_number -srN float_number -srO float_number" -nbo atom_number -t float_number -pf -S -atd
+   echo "         -f: name of the log file (default: default.log)"
+   echo -e "         -s: scaling factor for frequencies (default: 1.0). "$RedC"not yet operational"$COff
+   echo "         -srH: reference chemical shielding value for 1H (usually TMS. Default (B3LYP/6-31G**): 31.76)"
+   echo "         -srC: reference chemical shielding value for 13C (usually TMS. Default (B3LYP/6-31G**): 191.81)" 
+   echo "         -srN: reference chemical shielding value for 15N (usually liquid ammonia. Default: 242.8)" 
+   echo "         -srO: reference chemical shielding value for 17O (usually liquid water. Default: 280.2)" 
+   echo "         -nbo: print all Second Order PTA that involve atom_number. Default: 0"
+   echo "         -t: threshold to print only NBO interactions > float_number (Default:0.0)"
+   echo "         -pf: print all vibration frequencies"
+   echo "         -S: save freq/NPA/TDDFT/NMR/last_xyz data, if available, in the log file (Default = false)"
+   echo "             the energy is save in the title section, as well as ZPE, H° and G° "
+   echo "             if a frequency calculation is available in the same file"
+   echo "         -atd: save all tddft calculations, if available, in the log file (series of TDDFT calc. in a single run. Default = false)"
+   echo "               sets -S flag"
+   echo "         -h: prints this help section"
+   echo
+else
+   echo "   => GParser executed with:" -f $flog -s $sf -srH $srH -srC $srC -srN $srN -srO $srO -nbo $nbo -t $tnbo $pf $svf $atd
+fi
+
+##
+#prefix=$(echo "$flog" | cut -f 1 -d '.')
+prefix=$(basename "$flog" | cut -f 1 -d '.');
+dirname=$(dirname "$flog");
+dirPrefix="$dirname/$prefix"
+fChemicalShift="$dirname/$prefix"_NMRtab.dat
+fVibFreq="$dirname/$prefix"_freq.dat
+fScan="$dirname/$prefix"_scan.dat
+ftddftA="$dirname/$prefix"_ExcS.dat
+ftddftB="$dirname/$prefix"_ExcStab.dat
+fNPA="$dirname/$prefix"_NPA.dat
+fNPA2="$dirname/$prefix"_NPAtab.dat
+fxyz="$dirname/$prefix"_OPT.xyz
+##
+
+echo -e    $RedC"--------------------------------------------------------------------------------------------"$COff
+if [ ! -f $flog ]; then
+    echo "File $flog not found!"
+    echo "Exiting."
+    echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+    exit
+fi
+if [ "${flog: -3}" == ".gz" ]; then
+   echo "gunzipping $flog"
+   gunzip -v $flog
+   Gzipped=true
+   flog=${flog::-3}
+   echo $flog
+   echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+else
+   Gzipped=false
+fi
+startt=`grep "Leave Link    1" $flog |head -n 1|tr -s " "|cut -d " " -f 6,7,8,9`
+echo -e $GreenC"   Job started on "$startt$COff
+
+Natoms=`grep "NAtoms=" $flog | tail -1 |tr -s " " | cut -d " " -f 3`
+NatomsR=`echo "scale=0;$Natoms+4"|bc`
+numberOfRuns=`grep -c -n "Normal termination of Gaussian" $flog`
+echo -e $BIRedC"How many completed Gaussian runs within a single job? "$COff$numberOfRuns
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c 'IRC-IRC-IRC' $flog` -ge 1 ]; then
+   nIRCstep=`grep -c "Delta-x Convergence Met" $flog`
+   nGradIRC=`grep "Total number of gradient calculations:" $flog |  tr -s " " | cut -d " " -f 7`
+   IRC="YES"
+   RevFwd=`grep 'Rxn path following direction = ' $flog | sed 's/Rxn path following direction = //'`
+   echo -e $BIRedC"IRC. "$COff$nIRCstep" IRC steps done in the"$RevFwd" direction"
+   rm -f Etmp.dat RCtmp.dat
+   grep -B 10 "Delta-x Convergence Met" $flog | grep "Corrected End Point Energy =" | tr -s " " | cut -d " " -f 7 > Etmp.dat
+   grep "NET REACTION COORDINATE UP TO THIS POINT" $flog | tr -s " " | cut -d " " -f 10 > RCtmp.dat
+   echo "n   rx. coord.    energy" 
+   paste RCtmp.dat Etmp.dat | cat -n | column -t -o "    " 
+   rm -f Etmp.dat RCtmp.dat
+   if [ `grep -c 'Reaction path calculation complete' $flog` -ge 1 ]; then
+      echo "Reaction path calculation complete"
+   else
+      echo -e $RedC"Reaction path calculation does not seem complete"$COff
+   fi
+   echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+else
+   IRC="NO"
+   nGradIRC=0
+fi
+if [ `grep -c 'Berny optimization' $flog` -ge 1 ] && [ `grep -c 'Computing CIS/TDA/TD derivatives' $flog` -eq 0 ]; then
+   OPTGS="YES"
+   if [ `grep -c 'Search for a saddle point' $flog` -ge 1 ]; then
+      TS="(opt(ts))"
+   else
+      TS=""
+   fi
+   nstep=`grep -c "Step number" $flog` 
+   nfreq=`grep -c "Harmonic frequencies" $flog`
+   # if IRC, remove first $ngradIRC energies
+   # if IRC, $nstep corresponds to total number of IRC gradient calc. + number of opt. steps
+   ((nstepOPT=$nstep-$nfreq-$nGradIRC))
+   ((nstepOPTWithFreq=$nstep-$nGradIRC))
+   OPTGS2=$OPTGS
+   OPTGS=$OPTGS".  "$nstepOPT" optimization steps done"
+else
+   OPTGS="NO"
+   TS=""
+   OPTGS2=$OPTGS
+   nstepOPT=1
+fi
+
+if [ `grep -c 'Berny optimization' $flog` -ge 1 ] && [ `grep -c 'Computing CIS/TDA/TD derivatives' $flog` -ge 1 ]; then
+   OPTES="YES"
+   nstep=`grep -c "Step number" $flog` 
+   nfreq=`grep -c "Harmonic frequencies" $flog`
+else
+   OPTES="NO"
+fi
+
+if [ `grep -c 'Summary of the potential surface scan' $flog` -ge 1 ]; then
+   SCAN="YES"
+else
+   SCAN="NO"
+fi
+echo -e $BIRedC"OPTIMIZATION IN THE GROUND STATE? "$COff$OPTGS"  "$BlueC$TS$COff
+rm -f Etmp.dat yntmp.dat EEtmp.dat
+if [ $OPTGS2 == "YES" ]; then
+ 
+   rm -f Etmp.dat yntmp.dat
+   # if IRC, remove first $ngradIRC energies
+   #grep -m $nstep "SCF Done" $flog | cat -n > Etmp.dat
+   grep "SCF Done" $flog | tail -n $nstepOPTWithFreq | head -n $nstepOPT | cat -n > Etmp.dat
+   grep -A3 --no-group-separator -m $nstepOPT "Maximum Force" $flog | tr -s " " | cut -d " " -f 6 | paste -d' ' - - - - > yntmp.dat
+   sed -i 's/YES/y/g' yntmp.dat
+   sed -i 's/NO/n/g' yntmp.dat
+   paste Etmp.dat yntmp.dat
+   if [ `awk '{/YES/?f++:f=0} f==4' $flog | grep -c YES` -ge 1 ]; then
+      echo -e "geometry optimization is converged, all four convergence criteria met."
+   else
+      echo -e "geometry optimization is NOT converged, some convergence criteria are not met."
+   fi
+   rm -f Etmp.dat yntmp.dat
+else
+   if [ ! $IRC == "YES" ] & [ `grep -c 'Computing CIS/TDA/TD derivatives' $flog` -eq 0 ] ; then
+      grep "SCF Done" $flog | cat -n
+   fi
+   if [ $SCAN == "YES" ]; then
+      echo
+      echo -e $BlueC"Summary of the potential energy surface (or energy landscape) scan"$COff
+      sed -n '/Summary of the potential surface scan/,/^\s*$/p' $flog |head -n -2|tail -n +2
+      if  [ $savef == "YES" ]; then
+      	echo -e $YellowC"All distances and energies saved in $fScan"$COff
+      	sed -n '/Summary of the potential surface scan/,/^\s*$/p' $flog |head -n -2|tail -n +2 > $fScan
+      fi
+   fi
+fi
+if [ $OPTES == "YES" ]; then
+   ((nstepOPT=$nstep-$nfreq-$nGradIRC))
+   ((nstepOPTWithFreq=$nstep-$nGradIRC))
+   optES=`awk '/Excitation energies and oscillator strength/,/This state for optimization and\/or second-order correction/' $flog | grep 'Excited State' | tr -s " " | cut -d " " -f 4 | tail -1 | sed 's/://'`
+   echo -e $BIRedC"OPTIMIZATION IN AN EXCITED STATE? "$COff$OPTES"  "$BlueC$TS$COff$BlueC" Exc. State # "$optES$COff
+   grep "SCF Done" $flog | tail -n $nstepOPTWithFreq | head -n $nstepOPT | cat -n > Etmp.dat
+   grep 'E(TD-HF/TD-DFT)' $flog | tail -n $nstepOPTWithFreq | head -n $nstepOPT | cut -d " " -f 7 > EEtmp.dat
+   awk '{print "  ETD = ",$1}' EEtmp.dat > EEtmp2.dat
+   grep -A3 --no-group-separator -m $nstepOPT "Maximum Force" $flog | tr -s " " | cut -d " " -f 6 | paste -d' ' - - - - > yntmp.dat
+   sed -i 's/YES/y/g' yntmp.dat
+   sed -i 's/NO/n/g' yntmp.dat
+   paste Etmp.dat EEtmp2.dat yntmp.dat
+   if [ `awk '{/YES/?f++:f=0} f==4' $flog | grep -c YES` -ge 1 ]; then
+      echo -e "geometry optimization is converged, all four convergence criteria met."
+   else
+      echo -e "geometry optimization is NOT converged, some convergence criteria are not met."
+   fi
+   rm -f EEtmp.dat EEtmp2.dat Etmp.dat yntmp.dat
+fi
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c 'Full mass-weighted force constant matrix' $flog` -ge 1 ]; then
+   FREQ="YES"
+else
+   FREQ="NO"
+fi
+echo -e $BIRedC"FREQ? "$COff$FREQ" "$BlueC$TS$COff
+if [ $FREQ == "YES" ]; then
+   rm -f yntmp.dat
+   grep -A3 --no-group-separator "Maximum Force" $flog | tr -s " " | cut -d " " -f 6 | paste -d' ' - - - - > yntmp.dat
+   sed -i 's/YES/y/g' yntmp.dat
+   sed -i 's/NO/n/g' yntmp.dat
+   yyyy=`tail -1 yntmp.dat`
+   rm -f yntmp.dat
+   Efreq=`grep -m $nstep "SCF Done" $flog | tail -1`
+   echo "Ground-state energy of the freq. calc. step:"$Efreq"  "$yyyy
+   if [ $OPTES == "YES" ]; then
+      EfreqES=`grep 'E(TD-HF/TD-DFT)' $flog | tail -1 | cut -d " " -f 7`
+      echo "Excited-state energy "$EfreqES"  "$yyyy
+   fi
+   echo
+   grep -m 1 "Low frequencies" $flog
+   echo -e $CyanC"minimum on the PES (non linear molecules): 6 freq = 0"
+   echo -e "                       (linear molecules): 5 freq = 0"
+   echo "TS on the PES = 1st order saddle point: 1 freq < 0"
+   echo "2 freq < 0 or more: no chemical meaning "
+   echo -e "(-20 cm-1 < freq < +20 cm-1 can in general be considered as zero)"$COff
+
+   echo
+   if  [ $savef == "YES" ]; then
+      echo -e $YellowC"All frequencies saved in $fVibFreq"$COff
+      grep 'Frequencies' $flog | sed -n 's/  */ /gp' | cut -d " " -f 4-6 |sed -n 's/ /\n/gp' > $fVibFreq
+   fi
+   if [ $printfreq == "YES" ]; then
+      echo
+      grep 'Frequencies' $flog | sed -n 's/  */ /gp' | cut -d " " -f 4-6 |sed -n 's/ /\n/gp' | awk '{if (NR%8) {ORS="";print " "$0} else {ORS="\n";print " "$0}}' |column -t
+   fi
+   ZPEcorr=`grep "Zero-point correction" $flog |tr -s " " | cut -d " " -f 4`
+   Hstd=`grep "Sum of electronic and thermal Enthalpies" $flog |tr -s " " | cut -d " " -f 8`
+   Gstd=`grep "Sum of electronic and thermal Free Energies" $flog |tr -s " " | cut -d " " -f 9`
+
+   echo
+   echo -e $YellowC"use Molden or jmol to visualize all normal modes of vibration"$COff
+   echo -e $YellowC"with jmol:"
+   echo            "  - first load the $flog file"
+   echo            "  - then, select Tools > Vibrate > Start vibration in the menu"
+   echo            " and navigate with the -> arrow in order to find the lowest normal mode"
+fi
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c ' Thermochemistry ' $flog` -ge 1 ]; then
+   ZPE="YES"
+else
+   ZPE="NO"
+fi
+echo -e $BIRedC"ZPE & thermo? "$COff$ZPE
+grep "Zero-point correction" $flog
+grep -A 3 "Sum of electronic and zero-point Energies" $flog
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c 'DoRPA=T' $flog` -ge 1 ]; then
+   TDDFT="YES"
+   nstates=`grep 'Change is' $flog | tr -s " " | cut -d " " -f 3 | tail -1`
+else
+   TDDFT="NO"
+fi
+echo -e $BIRedC"TDDFT? "$COff$TDDFT
+if [ $TDDFT == "YES" ]; then
+
+   line=`sed -n '/Entering Gaussian System/,/DoRPA=T/p' $flog | grep "SCF Done" | tail -1`
+   if [ $OPTES == "YES" ]; then
+      LAST="last "
+   else
+      LAST=""
+   fi
+   echo "Ground-State energy at the ${LAST}TDDFT step: "$line
+   if [ $tdlastStateOnly == "YES" ]; then
+      grep 'Excited State' $flog  | tr -s " " | cut -d " " -f 4,5,8,10,11|sed 's/<S\*\*2>=//'|sed 's/f=//' |column -t -o "   " | tail -$nstates
+   elif [ $tdlastStateOnly == "NO" ]; then
+      grep 'Excited State' $flog  | tr -s " " | cut -d " " -f 4,5,8,10,11|sed 's/<S\*\*2>=//'|sed 's/f=//' |column -t -o "   " 
+   fi
+   if  [ $savef == "YES" ]; then
+      echo "iState  State   lambda/nm    fe     S^2" > $ftddftB
+      if [ $tdlastStateOnly == "YES" ]; then
+         grep 'Excited State' $flog  | tr -s " " | cut -d " " -f 4,5,8,10,11|sed 's/<S\*\*2>=//'|sed 's/f=//' |column -t -o "   " | tail -$nstates >> $ftddftB
+      elif [ $tdlastStateOnly == "NO" ]; then
+         grep 'Excited State' $flog  | tr -s " " | cut -d " " -f 4,5,8,10,11|sed 's/<S\*\*2>=//'|sed 's/f=//' |column -t -o "   " >> $ftddftB
+      fi
+      if [ $OPTES == "NO" ] && [ $tdlastStateOnly == "NO" ]; then
+         awk '/Excitation energies and oscillator strengths/,/Leave Link  914/' $flog |tail -n +3| head -n -2 > $ftddftA
+      elif [ $OPTES == "NO" ] && [ $tdlastStateOnly == "YES" ]; then
+         ed -s $flog >  .tddftOPT.dat <<-"EOF"     
+         ?Excitation energies and oscillator strengths?;/Leave Link  914/p
+         q
+EOF
+         tail -n +3 .tddftOPT.dat | head -n -2 > $ftddftA
+         rm .tddftOPT.dat
+      elif [ $OPTES == "YES" ]; then
+         #ed -s $flog <<< '?Excitation energies and oscillator strengths?;/The selected state is a/,p,q'
+         ed -s $flog >  .tddftOPT.dat <<-"EOF"     
+         ?Excitation energies and oscillator strengths?;/The selected state is a/p
+         q
+EOF
+         tail -n +3 .tddftOPT.dat | head -n -2 > $ftddftA
+         rm .tddftOPT.dat
+      fi
+      echo -e $YellowC"This table is saved in $ftddftB"$COff
+      echo -e $YellowC"Nature of excitations saved in $ftddftA"$COff
+   fi
+
+fi
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c 'Calculating GIAO nuclear magnetic shielding tensors' $flog` -ge 1 ]; then
+   NMR="YES"
+else
+   NMR="NO"
+fi
+echo -e $BIRedC"NMR? "$COff$NMR
+if [ $NMR == "YES" ]; then
+
+   line=`sed -n '/Entering Gaussian System/,/Calculating GIAO nuclear magnetic shielding tensors/p' $flog | grep "SCF Done" | tail -1`
+   echo "Energy at the NMR step: "$line
+   rm -f NMRtmp.dat NMRtmp2.dat NMRtmp3.dat NMRtmp4.dat
+   grep "Isotropic =" $flog| tr -s " " | cut -d " " -f 3,6|column -t -o "   " > NMRtmp.dat
+   while read line; do
+      SymbAt=`echo $line|cut -d " " -f 1`
+      cs=`echo $line|cut -d " " -f 2`
+      case $SymbAt in
+          H)
+	     cshift=`echo "scale=2;($srH - $cs)/1"|bc `
+          ;;
+          C)
+	     cshift=`echo "scale=2;($srC - $cs)/1"|bc `
+          ;;
+          N)
+	     cshift=`echo "scale=2;($srN - $cs)/1"|bc `
+          ;;
+          O)
+	     cshift=`echo "scale=2;($srO - $cs)/1"|bc `
+          ;;
+          *)
+   	  cshift="0.0"
+          ;;
+      esac
+      echo $cshift >> NMRtmp2.dat
+   done < NMRtmp.dat
+   grep "Isotropic =" $flog| tr -s " " | cut -d " " -f 2,3,6,9|column -t -o "   " > NMRtmp3.dat
+   paste NMRtmp3.dat NMRtmp2.dat > NMRtmp4.dat
+   echo "At. #   At. Symbol     Isotropic Chem. Shielding & Anisotropy     Chem. Shift/ppm"
+   cat NMRtmp4.dat | tr -s " " | cut -d " " -f 1,2,3,4,5|column -t -o "            " 
+   echo -e $CyanC"(chemical shifts are only calculated for 1H, 13C, 15N & 17O)"$COff
+   if  [ $savef == "YES" ]; then
+      echo -e $YellowC"A $fChemicalShift file has just been created"
+      echo
+      echo -e $YellowC"in order to visualize chemical shifts directly with jmol..."
+      echo "  - 1st, read the $flog file with jmol"
+      echo "  - then, in the jmol console, copy/paste the following command"
+      echo -e $BlueC'    {*}.property_cshift = load("./'$fChemicalShift'"); label %3.1[property_cshift]; font label 30 sanserif bold; color label red'$COff
+
+      cp NMRtmp2.dat $fChemicalShift
+      if grep -q "Total nuclear spin-spin coupling J (Hz):" "$flog"; then
+	 echo
+         echo -e $CyanC"J coupling section found. Parsing..."$COff
+         GParser_J.py "$flog"
+      else
+         echo -e $RedC"No J coupling section found."$COff
+      fi   
+   else
+      if grep -q "Total nuclear spin-spin coupling J (Hz):" "$flog"; then
+	 echo
+         echo -e $YellowC"J coupling section found. Use -S option if parsing is needed"$COff
+      fi
+   fi
+   rm -f NMRtmp.dat NMRtmp2.dat NMRtmp3.dat NMRtmp4.dat
+fi
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c 'Summary of Natural Population Analysis' $flog` -ge 1 ]; then
+   NBO="YES"
+else
+   NBO="NO"
+fi
+if [ `grep -c '*Gaussian NBO Version 3.1*' $flog` -ge 1 ]; then
+   NBOv="3.1"
+elif [ `grep -c '* NBO 6.0 *' $flog` -ge 1 ]; then
+   NBOv="6.0"
+else
+   NBOv="Unknown version"
+fi
+if [ $NBO == "YES" ]; then
+   echo -e $BIRedC"NBO? "$COff$NBO". Version "$NBOv
+else
+   echo -e $BIRedC"NBO? "$COff$NBO
+fi
+if [ $NBO == "YES" ]; then
+   line=`sed -n '/Entering Gaussian System/,/N A T U R A L   A T O M I C   O R B I T A L/p' $flog | grep "SCF Done" | tail -1`
+   STotal=`sed -n '/Entering Gaussian System/,/N A T U R A L   A T O M I C   O R B I T A L/p' $flog | grep "<S\*\*2>" | tail -1 | grep "<S\*\*2>" | tail -1 | tr -s " " | cut -d " " -f 11`
+   if [ -z "${STotal}" ]; then
+       STotal=0
+   fi
+   MSpin=`echo "scale=0;2*$STotal+1"|bc`
+   echo "Energy at the NBO step: "$line "  (2S+1) = "$MSpin
+   if [ $NBOv == "3.1" ]; then
+      sed -n '/    Atom  No    Charge         Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog
+   elif [ $NBOv == "6.0" ]; then
+      sed -n '/  Atom No    Charge        Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog
+   else
+      sed -n '/    Atom  No    Charge         Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog
+   fi
+   if  [ $savef == "YES" ]; then
+      rm -f .nbo.tmp
+      if [ $NBOv == "3.1" ]; then
+         sed -n '/    Atom  No    Charge         Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog > $fNPA2
+         sed -n '/    Atom  No    Charge         Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog | tail -n +3 | tr -s " " | cut -d " " -f 4 > .nbo.tmp
+      elif [ $NBOv == "6.0" ]; then
+         sed -n '/  Atom No    Charge        Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog > $fNPA2
+         sed -n '/  Atom No    Charge        Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog | tail -n +3 | tr -s " " | cut -d " " -f 4 > .nbo.tmp
+      else
+         sed -n '/    Atom  No    Charge         Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog > $fNPA2
+         sed -n '/    Atom  No    Charge         Core      Valence    Rydberg      Total/,/======================/{/============/d;p}' $flog | tail -n +3 | tr -s " " | cut -d " " -f 4 > .nbo.tmp
+      fi
+      cat .nbo.tmp | sed 's/$/ /' | tr -d '\r\n' > $fNPA
+      echo "" >> $fNPA
+      cat .nbo.tmp | sed 's/$/ /' | tr -d '\r\n' >> $fNPA
+      rm -f .nbo.tmp
+      echo -e $YellowC"All NPA charges are saved in $fNPA (used by vChem3D, this is why it is saved twice)"$COff
+      echo -e $YellowC"Wanna see them with JMol? In its console, type:"$COff
+      echo -e $YellowC"{*}.partialCharge = load('./$(basename $fNPA)'); label %3.2P;font label 20 Bold; color label [x000000]"$COff
+   fi
+fi
+if [ ! $nbo == 0 ]; then
+   echo
+   echo -e $BlueC"Second Order Perturbation Theory Analysis of Fock Matrix in NBO Basis that involves atom # "$RedC$nbo$COff
+   echo -e $BlueC"(BD*>BD*, LP*>LP*, BD*>LP*, LP*>BD* & XX>RY* contributions removed)"$COff
+   pattern=" "$nbo" "
+   #grep "$pattern" $flog | grep '/' |grep -v RY*|grep -vE "(BD*){2}"
+   echo -e $YellowC"From "$nbo$COff
+   rm -f .nbo.tmp
+   awk -v SSS="$pattern" 'substr($0,10,35-10)~SSS' $flog | grep '/' |grep '(' |grep -v "RY*" > .nbo.tmp
+   rm -f .nbo2.tmp
+   while IFS= read -r line
+   do
+      found=`echo -e "$line" | grep -v '\(.*'"LP\*"'\)\{2\}' | grep -v '\(.*'"BD\*"'\)\{2\}' | grep -vE "LP\*.*BD\*|BD\*.*LP\*"`
+      if [[ ! -z $found ]]; then
+	 echo "$found"
+      fi
+   done < .nbo.tmp
+   echo -e $YellowC"To "$nbo$COff
+   rm -f .nbo.tmp
+   awk -v SSS="$pattern" 'substr($0,45,75-45)~SSS' $flog | grep '/' |grep '('  |grep -v "RY*" > .nbo.tmp
+   rm -f .nbo2.tmp
+   while IFS= read -r line
+   do
+      found=`echo -e "$line" | grep -v '\(.*'"LP\*"'\)\{2\}' | grep -v '\(.*'"BD\*"'\)\{2\}' | grep -vE "LP\*.*BD\*|BD\*.*LP\*"`
+      if [[ ! -z $found ]]; then
+	 cc=`echo "$found" | cut -c 60- | tr -s " " | cut -d " " -f 2`
+	 if (( $(echo "$cc > $tnbo" |bc -l) )); then
+	    echo "$found"
+	 fi
+      fi
+   done < .nbo.tmp
+   rm -f .nbo.tmp
+fi
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c 'Solvent              :' $flog` -ge 1 ]; then
+   PCM="YES"
+else
+   PCM="NO"
+fi
+echo -e $BIRedC"Solvent effect? "$COff$PCM
+if [ $PCM == "YES" ]; then
+  grep 'Solvent              :' $flog | sed 's/ Solvent              : //' | tail -1
+fi
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+if [ `grep -c 'Electric dipole moment (dipole orientation):' $flog` -ge 1 ] || [ `grep -c 'Dipole moment (field-independent basis, Debye):' $flog` -ge 1 ]; then
+   DIP="YES"
+else
+   DIP="NO"
+fi
+echo -e $BIRedC"Dipole Moment? "$COff$DIP
+if [ $DIP == "YES" ]; then
+   if [ `grep -c 'Electric dipole moment (dipole orientation):' $flog` -ge 1 ]; then
+      DIPOL=`grep -m 1 -A 3 'Electric dipole moment (dipole orientation):' $flog  | tail -1 | tr -s " " |cut -d " " -f 4` 
+      DIPOL1=`echo $DIPOL |sed 's/D/E/'|xargs printf '%.4f'`
+   fi
+   if [ `grep -c 'Dipole moment (field-independent basis, Debye):' $flog` -ge 1 ]; then
+      DIPOL2=`grep -m 1 -A 1 'Dipole moment (field-independent basis, Debye):' $flog |tail -1| tr -s " " |cut -d " " -f 9`
+   fi
+   if [ ! $DIPOL1 == "" ]; then
+        echo $DIPOL1 "Debye"
+   else
+        echo $DIPOL2 "Debye"
+   fi
+fi
+
+echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+LastE=`grep 'SCF Done' $flog |tail -1 | tr -s " " | cut -d " " -f 6`
+if [ ! -z $LastE ]; then
+   echo -e $CyanC"(FYI: last calculated energy found in this log file is "$LastE" hartree)"$COff
+fi
+if  [ $savef == "YES" ]; then
+   if [ `grep -c 'Standard orientation' $flog` -eq 0 ]; then
+      MolOrientation='Input orientation'
+   else
+      MolOrientation='Standard orientation'
+   fi
+   if [ $FREQ == "YES" ]; then
+      HG=" / ZPE = $ZPEcorr / H° = $Hstd / G° = $Gstd"
+   else
+      HG=""
+   fi
+   echo -e "last geometry in its $BlueC$MolOrientation$COff saved in "$fxyz
+   echo $Natoms > $fxyz
+   echo EDFT = $LastE $HG >> $fxyz
+   grep -A$NatomsR "$MolOrientation" $flog | tail -$Natoms | while read n Z dum x y z;  do printf "%-2s %12f %12f %12f\n" "${Symbols[$Z-1]}" "$x" "$y" "$z" ;done >> $fxyz
+fi
+ENDG=`tail -1 $flog | grep "Normal termination of Gaussian"`
+[[ -z $ENDG ]] && echo -e $RedC"Job is not finished. Still running?"$COff
+if [[ ! -z $ENDG ]]; then
+   endt=`grep "Normal termination of Gaussian" $flog |tail -n 1 | tr -s " " |cut -d " " -f 8,9,10,11`
+   echo -e $GreenC "Normal termination of Gaussian. Job seems finished on "$endt$COff
+fi
+if  [ $savef == "NO" ]; then
+   echo -e $BlackC$On_White"Mind that several data files can be saved by running GParser with the -S option"$COff
+fi
+if $Gzipped ; then
+   echo -e $RedC'--------------------------------------------------------------------------------------------'$COff
+   echo "gzipping back $flog"
+   gzip -v $flog
+fi
+echo -e $RedC'- End of GParser ---------------------------------------------------------------------------'$COff

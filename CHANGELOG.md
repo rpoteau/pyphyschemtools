@@ -1,8 +1,32 @@
 <div style="text-align:center">
 <img src="https://raw.githubusercontent.com/rpoteau/pyphyschemtools/main/pyphyschemtools/resources/svg/tools4pyPC_banner.png" alt="t4pyPCbanner" width="800"/>
 </div>
+<br>
+<br>
 
-# Changelog
+**Table of Contents**
+* [Changelog pyphyschemtools](#changelog-pyphyschemtools)
+* [Changelog tools4Gaussian](#changelog-tools4gaussian)
+* [Changelog tools4VASP](#changelog-tools4vasp)
+
+# Changelog pyphyschemtools
+
+## [0.7.0] - 2026-02-14. "NEW quantum chemistry corner"
+
+### Added
+- **Quantum Chemistry Corner**: Integration of a major suite of tools for VASP and Gaussian 16 calculations.
+- **Unified Tool Changelog**: Added a specialized history section for computational chemistry tools with internal navigation:
+    * [Changelog tools4Gaussian](#changelog-tools4gaussian)
+    * [Changelog tools4VASP](#changelog-tools4vasp)
+- **New Command Line Interfaces (CLI)**:
+    - Added Python-native `GScan_Analyzis`, `pos2xyz`, `pos2cif`, and `cif2pos` (v20260213).
+    - Integrated legacy Bash and Fortran tools (`GParser`, `GP2bw`, `cpG`, `ThermoWithVASP`, `vibVASP`, `selectLOBSTER`, `sel4vibVASP`, `RestartVASP`, `hVASP`, `cleanVASPf`, `VASPcv`, `ManipCell`) via Python entry point wrappers for better portability.
+    - `get_qc_examples` utility for reference data retrieval.
+        - Behavior: This command copies the compressed and tarred example archives (`.tar.bz2`) directly to your current working directory.
+        - Usage: Requires an explicit argument (VASP or G16). Supports case-insensitive input and includes a -h help menu.
+
+### Changed
+- **Documentation**: New dedicated documentation for the Quantum Corner in `QuantumChemCorner.md`.
 
 ## [0.6.0] - 2026-02-10. "easy_rdkit, built-in data management, new core tools"
 
@@ -159,3 +183,172 @@
 
 ## [0.1.0] - 2026-02-01
 first commit
+
+--- 
+
+# Changelog tools4Gaussian
+
+## 20240326. GParser. 
+- Now saves without error the last optimized geometry if -S is activated, with the associated energy in the title. ZPE, H° and G° are now added
+## 20240126. GParser
+- Now saves the scan section of G16 is -S is activated
+## 20230526. GParser.
+- Now saves the last found coordinates in a `$prefix_OPT.xyz` file (Input orientation if nosymm, Standard orientation otherwise)
+## 20230221. GParser.
+- Minor bug fix
+- `$OPTGS` instead of `$OPT`
+- GS opt energies were no longer written
+- NPA charges are saved twice in the `"$Prefix"_NPA.dat` file (JSMol/vChem3D requirement)
+- Series of tddft vertical excitation energies calculated in the same run are all saved
+in the `"$Prefix"_ExcStab.dat` file if the new -atd line command option is given
+(could be useful to sum transitions of various geometries on the same simulated VUV plot)
+## 20230219. GParser.
+- New! Now reads tddft optimizations and frequency calculations
+- Fixed. When saving TDDFT energies, wrote it twice on screen
+- Fixed. Dipole moment search was wrong (| instead of || in a conditional test)
+## 20230213. GParser.
+- Dipole moments also searched
+## 20230210. GParser.
+- tddft excitations also saved in a `"$Prefix"_ExcS.dat` file
+- NPA charges now saved as a single line in a `"$Prefix"_NPA.dat` file
+(used in the MO page of vChem3D)
+- NPA table also saved in a `"$Prefix"_NPAtab.dat` file
+- `"$Prefix"_Te_fe.dat` renamed as `"$Prefix"_ExcStab.dat` 
+- `"$Prefix"_NMR.dat` renamed as `"$Prefix"_NMRtab.dat` 
+- all the created files are not saved anymore by default.
+use the -S option to save them: `GParser -f XXX.log -S`
+## 20230204. GParser.
+- Now reads tddft calculations. And saves a `"$Prefix"_Te_fe.dat` file
+## 20220210. Gparser.
+- Bug fix with the new `-sp` functionality. Only 2/3 of the frequencies were printed and saved
+## 20220210. GP2bw.
+- Bug fix. some spurious characters (corresponding to the "clear" command) were not removed from the GParser log file
+## 20220202. Gparser.
+- New `-sp` option: all frequencies are printed in the standard output (provided that the "freq" keyword was used with Gaussian). Frequencies are now saved under column format in a `$prefix_freq.dat` file
+- New GP2bw tool! Converts the colored standard output of GParser in black and white
+- Commands: 
+    - `GParser [options] > summary.dat`
+    - `GP2bw summary.dat` creates a `summary.dat.bw` without color codes
+## 20220111. GParser.
+- NBO part. LP* > LP* and BD* > BD* were not all properly removed. Fixed
+- new `-t threshold` option added in order to print only second-order NBO analysis > threshold
+## 20220110. GParser. NBO part.
+- Did not read long strings such as `BD*(   1)Mo   1 -Mo   2`
+now searching form atom `$nbo` in columns 10-35 and 45-75 (formerly 17-21 & 53-58)
+## 20220109. GParser.
+- Bug when reading NMR isototropic chemical shieldings. 1st atom was skipped.
+- Added reading of a scan calculation
+- Start/End dates and time now printed
+## 20220108. GParser & cpG.
+- `-h` help option added 
+## 20220105. GParser.
+- Now reads an IRC calculation
+- update: bug fix. when IRC only (all energies were printed in the OPT section)
+## 20220103. GParser.
+Now also reads NPA charges and NBO 2nd order PT analysis for an atom specified with `-nbo` option
+## 20211230. GParser.
+- Calculation of chemical shifts (use `-srX` options)
+## 20211228. GParser.
+- 1st version. Prints opt. iterations and energies, ZPE, thermodynamic values, chemical shieldings, low frequencies
+## 20211231.
+- New version of cpG
+
+---
+
+# Changelog tools4VASP
+
+**Basic tools**
+
+## 20260213.
+- `pos2xyz`, `pos2cif`, `cif2pos` rewritten in python
+- `hVASP` now calls `pos2xyz` and `pos2cif` instead of `pos2xyz.pl`
+## 20240130. VASPcv.
+- Now printing IDIPOL
+## 20240130. RestartVASP.
+- Now introducing various Restart schemes
+## 20240127. VASPcv.
+- `ReadIterVASP.py` adapted for python3
+## 20230711. hVASP. New behaviour:
+- All `CONTCAR` files will now recursively be saved in a `VASP-ARK/CONTCARs` folder
+- `CONTCAR.xyz` files will now be saved in an XYZ folder
+- New options: `-A`, `-LD`, `-O`, `-CIF`, `-POS`, `-h` (see documentation)
+## 20230313. cpVASP:
+- possibility to copy from a folder with a diffrerent path than the target folder
+## 20220523. RestartVASP
+- did not test the possible existence of a previous `OUTCAR.x.gz` file. Fixed 
+## 20220515. RestartVASP:
+- gzips the `OUTCAR` or `OUTCAR.x` file
+## 20220515. VASPcv:
+- gunzips input file (ie `OUTCAR[.x].gz`) if needed, parses the data and finally gzips the file (ie `OUTCAR[.x] > OUTCAR[.x].gz`) if and only if the input file was zipped 
+## 20220419. ManipCell:
+- `-fc` replication scheme added (surprisingly absent in the previous versions!)
+## 20220122. RestartVASP:
+- now checks if the `OUTCAR` and `CONTACR` files might be present in a `workdir`  (necessity to initialize the `tmpdir` variable at the beginning of the script)
+## 20210510. ManipCell:
+- new `-GA` option. Counts the number of molecules in a unitcell and returns the atom indexes/molecule (based on Graph Theory). See dedicated example
+## 20210427. hVASP:
+- content of `2ARK` file will be added to the cif and xyz title.
+- Possibility to define another flag than `2ARK`
+## 20210330. New tool: hVASP.
+- Useful to create archives for SI or for data management.
+## 20210312. cpVASP:
+- bugfix when the trailing character of the target folder name was a "/"
+## 20210311. ManipCell:
+- bugfix. The AddAtoms and putInside routines did not  consider atoms lying outside the c direction
+## 20210304. ManipCell:
+- the delOutside routine did not consider atoms lying outside  the cell in the c direction
+## 20210228. cpVASP
+- updated with colors and setup of the job name in `LOBSTER.runjob`
+## 20210225. ThermoWithVASP
+- made compatible with the new `VASPcv` command
+## 20210225. VASPcv
+- now prints reference energy (i.e. 1st step) if `IBRION=5`
+
+
+**selectLOBSTER**
+
+Do not forget to put `selectLOBSTER.agr` & `selectLOBSTER-ColorMaps.README`
+in a target folder (e.g. bin) and add the following line in your .bashrc:
+`export PathToTables="$HOME/bin"`
+
+## 20220719.
+- Bug in c2i function when the input string did not contain trailing characters
+(modification in toolbox_ABC)
+## 20210314.
+- Basis set and MOs are now analyzed, and written under molden format 
+(writeBasisFunctions and printLCAORealSpaceWavefunction keywords of lobster >= 4.0.0)
+## 20210311.
+- Increased the input analyzis up to 600 characters (for long list selection)
+## 20210304.
+- Atomic symbols now written in the charges and magnetic moments output. 
+- Fragment analysis also performed with LOBSTER original charges.
+- bug fixed in the routine that saves *_EF.dat atomic d-band centers
+## 20210303.
+- Spilling in LOBSTER now printed in `selectLOBSTER.log`, as well as Mulliken 
+- charges direcly calculated by LOBSTER (Mulliken charges of `CHARGES.lobster `
+also saved as `CHARGESM.lobster`)
+- minor bugs fixed in the atomic dbc printing (NaN now set to 0.d0 if atom not selected)
+## 20210302.
+- Improvement and minor bugs fixed. Add the possibility to use another input file than `selectLOBSTER.in`
+## older versions
+- pdos: calculation of the population and of the spin density/subshell/atom for open shell calculations
+- pdos: addition of the "Search4EMax" option
+- pdos: addition of the "Integrate" option
+- cohpgenerator: selection of pair of atoms A/B according to the number of bonds between A andB ("bridge" option)
+- cohpgenerator: selection of pair of atoms A/B according to the bonding of B with other atoms ("boundto" option)
+- cohpgenerator: selection of metal atoms according to their core/surface type
+- Up to DZ basis sets on each atom
+- Possibility to start the integration of the pDOS for bandcenter calculations at a given energy (keyword: startBC)
+- Correction of a serious bug: two sets with same type of atoms were merged into a single set
+- Calculation of the center of mass and the width of the selected projected DOS
+- Compatibility with the COHPBETWEEN command of Lobster
+- Select COHP, COOP and DOS data from *.LOBSTER files
+
+**Examples**
+
+## 20210510.
+- New `Tools4VASP-Examples/ManipCell/Ru13H17-solv-GA-option/` folder with an example of application of the new graph analysis option (`-GA`)
+## 20210303.
+- New `Tools4VASP-Examples/selectLOBSTER/Ru13IC-Ethanoate-H` folder with an example of analysis for a Ru13 cluster
+## 20210302.
+- `ManipCell-Cluster.sh` example in `Tools4VASP-Examples/ManipCell/` (application of ManipCell to supercells)

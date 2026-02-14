@@ -6,9 +6,6 @@ pyphyschemtools package
    :show-inheritance:
    :undoc-members:
 
-Submodules
-----------
-
 pyphyschemtools.Chem3D module
 -----------------------------
 

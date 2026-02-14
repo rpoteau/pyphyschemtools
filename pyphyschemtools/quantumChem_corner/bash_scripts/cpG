@@ -1,0 +1,181 @@
+#!/bin/bash
+COff='\033[0m'             # Text Reset
+# Regular Colors
+BlackC='\033[0;30m'        # Black
+RedC='\033[0;31m'          # Red
+GreenC='\033[0;32m'        # Green
+YellowC='\033[0;33m'       # Yellow
+BlueC='\033[0;34m'         # Blue
+PurpleC='\033[0;35m'       # Purple
+CyanC='\033[0;36m'         # Cyan
+WhiteC='\033[0;37m'        # White
+# Bold
+BBlackC='\033[1;30m'       # Black
+BRedC='\033[1;31m'         # Red
+BGreenC='\033[1;32m'       # Green
+BYellowC='\033[1;33m'      # Yellow
+BBlueC='\033[1;34m'        # Blue
+BPurpleC='\033[1;35m'      # Purple
+BCyanC='\033[1;36m'        # Cyan
+BWhiteC='\033[1;37m'       # White
+# Bold High Intensity
+BIBlackC='\033[1;90m'      # Black
+BIRedC='\033[1;91m'        # Red
+BIGreenC='\033[1;92m'      # Green
+BIYellowC='\033[1;93m'     # Yellow
+BIBlueC='\033[1;94m'       # Blue
+BIPurpleC='\033[1;95m'     # Purple
+BICyanC='\033[1;96m'       # Cyan
+BIWhiteC='\033[1;97m'      # White
+# Background
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
+version="20220108"
+echo -e $GreenC"--------------------------------------------------------------------------------------------------------"$COff
+echo -e $BIWhiteC$On_Black"                              cpG v.$version"$COff
+
+echo -e $GreenC"--------------------------------------------------------------------------------------------------------"$COff
+prefix1=${1##*/}
+prefix2=${2##*/}
+dir1=`dirname -- "$1"`
+dir2=`dirname -- "$2"`
+ok=F
+help="NO"
+options="$@"
+
+set_options(){
+
+    for option in $options;
+    do
+	case $option in
+            "-h")
+               help="YES"
+            ;;
+	esac
+    done
+}
+
+set_options
+
+if [ $help == "YES" ]; then
+   echo
+   echo -e  $BlueC"Help section"$COff
+   echo -e        "Command: cpG source target R"
+   echo
+   echo           "        source is the prefix of the reference source.com and source.qsub example files"
+   echo           "        target is the prefix of the target target.com and target.qsub example files"
+   echo           "        And all 'source' words will be replaced with 'target' inside the target.com and target.qsub files"
+   echo
+   echo           "        R (for [R]estart) is optional. When specified => the MOs or last geometry "
+   echo           "        of the source.chk file will be used by the new Gaussian run"
+   echo
+   echo           "The source and target can be defined w.r.t. a relative pathway"
+   echo           "- example 1: cpG H2 projet/CH4"
+   echo           "  A projet folder will be created and the H2.com and H2.qsub source files will"
+   echo           "  be copied as CH4.com and CH4.qsub"
+   echo           "- example 2: cpG ../CH4 CH4NMR R"
+   echo           "  the CH4.com, CH4.qsub and CH4.chk files of the parent folder are copied in the current folder"
+   echo           "  as CH4NMR.com CH4NMR.qsub and CH4.chk."
+   echo           "  An additional %OldChk=CH4.chk line is inserted at the beginning of the CH4NMR.com file."
+   echo           "  The last geometry of the previous CH4 job as well as the MOs can now be read by the CH4NMR job"
+   echo           "  (add the keywords guess=check geome=check in CH4NMR.com)" 
+   echo
+   echo -e   $RedC"cpG command stops if called with -h"$COff
+   echo
+   echo -e $BlueC"-------------------------------------------------------------------"$COff
+   exit
+fi
+
+if [ $1 == $2 ]; then
+   echo -e $RedC"Source and target files are the same. Exiting"$COff
+   echo -e $GreenC"-------------------------------------------------------------------"$COff
+   exit
+fi
+
+if [ ! -f $2.qsub ]; then
+   ok=T
+else
+   echo -e $RedC"Target files $2.qsub and $2.com already exist. Do you really want to replace them (Y/N)?"$COff
+   read -r answer
+   if [ $answer == "Y" ] || [ $answer == "y" ]; then
+      ok=T
+      rm -f $2.com $2.qsub
+   else
+      echo "copy aborted"
+      echo -e $GreenC"-------------------------------------------------------------------"$COff
+      exit
+   fi
+fi
+
+echo
+if [ $dir2 != "." ] && [ ! -e $dir2 ] ; then
+   mkdir $dir2
+   echo "directory $dir2 created"
+else
+   echo "(directory $dir2 already exists)"
+fi
+
+if [ $ok == "T" ]; then 
+   if [ -f "$1.qsub" ]; then
+      cp $1.qsub $2.qsub
+   else
+      echo -e $RedC"File $1.qsub does not exist. CpG stops."$COff
+      exit
+   fi
+   echo -e $BlueC"$1.qsub >> $2.qsub"$COff
+   if [ -f "$1.in" ]; then
+      cp $1.in $2.in
+      targetinp=$2.in
+      echo -e $BlueC"$1.in >> $2.in"$COff
+   fi
+   if [ -f "$1.com" ]; then
+      cp $1.com $2.com
+      targetinp=$2.com
+      echo -e $BlueC"$1.com >> $2.com"$COff
+   else
+      echo -e $RedC"File $1.com does not exist. CpG stops."$COff
+      exit
+   fi
+   chkF=`grep -m 1 '%chk' $targetinp |cut -d "=" -f 2`
+   JobName=`grep '#SBATCH -J' $2.qsub |cut -d " " -f 3`
+   INPUT=`grep -m 1 'INPUT' $2.qsub |cut -d "=" -f 2`
+   sed -i -e "/chk/I s/$chkF/$prefix2.chk/" $targetinp
+   sed -i -e "/SBATCH/I s/$JobName/$prefix2/" $2.qsub
+   sed -i -e "/INPUT/I s/$INPUT/$prefix2/" $2.qsub
+   echo -e $YellowC$prefix1$COff" occurences replaced with "$YellowC$prefix2$COff" in the new $2.com and $2.qsub files"
+   if [ `grep -ic '%OldChk' $2.com` -ge 1 ] && [ -z $3 ]; then
+      echo
+      echo -e $RedC"New calculation "$COff "=> %oldChk line is removed in $2.com"
+      echo "don't forget to remove guess=check and/or geom=check in the first link"
+      sed -i "/%OldChk/d" $2.com
+   fi
+   if [ ! -z $3 ]; then
+      if [ $3 == "R" ]; then
+      sed -i "/%OldChk/d" $2.com
+      sed -i "1s/^/%OldChk=$prefix1.chk\n/I" $2.com
+      echo
+      echo -e $RedC"Restarted calculation => "$COff$YellowC"%OldChk=$prefix1.chk"$COff" line added at the beginning of the $2.com file"
+      echo -e "dont't forget to add "$YellowC"guess=check and/or geom=check"$COff" keywords"
+      if [ ! $dir1 == "." ] || [ ! $dir2 == "." ]; then
+	 if [ -e $1.chk ]; then
+	    cp $1.chk $2.chk
+	    echo -e $BlueC"$1.chk >> $dir2/$prefix1.chk"$COff
+	 else
+	    echo -e "There is a problem. Unable to copy "$BlueC"$1.chk >> $2.chk"$COff
+	 fi
+      fi 
+      fi
+   fi
+   if [ ! $dir2 == "." ]; then
+      echo
+      echo "Don't forget to go to the $dir2 folder in order to run the new calculation..."
+      echo -e "copy/paste: "$YellowC"cd $dir2"$COff
+   fi
+fi
+echo -e $GreenC"- End of cpG ------------------------------------------------------"$COff

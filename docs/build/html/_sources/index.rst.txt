@@ -17,6 +17,11 @@ pyphyschemtools documentation
 
 Welcome to **pyphyschemtools**. This documentation combines computational tools with scientific theoretical reviews to support your chemical and physical chemistry workflows.
 
+The package provides a versatile ecosystem for researchers:
+
+* **Python "API of APIs"**: High-level wrappers that unify various libraries (like ``mendeleev``, ``scipy``, and ``rdkit``) into a simplified, consistent interface for Python scripts and Jupyter Notebooks. See the **Docs and Theory** section below, as well as the **Interactive Examples** and the **API Reference**.
+* **CLI Tools**: A robust set of command-line utilities for rapid post-processing and job management in VASP and Gaussian environments. For more details on computational workflows and tool usage, please see the :doc:`theoryDocs/QuantumChemCorner`.
+
 .. toctree::
    :maxdepth: 2
    :caption: 📚 Docs and Theory
@@ -37,6 +42,12 @@ Welcome to **pyphyschemtools**. This documentation combines computational tools 
 
 .. toctree::
    :maxdepth: 2
-   :caption: 🛠 API Reference (Technical)
+   :caption: ⚛️ Quantum Chemistry Corner
+
+   theoryDocs/QuantumChemCorner
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 🛠️ API Reference (Technical)
 
    modules

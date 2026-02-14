@@ -1,6 +1,6 @@
 [project]
 name = "pyphyschemtools"
-version = "0.6.1"
+version = "0.7.0"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
@@ -48,7 +48,12 @@ include = ["pyphyschemtools*"]
 [tool.setuptools.package-data]
 "pyphyschemtools" = [
     "resources/**",
-    "data_examples/**",
+    "data_examples/Kinetics/*",
+    "data_examples/Molecules/*",
+    "data_examples/Spectra/*",
+    "data_examples/QCCorner/*.tar.bz2",
+    "quantumChem_corner/bash_scripts/*",
+    "quantumChem_corner/bin/*",
 ]
 
 [project.optional-dependencies]
@@ -63,4 +68,26 @@ docs = [
   "sphinx-copybutton"
 ]
 
+[project.scripts]
+GScan_Analyzis = "pyphyschemtools.quantumChem_corner.GScan_Analyzis:main"
+cif2pos = "pyphyschemtools.quantumChem_corner.cif2pos:main"
+pos2cif = "pyphyschemtools.quantumChem_corner.pos2xxx:main"
+pos2xyz = "pyphyschemtools.quantumChem_corner.pos2xxx:main"
+pos2xxx = "pyphyschemtools.quantumChem_corner.pos2xxx:main"
+ReadIterVASP = "pyphyschemtools.quantumChem_corner.bash_scripts.ReadIterVASP:main"
+get_qc_examples = "pyphyschemtools.core:get_qc_examples"
 
+# Wrappers for bash and fortran binaries
+VASPcv = "pyphyschemtools.quantumChem_corner.wrappers:vasp_cv"
+RestartVASP = "pyphyschemtools.quantumChem_corner.wrappers:restart_vasp"
+cpG = "pyphyschemtools.quantumChem_corner.wrappers:cp_g"
+cpVASP = "pyphyschemtools.quantumChem_corner.wrappers:cp_vasp"
+cleanVASPf = "pyphyschemtools.quantumChem_corner.wrappers:clean_vasp"
+GParser = "pyphyschemtools.quantumChem_corner.wrappers:g_parser"
+hVASP = "pyphyschemtools.quantumChem_corner.wrappers:h_vasp"
+GP2bw = "pyphyschemtools.quantumChem_corner.wrappers:gp2bw"
+ManipCell = "pyphyschemtools.quantumChem_corner.wrappers:manip_cell"
+ThermoWithVASP = "pyphyschemtools.quantumChem_corner.wrappers:thermo_vasp"
+vibVASP = "pyphyschemtools.quantumChem_corner.wrappers:vib_vasp"
+sel4vibVASP = "pyphyschemtools.quantumChem_corner.wrappers:sel4vib_vasp"
+selectLOBSTER = "pyphyschemtools.quantumChem_corner.wrappers:select_lobster"

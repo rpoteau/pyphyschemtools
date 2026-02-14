@@ -180,3 +180,57 @@ def save_data(df, path_with_name: str, **kwargs):
         raise ValueError(f"Unsupported file extension: {ext}. Use .csv, .xlsx, or .xls")
     
     print(f"✅ Data saved to: {full_path}")
+
+# --------------------------------------------------------------
+import shutil
+import sys
+import argparse
+from pathlib import Path
+import pyphyschemtools
+
+def get_qc_examples(suite=None):
+    """
+    Copies QC examples archive to the current directory.
+    Supports terminal CLI (with help) and direct Python calls.
+    """
+    # 1. Handle CLI Arguments if called from terminal
+    if suite is None:
+        parser = argparse.ArgumentParser(
+            description="Copy Quantum Chemistry example archives to the current directory."
+        )
+        parser.add_argument(
+            "suite", 
+            help="Specify the suite to retrieve: 'VASP' or 'G16' (case-insensitive)",
+            type=str
+        )
+        # If no arguments are passed, show help and exit
+        if len(sys.argv) == 1:
+            parser.print_help()
+            return
+            
+        args = parser.parse_args()
+        suite = args.suite
+
+    # 2. Case-insensitivity logic
+    suite_upper = suite.upper()
+    if suite_upper not in ["VASP", "G16"]:
+        print(f"❌ Error: '{suite}' is not a valid suite. Please choose 'VASP' or 'G16'.")
+        return
+
+    # 3. Path Logic
+    pkg_root = Path(pyphyschemtools.__file__).parent
+    archive_name = f"tools4{suite_upper}-Examples.tar.bz2"
+    source = pkg_root / "data_examples" / "QCCorner" / archive_name
+    
+    if not source.exists():
+        print(f"❌ Error: Archive {archive_name} not found in the package installation.")
+        return
+
+    destination = Path.cwd() / archive_name
+    
+    try:
+        shutil.copy(source, destination)
+        print(f"✅ Success! {suite_upper} examples archive copied to: {destination}")
+        print(f"To extract, run: tar -xvjf {archive_name}")
+    except Exception as e:
+        print(f"❌ Failed to copy archive: {e}")

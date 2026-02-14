@@ -10,6 +10,11 @@ recursive-include docs *
 # Include all source code inside pyphyschemtools
 recursive-include pyphyschemtools *
 
+# SPECIFICALLY include the compiled Fortran binaries and Bash scripts
+# This ensures non-Python files are not stripped during the build process
+recursive-include pyphyschemtools/quantumChem_corner/bash_scripts *
+recursive-include pyphyschemtools/quantumChem_corner/bin *
+
 # Include example notebooks
 include *.ipynb
 

@@ -1,0 +1,306 @@
+#!/bin/bash
+COff='\033[0m'             # Text Reset
+# Regular Colors
+BlackC='\033[0;30m'        # Black
+RedC='\033[0;31m'          # Red
+GreenC='\033[0;32m'        # Green
+YellowC='\033[0;33m'       # Yellow
+BlueC='\033[0;34m'         # Blue
+PurpleC='\033[0;35m'       # Purple
+CyanC='\033[0;36m'         # Cyan
+WhiteC='\033[0;37m'        # White
+# Bold
+BBlackC='\033[1;30m'       # Black
+BRedC='\033[1;31m'         # Red
+BGreenC='\033[1;32m'       # Green
+BYellowC='\033[1;33m'      # Yellow
+BBlueC='\033[1;34m'        # Blue
+BPurpleC='\033[1;35m'      # Purple
+BCyanC='\033[1;36m'        # Cyan
+BWhiteC='\033[1;37m'       # White
+# Bold High Intensity
+BIBlackC='\033[1;90m'      # Black
+BIRedC='\033[1;91m'        # Red
+BIGreenC='\033[1;92m'      # Green
+BIYellowC='\033[1;93m'     # Yellow
+BIBlueC='\033[1;94m'       # Blue
+BIPurpleC='\033[1;95m'     # Purple
+BICyanC='\033[1;96m'       # Cyan
+BIWhiteC='\033[1;97m'      # White
+# Background
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
+echo "--------------------------------------------------------------------------------------------------"
+echo -e $BIWhiteC$On_Black"                  hVASP (aka harvest VASP results) v.20260213"$COff
+echo "--------------------------------------------------------------------------------------------------"
+echo
+echo "All CONTCAR files will recursively be saved in a VASP-ARK/CONTCARs folder"
+echo "CONTCAR.xyz will also be saved in an XYZ folder. Energies will also be written"
+echo "in the title or data_ sections"
+echo "Files will be named after the name of their parent folder"
+echo
+echo "Command: hVASP -flag 2ARK-FileName -F FolderName -A -O -LD -CIF -POS"
+echo "-flag: selective archive. Name of the 2ARK flag (default: empty 2ARK file in each folder to be archived)"
+echo "       Do not forget to create a 2ARK (default name) file in each subfolder you want to archive the coordinates" 
+echo "      (simply use the 'touch 2ARK' command in each target folder)"
+echo "      If not empty, the content of the 2ARK-FileName will be added to the xyz and cif titles"
+echo "-A: systematic recursive archiving, ie without considering the presence of a 2ARK file (default: false)"
+echo "    an empty XARK file present in a fdolder will eXclude it from the archive"
+echo "-F: name of the parent folder that contains subfolders that will be archived (default: current folder)"
+echo "-LD: name the CONTCAR and OUTCAR files after the name of the parent folder of the OUTCAR and CONTCAR files"
+echo "    default: false, i.e. Folder1/Folder2/OUTCAR will be saved as Folder1_Folder2_OUTCAR.gz"
+echo "    otherwise it will simply be saved as Folder2_OUTCAR.gz"
+echo "-O: save OUTCAR files as well (will be saved in an OUTCARs subfolder; default: false)"
+echo "-CIF: create a cif file from the CONTCAR and save it in a CIF folder (default: false)"
+echo "-POS: save the POSCAR file as well in a POSCARs folder (default: false)"
+echo
+echo "-h: print only this help and exit"
+echo
+echo "dependencies:"
+echo "	- pos2xyz"
+echo "	- pos2cif"
+echo 
+echo "--------------------------------------------------------------------------------------------------"
+subhVASP()
+{
+   Name=$1
+   #echo "---- " $Name
+   FullPath="${Name%/}" 
+   FullPath=`sed 's/ /_/g' <<< $FullPath`
+   FullPath=`sed 's/\//__/g' <<< $FullPath`
+   FullPath=`sed 's/\./_/g' <<< $FullPath`
+   FullPath=`sed 's/___//' <<< $FullPath`
+   #echo $FullPath
+   LastDir="${Name##*/}"
+   #echo $LastDir
+   if $NamedAfterFullPathway ; then
+      FileName=$FullPath
+   else
+      FileName=$LastDir
+   fi 
+
+   if (([ -f "$1/$flagFile2ARK" ] || [ $all = true ]) && [ ! -f "$1/$flagFileNot2ARK" ]); then
+      isitVASP_ARK=`echo "$1" | grep $VASP_ARK`
+      #echo "isitVASP_ARK" $isitVASP_ARK "1" $1 "flagFile2ARK" $flagFile2ARK
+      if [ -z $isitVASP_ARK ]; then
+         echo -e $BCyanC "Folder to Archive: $1"$COff
+         if [[ ! -f "$1/OUTCAR"  &&  ! -f "$1/OUTCAR.gz" ]]; then
+            echo "   - OUTCAR or OUTCAR.gz not found => the optimized energy cannot be copied in the title of the xyz file"
+            echo "                                      and the convergence of the geometry optimization cannot be checked"
+            AccShort=";NOT_cv;"
+         else
+            if [[ -f "$1/OUTCAR" ]]; then
+               gzippedO=false
+            else
+               gzippedO=true
+               gunzip "$1/OUTCAR.gz"
+            fi
+            if [ `grep -c 'required acc' "$1/OUTCAR"` -ge 1 ]; then
+                Acc=`echo -e "$GreenC Required accuracy reached $COff"`
+                AccShort=";cv;"
+            else
+                Acc=`echo -e "$RedC Required accuracy not reached... yet $COff"`
+                AccShort=";NOT_cv;"
+            fi
+            Esig=`grep 'energy  without entropy' "$1/OUTCAR" | tail -1 |tr -s " " | cut -d " " -f 8`
+            if $gzippedO ; then
+               echo -e "   - OUTCAR.gz found, E = " $Esig $Acc
+               gzip "$1/OUTCAR"
+               if $SaveOUTCARs ; then
+                  cp "$1/OUTCAR.gz" "$VASP_ARK/OUTCARs/"$FileName"_OUTCAR.gz"
+                  echo "   - OUTCAR.gz copied in the OUTCARs subfolder as "$FileName"_OUTCAR.gz"
+               fi
+            else
+               echo -e "   - OUTCAR found, E = " $Esig $Acc
+               if $SaveOUTCARs ; then
+                  cp "$1/OUTCAR" "$VASP_ARK/OUTCARs/"$FileName"_OUTCAR"
+                  gzip "$VASP_ARK/OUTCARs/"$FileName"_OUTCAR"
+                  echo "   - OUTCAR copied and gzipped in the OUTCARs subfolder as "$FileName"_OUTCAR.gz"
+               fi
+            fi
+         fi
+         if [[ ! -f "$1/CONTCAR.xyz" ]]; then
+            if [[ -f "$1/CONTCAR" ]]
+            then
+	       echo "   - $1/CONTCAR.xyz is being generated with pos2xyz"
+	       CONTCARxyz=`echo "$1/CONTCAR"`
+               CONTCARxyz=`sed 's/ /\\ /g' <<< $CONTCARxyz`
+               pos2xyz "`sed 's/ /[[:blank:]]/g' <<< $CONTCARxyz`"
+            else
+               echo -e $RedC"   - CONTCAR or CONTCAR.xyz files were not found in this folder"$COff
+            fi
+         fi
+         if $CIF ; then
+            if [[ ! -f "$1/CONTCAR.cif" ]]; then
+               if [[ -f "$1/CONTCAR" ]]; then
+                  pos2cif "$1/CONTCAR"
+               fi
+            fi
+         fi
+         if [[ -f "$1/CONTCAR.xyz" ]]; then
+            fcp="$VASP_ARK/XYZ/"$FileName"_CONTCAR.xyz"
+            cp "$1/CONTCAR.xyz" $fcp
+            #Title=`echo $1"; E = " $Esig $AccShort` 
+            #Title=`sed 's/\///' <<<$Title | sed 's/\.//'`
+            Title=`echo $FullPath"; E = " $Esig $AccShort` 
+            if [[ -s "$1/$flagFile2ARK" ]]; then
+               add2title=$(cat "$1/$flagFile2ARK")
+               echo "   '$add2title' added to the title of the xyz file"
+            else
+               add2title=''
+            fi
+            Title=$Title" "$add2title
+            sed -i "s/`head -2 $fcp | tail -1 `/$Title/" $fcp
+            echo "   - CONTCAR.xyz copied as $fcp, with title: "$Title
+         fi
+         if [ $POSCAR = true ] && [ -f "$1/POSCAR" ] ; then
+            fcp="$VASP_ARK/POSCARs/"$FileName"_POSCAR"
+            cp "$1/POSCAR" $fcp
+            echo "   - POSCAR copied as $fcp"
+	 fi
+         if [ $POSCAR = true ] && [ -f "$1/POSCAR.0" ] ; then
+            fcp="$VASP_ARK/POSCARs/"$FileName"_POSCAR0"
+            cp "$1/POSCAR.0" $fcp
+            echo "   - POSCAR.0 copied as $fcp"
+	 fi
+         if [ $CIF = true ] && [ -f "$1/CONTCAR.cif" ] ; then
+            fcp="$VASP_ARK/CIF/$FileName.cif"
+            cp "$1/CONTCAR.cif" $fcp
+            #tmp=`sed 's/\///' <<<$1 | sed 's/\.//'`
+            #tmp=`echo $tmp |tr -d " "`
+            tmp=$FullPath
+            Title=`echo $tmp";___E="$Esig$AccShort`
+            if [[ -s "$1/$flagFile2ARK" ]]
+            then
+               add2title=$(cat "$1/$flagFile2ARK")
+               echo "   '$add2title' added to the title of the cif file"
+               Title=$Title";___"$add2title
+               Title=`sed 's/ /_/g' <<< $Title`
+            else
+               add2title=''
+            fi
+            sed -i "s/data_.*/data_$Title/" $fcp
+            echo "   - CONTCAR.cif copied as $fcp, with data_:"$Title
+         fi
+      else
+	 echo "$1 skipped"
+      fi
+   else
+      echo -e $RedC"Folder NOT Archived:"$COff $1
+   fi
+}
+export -f subhVASP
+
+set_options(){
+    prev_option=""
+
+    for option in $options;
+    do
+        case $prev_option in
+            "-flag")
+	       flagFile2ARK="$option"
+            ;;
+
+            "-F")
+               Folder="$option"
+            ;;
+        esac
+	case $option in
+            "-h")
+               helpOnly=true
+            ;;
+
+            "-O")
+               SaveOUTCARs=true
+            ;;
+
+            "-LD")
+               NamedAfterFullPathway=false
+            ;;
+
+            "-CIF")
+               CIF=true
+            ;;
+
+            "-POS")
+               POSCAR=true
+            ;;
+
+            "-A")
+               all=true
+            ;;
+	esac
+        prev_option="$option"
+    done
+}
+export -f set_options
+
+#------------------------------------------------------------------------------------------
+flagFile2ARK='2ARK'
+flagFileNot2ARK='XARK' # as exclude
+Folder=''
+helpOnly=false
+SaveOUTCARs=false
+NamedAfterFullPathway=true
+CIF=false
+all=false
+POSCAR=false
+options="$@"
+
+set_options
+echo "Options: " $@
+
+if $helpOnly ; then
+   echo "(print help and exit)"
+   echo "--------------------------------------------------------------------------------------------------"
+   exit
+fi
+
+if [ -z $Folder ]
+then
+   echo "Searching in current folder"
+   Dir="."
+else
+   echo "Searching in $Folder folder"
+   Dir=$Folder
+fi
+echo "2ARK flag: "$flagFile2ARK
+echo "--------------------------------------------------------------------------------------------------"
+
+
+VASP_ARK="VASP-"$flagFile2ARK
+if [ ! -d $VASP_ARK ]
+then
+   mkdir $VASP_ARK
+   echo "Creating "$VASP_ARK" folder"
+else
+   echo -e $RedC $VASP_ARK "folder already exists. Deleting its content"$COff
+   echo -e $BlueC "New $VASP_ARK created"$COff 
+   rm -Rf $VASP_ARK/*
+fi
+if [ $SaveOUTCARs = true ] && [ ! -d $VASP_ARK/OUTCARs ]; then
+   mkdir $VASP_ARK/OUTCARs
+   echo -e $BlueC "Creating "$VASP_ARK/OUTCARs" subfolder"$COff
+fi
+if [ ! -d $VASP_ARK/XYZ ]; then
+   mkdir $VASP_ARK/XYZ
+   echo -e $BlueC "Creating "$VASP_ARK/XYZ" subfolder"$COff
+fi
+if [ $CIF = true ] && [ ! -d $VASP_ARK/CIF ]; then
+   mkdir $VASP_ARK/CIF
+   echo -e $BlueC "Creating "$VASP_ARK/CIF" subfolder"$COff
+fi
+if [ $POSCAR = true ] && [ ! -d $VASP_ARK/POSCARs ]; then
+   mkdir $VASP_ARK/POSCARs
+   echo -e $BlueC "Creating "$VASP_ARK/POSCARs" subfolder"$COff
+fi
+find $Dir -type d -print0 | while read -d '' -r DirT; do 
+   subhVASP "$DirT"
+done
+echo "--------------------------------------------------------------------------------------------------"

@@ -1,0 +1,144 @@
+#!/bin/bash
+COff='\033[0m'             # Text Reset
+# Regular Colors
+BlackC='\033[0;30m'        # Black
+RedC='\033[0;31m'          # Red
+GreenC='\033[0;32m'        # Green
+YellowC='\033[0;33m'       # Yellow
+BlueC='\033[0;34m'         # Blue
+PurpleC='\033[0;35m'       # Purple
+CyanC='\033[0;36m'         # Cyan
+WhiteC='\033[0;37m'        # White
+# Bold
+BBlackC='\033[1;30m'       # Black
+BRedC='\033[1;31m'         # Red
+BGreenC='\033[1;32m'       # Green
+BYellowC='\033[1;33m'      # Yellow
+BBlueC='\033[1;34m'        # Blue
+BPurpleC='\033[1;35m'      # Purple
+BCyanC='\033[1;36m'        # Cyan
+BWhiteC='\033[1;37m'       # White
+# Bold High Intensity
+BIBlackC='\033[1;90m'      # Black
+BIRedC='\033[1;91m'        # Red
+BIGreenC='\033[1;92m'      # Green
+BIYellowC='\033[1;93m'     # Yellow
+BIBlueC='\033[1;94m'       # Blue
+BIPurpleC='\033[1;95m'     # Purple
+BICyanC='\033[1;96m'       # Cyan
+BIWhiteC='\033[1;97m'      # White
+# Background
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
+echo -e $BIWhiteC$On_Black"cpVASP v.20240307"$COff
+#prefix0=${1##*/}
+#prefix1=${2##*/}
+dir0=`dirname -- "$1"`
+dir1=`dirname -- "$2"`
+folder0=`basename -- "$1"`
+folder1=`basename -- "$2"`
+currentDir=`pwd`
+#f0=`echo $1 | sed 's/\///'`
+#echo $f0
+#f1=`echo $2 | sed 's/\///'`
+#echo $f1
+#
+#echo "fdr0 ="$folder0
+#echo "fdr1 ="$folder1
+#echo "dir0 ="$dir0
+#echo "dir1 ="$dir1
+#echo "1=f0 ="$1
+#echo "currentDir ="$currentDir
+#
+f0=$1
+f1=$2
+#cd $dir1
+#echo -e $BIBlueC"now in $dir1"$Coff
+
+#echo -e $BlueC"copy from $f0 to $f1 (created in the $dir1 folder)"$COff
+echo -e $BlueC"copy from $f0 to $f1"$COff
+
+if [ ! -d $2 ]; then
+   mkdir $f1
+   if [ ! -d $f0/00 ]; then
+       if [ -z "$3" ]; then
+           cp $f0/POSCAR $f1/.
+           echo "copy of POSCAR POTCAR runjob KPOINTS & INCAR in "$f1
+       fi
+       if [ "$3" = "1" ]; then
+           cp $f0/CONTCAR $f1/POSCAR
+           echo "copy of CONTCAR(as POSCAR) POTCAR runjob KPOINTS & INCAR in "$f1
+       fi
+       cp $f0/POTCAR $f1/.
+       cp $f0/*.runjob $f1/.
+       cp $f0/KPOINTS $f1/.
+       cp $f0/INCAR $f1/.
+   else
+      echo "NEB calculation"
+      echo "copy of POTCAR runjob KPOINTS & INCAR in "$f1
+      cp $f0/POTCAR $f1/.
+      cp $f0/*.runjob $f1/.
+      cp $f0/KPOINTS $f1/.
+      cp $f0/INCAR $f1/.
+      for i in `seq 0 9`;
+      do
+      if [ -d $f0/0$i ]; then
+          mkdir $f1/0$i
+          if [ -z "$3" ]; then
+          echo "copy of $f0/0$i/POSCAR in "$f1/0$i
+          cp $f0/0$i/POSCAR $f1/0$i/.
+          fi
+          if [ "$3" = "1" ]; then
+          echo "copy of $f0/0$i/CONTCAR as POSCAR in "$f1/0$i
+          cp $f0/0$i/CONTCAR $f1/0$i/POSCAR
+          fi
+      fi
+      done
+      for i in `seq 10 30`;
+      do
+      if [ -d $f0/$i ]; then
+          mkdir $f1/$i
+          if [ -z "$3" ]; then
+          echo "copy of $f0/$i/POSCAR in "$f1/$i
+          cp $f0/$i/POSCAR $f1/$i/.
+          fi
+          if [ "$3" = "1" ]; then
+          echo "copy of $f0/$i/CONTCAR as POSCAR in "$f1/$i
+          cp $f0/$i/CONTCAR $f1/$i/POSCAR
+          fi
+      fi
+      done
+   fi
+   
+   if [ -f $f0/vdw_kernel.bindat ]; then
+      cp $f0/vdw_kernel.bindat $f1/.
+      echo "copy of vdw_kernel.bindat in "$f1
+   fi
+
+   JobName=`grep '#SBATCH -J' $f1/VASP.runjob |cut -d " " -f 3`
+   sed -i "s/$JobName/$folder1/" $f1/VASP.runjob
+   echo "copy of VASP.runjob in "$f1 "(jobname updated as $folder1)"
+
+   if [ -f $f0/LOBSTER.runjob ]; then
+      JobName=`grep '#SBATCH -J' $f1/LOBSTER.runjob |cut -d " " -f 3`
+      sed -i "s/$JobName/$folder1-L/" $f1/LOBSTER.runjob
+      if [ -f $f0/lobsterin ]; then
+         cp $f0/lobsterin $f1/.
+         echo "copy of LOBSTER.runjob & lobsterin in "$f1 "(jobname updated as $folder1-L)"
+      else
+         echo -e $RedC"Strange. There is a LOBSTER.runjob in $f0 but no lobsterin file. Are you sure?"$COff
+         echo -e "copy of$RedC only$COff LOBSTER.runjob in "$f1
+      fi
+   fi
+
+else
+
+   echo -e $RedC $f1 " folder already exists. Stopping"$COff
+
+fi

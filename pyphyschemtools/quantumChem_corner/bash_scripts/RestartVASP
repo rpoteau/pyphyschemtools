@@ -1,0 +1,262 @@
+#!/bin/bash
+COff='\033[0m'             # Text Reset
+# Regular Colors
+BlackC='\033[0;30m'        # Black
+RedC='\033[0;31m'          # Red
+GreenC='\033[0;32m'        # Green
+YellowC='\033[0;33m'       # Yellow
+BlueC='\033[0;34m'         # Blue
+PurpleC='\033[0;35m'       # Purple
+CyanC='\033[0;36m'         # Cyan
+WhiteC='\033[0;37m'        # White
+# Bold
+BBlackC='\033[1;30m'       # Black
+BRedC='\033[1;31m'         # Red
+BGreenC='\033[1;32m'       # Green
+BYellowC='\033[1;33m'      # Yellow
+BBlueC='\033[1;34m'        # Blue
+BPurpleC='\033[1;35m'      # Purple
+BCyanC='\033[1;36m'        # Cyan
+BWhiteC='\033[1;37m'       # White
+# Bold High Intensity
+BIBlackC='\033[1;90m'      # Black
+BIRedC='\033[1;91m'        # Red
+BIGreenC='\033[1;92m'      # Green
+BIYellowC='\033[1;93m'     # Yellow
+BIBlueC='\033[1;94m'       # Blue
+BIPurpleC='\033[1;95m'     # Purple
+BICyanC='\033[1;96m'       # Cyan
+BIWhiteC='\033[1;97m'      # White
+# Background
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
+
+tmpdir=/tmpdir/rpoteau
+
+help="NO"
+N=""
+M=""
+PC0=""
+PC1=""
+PC2=""
+PC3=""
+DIP=""
+
+version="20240130"
+
+options="$@"
+
+if [ -z "$options" ]; then
+   options="-h"
+fi
+
+set_options(){
+
+    for option in $options;
+    do
+        case $prev_option in
+            "-n")
+               N="$option"
+            ;;
+            "-DIP")
+               DIP="DIP"
+               M="$option"
+            ;;
+        esac
+        prev_option="$option"
+        case $option in
+            "-h")
+               help="YES"
+            ;;
+            "-PC0")
+               PC0="PC0"
+            ;;
+            "-PC1")
+               PC1="PC1"
+            ;;
+            "-PC2")
+               PC2="PC2"
+            ;;
+            "-PC3")
+               PC3="PC3"
+            ;;
+        esac
+    done
+}
+
+set_options
+
+#echo "Options:  $@"
+if [ $help == "YES" ]; then
+   echo 
+   echo -e $BlueC"Available options:"$COff
+   echo "Command: RestartVASP -n N -h"
+   echo "         -n N: copy of OUTCAR and CONTCAR files as CONTCAR.N and OUTCAR.N"
+   echo "               copy of POSCAR as POSCAR.0 if N=1 (saves the initial geometry)"
+   echo -e "         -PC0: sets EDIFFG = -0.05  & EDIFF = 1e-5 & SIGMA = 0.05 and KPOINTS 1 1 1;\n               DIPOL options removed, unless -DIP m is initialized"
+   echo -e "         -PC1: changes EDIFFG = -0.05 to EDIFFG=-0.02;\n               DIPOL options removed, unless -DIP m is initialized"
+   echo -e "         -PC2: changes EDIFFG = -0.05, EDFIFF = 1e-5 & SIGMA = 0.5 to EDIFFG = -0.02, EDIFF=1e-6 & SIGMA = 0.02;\n               DIPOL options removed, unless -DIP m is initialized"
+   echo -e "         -PC3: changes EDIFFG = -0.05, EDFIFF = 1e-5 & SIGMA = 0.05 to EDIFFG = -0.02, EDIFF=1e-6 & SIGMA = 0.02 and KPOINTS 1 1 1 to KPOINTS 3 3 1;\n               DIPOL options, if present in INCAR, are not removed"
+   echo "         -DIP m: introduces dipole options LDIPOL = T; IDIPOL = m (3 for slabs alog c / 4 for molecules)"
+   echo -e "         $RedC-PCn or -DIP options only change variables, without renaming POSCAR, OUTCAT and CONTCAR files$COff"
+   echo "         -h: prints this help section"
+   echo
+   exit
+else
+   echo "   => RestartVASP executed with: -n $N $PC1 $PC2 $PC3 $DIP $M"
+fi
+
+
+echo -e $BIWhiteC$On_Black"RestartVASP v.$version"$COff
+if [ "$PC0" == "PC0" ];
+then
+   touch PC0_activated
+   echo "EDIFF > 1e-5"
+   sed -i '/\bEDIFF\b/c EDIFF = 1e-5' INCAR
+   echo "EDIFFG > -0.05"
+   sed -i '/\bEDIFFG\b/c EDIFFG = -0.05' INCAR
+   echo "SIGMA > 0.05"
+   sed -i '/\bSIGMA\b/c ISMEAR = 0; SIGMA = 0.05' INCAR
+   echo "KPOINTS > 1 1 1"
+   sed -i "s/3 3 1/1 1 1/" KPOINTS
+   echo "DIPOL options removed"
+   sed -i -e "/Dipole/,+2d" INCAR
+   echo "----------------------------------"
+   echo -e $CyanC"Is the setup OK?"$COff
+   grep -w EDIFFG INCAR
+   grep -w EDIFF INCAR
+   grep -w SIGMA INCAR
+   grep -w LDIPOL INCAR
+   cat KPOINTS
+   N=""
+   M=""
+   exit 0 
+fi
+
+if [ "$PC1" == "PC1" ];
+then
+   touch PC1_activated
+fi
+if [ "$PC2" == "PC2" ];
+then
+   touch PC2_activated
+fi
+if [ "$PC3" == "PC3" ];
+then
+   touch PC3_activated
+fi
+if [ "$DIP" == "DIP" ];
+then
+   touch "DIP"$M"_activated"
+fi
+
+if [ -z "$M" ]; then
+   if [ ! -z "$DIP" ]; then
+         echo 'M variable (=IDIPOL correction) is not properly set. Please give a value >= 1 and <= 4 (-DIP M)'
+         exit
+   fi
+fi
+
+if [ -z "$N" ]; then
+      if [ -z "$PC0" ] && [ -z "$PC2" ] && [ -z "$PC3" ] && [ -z "$DIP" ]; then
+         echo 'N variable is not properly set. Please give a value >= 1 (-n N)'
+         exit
+      fi
+fi
+
+if [ ! -z "$N" ]; then
+      # test if a more recent OUTCAR is present in tmpdir
+      Project=${PWD##*/}
+      ProjectFull=$PWD
+      if [ ! -f ./OUTCAR ]; then
+         if [ ! -f $tmpdir/$Project/OUTCAR ]; then
+            echo "no OUTCAR file in $ProjectFull or in $tmpdir/$Project"
+            echo "exit"
+            exit
+         else
+            echo "no OUTCAR file in $ProjectFull, but one has been found in $tmpdir/$Project"
+            lastOUTCAR_HOME=`ls -t OUTCAR.*  2> /dev/null | head -n1`
+            if [ ! -z $lastOUTCAR_HOME ]; then
+               echo "now checking that it is more recent than the latest $lastOUTCAR_HOME file found in $HOME/$Project"
+               datelOH=`date +%s -r $lastOUTCAR_HOME`
+               dateOtmp=`date +%s -r $tmpdir/$Project/OUTCAR`
+               if [ "$dateOtmp" -gt "$datelOH" ]; then
+                  echo "OUTCAR in tmpdir is newer than $lastOUTCAR_HOME (in HOME dir)=> cp $tmpdir/$Project/OUTCAR $ProjectFull/OUTCAR"
+                  echo "                                                                cp $tmpdir/$Project/CONTCAR $ProjectFull/CONTCAR"
+                  cp $tmpdir/$Project/OUTCAR .
+                  cp $tmpdir/$Project/CONTCAR .
+               else
+                  echo "no OUTCAR in tmpdir newer than $lastOUTCAR_HOME (in HOME dir.)"
+                  echo "check your data. Exit"
+                  exit
+               fi
+            else
+               echo "no OUTCAR.x found in $ProjectFull either"
+               echo "assuming that it is the first run => cp $tmpdir/$Project/OUTCAR $ProjectFull/OUTCAR"
+               echo "                                     cp $tmpdir/$Project/CONTCAR $ProjectFull/CONTCAR"
+               cp $tmpdir/$Project/OUTCAR .
+               cp $tmpdir/$Project/CONTCAR .
+            fi
+         fi
+      fi
+      #######################"
+      if [ ! -f OUTCAR.$N -a ! -f OUTCAR.$N.gz ]; then
+         mv OUTCAR OUTCAR.$N; gzip OUTCAR.$N
+         mv CONTCAR CONTCAR.$N
+         if [ $N -eq 1 ]; then
+            rm -f POSCAR.0
+            mv POSCAR POSCAR.0
+            echo "POSCAR > POSCAR.0"
+         else
+            rm -f POSCAR
+         fi
+         cp -f CONTCAR.$N POSCAR
+         echo "CONTCAR > POSCAR"
+         echo "CONTCAR > CONTCAR.$N"
+         echo "OUTCAR > OUTCAR.$N.gz"
+      else
+         [[ -f OUTCAR.$N ]] && echo -e $RedC"OUTCAR.$N already exist. Play again."$COff
+         [[ -f OUTCAR.$N.gz ]] && echo -e $RedC"OUTCAR.$N.gz already exist. Play again."$COff
+         ls OUTCAR*
+      fi
+fi
+if [ "$PC1" == "PC1" ] || [ "$PC2" == "PC2" ] || [ "$PC3" == "PC3" ];
+then
+   echo "EDIFFG > -0.02"
+   sed -i '/\bEDIFFG\b/c EDIFFG = -0.02' INCAR
+fi
+if [ "$PC1" == "PC1" ] || [ "$PC2" == "PC2" ];
+then
+   echo "DIPOL options removed"
+   sed -i -e "/Dipole/,+2d" INCAR
+fi
+if [ "$PC2" == "PC2" ] || [ "$PC3" == "PC3" ];
+then
+   echo "EDIFF > 1e-6"
+   echo "SIGMA > 0.02"
+   sed -i "s/SIGMA = 0.05/SIGMA = 0.02/" INCAR
+   sed -i "s/EDIFF = 1e-5/EDIFF = 1e-6/" INCAR
+fi
+if [ "$PC3" == "PC3" ];
+then
+   echo "KPOINTS > 3 3 1"
+   sed -i "s/1 1 1/3 3 1/" KPOINTS
+fi
+if [ "$DIP" == "DIP" ];
+then
+   echo "DIPOL options, with IDIPOL = $M"
+   sed -i "/_ SCF/i #____ Dipole\nLDIPOL = T; IDIPOL = $M\n" INCAR
+fi
+echo "----------------------------------"
+echo -e $CyanC"Is the setup OK?"$COff
+grep -w EDIFFG INCAR
+grep -w EDIFF INCAR
+grep -w SIGMA INCAR
+grep -w LDIPOL INCAR
+cat KPOINTS

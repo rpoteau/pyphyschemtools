@@ -1,0 +1,200 @@
+#!/bin/bash
+COff='\033[0m'             # Text Reset
+# Regular Colors
+BlackC='\033[0;30m'        # Black
+RedC='\033[0;31m'          # Red
+GreenC='\033[0;32m'        # Green
+YellowC='\033[0;33m'       # Yellow
+BlueC='\033[0;34m'         # Blue
+PurpleC='\033[0;35m'       # Purple
+CyanC='\033[0;36m'         # Cyan
+WhiteC='\033[0;37m'        # White
+# Bold
+BBlackC='\033[1;30m'       # Black
+BRedC='\033[1;31m'         # Red
+BGreenC='\033[1;32m'       # Green
+BYellowC='\033[1;33m'      # Yellow
+BBlueC='\033[1;34m'        # Blue
+BPurpleC='\033[1;35m'      # Purple
+BCyanC='\033[1;36m'        # Cyan
+BWhiteC='\033[1;37m'       # White
+# Bold High Intensity
+BIBlackC='\033[1;90m'      # Black
+BIRedC='\033[1;91m'        # Red
+BIGreenC='\033[1;92m'      # Green
+BIYellowC='\033[1;93m'     # Yellow
+BIBlueC='\033[1;94m'       # Blue
+BIPurpleC='\033[1;95m'     # Purple
+BICyanC='\033[1;96m'       # Cyan
+BIWhiteC='\033[1;97m'      # White
+# Background
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
+#
+echo '------------------------------------------------------------------------------------------------------------'
+echo -e "$BIWhiteC$On_Black             VASPcv v.20240311 (enhanced with the ReadIterVASP.py tool, aka grad2.py of P. Larsson)         $COff"
+echo '------------------------------------------------------------------------------------------------------------'
+if [ ! -f $1 ]; then
+   echo "File $1 not found!"
+   echo "Exiting."
+   echo '------------------------------------------------------------------------------------------------------------'
+   exit
+fi
+if [ "${1: -3}" == ".gz" ]; then
+   echo "gunzipping $1"
+   gunzip -v $1
+   Gzipped=true
+   OUTCARf=${1::-3}
+else
+   Gzipped=false
+   OUTCARf="$1"
+fi
+NIONS=`grep NIONS $OUTCARf | tail -1 |cut -c 66-|sed -e 's/ //g'`
+IBRION=`grep "IBRION =" $OUTCARf | tail -1 |sed -e 's/  */ /g' |cut -d " " -f 4`
+POTIM=`grep -m 1 POTIM $OUTCARf | tail -1 |sed -e 's/  */ /g' |cut -d " " -f 4`
+EDIFFG=`grep EDIFFG $OUTCARf | tail -1 |sed -e 's/  */ /g' |cut -d " " -f 4`
+NFREE=`grep NFREE $OUTCARf | tail -1 |sed -e 's/  */ /g' |cut -d " " -f 4`
+EDIFF=`grep "EDIFF  =" $OUTCARf | tail -1 |tr -s " " |cut -d " " -f 4`
+ISMEAR=`grep "ISMEAR =" $OUTCARf | tail -1 |tr -s " " |cut -d " " -f 4 |sed -e 's/;//'`
+SIGMA=`grep "ISMEAR =" $OUTCARf | tail -1 |tr -s " " |cut -d " " -f 7`
+ISPIN=`grep "ISPIN  =" $OUTCARf | tail -1 | tr -s " " |cut -d " " -f 4`
+ENCUT=`grep "ENCUT  =" $OUTCARf | tail -1 | tr -s " " |cut -d " " -f 4`
+IDIPOL=`grep "IDIPOL =" $OUTCARf | tail -1 | tr -s " " | cut -d " " -f 4`
+if (( $IBRION == 5 || $IBRION == 6 )); then
+   DOF=`grep "Degrees of freedom DOF   =" $OUTCARf | tr -s " " | cut -d " " -f 7`
+   echo -e "$BlueC VIBRATIONAL CALCULATION (IBRION=$IBRION).$COff DOF: $DOF   ; NFREE: $NFREE   ; POTIM: $POTIM"
+   FEn=`grep -m 1 'free  energy' $OUTCARf |  tr -s " " |cut -d " " -f 6`
+   EwoS=`grep -m 1 'energy  without entropy' $OUTCARf | tr -s " " | cut -d " " -f 5`
+   Esig=`grep -m 1 'energy  without entropy' $OUTCARf | tr -s " " | cut -d " " -f 8`
+   echo " Reference Energy. Free En.: $FEn    En. wo. entropy: $EwoS   En.(sigma->0): $Esig"
+   echo '------------------------------------------------------------------------------------------------------------'
+fi
+nopt=`grep -c 'gy  w' $OUTCARf`
+echo $OUTCARf
+ReadIterVASP $OUTCARf
+echo '------------------------------------------------------------------------------------------------------------'
+ncycle=`grep -e '^--------------------------------------- I' $OUTCARf | tail -1 | tr -s ' ' | cut -d " " -f 4 |sed -e 's/)//'`
+echo " "$nopt" optimization steps"
+echo " Last E found after "$ncycle" cycles"
+FEn=`grep 'free  energy' $OUTCARf | tail -1 | tr -s " " |cut -d " " -f 6`
+EwoS=`grep 'energy  without entropy' $OUTCARf | tail -1 |tr -s " " | cut -d " " -f 5`
+Esig=`grep 'energy  without entropy' $OUTCARf | tail -1 |tr -s " " | cut -d " " -f 8`
+echo " Free En.: $FEn    En. wo. entropy: $EwoS         En.(sigma->0): $Esig"
+echo '---------------------------------------------------------------------------------------------------'
+if (( $IBRION >= 1 )) && (( $IBRION <= 2 )); then
+   ((nread=$NIONS+1))
+   grep -A$nread "TOTAL-FORCE" $OUTCARf |sed -e '/--/d' |tail -$nread > .VASPf1
+   ((i=0))
+   while read line; do
+      ((i=i+1))
+      if [[ $line == *TOTAL-FORCE* ]];
+      then
+         ((l1=i+1))
+         ((l2=$l1+$NIONS-1))
+         sed -n "$l1","$l2"p .VASPf1 |tr -s ' ' | cut -d " " -f 5,6,7 > .VASPf2
+         ((normT=0))
+         while read forces; do
+            fx=`echo $forces|cut -d " " -f 1`
+            fy=`echo $forces|cut -d " " -f 2`
+            fz=`echo $forces|cut -d " " -f 3`
+            normT=`echo "scale=0;$normT+sqrt($fx*$fx+$fy*$fy+$fz*$fz)"|bc -l`
+         done < .VASPf2
+         normT=`echo "scale=3;$normT/$NIONS"|bc -l`
+      fi
+   done < .VASPf1
+   rm -f .VASPf1 .VASPf2
+   echo " IBRION = " $IBRION " ;  POTIM = " $POTIM " ; NFREE = " $NFREE " ; EDIFFG = " $EDIFFG
+fi
+if [ `grep -c 'required acc' $OUTCARf` -ge 1 ]; then
+    Acc=`echo -e "$GreenC Required accuracy reached $COff"`
+    echo " Final Avg|F|" $normT $Acc
+   echo '---------------------------------------------------------------------------------------------------'
+else
+   if (( $IBRION >= 1 )) && (( $IBRION <= 2)); then
+      Acc=`echo -e "$RedC Required accuracy not reached... yet $COff"`
+      echo " Current Avg|F|" $normT $Acc
+      echo '---------------------------------------------------------------------------------------------------'
+   fi
+fi
+echo -e " $BlueC SCF Process.$COff   EDIFF: $EDIFF    ; ISMEAR: $ISMEAR    ; SIGMA: $SIGMA   ; ISPIN: $ISPIN   ; ENCUT : $ENCUT eV"
+if (( $IDIPOL >=1 )); then
+   echo -e $CyanC"                 Dipolar corrections: IDIPOL: $IDIPOL"$COff
+fi
+echo '---------------------------------------------------------------------------------------------------'
+grep 'number of electron ' $OUTCARf |tail -n 1
+echo '---------------------------------------------------------------------------------------------------'
+grep 'GGA type' $OUTCARf
+grep 'LHFCALC =     T' $OUTCARf
+if [ `grep -c 'HFSCREEN=' $OUTCARf` -ge 1 ]; then
+    hfs=`grep HFSCREEN= $OUTCARf |sed -e 's/^[ \t]*//g' |cut -d " " -f 5`
+    echo "  HFSCREEN = "$hfs" (HSE functionals)" 
+fi
+grep 'IVDW' $OUTCARf
+if [ `grep -c ' LDA+U is selected' $OUTCARf` -ge 1 ]; then
+    echo '-- DFT+U calculation ----------'
+    grep 'angular momentum for each species LDAUL =' $OUTCARf
+    grep 'U (eV)           for each species LDAUU =' $OUTCARf
+    grep 'J (eV)           for each species LDAUJ =' $OUTCARf
+fi
+echo '---------------------------------------------------------------------------------------------------'
+if [ `grep -c 'LSOL    =     T' $OUTCARf` -ge 1 ]; then
+   echo '-- Solvent --------------------'
+   grep 'EB_K' $OUTCARf
+   grep 'SIGMA_K' $OUTCARf
+   grep 'NC_K' $OUTCARf
+   grep 'TAU' $OUTCARf
+   grep 'LAMBDA_D_K' $OUTCARf
+   echo '---------------------------------------------------------------------------------------------------'
+fi
+dir=`dirname $OUTCARf`
+cat $dir/KPOINTS
+echo '---------------------------------------------------------------------------------------------------'
+if [ `grep -c 'LCHIMAG   =     T' $OUTCARf` -ge 1 ]; then
+   if [ `grep -c 'LLRAUG    =     T' $OUTCARf` -ge 1 ]; then
+      LLRAUG="T"
+   else
+      LLRAUG="F"
+   fi
+   echo "NMR calculation for all "$NIONS" atoms.   LLRAUG: "$LLRAUG
+   grep -A$NIONS "(absolute, valence and core)" $OUTCARf |tail -$NIONS |tr -s ' ' |cut -d " " -f 2,6,7 | column -t
+   echo '---------------------------------------------------------------------------------------------------'
+fi
+if [ `grep -c 'Elapsed time (sec):' $OUTCARf` -ge 1 ]; then
+   grep 'Elapsed time (sec):' $OUTCARf | sed -e 's/^[ \t]*//'
+   nscf=`grep -c 'gy w' $OUTCARf`
+   nopt=`grep -c 'gy  w' $OUTCARf`
+   ncore=`grep 'total core' $OUTCARf |cut -c 12-| sed -e 's/^[ \t]*//g' |cut -d " " -f 1`
+   et=`grep 'Elapsed time (sec):' $OUTCARf |cut -c 45- | sed -e 's/^[ \t]*//g'`
+   CPUt=`echo "scale=0;$ncore*$et/3600" |bc`
+   echo
+   echo "      -------------------------------------------------------------"
+   echo "      Total CPU cost of the calculation: " $CPUt "h   (ncores: " $ncore " )"
+   echo "      -------------------------------------------------------------"
+   echo
+   echo "  "$nscf" SCF iterations    &  "$nopt" optimization steps" 
+   et1=`echo "scale=0;$et/$nscf" |bc`
+   et2=`echo "scale=0;$et/$nopt" |bc`
+   echo "  "$et1" sec user time/SCF iteration   &  "$et2" sec user time/optimization step"
+   et1=`echo "scale=2;$et/3600/$nscf" |bc`
+   et2=`echo "scale=1;$et/3600/$nopt" |bc`
+   echo "  "$et1 " h user time/SCF iteration   &  "$et2" h user time/optimization step"
+   echo
+   et1=`echo "scale=1;$ncore*$et/$nscf" |bc`
+   et2=`echo "scale=1;$ncore*$et/$nopt" |bc`
+   echo "  "$et1" CPU s/SCF iteration   &  "$et2" CPU s/optimization step"
+   et1=`echo "scale=1;$ncore*$et/3600/$nscf" |bc`
+   et2=`echo "scale=1;$ncore*$et/3600/$nopt" |bc`
+   echo "  "$et1 "CPU h/SCF iteration   &  "$et2" CPU h/optimization step"
+   echo '---------------------------------------------------------------------------------------------------'
+fi
+if $Gzipped ; then
+   echo "gzipping back $OUTCARf"
+   gzip -v $OUTCARf
+   echo '---------------------------------------------------------------------------------------------------'
+fi

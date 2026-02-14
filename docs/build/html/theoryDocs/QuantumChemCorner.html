@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantum Chemistry Corner &mdash; pyphyschemtools 0.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/visualID.css?v=3107c110" />
+
+  
+    <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/QuantumChemCorner.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyphyschemtools" href="../modules.html" />
+    <link rel="prev" title="Miscellaneous tools" href="Misc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyphyschemtools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">📚 Docs and Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Cheminformatics.html">Cheminformatics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Kinetics.html">Chemical Kinetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PeriodicTable.html">Periodic Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Units.html">Fundamental Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Misc.html">Miscellaneous tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🚀 Interactive Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb">Examples (Google Colab)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">⚛️ Quantum Chemistry Corner</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quantum Chemistry Corner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#brief-introduction-dependencies-and-examples">🚀 Brief introduction, dependencies and examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tools-for-vasp">⚛️ Tools for VASP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#citation">📖 Citation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vaspcv-bash-python">✅ <strong>VASPcv</strong> (bash &amp; python)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpvasp-bash">✅ <strong>cpVASP</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restartvasp-bash">✅ <strong>RestartVASP</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cleanvaspf-bash-python">✅ <strong>cleanVASPf</strong> (bash &amp; python)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manipcell-fortran-binary">✅ <strong>ManipCell</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sel4vibvasp-fortran-binary">✅ <strong>sel4vibVASP</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vibvasp-fortran-binary">✅ <strong>vibVASP</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermowithvasp-fortran-binary">✅ <strong>ThermoWithVASP</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#selectlobster-fortran-binary">✅ <strong>selectLOBSTER</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hvasp-bash">✅ <strong>hVASP</strong> (bash)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tools-for-gaussian">⚛️ Tools for Gaussian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gparser-bash">✅ <strong>GParser</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpg-bash">✅ <strong>cpG</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gscan-analyzis-python">✅ <strong>GScan_Analyzis</strong> (python)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-contribute">🤝 How to contribute?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#technical-requirements">📋 Technical Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation-requirements">📖 Documentation Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integration-procedure">🚀 Integration Procedure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-the-wrapper-approach">💡 Why the “Wrapper” approach?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ API Reference (Technical)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">pyphyschemtools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyphyschemtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quantum Chemistry Corner</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theoryDocs/QuantumChemCorner.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="quantum-chemistry-corner">
+<h1>Quantum Chemistry Corner<a class="headerlink" href="#quantum-chemistry-corner" title="Link to this heading"></a></h1>
+<section id="brief-introduction-dependencies-and-examples">
+<h2>🚀 Brief introduction, dependencies and examples<a class="headerlink" href="#brief-introduction-dependencies-and-examples" title="Link to this heading"></a></h2>
+<p>A collection of specialized tools for <strong>VASP</strong> and <strong>Gaussian</strong> post-processing and job management are also provided with the <code class="docutils literal notranslate"><span class="pre">pyphyschemtools</span></code> library.</p>
+<blockquote>
+<div><p>[!IMPORTANT]
+Except for a few Python utilities (<code class="docutils literal notranslate"><span class="pre">pos2cif</span></code>, <code class="docutils literal notranslate"><span class="pre">pos2xyz</span></code>, <code class="docutils literal notranslate"><span class="pre">cif2pos</span></code>), these tools are designed for <strong>Unix-based systems</strong> and have been primarily tested on openSUSE.</p>
+</div></blockquote>
+<p><strong>Dependencies:</strong></p>
+<ul class="simple">
+<li><p>python 3.8+</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">ase</span></code> (for the VASP tools) and <code class="docutils literal notranslate"><span class="pre">cclib</span></code> (for the Gaussian tools) python libraries</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bash</span></code></p></li>
+<li><p>linux fortran library</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">bc</span></code> unix calculator</p></li>
+</ul>
+<p><strong>Examples</strong></p>
+<p>To help you get started, several reference datasets (including <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code>, and <code class="docutils literal notranslate"><span class="pre">Gaussian</span></code> .log files) are included in the package distribution. Rather than cluttering your workspace, these are stored as compressed archives.</p>
+<p>You can retrieve these examples using the built-in <code class="docutils literal notranslate"><span class="pre">get_qc_examples</span></code> CLI utility:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># To get VASP and LOBSTER examples:</span>
+get_qc_examples<span class="w"> </span>VASP
+
+<span class="c1"># To get Gaussian 16 examples:</span>
+get_qc_examples<span class="w"> </span>G16
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="tools-for-vasp">
+<h2>⚛️ Tools for VASP<a class="headerlink" href="#tools-for-vasp" title="Link to this heading"></a></h2>
+<section id="citation">
+<h3>📖 Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h3>
+<p>Some of these tools are mentioned in:</p>
+<blockquote>
+<div><p>L. Cusinato, I. del Rosal, R. Poteau (<strong>2017</strong>). Shape, electronic structure and steric effects of organometallic nanocatalysts: relevant tools to improve the synergy between theory and experiments. <em>Dalton Trans.</em> <strong>46</strong>: 378-395. <a class="reference external" href="https://dx.doi.org/10.1039/C6DT04207D">DOI: 10.1039/C6DT04207D</a></p>
+</div></blockquote>
+</section>
+<section id="vaspcv-bash-python">
+<h3>✅ <strong>VASPcv</strong> (bash &amp; python)<a class="headerlink" href="#vaspcv-bash-python" title="Link to this heading"></a></h3>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code> files and quickly prints an overview of VASP output. Uses the <code class="docutils literal notranslate"><span class="pre">grad2.py</span></code> tool of Peter Larsson.</p>
+<ul>
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">VASPCV OUTCAR_file[.gz]</span></p>
+<p>Automatically gunzips <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code> files, prints the overview, and gzips it at the end of the process</p>
+</li>
+<li><p><strong>Current version:</strong> 20240311</p></li>
+</ul>
+</section>
+<section id="cpvasp-bash">
+<h3>✅ <strong>cpVASP</strong> (bash)<a class="headerlink" href="#cpvasp-bash" title="Link to this heading"></a></h3>
+<p>Copies the necessary input files (<code class="docutils literal notranslate"><span class="pre">INCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">POTCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">KPOINTS</span></code>, <code class="docutils literal notranslate"><span class="pre">VASP.runjob</span></code>) of a VASP folder into a new one.</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">cpVASP SOURCE_FOLDER DESTINATION_FOLDER <em>n</em></span></p></li>
+<li><p><strong>Note:</strong> The destination folder is created automatically and the job name in the runjob is updated (<em>edit the script to rename VASP.runjob to your own runjob command</em>)</p></li>
+<li><p><strong>Option <em>n</em> (optional, default: 0):</strong></p>
+<ul>
+<li><p>0: Copy <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code> of the source as <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code> in the destination.</p></li>
+<li><p>1: Copy <code class="docutils literal notranslate"><span class="pre">CONTCAR</span></code> of the source as <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code> in the destination.</p></li>
+</ul>
+</li>
+<li><p><strong>Current version</strong>: 20240307</p></li>
+</ul>
+</section>
+<section id="restartvasp-bash">
+<h3>✅ <strong>RestartVASP</strong> (bash)<a class="headerlink" href="#restartvasp-bash" title="Link to this heading"></a></h3>
+<p>Run it from a job folder that has abruptly stopped (time limit, number of optimization steps exceeded etc.). Makes an incremental copy of the <code class="docutils literal notranslate"><span class="pre">CONTCAR</span></code> and <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code> files.</p>
+<p>The tool also includes logic to check for the presence of <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code> and <code class="docutils literal notranslate"><span class="pre">CONTCAR</span></code> files within a temporary working directory. This is controlled by the <code class="docutils literal notranslate"><span class="pre">tmpdir</span></code> variable at the start of the script - <span style="color:red; font-family:monospace; font-weight:bold;">don’t forget to change it</span>.
+<strong>Why this is useful</strong>: On many HPC (High Performance Computing) clusters, calculations run on a local “scratch” or “tmp” disk for better performance. If a job crashes or times out, the files might remain in that temporary location. This update allows RestartVASP to “rescue” those files even if they haven’t been moved back to your home/main directory yet. <strong>If left empty or undefined</strong>, <code class="docutils literal notranslate"><span class="pre">RestartVASP</span></code> defaults to standard behavior, processing files only within the local directory.</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">RestartVASP n</span> (where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the restart index)</p></li>
+<li><p><strong>n=1:</strong> Copies <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code> as <code class="docutils literal notranslate"><span class="pre">POSCAR.0</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTCAR.1</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTCAR.1</span></code>. <code class="docutils literal notranslate"><span class="pre">CONTCAR.1</span></code> becomes the new <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code>.</p></li>
+<li><p><strong>n &lt;&gt; 1:</strong> Copies <code class="docutils literal notranslate"><span class="pre">CONTCAR</span></code> as <code class="docutils literal notranslate"><span class="pre">CONTCAR.n</span></code> and the new <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code>. <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code> is saved as <code class="docutils literal notranslate"><span class="pre">OUTCAR.n</span></code>.</p></li>
+<li><p><strong>Current version</strong>: 20240130</p></li>
+</ul>
+</section>
+<section id="cleanvaspf-bash-python">
+<h3>✅ <strong>cleanVASPf</strong> (bash &amp; python)<a class="headerlink" href="#cleanvaspf-bash-python" title="Link to this heading"></a></h3>
+<p>Run it from a job folder you intend to archive. Keeps only essential files (<code class="docutils literal notranslate"><span class="pre">INCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">KPOINTS</span></code>, <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code>, <code class="docutils literal notranslate"><span class="pre">POSCAR.0</span></code>) and creates <code class="docutils literal notranslate"><span class="pre">.xyz</span></code> and <code class="docutils literal notranslate"><span class="pre">.cif</span></code> versions of the coordinates files. Gzips <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code>, and also handles a previously gzipped <code class="docutils literal notranslate"><span class="pre">OUTCAR.gz</span></code> present in the folder.</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">cleanVASPf</span></p></li>
+<li><p><strong>Tip (Recursive gzip):</strong> <span style="color:red; font-family:monospace; font-weight:bold;">find . -type f -name OUTCAR -exec gzip {} ;</span></p></li>
+<li><p><strong>Current version</strong>: 20211115</p></li>
+</ul>
+</section>
+<section id="manipcell-fortran-binary">
+<h3>✅ <strong>ManipCell</strong> (fortran binary)<a class="headerlink" href="#manipcell-fortran-binary" title="Link to this heading"></a></h3>
+<p>Rotation around z/c and size adjustment of any unit cell with c orthogonal to a and b.</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">ManipCell -POS POSCAR_file [Options]`</span>, where options are <span style="color:darkcyan; font-family:monospace; font-weight:bold;">-a angle -fa value -fb value -fc value -S value -sha value -shb value -shc value -c c_new -T value -OC a_new b_new c_new -GA</span></p></li>
+<li><p><strong>Returns:</strong> new <code class="docutils literal notranslate"><span class="pre">POSCAR_file_MC</span></code> and <code class="docutils literal notranslate"><span class="pre">POSCAR_file_MC.cif</span></code> files</p></li>
+<li><p><strong>Options:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-a</span> <span class="pre">float</span></code>: rotation angle /c (degree, default: 0.0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-fa</span> <span class="pre">float,</span> <span class="pre">-fb</span> <span class="pre">float,</span> <span class="pre">-fc</span> <span class="pre">float</span></code>: size of the target unitcell (in units of a, b and c, default: 1.0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-S</span> <span class="pre">float</span></code>: scale all a,b final positions by S factor (should be close to 1.00, default: 1.0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-sha</span> <span class="pre">float</span></code>: shift atoms along a axis by sha factor (in reduced units, default: 0.0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-shb</span> <span class="pre">float</span></code>: shift atoms along b axis by shb factor (in reduced units, default: 0.0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-shc</span> <span class="pre">float</span></code>: shift atoms along c axis by shc factor (in reduced units, default: 0.0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">float</span></code>: change c to the new value (given in Å; all previous operations are done w.r.t. the initial a,b,c basis).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-T</span> <span class="pre">float</span></code>: threshold to remove atoms that lie outside the unitcell (try to lower it to 1e-10 to check the accuracy of your data, default: 0.02)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-OC</span> <span class="pre">a(float)</span> <span class="pre">b(float)</span> <span class="pre">c(float)</span></code>: change size of an orthorombic unitcell to a_new &amp; b_new &amp; c_new (whilst -c involves only the c parameter).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-GA</span></code>: topological analysis based on Graph Theory. Returns the number of molecules in a unitcell and the atom indexes/molecule (please provide a <code class="docutils literal notranslate"><span class="pre">radii.dat</span></code> file. One line per atom type. Same order as in the CONTCAR file. Radii in pm).</p></li>
+</ul>
+</li>
+<li><p><strong>Current version</strong>: 20241102</p></li>
+</ul>
+</section>
+<section id="sel4vibvasp-fortran-binary">
+<h3>✅ <strong>sel4vibVASP</strong> (fortran binary)<a class="headerlink" href="#sel4vibvasp-fortran-binary" title="Link to this heading"></a></h3>
+<p>Set up of an harmonic frequencies and modes calculation (selective dynamics).  Recommended INCAR file options: <code class="docutils literal notranslate"><span class="pre">IBRION</span> <span class="pre">=</span> <span class="pre">5;</span> <span class="pre">NFREE</span> <span class="pre">=</span> <span class="pre">2;</span> <span class="pre">NSW</span> <span class="pre">=</span> <span class="pre">1;</span> <span class="pre">POTIM=0.0005;</span> <span class="pre">ediff=1.e-7</span></code>.</p>
+<ul>
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">sel4vibVASP -POS POSCAR_file -V SELECTCAR_file</span></p>
+<p>Selects the atoms to consider in a <code class="docutils literal notranslate"><span class="pre">SELECTCAR</span> <span class="pre">file</span></code>: one line per atom. Each line is made of two values: a central atom (integer number) followed by the radius (float number) to select atoms within this radius.</p>
+</li>
+<li><p><strong>Returns:</strong> a <code class="docutils literal notranslate"><span class="pre">POSCAR_filev</span></code> file.</p></li>
+<li><p><strong>Current version</strong>: 20190407</p></li>
+</ul>
+</section>
+<section id="vibvasp-fortran-binary">
+<h3>✅ <strong>vibVASP</strong> (fortran binary)<a class="headerlink" href="#vibvasp-fortran-binary" title="Link to this heading"></a></h3>
+<p>Returns all calculated modes as a single <code class="docutils literal notranslate"><span class="pre">modes.xyz</span></code> file (xyzvib format), whilst vibrational frequencies (in cm-1) are saved in a <code class="docutils literal notranslate"><span class="pre">freq.dat</span></code> file.</p>
+<ul>
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">vibVASP -POS POSCAR_file -O OUTCAR_file [-m int float]</span></p>
+<p>(warning: creates a temporary <code class="docutils literal notranslate"><span class="pre">MODES</span></code> folder, deleted at the end of the command)</p>
+</li>
+<li><p><strong>Option [-m]:</strong> for transition states (TS), can be interesting to do a very basic reaction path following. In this case select the imaginary normal mode #k, and change the coordinates with a small amplitude, e.g. ±0.5 (<code class="docutils literal notranslate"><span class="pre">vibVASP</span> <span class="pre">-m</span> <span class="pre">1</span> <span class="pre">0.5</span> <span class="pre">or</span> <span class="pre">vibVASP</span> <span class="pre">-m</span> <span class="pre">1</span> <span class="pre">-0.5</span></code>).</p></li>
+<li><p><strong>Current version</strong>: 20190407</p></li>
+</ul>
+</section>
+<section id="thermowithvasp-fortran-binary">
+<h3>✅ <strong>ThermoWithVASP</strong> (fortran binary)<a class="headerlink" href="#thermowithvasp-fortran-binary" title="Link to this heading"></a></h3>
+<p>Computes thermochemical values after a normal modes calculation with VASP (same equations as used in the Gaussian software).</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">ThermoWithVASP [Options]</span></p></li>
+<li><p><strong>Options:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-T</span> <span class="pre">value</span></code>: temperature (default: 298.15K)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-P</span> <span class="pre">value</span></code>: pressure (default: 1atm)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">file</span></code>: name of the frequencies file (default: freq.dat)</p>
+<ul>
+<li><p>1 freq/line (in cm-1). Lines that start with ‘!’ won’t be considered</p></li>
+<li><p>VASP format: <code class="docutils literal notranslate"><span class="pre">frequency</span> <span class="pre">value</span>&#160; <span class="pre">'cm^{-1}'</span>&#160;&#160; <span class="pre">'...'</span>&#160; <span class="pre">extremum</span> <span class="pre">index</span></code></p></li>
+<li><p>you can write as many informations as you want after each extremum index value (such as the description of the mode nu_CO etc…)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-C</span> <span class="pre">file</span></code>: name of the coordinates file (default: CONTCAR.xyz)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-O</span> <span class="pre">file</span></code>: name of the OUTCAR file (default: OUTCAR)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">T/F</span></code>: contribution from translation        (default: F(alse))</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">T/F</span></code>: contribution from rotation           (default: F(alse))</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">T/F</span></code>: contribution from electronic motion  (default: F(alse))</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span> <span class="pre">T/F</span></code>: contribution from vibrational motion (default: T(rue))</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-S</span> <span class="pre">value</span></code>: rotational symmetry number (default: 1.0)</p>
+<ul>
+<li><p>(C1, Ci, Cs, Cinfv: 1  )</p></li>
+<li><p>(     Cn, Cnv, Cnh: n  )</p></li>
+<li><p>(            Dinfh: 2  )</p></li>
+<li><p>(     Dn, Dnh, Dnd: 2n )</p></li>
+<li><p>(            T, Td: 12 )</p></li>
+<li><p>(               Sn: n/2)</p></li>
+<li><p>(               Oh: 24 )</p></li>
+<li><p>(               Ih: 60 )</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Current version</strong>: 2021202411312</p></li>
+</ul>
+</section>
+<section id="selectlobster-fortran-binary">
+<h3>✅ <strong>selectLOBSTER</strong> (fortran binary)<a class="headerlink" href="#selectlobster-fortran-binary" title="Link to this heading"></a></h3>
+<p>Reads LOBSTER files and helps selecting relevant data to create COHP, COOP and DOS diagrams under the xmgrace format.</p>
+<p>LOBSTER does crystal orbital Hamilton population (COHP) analysis. A COHP diagram indicates bonding and antibonding contributions to the band-structure energy, and it is usually plotted alongside the DOS. Regarding VASP, the added-value is the projection of the PW wavefunction into a local slater-type orbital basis set.</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">selectLOBSTER -F input_file</span></p></li>
+<li><p><strong>Requires:</strong></p>
+<ul>
+<li><p>files provided by LOBSTER: <code class="docutils literal notranslate"><span class="pre">ICOOPLIST.lobster</span></code>, <code class="docutils literal notranslate"><span class="pre">ICOHPLIST.lobster</span></code>, <code class="docutils literal notranslate"><span class="pre">COOPCAR.lobster</span></code>, <code class="docutils literal notranslate"><span class="pre">COHPCAR.lobster</span></code>, <code class="docutils literal notranslate"><span class="pre">DOSCAR.LOBSTER</span></code>, and <code class="docutils literal notranslate"><span class="pre">CONTCAR.xyz</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">COBTCAR.</span> <span class="pre">xyz</span></code></p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">CoreSurfaceAtoms.dat</span></code> file is needed if the keywords core or surface are used in the selectLOBSTER.in input file</p></li>
+</ul>
+</li>
+<li><p><strong>Current version</strong>: 20250121</p></li>
+</ul>
+</section>
+<section id="hvasp-bash">
+<h3>✅ <strong>hVASP</strong> (bash)<a class="headerlink" href="#hvasp-bash" title="Link to this heading"></a></h3>
+<p>Useful to create archives for SI or for data management. All subfolders of the input folder will recursively be saved in a <code class="docutils literal notranslate"><span class="pre">VASP-ARK</span></code> folder, after transformation into xyz and cif files. xyz and cif files will be named after the name of the parent VASP folder. Energies will also be written in the title (xyz) or data_ (cif) sections.</p>
+<ul>
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">hVASP -F FolderName</span></p></li>
+<li><p><strong>Options:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-flag</span> <span class="pre">2ARK-FileName</span></code>: name of the 2ARK flag (default: empty <code class="docutils literal notranslate"><span class="pre">2ARK</span></code> file in each folder to be archived; do not forget to create it in each subfolder you want to archive the coordinates, by simply running the <code class="docutils literal notranslate"><span class="pre">touch</span> <span class="pre">2ARK</span></code> bash command in each target folder).</p>
+<p>If not empty, the content of the <code class="docutils literal notranslate"><span class="pre">2ARK-FileName</span></code> will be added to the xyz and cif titles</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-A</span></code>: systematic recursive archiving, ie without considering the presence of a 2ARK file (default: false)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">name</span></code>: name of the parent folder that contains subfolders that will be archived (default: current folder)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-LD</span> <span class="pre">boolean</span> <span class="pre">value</span></code> : if true, rename the <code class="docutils literal notranslate"><span class="pre">CONTCAR</span></code> and <code class="docutils literal notranslate"><span class="pre">OUTCAR</span></code> files after the name of <em>all</em> their parent folders</p>
+<p><em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">Folder1/Folder2/OUTCAR</span></code> will be saved as <code class="docutils literal notranslate"><span class="pre">Folder1_Folder2_OUTCAR.gz</span></code> if true, otherwise it will simply be saved as <code class="docutils literal notranslate"><span class="pre">Folder2_OUTCAR.gz</span></code> (default: false)</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-O</span></code>: save OUTCAR files as well (will be saved in an <code class="docutils literal notranslate"><span class="pre">OUTCARs</span></code> subfolder; default: false)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-CIF</span></code>: create a cif file from the <code class="docutils literal notranslate"><span class="pre">CONTCAR</span></code> and save it in a <code class="docutils literal notranslate"><span class="pre">CIF</span></code> folder (default: false)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-POS</span></code>: save the <code class="docutils literal notranslate"><span class="pre">POSCAR</span></code> file as well in a <code class="docutils literal notranslate"><span class="pre">POSCARs</span></code> folder (default: false)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code>: print only this help and exit</p></li>
+</ul>
+</li>
+<li><p><strong>Current version</strong>: 20260213</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="tools-for-gaussian">
+<h2>⚛️ Tools for Gaussian<a class="headerlink" href="#tools-for-gaussian" title="Link to this heading"></a></h2>
+<section id="gparser-bash">
+<h3>✅ <strong>GParser</strong> (bash)<a class="headerlink" href="#gparser-bash" title="Link to this heading"></a></h3>
+<p>Reads Gaussian log files and quickly prints an overview of its content.</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">GParser -f log_file [Options]</span></p></li>
+<li><p><strong>General command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">GParser -f file.log -s float_number -srH float_number -srC float_number -srN float_number -srO float_number” -nbo atom_number -t float_number -pf -S -atd</span></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">file</span></code>: name of the log file (default: default.log)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">float</span></code>: scaling factor for frequencies (default: 1.0). not yet operational</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-srH</span> <span class="pre">float</span></code>: reference chemical shielding value for 1H (usually TMS. Default:  31.76)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-srC</span> <span class="pre">float</span></code>: reference chemical shielding value for 13C (usually TMS. Default: 191.81)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-srN</span> <span class="pre">float</span></code>: reference chemical shielding value for 15N (usually liquid ammonia. Default: 242.8)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-srO</span> <span class="pre">float</span></code>: reference chemical shielding value for 17O (usually liquid water. Default: 280.2)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-nbo</span> <span class="pre">integer</span></code>: print all Second Order PTA that involve atom_number. Default: 0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">float</span></code>: threshold to print only NBO interactions &gt; float_number (Default:0.0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-pf</span></code>: prints all vibration frequencies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-S</span></code>: save freq/NPA/TDDFT/NMR/last_xyz data, if available, in the log file (Default = false)
+the energy is save in the title section, as well as ZPE, H° and G° if a frequency calculation is available in the same file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-atd</span></code>: save all tddft calculations, if available, in the log file (series of TDDFT calc. in a single run, for example after a MD simulation. Default = false). Sets -S flag</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code>: print this help section</p></li>
+</ul>
+</li>
+<li><p><strong>Current version</strong>: 20250709</p></li>
+</ul>
+</section>
+<section id="cpg-bash">
+<h3>✅ <strong>cpG</strong> (bash)<a class="headerlink" href="#cpg-bash" title="Link to this heading"></a></h3>
+<p>Copy of the necessary input files (<code class="docutils literal notranslate"><span class="pre">.com</span></code>, <code class="docutils literal notranslate"><span class="pre">.qsub</span></code>) of a Gaussian calculation as a new one. The job name in the <code class="docutils literal notranslate"><span class="pre">file.qsub</span></code> is also automatically changed (edit the script to rename <code class="docutils literal notranslate"><span class="pre">file.qsub</span></code> to your own submission command)</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">cpG SOURCE_FILES DESTINATION_FILES [R]`</span></p></li>
+<li><p><strong>R [optional]:</strong> Reuse MOs or last geometry from the <code class="docutils literal notranslate"><span class="pre">.chk</span></code> file.</p></li>
+<li><p><strong>Current version</strong>: 20230304</p></li>
+</ul>
+</section>
+<section id="gscan-analyzis-python">
+<h3>✅ <strong>GScan_Analyzis</strong> (python)<a class="headerlink" href="#gscan-analyzis-python" title="Link to this heading"></a></h3>
+<p>A Python-based post-processing tool for Gaussian Potential Energy Surface (PES) scans. It identifies optimized scan points, including checking optimization status and “energy valley” detection.</p>
+<ul class="simple">
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">GScan_Analyzis log_file`</span>: plots the optimal energy profile, saves the optimized geometries for each scan point, and exports the structure with the lowest energy. It remains fully functional even if the scan is interrupted or incomplete.</p></li>
+<li><p><strong>Current version</strong>: 20260211</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="how-to-contribute">
+<h2>🤝 How to contribute?<a class="headerlink" href="#how-to-contribute" title="Link to this heading"></a></h2>
+<p>The <strong>Quantum Chemistry Corner</strong> is a collaborative space. If you have developed a script or a tool (Python, Bash, C or Fortran) that could benefit the computational chemistry community, we welcome your contributions!</p>
+<p>To maintain the stability and portability of the pyphyschemtools package, all integrations are supervised by the maintainer (Romuald Poteau, romuald.poteau&#64;utoulouse.fr). Here is the workflow and the technical requirements for submission.</p>
+<section id="technical-requirements">
+<h3>📋 Technical Requirements<a class="headerlink" href="#technical-requirements" title="Link to this heading"></a></h3>
+<p>Each tool must be self-contained and adhere to the following standards:</p>
+<ul class="simple">
+<li><p><strong>Python Scripts (.py)</strong>:</p>
+<ul>
+<li><p>Must include the shebang: <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/env</span> <span class="pre">python3</span></code>.</p></li>
+<li><p>Code must be wrapped inside a <code class="docutils literal notranslate"><span class="pre">main()</span></code> function to be compatible with Python entry points.</p></li>
+<li><p>Any external dependencies (e.g., <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">ase</span></code>, <code class="docutils literal notranslate"><span class="pre">cclib</span></code>) must be clearly listed.</p></li>
+</ul>
+</li>
+<li><p><strong>Bash Scripts</strong>:</p>
+<ul>
+<li><p>Must include the shebang: <code class="docutils literal notranslate"><span class="pre">#!/bin/bash</span></code>.</p></li>
+<li><p>No absolute paths: Do not use hardcoded paths (e.g., /home/user/bin/). Only use commands available in the standard $PATH.</p></li>
+</ul>
+</li>
+<li><p><strong>Compiled Tools (Fortran / C)</strong>:</p>
+<ul>
+<li><p>You must provide the source code (<code class="docutils literal notranslate"><span class="pre">.f90</span></code>, <code class="docutils literal notranslate"><span class="pre">.c</span></code>, etc.) for long-term maintenance.</p></li>
+<li><p>Binaries should be compiled statically where possible to ensure they run on different Linux distributions.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="documentation-requirements">
+<h3>📖 Documentation Requirements<a class="headerlink" href="#documentation-requirements" title="Link to this heading"></a></h3>
+<p>To be accepted, every new tool must come with a short documentation snippet (in Markdown) to be included in <code class="docutils literal notranslate"><span class="pre">QuantumChemCorner.md</span></code>. Please provide the following details:</p>
+<ul class="simple">
+<li><p><strong>Tool Name &amp; Type</strong>: (e.g., <code class="docutils literal notranslate"><span class="pre">MyTool</span></code> - Bash script).</p></li>
+<li><p><strong>Short Description</strong>: One or two sentences explaining what the tool does.</p></li>
+<li><p><strong>Command Syntax</strong>: A clear example of how to run it in the terminal.</p></li>
+<li><p><strong>Arguments/Flags</strong>: Explanation of any required or optional parameters.</p></li>
+<li><p><strong>Example Case</strong>: A brief description of the expected output.</p></li>
+</ul>
+</section>
+<section id="integration-procedure">
+<h3>🚀 Integration Procedure<a class="headerlink" href="#integration-procedure" title="Link to this heading"></a></h3>
+<p>If your tool meets the requirements:</p>
+<ul class="simple">
+<li><p><strong>Prepare a bundle</strong>: Include your script/source, a brief description of what it does, and a usage example.</p></li>
+<li><p><strong>Submit to the Maintainer</strong>: I will handle the backend integration, which includes:</p>
+<ul>
+<li><p>Placing files in the correct directories (<code class="docutils literal notranslate"><span class="pre">bash_scripts/</span></code>, <code class="docutils literal notranslate"><span class="pre">bin/</span></code>, or the corner root).</p></li>
+<li><p>Creating the Python Wrapper in <code class="docutils literal notranslate"><span class="pre">wrappers.py</span></code> so the tool is accessible globally.</p></li>
+<li><p>Registering the official command in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.</p></li>
+<li><p>Validation: A local installation in editable mode (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code>) will be performed to ensure the new command works perfectly in the terminal.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="why-the-wrapper-approach">
+<h3>💡 Why the “Wrapper” approach?<a class="headerlink" href="#why-the-wrapper-approach" title="Link to this heading"></a></h3>
+<p>We don’t just “drop” scripts into the folder. By using Python wrappers, we ensure:</p>
+<ul class="simple">
+<li><p><strong>Encoding Safety</strong>: Binary files (like Fortran executables) don’t break the PyPI upload process.</p></li>
+<li><p><strong>Global Access</strong>: Once <code class="docutils literal notranslate"><span class="pre">pyphyschemtools</span></code> is installed, your tool is available as a standalone command (e.g., just type <code class="docutils literal notranslate"><span class="pre">MyNewTool</span></code> in the terminal).</p></li>
+<li><p><strong>Argument Handling</strong>: Python’s subprocess module safely handles the hand-off of flags and filenames from the shell to your script.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Misc.html" class="btn btn-neutral float-left" title="Miscellaneous tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../modules.html" class="btn btn-neutral float-right" title="pyphyschemtools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Romuald Poteau.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

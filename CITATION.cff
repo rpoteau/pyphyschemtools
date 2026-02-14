@@ -1,0 +1,37 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: "pyphyschemtools: A Python toolbox for physical chemistry and cheminformatics"
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Toucouere
+    family-names: Lorris
+    email: lorris.toucouere@utoulouse.fr
+    affiliation: UT (Université de Toulouse)
+  - given-names: Jéré
+    family-names: Quentin
+    email: quentin.jere@utoulouse.fr
+    affiliation: UT (Université de Toulouse)
+  - given-names: Romuald
+    family-names: Poteau
+    email: romuald.poteau@utoulouse.fr
+    affiliation: >-
+      LPCNO (INSA, CNRS UMR 5215, Université de
+      Toulouse)
+    orcid: 'https://orcid.org/0000-0003-4338-174X'
+repository-code: 'https://github.com/rpoteau/pyphyschemtools'
+abstract: >-
+  pyphyschemtools provides a unified Python ecosystem for physical chemistry 
+  research and education. It acts as an "API of APIs" for computational 
+  workflows (VASP, Gaussian, LOBSTER), microkinetics simulations (KORD), 
+  3D visualization, cheminformatics tools, and other topics.
+keywords:
+  - Physical Chemistry
+  - Cheminformatics
+license: GPL-3.0-or-later
+version: 0.7.1
+date-released: '2026-02-14'

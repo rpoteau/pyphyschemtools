@@ -157,6 +157,15 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     else
         echo -e "${YELLOW}     - Warning: docs/source/conf.py not found, skipping documentation update.${RESET}"
     fi
+    # Update version and date in CITATION.cff
+    CITATION_CFF="CITATION.cff"
+    if [ -f "$CITATION_CFF" ]; then
+        # Replace the version number (e.g., 0.7.0) 
+        sed -i "s/^version: .*/version: $NEW_VERSION/" "$CITATION_CFF"
+        # Replace the release date with single quotes (e.g., '2026-02-14')
+        sed -i "s/^date-released: .*/date-released: '$today'/" "$CITATION_CFF"
+        echo "     - version & date updated in CITATION.cff ... Done"
+    fi
     # --- DOC VALIDATION ---
     echo -e "${CYAN}Checking documentation health before commit...${RESET}"
     (cd docs && make clean && make html > /dev/null 2>&1)
@@ -209,6 +218,13 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
             sed -i "s/^release = '$NEW_VERSION'/release = '$CURRENT_VERSION'/" "docs/source/conf.py"
 	    echo "     - docs/source/conf.py version number reverted"
 	fi
+	if [ -f "CITATION.cff" ]; then
+            # Use a wildcard (.*) to overwrite the entire line after 'version:'
+            sed -i "s/^version: .*/version: $CURRENT_VERSION/" "CITATION.cff"
+            # Note: We don't necessarily revert the date as the original file's date 
+            # is likely in the past, but the version consistency is restored.
+            echo "     - CITATION.cff version number reverted"
+        fi
 	echo -e "${GREEN}Rollback complete. Version numbers are back to $CURRENT_VERSION.${RESET}"
         echo -e "${GREEN}All your other changes (dependencies, README, notebooks) are safe.${RESET}"
         exit 1 

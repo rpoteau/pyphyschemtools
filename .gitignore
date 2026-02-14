@@ -4,12 +4,12 @@ __pycache__/
 *-dev.py
 *.so
 *.pyd
+*.pyc
 *.egg-info/
 .eggs/
 build/
-!docs/build/
 dist/
-# *.log
+*.log
 
 # Jupyter notebooks
 .ipynb_checkpoints/
@@ -30,6 +30,7 @@ Thumbs.db
 # Custom project
 Biblio/
 tools4pyPhysChem/build/
+Examples-dev/
 
 # Swap and temporary
 *~
@@ -37,3 +38,4 @@ tools4pyPhysChem/build/
 *.swo
 
 
+dist/pyphyschemtools-0.7.0.tar.gz

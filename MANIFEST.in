@@ -33,3 +33,4 @@ prune pyphyschemtools/build
 prune pyphyschemtools/dist
 prune pyphyschemtools/archives
 prune Biblio
+prune Examples-dev

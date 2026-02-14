@@ -11,6 +11,12 @@
 
 # Changelog pyphyschemtools
 
+## [0.7.1] - 2026-02-14. "zenodo"
+- synchronization between github and zenodo
+- **CITATION.cff** file
+
+### Added
+
 ## [0.7.0] - 2026-02-14. "NEW quantum chemistry corner"
 
 ### Added

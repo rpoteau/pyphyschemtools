@@ -1,6 +1,6 @@
 [project]
 name = "pyphyschemtools"
-version = "0.7.1"
+version = "0.7.2"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"

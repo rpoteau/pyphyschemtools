@@ -201,11 +201,19 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
             echo -e "${YELLOW}     - No extra comment provided. Using default version message.${RESET}"
         fi
 
-	echo -e "${RED}Commit message: $COMMIT_MSG${RESET}"
+	echo -e "${GREEN}Commit message: $COMMIT_MSG${RESET}"
         git commit -m "$COMMIT_MSG"
         git tag "v$NEW_VERSION"
         git push
         git push --tags
+	# Create GitHub Release if gh cli is installed
+        if command -v gh >/dev/null 2>&1; then
+            echo -e "${CYAN}Creating GitHub Release...${RESET}"
+            gh release create "v$NEW_VERSION" dist/* --title "Release v$NEW_VERSION" --notes "$COMMIT_MSG"
+            echo "     - GitHub Release created ... Done"
+        else
+            echo -e "${RED}     - Warning: gh CLI not found. Please create the release manually on GitHub.${RESET}"
+        fi
     else
         echo -e "${RED}Commit cancelled. Reverting version numbers only...${RESET}"
 	sed -i "s/^version = \"$NEW_VERSION\"/version = \"$CURRENT_VERSION\"/" "$PYPROJECT"

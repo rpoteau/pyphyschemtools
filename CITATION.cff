@@ -8,14 +8,18 @@ message: >-
   metadata from this file.
 type: software
 authors:
-  - given-names: Toucouere
-    family-names: Lorris
-    email: lorris.toucouere@utoulouse.fr
-    affiliation: UT (Université de Toulouse)
-  - given-names: Jéré
-    family-names: Quentin
+  - given-names: Quentin
+    family-names: Jéré
     email: quentin.jere@utoulouse.fr
-    affiliation: UT (Université de Toulouse)
+    affiliation: >-
+      LPCNO (INSA, CNRS UMR 5215, Université de
+      Toulouse)
+  - given-names: Lorris
+    family-names: Toucouère
+    email: lorris.toucouere@utoulouse.fr
+    affiliation: >-
+      LPCNO (INSA, CNRS UMR 5215, Université de
+      Toulouse)
   - given-names: Romuald
     family-names: Poteau
     email: romuald.poteau@utoulouse.fr
@@ -23,6 +27,9 @@ authors:
       LPCNO (INSA, CNRS UMR 5215, Université de
       Toulouse)
     orcid: 'https://orcid.org/0000-0003-4338-174X'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.18644730
 repository-code: 'https://github.com/rpoteau/pyphyschemtools'
 abstract: >-
   pyphyschemtools provides a unified Python ecosystem for physical chemistry 
@@ -33,5 +40,5 @@ keywords:
   - Physical Chemistry
   - Cheminformatics
 license: GPL-3.0-or-later
-version: 0.7.1
+version: 0.7.2
 date-released: '2026-02-14'

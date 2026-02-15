@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quantum Chemistry Corner &mdash; pyphyschemtools 0.7.2 documentation</title>
+  <title>Quantum Chemistry Corner &mdash; pyphyschemtools 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/QuantumChemCorner.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=6dfdf7c3"></script>
+      <script src="../_static/documentation_options.js?v=c98573da"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -213,7 +213,7 @@ get_qc_examples<span class="w"> </span>G16
 <h3>✅ <strong>ManipCell</strong> (fortran binary)<a class="headerlink" href="#manipcell-fortran-binary" title="Link to this heading"></a></h3>
 <p>Rotation around z/c and size adjustment of any unit cell with c orthogonal to a and b.</p>
 <ul class="simple">
-<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">ManipCell -POS POSCAR_file [Options]`</span>, where options are <span style="color:darkcyan; font-family:monospace; font-weight:bold;">-a angle -fa value -fb value -fc value -S value -sha value -shb value -shc value -c c_new -T value -OC a_new b_new c_new -GA</span></p></li>
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">ManipCell -POS POSCAR_file [Options]</span>, where options are <span style="color:darkcyan; font-family:monospace; font-weight:bold;">-a angle -fa value -fb value -fc value -S value -sha value -shb value -shc value -c c_new -T value -OC a_new b_new c_new -GA</span></p></li>
 <li><p><strong>Returns:</strong> new <code class="docutils literal notranslate"><span class="pre">POSCAR_file_MC</span></code> and <code class="docutils literal notranslate"><span class="pre">POSCAR_file_MC.cif</span></code> files</p></li>
 <li><p><strong>Options:</strong></p>
 <ul>
@@ -257,14 +257,14 @@ get_qc_examples<span class="w"> </span>G16
 <section id="thermowithvasp-fortran-binary">
 <h3>✅ <strong>ThermoWithVASP</strong> (fortran binary)<a class="headerlink" href="#thermowithvasp-fortran-binary" title="Link to this heading"></a></h3>
 <p>Computes thermochemical values after a normal modes calculation with VASP (same equations as used in the Gaussian software).</p>
-<ul class="simple">
+<ul>
 <li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">ThermoWithVASP [Options]</span></p></li>
 <li><p><strong>Options:</strong></p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">-T</span> <span class="pre">value</span></code>: temperature (default: 298.15K)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-P</span> <span class="pre">value</span></code>: pressure (default: 1atm)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">file</span></code>: name of the frequencies file (default: freq.dat)</p>
-<ul>
+<ul class="simple">
 <li><p>1 freq/line (in cm-1). Lines that start with ‘!’ won’t be considered</p></li>
 <li><p>VASP format: <code class="docutils literal notranslate"><span class="pre">frequency</span> <span class="pre">value</span>&#160; <span class="pre">'cm^{-1}'</span>&#160;&#160; <span class="pre">'...'</span>&#160; <span class="pre">extremum</span> <span class="pre">index</span></code></p></li>
 <li><p>you can write as many informations as you want after each extremum index value (such as the description of the mode nu_CO etc…)</p></li>
@@ -278,18 +278,42 @@ get_qc_examples<span class="w"> </span>G16
 <li><p><code class="docutils literal notranslate"><span class="pre">-v</span> <span class="pre">T/F</span></code>: contribution from vibrational motion (default: T(rue))</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-S</span> <span class="pre">value</span></code>: rotational symmetry number (default: 1.0)</p>
 <ul>
-<li><p>(C1, Ci, Cs, Cinfv: 1  )</p></li>
-<li><p>(     Cn, Cnv, Cnh: n  )</p></li>
-<li><p>(            Dinfh: 2  )</p></li>
-<li><p>(     Dn, Dnh, Dnd: 2n )</p></li>
-<li><p>(            T, Td: 12 )</p></li>
-<li><p>(               Sn: n/2)</p></li>
-<li><p>(               Oh: 24 )</p></li>
-<li><p>(               Ih: 60 )</p></li>
-</ul>
+<li><p><span style="font-family:monospace"> C1, Ci, Cs, Cinfv: 1</p></li>
+<li><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>     Cn, Cnv, Cnh: n  
+</pre></div>
+</div>
+</li>
+<li><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>            Dinfh: 2  
+</pre></div>
+</div>
+</li>
+<li><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>     Dn, Dnh, Dnd: 2n 
+</pre></div>
+</div>
+</li>
+<li><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>            T, Td: 12 
+</pre></div>
+</div>
+</li>
+<li><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>               Sn: n/2
+</pre></div>
+</div>
+</li>
+<li><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>               Oh: 24 
+</pre></div>
+</div>
+</li>
+<li><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>               Ih: 60
+</pre></div>
+</div>
 </li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+</span>
+<ul class="simple">
 <li><p><strong>Current version</strong>: 2021202411312</p></li>
 </ul>
 </section>
@@ -366,7 +390,7 @@ the energy is save in the title section, as well as ZPE, H° and G° if a freque
 <h3>✅ <strong>cpG</strong> (bash)<a class="headerlink" href="#cpg-bash" title="Link to this heading"></a></h3>
 <p>Copy of the necessary input files (<code class="docutils literal notranslate"><span class="pre">.com</span></code>, <code class="docutils literal notranslate"><span class="pre">.qsub</span></code>) of a Gaussian calculation as a new one. The job name in the <code class="docutils literal notranslate"><span class="pre">file.qsub</span></code> is also automatically changed (edit the script to rename <code class="docutils literal notranslate"><span class="pre">file.qsub</span></code> to your own submission command)</p>
 <ul class="simple">
-<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">cpG SOURCE_FILES DESTINATION_FILES [R]`</span></p></li>
+<li><p><strong>Command:</strong> <span style="color:darkcyan; font-family:monospace; font-weight:bold;">cpG SOURCE_FILES DESTINATION_FILES [R]</span></p></li>
 <li><p><strong>R [optional]:</strong> Reuse MOs or last geometry from the <code class="docutils literal notranslate"><span class="pre">.chk</span></code> file.</p></li>
 <li><p><strong>Current version</strong>: 20230304</p></li>
 </ul>
@@ -383,7 +407,7 @@ the energy is save in the title section, as well as ZPE, H° and G° if a freque
 <hr class="docutils" />
 <section id="how-to-contribute">
 <h2>🤝 How to contribute?<a class="headerlink" href="#how-to-contribute" title="Link to this heading"></a></h2>
-<p>The <strong>Quantum Chemistry Corner</strong> is a collaborative space. If you have developed a script or a tool (Python, Bash, C or Fortran) that could benefit the computational chemistry community, we welcome your contributions!</p>
+<p>The <span style="color:darkcyan; font-weight:bold;">Quantum Chemistry Corner</span> is a collaborative space. If you have developed a script or a tool (Python, Bash, C or Fortran) that could benefit the computational chemistry community, we welcome your contributions!</p>
 <p>To maintain the stability and portability of the pyphyschemtools package, all integrations are supervised by the maintainer (Romuald Poteau, romuald.poteau&#64;utoulouse.fr). Here is the workflow and the technical requirements for submission.</p>
 <section id="technical-requirements">
 <h3>📋 Technical Requirements<a class="headerlink" href="#technical-requirements" title="Link to this heading"></a></h3>

@@ -72,7 +72,7 @@ Run it from a job folder you intend to archive. Keeps only essential files (`INC
 
 ### ✅ **ManipCell** (fortran binary)
 Rotation around z/c and size adjustment of any unit cell with c orthogonal to a and b.
-* **Command:** <span style="color:darkcyan; font-family:monospace; font-weight:bold;">ManipCell -POS POSCAR_file [Options]`</span>, where options are <span style="color:darkcyan; font-family:monospace; font-weight:bold;">-a angle -fa value -fb value -fc value -S value -sha value -shb value -shc value -c c_new -T value -OC a_new b_new c_new -GA</span>
+* **Command:** <span style="color:darkcyan; font-family:monospace; font-weight:bold;">ManipCell -POS POSCAR_file [Options]</span>, where options are <span style="color:darkcyan; font-family:monospace; font-weight:bold;">-a angle -fa value -fb value -fc value -S value -sha value -shb value -shc value -c c_new -T value -OC a_new b_new c_new -GA</span>
 * **Returns:** new `POSCAR_file_MC` and `POSCAR_file_MC.cif` files
 * **Options:**
     * `-a float`: rotation angle /c (degree, default: 0.0).
@@ -121,14 +121,16 @@ Computes thermochemical values after a normal modes calculation with VASP (same 
     * `-e T/F`: contribution from electronic motion  (default: F(alse))
     * `-v T/F`: contribution from vibrational motion (default: T(rue))
     * `-S value`: rotational symmetry number (default: 1.0)
-        * (C1, Ci, Cs, Cinfv: 1  )
-        * (     Cn, Cnv, Cnh: n  )
-        * (            Dinfh: 2  )
-        * (     Dn, Dnh, Dnd: 2n )
-        * (            T, Td: 12 )
-        * (               Sn: n/2)
-        * (               Oh: 24 )
-        * (               Ih: 60 )
+        * <span style="font-family:monospace"> C1, Ci, Cs, Cinfv: 1  
+        *          Cn, Cnv, Cnh: n  
+        *                 Dinfh: 2  
+        *          Dn, Dnh, Dnd: 2n 
+        *                 T, Td: 12 
+        *                    Sn: n/2
+        *                    Oh: 24 
+        *                    Ih: 60
+</span>
+
 * **Current version**: 2021202411312
 
 ### ✅ **selectLOBSTER** (fortran binary)
@@ -187,7 +189,7 @@ Reads Gaussian log files and quickly prints an overview of its content.
 
 ### ✅ **cpG** (bash)
 Copy of the necessary input files (`.com`, `.qsub`) of a Gaussian calculation as a new one. The job name in the `file.qsub` is also automatically changed (edit the script to rename `file.qsub` to your own submission command)
-* **Command:** <span style="color:darkcyan; font-family:monospace; font-weight:bold;">cpG SOURCE_FILES DESTINATION_FILES [R]`</span>
+* **Command:** <span style="color:darkcyan; font-family:monospace; font-weight:bold;">cpG SOURCE_FILES DESTINATION_FILES [R]</span>
 * **R [optional]:** Reuse MOs or last geometry from the `.chk` file.
 * **Current version**: 20230304
 
@@ -201,7 +203,7 @@ A Python-based post-processing tool for Gaussian Potential Energy Surface (PES) 
 
 ## 🤝 How to contribute?
 
-The **Quantum Chemistry Corner** is a collaborative space. If you have developed a script or a tool (Python, Bash, C or Fortran) that could benefit the computational chemistry community, we welcome your contributions!
+The <span style="color:darkcyan; font-weight:bold;">Quantum Chemistry Corner</span> is a collaborative space. If you have developed a script or a tool (Python, Bash, C or Fortran) that could benefit the computational chemistry community, we welcome your contributions!
 
 To maintain the stability and portability of the pyphyschemtools package, all integrations are supervised by the maintainer (Romuald Poteau, romuald.poteau@utoulouse.fr). Here is the workflow and the technical requirements for submission.
 

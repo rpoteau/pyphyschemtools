@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.7.2 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6dfdf7c3"></script>
+      <script src="_static/documentation_options.js?v=c98573da"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -414,6 +414,22 @@ high-throughput processing.</p></li>
 </pre></div>
 </div>
 <dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView.analyze_symmetry">
+<span class="sig-name descname"><span class="pre">analyze_symmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigen_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView.analyze_symmetry" title="Link to this definition"></a></dt>
+<dd><p>Comprehensive symmetry analysis using Pymatgen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tolerance</strong> (<em>float</em>) – Distance tolerance in Å (symprec for crystals). Default 0.3.</p></li>
+<li><p><strong>angle_tolerance</strong> (<em>float</em>) – Angular tolerance in degrees (Crystals only). Default 5.0.</p></li>
+<li><p><strong>eigen_tolerance</strong> (<em>float</em>) – Inertia tensor eigenvalue tolerance (Molecules only). Default 0.01.</p></li>
+<li><p><strong>matrix_tolerance</strong> (<em>float</em>) – Symmetry operation matrix tolerance (Molecules only). Default 0.1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.Chem3D.molView.show_bounding_sphere">
 <span class="sig-name descname"><span class="pre">show_bounding_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.Chem3D.molView.show_bounding_sphere" title="Link to this definition"></a></dt>
 <dd><p>Calculates and displays the VdW bounding sphere in one go.</p>
@@ -705,6 +721,13 @@ Calculates valence electrons, lone pairs, formal charges, and octet rule complia
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.analyze_stereochemistry">
+<span class="sig-name descname"><span class="pre">analyze_stereochemistry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.analyze_stereochemistry" title="Link to this definition"></a></dt>
+<dd><p>Identifies chiral centers and stereogenic double bonds.
+Returns a dictionary with counts and specific assignments.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.descriptors">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">descriptors</span></span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.descriptors" title="Link to this definition"></a></dt>
@@ -732,8 +755,39 @@ Useful for molecules initialized directly via SMILES.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.get_isomers">
+<span class="sig-name descname"><span class="pre">get_isomers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_isomers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.get_isomers" title="Link to this definition"></a></dt>
+<dd><p>Explores the stereochemical space of the molecule by enumerating all possible stereoisomers.</p>
+<p>This method identifies all unassigned or flexible stereocenters (chiral centers
+and double bonds) and generates a complete set of discrete stereochemical
+configurations. It is particularly useful for resolving “flat” SMILES strings
+into their constituent enantiomers and diastereomers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_isomers</strong> (<em>int</em>) – The maximum number of isomers to generate. This prevents
+computational explosion for molecules with many stereocenters (2^n).
+Defaults to 12.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, prints a summary of the number of isomers found
+using a colored terminal message. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A list of easy_rdkit instances, each representing a unique,</dt><dd><p>fully-defined stereoisomer of the parent molecule.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.plot_grid_from_df">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">plot_grid_from_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SMILES'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IUPAC</span> <span class="pre">Name'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mols_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(250,</span> <span class="pre">250)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.plot_grid_from_df" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">plot_grid_from_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SMILES'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IUPAC</span> <span class="pre">Name'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mols_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(250,</span> <span class="pre">250)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_stereo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.plot_grid_from_df" title="Link to this definition"></a></dt>
 <dd><p>Generates a grid image of molecular structures from a pandas DataFrame.</p>
 <p>This method extracts SMILES strings from the specified column, generates 2D
 representations, and arranges them in a grid. It supports multi-line legends
@@ -779,8 +833,42 @@ RDKit installation.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.show_isomers">
+<span class="sig-name descname"><span class="pre">show_isomers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mols_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(250,</span> <span class="pre">250)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.show_isomers" title="Link to this definition"></a></dt>
+<dd><p>Generates, labels, and displays a grid of all possible stereoisomers.</p>
+<p>This method automates the transition from a single chemical identity to a
+visual comparative analysis of its stereoisomers. Each isomer is rendered
+with its specific SMILES string (including &#64; markers and / directionals)
+and an isomer index. It utilizes the class’s internal grid-plotting logic
+to ensure high-quality SVG output and optional file export.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mols_per_row</strong> (<em>int</em>) – Number of isomer structures to display per row
+in the grid. Defaults to 4.</p></li>
+<li><p><strong>size</strong> (<em>tuple</em>) – The (width, height) in pixels for each individual
+molecular panel. Defaults to (250, 250).</p></li>
+<li><p><strong>save_img</strong> (<em>str</em><em>, </em><em>optional</em>) – File path (e.g., ‘isomers.svg’ or ‘isomers.png’)
+to export the grid. Directories are created automatically.
+Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A grid image displayed directly in the Jupyter/Colab</dt><dd><p>environment.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>IPython.display.SVG</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.show_mol">
-<span class="sig-name descname"><span class="pre">show_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(400,</span> <span class="pre">400)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_Lewis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_conjugation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_aromatic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_hybrid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_H</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep3D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macrocycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlightAtoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.show_mol" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">show_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(400,</span> <span class="pre">400)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_Lewis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_conjugation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_aromatic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_hybrid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_H</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_stereo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep3D</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macrocycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlightAtoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.show_mol" title="Link to this definition"></a></dt>
 <dd><p>Renders the molecule in 2D SVG format with optional property overlays.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -792,10 +880,14 @@ RDKit installation.</p>
 <li><p><strong>show_n</strong> (<em>bool</em>) – Displays atom indices.</p></li>
 <li><p><strong>show_hybrid</strong> (<em>bool</em>) – Displays atom hybridization (sp3, sp2, etc.).</p></li>
 <li><p><strong>show_H</strong> (<em>bool</em>) – Adds explicit Hydrogens to the drawing.</p></li>
+<li><p><strong>show_stereo</strong> (<em>bool</em>) – Shows R,S,Z,E labels - if relevant</p></li>
 <li><p><strong>rep3D</strong> (<em>bool</em>) – Computes a 3D-like conformation before drawing.</p></li>
 <li><p><strong>macrocycle</strong> (<em>bool</em>) – Uses CoordGen for better rendering of large rings (e.g., Cyclodextrins).</p></li>
 <li><p><strong>highlightAtoms</strong> (<em>list</em>) – List of indices to highlight.</p></li>
 <li><p><strong>legend</strong> (<em>str</em>) – Title or legend text for the drawing.</p></li>
+<li><p><strong>save_img</strong> (<em>str</em>) – File path to save the resulting image.
+Supports ‘.svg’ (vector) and ‘.png’ (raster) extensions.
+Defaults to None.</p></li>
 </ul>
 </dd>
 </dl>

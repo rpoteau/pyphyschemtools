@@ -13,120 +13,121 @@ import requests
 import numpy as np
 from ipywidgets import GridspecLayout, VBox, Label, Layout
 import CageCavityCalc as CCC
+from pathlib import Path
 
 # ============================================================
 # Jmol-like element color palette
 # ============================================================
 JMOL_COLORS = {
-'H', '#FFFFFF',
-'He', '#D9FFFF',
-'Li', '#CC80FF',
-'Be', '#C2FF00',
-'B', '#FFB5B5',
-'C', '#909090',
-'N', '#3050F8',
-'O', '#FF0D0D',
-'F', '#90E050',
-'Ne', '#B3E3F5',
-'Na', '#AB5CF2',
-'Mg', '#8AFF00',
-'Al', '#BFA6A6',
-'Si', '#F0C8A0',
-'P', '#FF8000',
-'S', '#FFFF30',
-'Cl', '#1FF01F',
-'Ar', '#80D1E3',
-'K', '#8F40D4',
-'Ca', '#3DFF00',
-'Sc', '#E6E6E6',
-'Ti', '#BFC2C7',
-'V', '#A6A6AB',
-'Cr', '#8A99C7',
-'Mn', '#9C7AC7',
-'Fe', '#E06633',
-'Co', '#F090A0',
-'Ni', '#50D050',
-'Cu', '#C88033',
-'Zn', '#7D80B0',
-'Ga', '#C28F8F',
-'Ge', '#668F8F',
-'As', '#BD80E3',
-'Se', '#FFA100',
-'Br', '#A62929',
-'Kr', '#5CB8D1',
-'Rb', '#702EB0',
-'Sr', '#00FF00',
-'Y', '#94FFFF',
-'Zr', '#94E0E0',
-'Nb', '#73C2C9',
-'Mo', '#54B5B5',
-'Tc', '#3B9E9E',
-'Ru', '#248F8F',
-'Rh', '#0A7D8C',
-'Pd', '#006985',
-'Ag', '#C0C0C0',
-'Cd', '#FFD98F',
-'In', '#A67573',
-'Sn', '#668080',
-'Sb', '#9E63B5',
-'Te', '#D47A00',
-'I', '#940094',
-'Xe', '#429EB0',
-'Cs', '#57178F',
-'Ba', '#00C900',
-'La', '#70D4FF',
-'Ce', '#FFFFC7',
-'Pr', '#D9FFC7',
-'Nd', '#C7FFC7',
-'Pm', '#A3FFC7',
-'Sm', '#8FFFC7',
-'Eu', '#61FFC7',
-'Gd', '#45FFC7',
-'Tb', '#30FFC7',
-'Dy', '#1FFFC7',
-'Ho', '#00FF9C',
-'Er', '#00E675',
-'Tm', '#00D452',
-'Yb', '#00BF38',
-'Lu', '#00AB24',
-'Hf', '#4DC2FF',
-'Ta', '#4DA6FF',
-'W', '#2194D6',
-'Re', '#267DAB',
-'Os', '#266696',
-'Ir', '#175487',
-'Pt', '#D0D0E0',
-'Au', '#FFD123',
-'Hg', '#B8B8D0',
-'Tl', '#A6544D',
-'Pb', '#575961',
-'Bi', '#9E4FB5',
-'Po', '#AB5C00',
-'At', '#754F45',
-'Rn', '#428296',
-'Fr', '#420066',
-'Ra', '#007D00',
-'Ac', '#70ABFA',
-'Th', '#00BAFF',
-'Pa', '#00A1FF',
-'U', '#008FFF',
-'Np', '#0080FF',
-'Pu', '#006BFF',
-'Am', '#545CF2',
-'Cm', '#785CE3',
-'Bk', '#8A4FE3',
-'Cf', '#A136D4',
-'Es', '#B31FD4',
-'Fm', '#B31FBA',
-'Md', '#B30DA6',
-'No', '#BD0D87',
-'Lr', '#C70066',
-'Rf', '#CC0059',
-'Db', '#D1004F',
-'Sg', '#D90045',
-'Bh', '#E00038',
-'Hs', '#E6002E',
-'Mt', '#EB0026'
+'H': '#FFFFFF',
+'He': '#D9FFFF',
+'Li': '#CC80FF',
+'Be': '#C2FF00',
+'B': '#FFB5B5',
+'C': '#909090',
+'N': '#3050F8',
+'O': '#FF0D0D',
+'F': '#90E050',
+'Ne': '#B3E3F5',
+'Na': '#AB5CF2',
+'Mg': '#8AFF00',
+'Al': '#BFA6A6',
+'Si': '#F0C8A0',
+'P': '#FF8000',
+'S': '#FFFF30',
+'Cl': '#1FF01F',
+'Ar': '#80D1E3',
+'K': '#8F40D4',
+'Ca': '#3DFF00',
+'Sc': '#E6E6E6',
+'Ti': '#BFC2C7',
+'V': '#A6A6AB',
+'Cr': '#8A99C7',
+'Mn': '#9C7AC7',
+'Fe': '#E06633',
+'Co': '#F090A0',
+'Ni': '#50D050',
+'Cu': '#C88033',
+'Zn': '#7D80B0',
+'Ga': '#C28F8F',
+'Ge': '#668F8F',
+'As': '#BD80E3',
+'Se': '#FFA100',
+'Br': '#A62929',
+'Kr': '#5CB8D1',
+'Rb': '#702EB0',
+'Sr': '#00FF00',
+'Y': '#94FFFF',
+'Zr': '#94E0E0',
+'Nb': '#73C2C9',
+'Mo': '#54B5B5',
+'Tc': '#3B9E9E',
+'Ru': '#248F8F',
+'Rh': '#0A7D8C',
+'Pd': '#006985',
+'Ag': '#C0C0C0',
+'Cd': '#FFD98F',
+'In': '#A67573',
+'Sn': '#668080',
+'Sb': '#9E63B5',
+'Te': '#D47A00',
+'I': '#940094',
+'Xe': '#429EB0',
+'Cs': '#57178F',
+'Ba': '#00C900',
+'La': '#70D4FF',
+'Ce': '#FFFFC7',
+'Pr': '#D9FFC7',
+'Nd': '#C7FFC7',
+'Pm': '#A3FFC7',
+'Sm': '#8FFFC7',
+'Eu': '#61FFC7',
+'Gd': '#45FFC7',
+'Tb': '#30FFC7',
+'Dy': '#1FFFC7',
+'Ho': '#00FF9C',
+'Er': '#00E675',
+'Tm': '#00D452',
+'Yb': '#00BF38',
+'Lu': '#00AB24',
+'Hf': '#4DC2FF',
+'Ta': '#4DA6FF',
+'W': '#2194D6',
+'Re': '#267DAB',
+'Os': '#266696',
+'Ir': '#175487',
+'Pt': '#D0D0E0',
+'Au': '#FFD123',
+'Hg': '#B8B8D0',
+'Tl': '#A6544D',
+'Pb': '#575961',
+'Bi': '#9E4FB5',
+'Po': '#AB5C00',
+'At': '#754F45',
+'Rn': '#428296',
+'Fr': '#420066',
+'Ra': '#007D00',
+'Ac': '#70ABFA',
+'Th': '#00BAFF',
+'Pa': '#00A1FF',
+'U': '#008FFF',
+'Np': '#0080FF',
+'Pu': '#006BFF',
+'Am': '#545CF2',
+'Cm': '#785CE3',
+'Bk': '#8A4FE3',
+'Cf': '#A136D4',
+'Es': '#B31FD4',
+'Fm': '#B31FBA',
+'Md': '#B30DA6',
+'No': '#BD0D87',
+'Lr': '#C70066',
+'Rf': '#CC0059',
+'Db': '#D1004F',
+'Sg': '#D90045',
+'Bh': '#E00038',
+'Hs': '#E6002E',
+'Mt': '#EB0026'
 }
 
 class XYZData:
@@ -291,10 +292,7 @@ class XYZData:
         dims = sorted(dims, reverse=True)
         
         return dims[0], dims[1], dims[2]
-    
-    def __repr__(self):
-        return f"<XYZData: {len(self.symbols)} atoms>"        
-        
+            
 class molView:
     """
     Initializes a molecular/crystal viewer and coordinate extractor.
@@ -696,16 +694,26 @@ class molView:
         content = ""
         fmt = "xyz"
 
+        self.name = str(self.mol)
+        self.server = None
+
         # --- 1. Handle External API Sources ---
         if self.source == 'cid':
+            self.server = 'cid'
             if self.viewer: self.v = py3Dmol.view(query=f'cid:{self.mol}', width=self.w, height=self.h)
             url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{self.mol}/SDF?record_type=3d"
             response = requests.get(url)
             if response.status_code == 200:
                 content = response.text
                 fmt = "sdf" 
+            import pubchempy as pcp
+            try:
+                c = pcp.Compound.from_cid(self.mol)
+                self.name = c.iupac_name
+            except: pass
                 
         elif self.source == 'rscb':
+            self.server = 'rscb'
             if self.viewer: self.v = py3Dmol.view(query=f'pdb:{self.mol}', width=self.w, height=self.h)
             url = f"https://files.rcsb.org/view/{self.mol}.pdb"
             response = requests.get(url)
@@ -714,8 +722,14 @@ class molView:
                 fmt = "proteindatabank"
             else:
                 raise ValueError(f"Could not find PDB ID: {self.mol} on RSCB")
+            try:
+                r = requests.get(f"https://data.rcsb.org/rest/v1/core/entry/{self.mol}")
+                if r.status_code == 200:
+                    self.name = r.json().get('struct', {}).get('title', self.mol)
+            except: pass
                 
         elif self.source == 'cod':
+            self.server = 'cod'
             url = f"https://www.crystallography.net/cod/{self.mol}.cif"
             response = requests.get(url)
             if response.status_code == 200:
@@ -735,6 +749,9 @@ class molView:
             
             # Extraction de l'extension sans le point
             ext = os.path.splitext(self.mol)[1].lower().replace('.', '')
+            mol_path = Path(str(self.mol))
+            self.name = mol_path.name  # This gives you 'molecule.cif' instead of '/path/to/molecule.cif'
+            self.server = 'file'
             
             # Mapping explicite pour ASE
             if ext == 'pdb':
@@ -777,6 +794,7 @@ class molView:
                     if self.viewer:
                         self.v.show() # On montre au moins le viewer vide ou l'erreur
                     return
+            self._atoms_cache = atoms
             
             self.data = XYZData(
                 symbols=atoms.get_chemical_symbols(),
@@ -859,6 +877,39 @@ class molView:
             # FIX: Create the atoms object for standard molecules here
             atoms = read(io.StringIO(content), format=fmt)
 
+        if self.source == 'cod' or fmt == 'cif':
+            # 1. Define the keys ASE typically uses + standard CIF tags
+            # ASE often maps _chemical_formula_sum to 'formula'
+            potential_keys = [
+                'title', '_publ_section_title', 'publ_section_title',
+                'chemical_name_systematic', '_chemical_name_systematic',
+                'formula', '_chemical_formula_sum', 'chemical_formula_sum'
+            ]
+            
+            valid_info = []
+            for key in potential_keys:
+                val = atoms.info.get(key)
+                if val and isinstance(val, str):
+                    clean_val = val.replace('\n', ' ').replace(';', '').strip("'").strip('"').strip()
+                    if clean_val and clean_val not in valid_info:
+                        valid_info.append(clean_val)
+            
+            # 2. Safety Fallback: If atoms.info is empty, search the raw text content
+            if not valid_info and 'content' in locals():
+                import re
+                # Search for the tag in the raw string: _tag_name  'value'
+                # This regex looks for the tag followed by whitespace and a value in quotes or on the next line
+                for tag in ['_publ_section_title', '_chemical_name_systematic', '_chemical_formula_sum']:
+                    match = re.search(f"{tag}\s+['\"]?([^'\"\n;]+)", content)
+                    if match:
+                        valid_info.append(match.group(1).strip())
+
+            # 3. Final assignment
+            if valid_info:
+                self.name = " | ".join(valid_info[:2])
+            else:
+                self.name = "None found"
+
             
         # Finalize
         if self.viewer:
@@ -874,6 +925,10 @@ class molView:
             elif self.source != 'cif':
                 self.v.zoom(0.9) # Zoom par défaut pour ne pas coller aux bords
             if show: self.v.show()
+
+        # Print confirmation
+        source_label = self.server.upper()
+        self.msg = f"Structure loaded from {fg.BLUE}{hl.BOLD}{source_label}{hl.OFF}. Name = {fg.GREEN}{hl.BOLD}{self.name}{fg.OFF}"
 
     def _apply_element_colors(self, color_table):
         """
@@ -953,3 +1008,58 @@ class molView:
                 print(f"Dimensions: {L:.2f} x {W:.2f} x {H:.2f} Å")
                 print(f"Aspect Ratio (L/W): {L/W:.2f}")
         return self.v.show()
+
+    def analyze_symmetry(self, tolerance=0.3, angle_tolerance=5.0, eigen_tolerance=0.01, matrix_tolerance=0.1):
+        """
+        Comprehensive symmetry analysis using Pymatgen.
+        
+        Args:
+            tolerance (float): Distance tolerance in Å (symprec for crystals). Default 0.3.
+            angle_tolerance (float): Angular tolerance in degrees (Crystals only). Default 5.0.
+            eigen_tolerance (float): Inertia tensor eigenvalue tolerance (Molecules only). Default 0.01.
+            matrix_tolerance (float): Symmetry operation matrix tolerance (Molecules only). Default 0.1.
+        """
+        try:
+            from pymatgen.core import Molecule
+            from pymatgen.symmetry.analyzer import PointGroupAnalyzer, SpacegroupAnalyzer
+            from pymatgen.io.ase import AseAtomsAdaptor
+            
+            # --- Case A: Periodic System (Crystal) ---
+            if hasattr(self, '_atoms_cache') and self._atoms_cache.cell.volume > 1.0:
+                struct = AseAtomsAdaptor.get_structure(self._atoms_cache)
+                # SpacegroupAnalyzer uses symprec and angle_tolerance
+                sga = SpacegroupAnalyzer(struct, symprec=tolerance, angle_tolerance=angle_tolerance)
+                
+                return {
+                    "type": "Crystal",
+                    "symbol": sga.get_space_group_symbol(),
+                    "notation": "Hermann-Mauguin",
+                    "number": sga.get_space_group_number(),
+                    "system": sga.get_crystal_system(),
+                    "point_group": sga.get_point_group_symbol()
+                }
+            
+            # --- Case B: Isolated System (Molecule) ---
+            else:
+                mol = Molecule(self.data.symbols, self.data.positions)
+                # PointGroupAnalyzer uses tolerance, eigen_tolerance, and matrix_tolerance
+                pga = PointGroupAnalyzer(
+                    mol, 
+                    tolerance=tolerance, 
+                    eigen_tolerance=eigen_tolerance, 
+                    matrix_tolerance=matrix_tolerance
+                )
+                pg_symbol = pga.sch_symbol
+                
+                # Logic to determine chirality based on Schoenflies symbol
+                is_chiral = not any(c in pg_symbol for c in ['s', 'h', 'v', 'd', 'i'])
+
+                return {
+                    "type": "Molecule",
+                    "point_group": pg_symbol,  
+                    "notation": "Schoenflies", 
+                    "is_chiral": is_chiral
+                }
+        except Exception as e:
+            print(f"Symmetry analysis failed: {e}")
+            return None

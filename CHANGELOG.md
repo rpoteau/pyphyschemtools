@@ -11,11 +11,41 @@
 
 # Changelog pyphyschemtools
 
-## [0.7.1] - 2026-02-14. "zenodo"
-- synchronization between github and zenodo
-- **CITATION.cff** file
+## [0.7.3] - 2026-02-15. "stereochem with easy-rdkit & sym with Chem3D"
+
+### Added in `easy_rdkit`
+- New `save_img` parameter in `easy_rdkit.show_mol` for SVG and PNG exports
+- **Automated Stereochemistry Analysis**: New internal logic to detect and label $R/S$ chiral centers and $E/Z$ double bond geometry.
+    - **Smart Warning System**: `show_mol()` now detects and reports undefined stereochemistry with context-specific messages:
+        - Identifies unassigned chiral centers (atoms).
+        - Identifies unassigned stereogenic double bonds (bonds).
+    - **Dynamic Visualization**: 
+        - Automatic activation of `addAtomIndices` and `addBondIndices` when undefined stereochemistry is detected to facilitate SMILES correction.
+        - Support for `show_stereo=True` in 2D renderings using `PrepareMolForDrawing`.
+    - **Achirality Detection**: Informative messages identifying molecules where stereochemistry is irrelevant (achiral).
+    - **Isomer Enumeration**: 
+        - Added `get_isomers()`: Recursively generates all possible discrete stereoisomers (enantiomers/diastereomers) for a given structure.
+        - Added `show_isomers()`: Displays a side-by-side grid comparison of all valid stereochemical configurations.
+    - **Grid Stereo Support**: `plot_grid_from_df()` now accepts a `show_stereo` argument to render CIP labels $(R/S, E/Z)$ across an entire molecular dataset.
+
+### Added in `Chem3D`: **Advanced Symmetry & Analysis**
+* **Pymatgen Integration**: Established a high-level coupling with **Pymatgen** to provide professional-grade symmetry analysis for both periodic and isolated systems => **Automated Symmetry Detection**: New `analyze_symmetry()` method:
+  * **Crystals**: Identifies Space Groups, Crystal Systems, and Hermann-Mauguin notation.
+    * **Molecules**: Identifies Schoenflies Point Groups and performs automated **Chirality detection**.
+* **Geometry Persistence**: Atomic data is now encapsulated in a dedicated `XYZData` object, enabling geometric calculations (Center of Mass, Cavity Volume, Bounding Spheres) without reloading the source data.
+
+### Changed
+- Improved `show_mol()` drawing pipeline to prevent "ghosting" when combining highlights (aromatic/conjugation) with stereochemical labels.
+- **Jupyter Integration**: Updated `show_isomers()` to use explicit `display()` calls, ensuring grids are not overwritten by subsequent plots in the same cell.
+
+## [0.7.1, 0.7.2] - 2026-02-14. "zenodo"
 
 ### Added
+
+- **CITATION.cff** file
+
+### Changed
+- synchronization between github and zenodo
 
 ## [0.7.0] - 2026-02-14. "NEW quantum chemistry corner"
 

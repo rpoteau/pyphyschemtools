@@ -235,10 +235,12 @@ class easy_rdkit():
                  show_n: bool=False,
                  show_hybrid: bool=False,
                  show_H: bool=False,
+                 show_stereo: bool=False,
                  rep3D: bool=False,
                  macrocycle: bool=False,
                  highlightAtoms: list=[],
-                 legend: str=''
+                 legend: str='',
+                 save_img: str=None
                 ):
         """
         Renders the molecule in 2D SVG format with optional property overlays.
@@ -251,10 +253,14 @@ class easy_rdkit():
             show_n (bool): Displays atom indices.
             show_hybrid (bool): Displays atom hybridization (sp3, sp2, etc.).
             show_H (bool): Adds explicit Hydrogens to the drawing.
+            show_stereo (bool): Shows R,S,Z,E labels - if relevant
             rep3D (bool): Computes a 3D-like conformation before drawing.
             macrocycle (bool): Uses CoordGen for better rendering of large rings (e.g., Cyclodextrins).
             highlightAtoms (list): List of indices to highlight.
             legend (str): Title or legend text for the drawing.
+            save_img (str):  File path to save the resulting image. 
+                Supports '.svg' (vector) and '.png' (raster) extensions. 
+                Defaults to None.
         """
 
         def safe_add_hs():
@@ -289,7 +295,13 @@ class easy_rdkit():
         if macrocycle:
             rdCoordGen.AddCoords(self.mol)
                 
-        d2d = rdMolDraw2D.MolDraw2DSVG(size[0],size[1])
+        # 2. Define Extension and Drawer
+        ext = Path(save_img).suffix.lower() if save_img else ".svg"
+        
+        if ext == ".png":
+            d2d = rdMolDraw2D.MolDraw2DCairo(size[0], size[1])
+        else:
+            d2d = rdMolDraw2D.MolDraw2DSVG(size[0], size[1])
         
         atoms = list(mol.GetAtoms())
     
@@ -348,22 +360,129 @@ class easy_rdkit():
                 # print(f"Atom {i+1:3}: {atom.GetAtomicNum():3} {atom.GetSymbol():>2} {atom.GetHybridization()}")
             if show_Lewis:
                 display(df)
+                
+        ##### Drawing Block
+        # if show_n:
+        #     d2d.drawOptions().addAtomIndices=show_n
     
-        if show_n:
-            d2d.drawOptions().addAtomIndices=show_n
-    
-        if plot_aromatic or plot_conjugation:
-            d2d.DrawMoleculeWithHighlights(mol,legend,dict(athighlights),dict(bndhighlights),arads,{})
-        else:
-            d2d.DrawMolecule(mol,legend=legend, highlightAtoms=highlightAtoms)
-            
-        d2d.FinishDrawing()
-        display(SVG(d2d.GetDrawingText()))
+        # if plot_aromatic or plot_conjugation:
+        #     d2d.DrawMoleculeWithHighlights(mol,legend,dict(athighlights),dict(bndhighlights),arads,{})
+        # else:
+        #     d2d.DrawMolecule(mol,legend=legend, highlightAtoms=highlightAtoms)
 
+        # if show_stereo:
+        #     # This prepares the molecule for stereo display (R/S and E/Z labels)
+        #     Chem.AssignStereochemistry(mol, force=True, cleanIt=True)
+        #     # Force RDKit to calculate E/Z for the drawing engine
+        #     d2d.drawOptions().addStereoAnnotation = True
+        #     rdMolDraw2D.PrepareAndDrawMolecule(d2d, mol, legend=legend, highlightAtoms=highlightAtoms)
+            
+        # d2d.FinishDrawing()
+
+        # 1. SET GLOBAL OPTIONS
+        opts = d2d.drawOptions()
+        opts.addAtomIndices = show_n
+        
+        if show_stereo:
+            # 1. Perception (You have this, keep it!)
+            Chem.AssignStereochemistry(mol, force=True, cleanIt=True)
+            Chem.FindPotentialStereoBonds(mol)
+
+            # 2. Find chiral centers
+            chiral_centers = Chem.FindMolChiralCenters(mol, includeUnassigned=True)
+            # print(f"DEBUG: Chiral Centers found: {chiral_centers}")
+            
+            # 3. Find potential stereogenic double bonds
+            potential_db_indices = []
+            unassigned_db = []
+            
+            for bond in mol.GetBonds():
+                if bond.GetBondType() == Chem.rdchem.BondType.DOUBLE:
+                    # After FindPotentialStereoBonds, RDKit marks stereogenic bonds
+                    # even if they aren't assigned yet.
+                    stereo = bond.GetStereo()
+                    
+                    # If it's STEREONONE but the atoms have enough neighbors, it's a candidate
+                    if bond.GetBeginAtom().GetDegree() > 1 and bond.GetEndAtom().GetDegree() > 1:
+                        potential_db_indices.append(bond.GetIdx())
+                        
+                        # If RDKit hasn't found a specific E or Z, it's unassigned
+                        if stereo in [Chem.rdchem.BondStereo.STEREONONE, Chem.rdchem.BondStereo.STEREOANY]:
+                            unassigned_db.append(bond.GetIdx())
+
+            # for idx in potential_db_indices:
+            #     b = mol.GetBondWithIdx(idx)
+            #     print(f"DEBUG: Bond {idx} Type: {b.GetBondType()} | Stereo: {b.GetStereo()}")
+
+            # --- CASE 0: IRRELEVANT ---
+            if not chiral_centers and not potential_db_indices:
+                msg = "ℹ️  Note: Stereochemistry is irrelevant for this molecule."
+                print(f"{fg.CYAN}{msg}{fg.OFF}")
+
+            # --- CASE 1: WARNING ---
+            else:
+                unassigned_chiral = [idx for idx, config in chiral_centers if config == "?"]
+                
+                if unassigned_chiral or unassigned_db:
+                    msg = "⚠️  Warning: This SMILES contains undefined stereochemistry.\n"
+                    if unassigned_chiral:
+                        msg += f"   - Unassigned Chiral Centers (atoms): {unassigned_chiral}\n"
+                    if unassigned_db:
+                        msg += f"   - Unassigned Double Bond geometry (bonds): {unassigned_db}\n"
+                    
+                    # --- DYNAMIC FOOTER MESSAGE ---
+                    if unassigned_chiral and unassigned_db:
+                        msg += "   Labels (R/S, E/Z) cannot be displayed for undefined centers and bonds."
+                    elif unassigned_chiral:
+                        msg += "   Labels (R/S) cannot be displayed for undefined centers."
+                    else: # only unassigned_db
+                        msg += "   Labels (E/Z) cannot be displayed for undefined bonds."
+                    
+                    print(f"{fg.RED}{msg}{fg.OFF}")
+                    opts.addAtomIndices = True
+                    if unassigned_db:
+                        opts.addBondIndices = True # Show bond numbers for E/Z geometry
+                        print(f"{fg.CYAN}   -> Atom and Bond indices enabled to help you locate issues.{fg.OFF}")
+                else:
+                    print(f"{fg.GREEN}✅ Stereochemistry is fully defined.{fg.OFF}")
+
+            # Always apply the annotation option if the user asked for it
+            opts.addStereoAnnotation = True
+            rdMolDraw2D.PrepareMolForDrawing(mol)
+        # 3. SELECT THE DRAWING COMMAND
+        if plot_aromatic or plot_conjugation:
+            # This method supports stereo labels if opts.addStereoAnnotation is True
+            d2d.DrawMoleculeWithHighlights(
+                mol, legend, dict(athighlights), dict(bndhighlights), arads, {}
+            )
+        else:
+            # Standard drawing (also supports stereo labels)
+            d2d.DrawMolecule(mol, legend=legend, highlightAtoms=highlightAtoms)
+
+        d2d.FinishDrawing()
+        
+        ##### Save Image Block
+        if save_img:
+            save_path = Path(save_img)
+            if save_path.parent:
+                save_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(save_img, 'wb' if ext == ".png" else 'w') as f:
+                content = d2d.GetDrawingText()
+                f.write(content)
+            print(f"✅ Image saved to: {save_img}")
+
+        # 3. Affichage Jupyter (toujours en SVG pour la qualité)
+        if ext == ".png":
+            # Si on a sauvé en PNG, on regénère un SVG pour l'affichage écran
+            return self.show_mol(size=size, show_Lewis=show_Lewis, show_H=show_H, legend=legend)
+        else:
+            display(SVG(d2d.GetDrawingText()))
         return
 
     @staticmethod
-    def plot_grid_from_df(df, smiles_col='SMILES', legend_cols='IUPAC Name', mols_per_row=4, size=(250, 250), save_img=None):
+    def plot_grid_from_df(df, smiles_col='SMILES', legend_cols='IUPAC Name',
+                          mols_per_row=4, size=(250, 250), show_stereo=False, save_img=None):
         """
         Generates a grid image of molecular structures from a pandas DataFrame.
 
@@ -411,6 +530,12 @@ class easy_rdkit():
             mol = Chem.MolFromSmiles(smiles)
             if mol:
                 rdCoordGen.AddCoords(mol)
+                # --- NEW STEREO PERCEPTION FOR GRID ---
+                if show_stereo:
+                    Chem.AssignStereochemistry(mol, force=True, cleanIt=True)
+                    Chem.FindPotentialStereoBonds(mol)
+                    # This ensures the R/S and E/Z labels are calculated
+                    
                 mols.append(mol)
                 
                 # Build legend: use a separator that helps RDKit spacing
@@ -430,6 +555,8 @@ class easy_rdkit():
         dopts = rdMolDraw2D.MolDrawOptions()
         dopts.legendFontSize = 14  # Adjust this to change legend size
         dopts.padding = 0.15      # Adds room around the molecule
+        if show_stereo:
+            dopts.addStereoAnnotation = True
 
         # --- NEW SAVING LOGIC STARTS HERE ---
         if save_img:
@@ -479,7 +606,7 @@ class easy_rdkit():
                     f.write(drawer.GetDrawingText())
                 print(f"✅ PNG saved to: {save_img}")
 
-        return Draw.MolsToGridImage(
+        grid_img = Draw.MolsToGridImage(
             mols, 
             molsPerRow=mols_per_row, 
             subImgSize=size, 
@@ -487,3 +614,109 @@ class easy_rdkit():
             useSVG=True,
             drawOptions=dopts # Apply the spacing options here
         )
+
+        return grid_img
+
+    def analyze_stereochemistry(self):
+        """
+        Identifies chiral centers and stereogenic double bonds.
+        Returns a dictionary with counts and specific assignments.
+        """
+        # Find chiral centers (includes centers with unassigned stereo)
+        chiral_centers = Chem.FindMolChiralCenters(self.mol, includeUnassigned=True)
+        
+        # Identify stereogenic bonds (E/Z)
+        stereo_bonds = []
+        for bond in self.mol.GetBonds():
+            st = bond.GetStereo()
+            if st != Chem.rdchem.BondStereo.STEREONONE:
+                stereo_bonds.append((bond.GetBeginAtomIdx(), bond.GetEndAtomIdx(), st.name))
+        
+        return {
+            "chiral_centers_count": len(chiral_centers),
+            "chiral_centers": chiral_centers, # List of (atom_index, "R/S/?")
+            "stereo_bonds_count": len(stereo_bonds),
+            "stereo_bonds": stereo_bonds
+        }
+
+    def get_isomers(self, max_isomers=12, verbose=True):
+        """
+        Explores the stereochemical space of the molecule by enumerating all possible stereoisomers.
+        
+        This method identifies all unassigned or flexible stereocenters (chiral centers 
+        and double bonds) and generates a complete set of discrete stereochemical 
+        configurations. It is particularly useful for resolving "flat" SMILES strings 
+        into their constituent enantiomers and diastereomers.
+
+        Args:
+            max_isomers (int): The maximum number of isomers to generate. This prevents 
+                computational explosion for molecules with many stereocenters (2^n). 
+                Defaults to 12.
+            verbose (bool): If True, prints a summary of the number of isomers found 
+                using a colored terminal message. Defaults to True.
+
+        Returns:
+            list: A list of easy_rdkit instances, each representing a unique, 
+                fully-defined stereoisomer of the parent molecule.
+        """
+        from rdkit.Chem.EnumerateStereoisomers import EnumerateStereoisomers, StereoEnumerationOptions
+        
+        # Options to ensure we explore the full space
+        opts = StereoEnumerationOptions(tryEmbedding=True)
+        isomers_mols = list(EnumerateStereoisomers(self.mol, options=opts))
+        
+        if verbose:
+            print(f"{fg.CYAN}✨ {len(isomers_mols)} stereoisomers found for {self.smiles}{fg.OFF}")
+
+        # Wrap the resulting RDKit molecules back into easy_rdkit objects
+        return [easy_rdkit(Chem.MolToSmiles(iso)) for iso in isomers_mols[:max_isomers]]
+
+    def show_isomers(self, mols_per_row=4, size=(250, 250), save_img=None):
+        """
+        Generates, labels, and displays a grid of all possible stereoisomers.
+        
+        This method automates the transition from a single chemical identity to a 
+        visual comparative analysis of its stereoisomers. Each isomer is rendered 
+        with its specific SMILES string (including @ markers and / directionals) 
+        and an isomer index. It utilizes the class's internal grid-plotting logic 
+        to ensure high-quality SVG output and optional file export.
+
+        Args:
+            mols_per_row (int): Number of isomer structures to display per row 
+                in the grid. Defaults to 4.
+            size (tuple): The (width, height) in pixels for each individual 
+                molecular panel. Defaults to (250, 250).
+            save_img (str, optional): File path (e.g., 'isomers.svg' or 'isomers.png') 
+                to export the grid. Directories are created automatically. 
+                Defaults to None.
+
+        Returns:
+            IPython.display.SVG: A grid image displayed directly in the Jupyter/Colab 
+                environment.
+        """
+        # 1. Generate the objects
+        isomers = self.get_isomers(verbose=False)
+        
+        # 2. Build a temporary DataFrame to use our grid visualizer
+        # We include the SMILES so the user can see the slashes/chiral markers
+        data = []
+        for i, iso in enumerate(isomers):
+            d = iso.to_dict()
+            d["Isomer #"] = i
+            data.append(d)
+        
+        df_isomers = pd.DataFrame(data)
+        
+        # 3. Use the static method to plot
+        grid = self.plot_grid_from_df(
+            df_isomers, 
+            legend_cols=['Isomer #'], 
+            mols_per_row=mols_per_row, 
+            size=size, 
+            show_stereo=True,
+            save_img=save_img,
+        )
+        display(grid)
+        
+        # 3. Return the object so the user can still use it if they want
+        return grid

@@ -60,7 +60,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from cclib.io import ccopen, ccwrite
 
-def run_analysis():
+def main():
     # 1. Handle File Input
     if len(sys.argv) > 1:
         file_path = sys.argv[1]
@@ -203,4 +203,4 @@ def run_analysis():
     plt.show()
 
 if __name__ == "__main__":
-    run_analysis()
+    main()

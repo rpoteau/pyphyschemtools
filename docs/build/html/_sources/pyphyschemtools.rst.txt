@@ -62,6 +62,15 @@ pyphyschemtools.kinetics module
    :show-inheritance:
    :undoc-members:
 
+
+pyphyschemtools.nano module
+------------------------------
+
+.. automodule:: pyphyschemtools.nano
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 pyphyschemtools.spectra module
 ------------------------------
 

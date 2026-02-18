@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; pyphyschemtools 0.7.3 documentation</title>
+  <title>Index &mdash; pyphyschemtools 0.7.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/genindex.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=c98573da"></script>
+      <script src="_static/documentation_options.js?v=020ce317"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Cheminformatics.html">Cheminformatics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Kinetics.html">Chemical Kinetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Nano.html">Nanochemistry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/PeriodicTable.html">Periodic Table</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Units.html">Fundamental Units</a></li>
@@ -281,7 +282,11 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyphyschemtools.html#pyphyschemtools.kinetics.KORD.fit">fit() (pyphyschemtools.kinetics.KORD method)</a>
+
+      <ul>
+        <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.fit">(pyphyschemtools.nano.NanoparticleDistribution method)</a>
 </li>
+      </ul></li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.cheminformatics.easy_rdkit.from_cid">from_cid() (pyphyschemtools.cheminformatics.easy_rdkit class method)</a>
 </li>
   </ul></td>
@@ -300,6 +305,8 @@
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.kinetics.KORD.get_best_order">get_best_order() (pyphyschemtools.kinetics.KORD method)</a>
 </li>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.get_binned_statistics">get_binned_statistics() (pyphyschemtools.nano.NanoparticleDistribution method)</a>
+</li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.Chem3D.XYZData.get_bounding_sphere">get_bounding_sphere() (pyphyschemtools.Chem3D.XYZData method)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.Chem3D.XYZData.get_cage_volume">get_cage_volume() (pyphyschemtools.Chem3D.XYZData method)</a>
@@ -312,6 +319,8 @@
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.Chem3D.XYZData.get_center_of_mass">get_center_of_mass() (pyphyschemtools.Chem3D.XYZData method)</a>
 </li>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.get_fit_accuracy">get_fit_accuracy() (pyphyschemtools.nano.NanoparticleDistribution method)</a>
+</li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.cheminformatics.easy_rdkit.get_isomers">get_isomers() (pyphyschemtools.cheminformatics.easy_rdkit method)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.survey.SurveyApp.get_or_create_user_id">get_or_create_user_id() (pyphyschemtools.survey.SurveyApp method)</a>
@@ -319,6 +328,8 @@
       <li><a href="pyphyschemtools.html#pyphyschemtools.get_ppct_data">get_ppct_data() (in module pyphyschemtools)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.core.get_qc_examples">get_qc_examples() (in module pyphyschemtools.core)</a>
+</li>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.get_relative_height">get_relative_height() (pyphyschemtools.nano.NanoparticleDistribution method)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.color.GREEN">GREEN (pyphyschemtools.visualID_Eng.color attribute)</a>
 
@@ -442,6 +453,8 @@
 </li>
         <li><a href="pyphyschemtools.html#module-pyphyschemtools.ML">pyphyschemtools.ML</a>
 </li>
+        <li><a href="pyphyschemtools.html#module-pyphyschemtools.nano">pyphyschemtools.nano</a>
+</li>
         <li><a href="pyphyschemtools.html#module-pyphyschemtools.PeriodicTable">pyphyschemtools.PeriodicTable</a>
 </li>
         <li><a href="pyphyschemtools.html#module-pyphyschemtools.spectra">pyphyschemtools.spectra</a>
@@ -466,6 +479,10 @@
 
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution">NanoparticleDistribution (class in pyphyschemtools.nano)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pyphyschemtools.html#pyphyschemtools.PeriodicTable.TableauPeriodique.nomsFr">nomsFr (pyphyschemtools.PeriodicTable.TableauPeriodique attribute)</a>
 </li>
@@ -497,6 +514,8 @@
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.PeriodicTable.TableauPeriodique.patch_elements">patch_elements() (pyphyschemtools.PeriodicTable.TableauPeriodique method)</a>
 </li>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.plot">plot() (pyphyschemtools.nano.NanoparticleDistribution method)</a>
+</li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.kinetics.KORD.plot_all_fits">plot_all_fits() (pyphyschemtools.kinetics.KORD method)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.cheminformatics.easy_rdkit.plot_grid_from_df">plot_grid_from_df() (pyphyschemtools.cheminformatics.easy_rdkit static method)</a>
@@ -517,7 +536,11 @@
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.spectra.SpectrumSimulator.plotTDDFTSpectrum">plotTDDFTSpectrum() (pyphyschemtools.spectra.SpectrumSimulator method)</a>
 </li>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.print_accuracy_report">print_accuracy_report() (pyphyschemtools.nano.NanoparticleDistribution method)</a>
+</li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.survey.SurveyApp.print_questions_summary">print_questions_summary() (pyphyschemtools.survey.SurveyApp method)</a>
+</li>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.print_results">print_results() (pyphyschemtools.nano.NanoparticleDistribution method)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.sympyUtilities.PrintLatexStyleSymPyEquation">PrintLatexStyleSymPyEquation() (in module pyphyschemtools.sympyUtilities)</a>
 </li>
@@ -585,6 +608,13 @@
 
       <ul>
         <li><a href="pyphyschemtools.html#module-pyphyschemtools.ML">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyphyschemtools.nano
+
+      <ul>
+        <li><a href="pyphyschemtools.html#module-pyphyschemtools.nano">module</a>
 </li>
       </ul></li>
       <li>
@@ -667,6 +697,8 @@
       <li><a href="pyphyschemtools.html#pyphyschemtools.tools4AS.ReplaceNanBy0">ReplaceNanBy0() (in module pyphyschemtools.tools4AS)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.tools4AS.ReplaceNanBy0OLD">ReplaceNanBy0OLD() (in module pyphyschemtools.tools4AS)</a>
+</li>
+      <li><a href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution.results">results (pyphyschemtools.nano.NanoparticleDistribution property)</a>
 </li>
       <li><a href="pyphyschemtools.html#pyphyschemtools.survey.SurveyApp.run">run() (pyphyschemtools.survey.SurveyApp method)</a>
 </li>

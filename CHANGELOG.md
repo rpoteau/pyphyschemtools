@@ -11,6 +11,20 @@
 
 # Changelog pyphyschemtools
 
+## [0.7.4] - 2026-02-18 "Nano & GScan_Analyzis"
+
+### Added
+- New `nano` module. So far, contains only the `NanoparticleDistribution` class, precisely for nanoparticle size distribution analysis.
+- One example has been added in the `Examples.ipynb` notebook
+- (empty) file added for the documentation
+
+## [unreleased version] - 2026-02-17
+
+### Fixed in `GScan_Analyzis.py`: Geometry Stabilization & Alignment
+- Trajectory Discontinuity: Resolved the issue where `_optimized_movie.xyz` files were not stable or smooth. This was caused by `cclib` defaulting to Gaussian's Standard Orientations, which change frame-to-frame.
+- Molecular Jumping/Flickering: Implemented the Kabsch Algorithm (SVD-based Procrustes analysis, where SVD = Singular Value Decomposition) using `numpy.linalg.svd`. This corrects the "Standard Orientation" shifts by calculating the optimal rotation matrix between steps.
+- Visual Flow: Output trajectory files are now stabilized, ensuring the molecule no longer rotates or shifts artificially between scan steps, making them suitable for analysis and presentations.
+
 ## [0.7.3] - 2026-02-15. "stereochem with easy-rdkit & sym with Chem3D"
 
 ### Added in `easy_rdkit`

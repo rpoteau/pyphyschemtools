@@ -2,7 +2,7 @@
 import sys
 
 # --- VERSIONING ---
-__version__ = "20260211"
+__version__ = "20260217"
 
 # ANSI escape codes for colors
 RED = "\033[1;31m"
@@ -60,6 +60,31 @@ import matplotlib.pyplot as plt
 import numpy as np
 from cclib.io import ccopen, ccwrite
 
+def kabsch_rotate(P, Q):
+    """
+    Aligns coordinate matrix P onto reference matrix Q to minimize RMSD.
+    Using the Kabsch algorithm (SVD based).
+    """
+    # 1. Centrer les deux structures
+    P_center = P - np.mean(P, axis=0)
+    Q_center = Q - np.mean(Q, axis=0)
+    
+    # 2. Calculer la matrice de covariance
+    C = np.dot(P_center.T, Q_center)
+    
+    # 3. Décomposition en valeurs singulières (SVD)
+    V, S, W = np.linalg.svd(C)
+    d = (np.linalg.det(V) * np.linalg.det(W)) < 0.0
+    if d:
+        S[-1] = -S[-1]
+        V[:, -1] = -V[:, -1]
+    
+    # 4. Matrice de rotation optimale
+    U = np.dot(V, W)
+    
+    # 5. Appliquer la rotation et remettre à la position de référence
+    return np.dot(P_center, U) + np.mean(Q, axis=0)
+    
 def main():
     # 1. Handle File Input
     if len(sys.argv) > 1:
@@ -140,9 +165,30 @@ def main():
         has_recovered_point = True
         print(f"-> Added unconverged last point (index {last_idx}) for analysis.")
 
-    # --- DATA EXTRACTION ---
+    # --- DATA EXTRACTION --- Old. Drifting of the Standard 
+    # energies_ev = np.array([data.scfenergies[i] for i in indices])
+    # coords = np.array([data.atomcoords[i] for i in indices])
+    # delta_e_kcal = (energies_ev - np.min(energies_ev)) * 23.0605
+
+    # --- DATA EXTRACTION & ALIGNMENT ---
     energies_ev = np.array([data.scfenergies[i] for i in indices])
-    coords = np.array([data.atomcoords[i] for i in indices])
+    raw_coords = np.array([data.atomcoords[i] for i in indices])
+    
+    # Initialize aligned coordinates list with the first frame
+    aligned_coords = [raw_coords[0]]
+    
+    # Loop through subsequent frames
+    for i in range(1, len(raw_coords)):
+        # OPTION A: Align to the very first frame (more stable)
+        # reference = raw_coords[0]
+        
+        # OPTION B: Align to the previous frame (smoother transitions)
+        reference = aligned_coords[i-1]
+        
+        new_frame = kabsch_rotate(raw_coords[i], reference)
+        aligned_coords.append(new_frame)
+    
+    coords = np.array(aligned_coords)
     delta_e_kcal = (energies_ev - np.min(energies_ev)) * 23.0605
 
     # --- FIND GLOBAL MINIMUM ---

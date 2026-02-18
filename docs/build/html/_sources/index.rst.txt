@@ -29,6 +29,7 @@ The package provides a versatile ecosystem for researchers:
    theoryDocs/Cheminformatics
    theoryDocs/Chem3D
    theoryDocs/Kinetics
+   theoryDocs/Nano
    theoryDocs/PeriodicTable
    theoryDocs/Spectra
    theoryDocs/Units

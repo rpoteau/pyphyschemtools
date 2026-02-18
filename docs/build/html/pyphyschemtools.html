@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.7.3 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.7.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=c98573da"></script>
+      <script src="_static/documentation_options.js?v=020ce317"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Cheminformatics.html">Cheminformatics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Kinetics.html">Chemical Kinetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Nano.html">Nanochemistry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/PeriodicTable.html">Periodic Table</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Units.html">Fundamental Units</a></li>
@@ -104,6 +105,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.kinetics">pyphyschemtools.kinetics module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.kinetics.KORD"><code class="docutils literal notranslate"><span class="pre">KORD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.nano">pyphyschemtools.nano module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.nano.NanoparticleDistribution"><code class="docutils literal notranslate"><span class="pre">NanoparticleDistribution</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.spectra">pyphyschemtools.spectra module</a><ul>
@@ -1215,6 +1220,112 @@ Vectorial svg is recommended</p>
 for example to visualize the starting point of a fit.</p>
 <p>If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
 Vectorial svg is recommended</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyphyschemtools.nano">
+<span id="pyphyschemtools-nano-module"></span><h2>pyphyschemtools.nano module<a class="headerlink" href="#module-pyphyschemtools.nano" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.nano.</span></span><span class="sig-name descname"><span class="pre">NanoparticleDistribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to analyze and fit nanoparticle size distributions using Gaussian models.</p>
+<p>This tool provides methods for curve fitting, statistical breakdown by size bins,
+and publication-ready visualization.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.fit" title="Link to this definition"></a></dt>
+<dd><p>Perform a non-linear least squares Gaussian fit on the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p0</strong> (<em>list</em><em>, </em><em>optional</em>) – Initial guesses for [A, mu, sigma].
+Defaults to automatic estimates from data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optimized parameters [A, mu, sigma].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.get_binned_statistics">
+<span class="sig-name descname"><span class="pre">get_binned_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bin_width_nm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.get_binned_statistics" title="Link to this definition"></a></dt>
+<dd><p>Calculate theoretical populations using a fixed bin width in nanometers.
+The range automatically adjusts to cover approximately ±3.5 sigma.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bin_width_nm</strong> (<em>float</em><em>, </em><em>optional</em>) – The width of each bin in nm.
+Defaults to the fitted sigma.</p></li>
+<li><p><strong>total_n</strong> (<em>int</em><em>, </em><em>optional</em>) – Total number of particles for scaling.
+Defaults to the sum of input counts.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.get_fit_accuracy">
+<span class="sig-name descname"><span class="pre">get_fit_accuracy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.get_fit_accuracy" title="Link to this definition"></a></dt>
+<dd><p>Calculates the statistical uncertainty of the fit parameters
+and the R-squared value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.get_relative_height">
+<span class="sig-name descname"><span class="pre">get_relative_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.get_relative_height" title="Link to this definition"></a></dt>
+<dd><p>Calculates height relative to the peak (mu).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Nanoparticle</span> <span class="pre">Size</span> <span class="pre">Distribution'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_histo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'skyblue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_gaussian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'red'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.plot" title="Link to this definition"></a></dt>
+<dd><p>Visualize the experimental histogram overlaid with the Gaussian fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em>) – Graph title.</p></li>
+<li><p><strong>color_histo</strong> (<em>str</em>) – Hex code or name for the bars.</p></li>
+<li><p><strong>color_gaussian</strong> (<em>str</em>) – Hex code or name for the fit line.</p></li>
+<li><p><strong>save_img</strong> (<em>str</em><em>, </em><em>optional</em>) – Filename or path for saving. Supports .png and .svg.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – Resolution for raster exports (default 300).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.print_accuracy_report">
+<span class="sig-name descname"><span class="pre">print_accuracy_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.print_accuracy_report" title="Link to this definition"></a></dt>
+<dd><p>Prints a detailed report on the fit reliability.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.print_results">
+<span class="sig-name descname"><span class="pre">print_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.print_results" title="Link to this definition"></a></dt>
+<dd><p>Print a formatted summary of the distribution statistics.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.results">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">results</span></span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.results" title="Link to this definition"></a></dt>
+<dd><p>Calculate physical parameters from the fitted model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing amplitude, mean, sigma, FWHM, and CV (%).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If called before running the .fit() method.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

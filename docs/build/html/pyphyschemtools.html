@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.7.4 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.7.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=020ce317"></script>
+      <script src="_static/documentation_options.js?v=a674670e"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -109,6 +109,8 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.nano">pyphyschemtools.nano module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.nano.NanoparticleDistribution"><code class="docutils literal notranslate"><span class="pre">NanoparticleDistribution</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.nano.get_coordination_numbers"><code class="docutils literal notranslate"><span class="pre">get_coordination_numbers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.nano.view_coordination"><code class="docutils literal notranslate"><span class="pre">view_coordination()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.spectra">pyphyschemtools.spectra module</a><ul>
@@ -1328,6 +1330,71 @@ and the R-squared value.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.get_coordination_numbers">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.nano.</span></span><span class="sig-name descname"><span class="pre">get_coordination_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.get_coordination_numbers" title="Link to this definition"></a></dt>
+<dd><p>Calculates the coordination number (CN) for each atom in an ASE Atoms object.</p>
+<p>This function determines how many neighbors each atom has based on a distance
+threshold. If no cutoff is provided, it automatically estimates one based on
+the 1st percentile of the interatomic distance distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>ase.Atoms</em>) – The structural model (nanoparticle, molecule, or crystal).</p></li>
+<li><p><strong>cutoff</strong> (<em>float</em><em>, </em><em>optional</em>) – The distance threshold (in Angstroms) to define
+a chemical bond. Defaults to None (automatic detection).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>cn (numpy.ndarray): An array of integers representing the CN of each atom.</p></li>
+<li><p>used_cutoff (float): The actual cutoff value used for the calculation.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.view_coordination">
+<span class="sig-prename descclassname"><span class="pre">pyphyschemtools.nano.</span></span><span class="sig-name descname"><span class="pre">view_coordination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stick_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sphere_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'YlOrRd'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.view_coordination" title="Link to this definition"></a></dt>
+<dd><p>Visualizes a structure using py3Dmol with atoms color-coded by coordination number.</p>
+<p>This function computes the coordination environment and generates a 3D ball-and-stick
+model where colors represent the connectivity (e.g., surface vs. bulk atoms).
+A Matplotlib legend is displayed alongside the 3D view.</p>
+<p>The color logic is optimized for nanoparticles:
+- CN &lt; 5 : Pastel (low coordination/isolated)
+- CN 5-13: Sequential Gradient (surface to bulk transition)
+- CN &gt; 13: Deep Dark (high density/interstitials)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>ase.Atoms</em>) – The structural model to visualize.</p></li>
+<li><p><strong>cutoff</strong> (<em>float</em><em>, </em><em>optional</em>) – Distance threshold for bond detection.
+Defaults to None (auto-detect).</p></li>
+<li><p><strong>stick_radius</strong> (<em>float</em><em>, </em><em>optional</em>) – The thickness of the bonds in the 3D view.
+Defaults to 0.1.</p></li>
+<li><p><strong>sphere_scale</strong> (<em>float</em><em>, </em><em>optional</em>) – The size multiplier for the atomic spheres.
+Defaults to 0.6.</p></li>
+<li><p><strong>color_map</strong> (<em>str</em><em>, </em><em>optional</em>) – The Matplotlib colormap to use for discrete CN values.
+Defaults to “YlOrRd” (recommended!).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The interactive viewer object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>py3Dmol.view</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

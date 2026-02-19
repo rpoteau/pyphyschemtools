@@ -121,15 +121,14 @@ Computes thermochemical values after a normal modes calculation with VASP (same 
     * `-e T/F`: contribution from electronic motion  (default: F(alse))
     * `-v T/F`: contribution from vibrational motion (default: T(rue))
     * `-S value`: rotational symmetry number (default: 1.0)
-        * <span style="font-family:monospace"> C1, Ci, Cs, Cinfv: 1  
-        *          Cn, Cnv, Cnh: n  
-        *                 Dinfh: 2  
-        *          Dn, Dnh, Dnd: 2n 
-        *                 T, Td: 12 
+        *     C1, Ci, Cs, Cinfv: 1
+        *          Cn, Cnv, Cnh: n
+        *                 Dinfh: 2
+        *          Dn, Dnh, Dnd: 2n
+        *                 T, Td: 12
         *                    Sn: n/2
-        *                    Oh: 24 
+        *                    Oh: 24
         *                    Ih: 60
-</span>
 
 * **Current version**: 2021202411312
 

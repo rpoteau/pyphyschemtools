@@ -554,7 +554,11 @@ class molView:
             })
     
             # Label slightly beyond the arrow tip
-            label_pos = end + label_offset * vec / np.linalg.norm(vec)
+            norm = np.linalg.norm(vec)
+            if norm > 1e-6:
+                label_pos = end + label_offset * vec / np.linalg.norm(vec)
+            else:
+                label_pos = end
     
             self.v.addLabel(
                 name,
@@ -779,6 +783,8 @@ class molView:
         # On extrait les données ici avant toute modification (RDKit ou Supercell)
         if self.source == 'ase':
             atoms = self.mol
+            self.server = 'ase'
+            self.name = f"ASE Atoms ({self.mol.get_chemical_formula()})"
         else:
             try:
                 # On utilise l'alias long d'ASE pour PDB, sinon le format détecté
@@ -825,6 +831,7 @@ class molView:
             # Create ASE atoms object
             if self.source == 'ase':
                 atoms = self.mol
+                # For rendering consistency, generate content string from ASE
             else:
                 atoms = read(io.StringIO(content), format=fmt)
             
@@ -839,7 +846,7 @@ class molView:
             
             # 3. Send atoms to py3Dmol (XYZ, robust)
             xyz_buf = io.StringIO()
-            write(xyz_buf, atoms, format="xyz")
+            write(xyz_buf, atoms, format="xyz", comment="")
 
             if self.viewer: 
                 self.v.addModel(xyz_buf.getvalue(), "xyz")
@@ -915,6 +922,7 @@ class molView:
         if self.viewer:
             self._apply_style()
             self._add_interactions()
+            self.v.removeAllLabels()
             # Detect and add H-bonds if hydrogens are present
             symbols = atoms.get_chemical_symbols()
             if 'H' in symbols and self.displayHbonds:

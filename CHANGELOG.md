@@ -11,6 +11,21 @@
 
 # Changelog pyphyschemtools
 
+## [0.7.5] - 2026-02-19 "CN in nano; Chem3D fix; chrono_show"
+
+### Added
+* **General Nano-Analysis Tools in `nano.py`:**
+    * `get_coordination_numbers`: New utility to calculate atomic coordination (CN). Features an **automatic cutoff detection** algorithm based on 1.2x the 1st percentile of the interatomic distance distribution (robust for diverse scales).
+    * `view_coordination`: Enhanced visualization tool that maps CN to discrete color palettes (e.g., `tab20`). 
+    * **Integrated Legend:** Added a Matplotlib-based legend to `view_coordination` that dynamically displays the active CN values and the specific cutoff used in Angstroms.
+
+### Fixed
+* **3D Chemistry (`molView` class of `Chem3D.py`):** Resolved an issue where metadata from `ase.Atoms` objects caused ghost letters/labels to appear in the center of the 3D plot. 
+    * Added `self.v.removeAllLabels()` during the finalization of the viewer to ensure a clean canvas.
+    * Formally initialized `self.server` if ase objects.
+    * Improved handling of the XYZ comment line when serializing ASE objects to prevent `py3Dmol` from interpreting header strings as 3D text.
+* `chrono_show()` of `visualID_Eng.py` now given in the fast imports of `__init__.py`
+
 ## [0.7.4] - 2026-02-18 "Nano & GScan_Analyzis"
 
 ### Added

@@ -39,7 +39,7 @@ The package provides a versatile ecosystem for researchers:
    :maxdepth: 2
    :caption: 🚀 Interactive Examples
 
-   Examples (Google Colab) <https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb> 
+   Examples (Google Colab) <https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples_pyPCT.ipynb> 
 
 .. toctree::
    :maxdepth: 2

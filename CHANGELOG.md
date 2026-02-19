@@ -11,6 +11,10 @@
 
 # Changelog pyphyschemtools
 
+## [0.7.6] - 2026-02-20 "Wrong link to Examples_pyPCT.ipynb"
+
+Wrong link to `Examples_pyPCT.ipynb` in `README.md` and in `/docs/source/index.rst`, after renaming of the initial `Examples.ipynb`
+
 ## [0.7.5] - 2026-02-19 "CN in nano; Chem3D fix; chrono_show"
 
 ### Added

@@ -27,4 +27,4 @@ pip install pyphyschemtools
 [![Downloads](https://img.shields.io/pypi/dm/pyphyschemtools)](https://pypi.org/project/pyphyschemtools/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18644730.svg)](https://doi.org/10.5281/zenodo.18644730)
 
-**Main Tutorial**: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples.ipynb)
+**Main Tutorial**: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rpoteau/pyphyschemtools/blob/main/Examples_pyPCT.ipynb)

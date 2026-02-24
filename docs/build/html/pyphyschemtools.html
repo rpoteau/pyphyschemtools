@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.7.6 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=918ced64"></script>
+      <script src="_static/documentation_options.js?v=486e5634"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1231,7 +1231,7 @@ Vectorial svg is recommended</p>
 <span id="pyphyschemtools-nano-module"></span><h2>pyphyschemtools.nano module<a class="headerlink" href="#module-pyphyschemtools.nano" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.nano.</span></span><span class="sig-name descname"><span class="pre">NanoparticleDistribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.nano.</span></span><span class="sig-name descname"><span class="pre">NanoparticleDistribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to analyze and fit nanoparticle size distributions using Gaussian models.</p>
 <p>This tool provides methods for curve fitting, statistical breakdown by size bins,
@@ -1255,20 +1255,55 @@ Defaults to automatic estimates from data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.get_binned_statistics">
-<span class="sig-name descname"><span class="pre">get_binned_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bin_width_nm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.get_binned_statistics" title="Link to this definition"></a></dt>
-<dd><p>Calculate theoretical populations using a fixed bin width in nanometers.
-The range automatically adjusts to cover approximately ±3.5 sigma.</p>
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.from_gaussian_params">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_gaussian_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.from_gaussian_params" title="Link to this definition"></a></dt>
+<dd><p>Instantiate with a specific total population (total_n).
+The amplitude is calculated so the integral equals total_n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.from_lognormal_params">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_lognormal_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">median</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.from_lognormal_params" title="Link to this definition"></a></dt>
+<dd><p>Instantiates the class using Log-Normal parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bin_width_nm</strong> (<em>float</em><em>, </em><em>optional</em>) – The width of each bin in nm.
-Defaults to the fitted sigma.</p></li>
-<li><p><strong>total_n</strong> (<em>int</em><em>, </em><em>optional</em>) – Total number of particles for scaling.
-Defaults to the sum of input counts.</p></li>
+<li><p><strong>median</strong> (<em>float</em>) – The median diameter (nm).</p></li>
+<li><p><strong>sigma_g</strong> (<em>float</em>) – The geometric standard deviation.</p></li>
+<li><p><strong>amplitude</strong> (<em>float</em>) – Total number of particles.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.from_polydispersity">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_polydispersity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pd_pct</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.from_polydispersity" title="Link to this definition"></a></dt>
+<dd><p>Instantiate the class using mean diameter and Polydispersity Index (CV%).</p>
+<p>Formula: sigma = (PD% / 100) * mu</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.from_saxs_data">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_saxs_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_vol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pd_vol_pct</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.from_saxs_data" title="Link to this definition"></a></dt>
+<dd><p>Instantiate the class by converting SAXS (volume-weighted) parameters
+into Number-weighted parameters using numerical cube-weighting.</p>
+<p>This method uses a robust iterative solver to find the number-weighted
+mean (mu_n) that corresponds to the observed SAXS volume-weighted mean.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.from_saxs_lognormal">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_saxs_lognormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_vol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pd_vol_pct</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.from_saxs_lognormal" title="Link to this definition"></a></dt>
+<dd><p>Converts SAXS Volume-weighted Mean to Number-weighted Log-normal parameters
+using exact Hatch-Choate identities.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.get_binned_statistics">
+<span class="sig-name descname"><span class="pre">get_binned_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bin_width_nm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.get_binned_statistics" title="Link to this definition"></a></dt>
+<dd><p>Calculate theoretical populations using a fixed bin width in nanometers.
+Supports both Gaussian and Log-normal models.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1310,7 +1345,7 @@ and the R-squared value.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.nano.NanoparticleDistribution.print_results">
 <span class="sig-name descname"><span class="pre">print_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.nano.NanoparticleDistribution.print_results" title="Link to this definition"></a></dt>
-<dd><p>Print a formatted summary of the distribution statistics.</p>
+<dd><p>Print a formatted summary with dynamically calculated coverage.</p>
 </dd></dl>
 
 <dl class="py property">

@@ -405,6 +405,8 @@ class molView:
         self.supercell = supercell
         self.viewer = viewer
         self.zoom = zoom
+        self.sphere_radius = None
+        self.sphere_volume = None
         if source is None and os.path.exists(str(mol)):
             self.source = 'file'
         elif source in valid_sources:
@@ -993,6 +995,8 @@ class molView:
                 'opacity': opacity
             })
             print(f"Bounding Sphere: Radius = {radius:.2f} Å | Volume = {(4/3)*np.pi*radius**3:.2f} Å³")
+            self.sphere_radius = radius
+            self.sphere_volume = (4/3)*np.pi*radius**3
         return self.v.show()
 
     def show_cage_cavity(self, grid_spacing=0.5, color='cyan', opacity=0.5):

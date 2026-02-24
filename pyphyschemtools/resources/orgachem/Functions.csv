@@ -1,0 +1,51 @@
+Macro-Micro;id;nom_fr;smarts;commentaires_fr;commentaires_en;Famille;Prefixe;Suffixe;Priorite
+Micro;Carboxylic Acid;Acide Carboxylique;[CX3](=O)[OX2H1];Acide organique faible;Weak organic acid;Acide Carboxylique;carboxy;oic acid;2
+Micro;Thiocaboxilic Acid;Thioacide;[CX3](=S)[OH];Acide O-carbothioïque;Acide O-carbothioïque;Acide Thiocarboxylique;sulfanylcarbonyl;thioic O-acid;2
+Micro;Thiocaboxilic Acid;Thioacide;[CX3](=O)[SH];Acide S-carbothioïque;Acide S-carbothioïque;Acide Thiocarboxylique;sulfanylcarbonyl;thioic S-acid;2
+Micro;Sulfonic Acid;Acide Sulfonique;[SX4](=O)(=O)[OH];Acide fort organique;Strong organic acid;Acide Sulfonique;sulfo;sulfonic acid;2
+Micro;Sulfinic Acid;Acide Sulfinique;[SX3](=O)[OH];;;Acide Sulfinique;sulfino;sulfinic acid;2
+Micro;Acid Anhydride;Anhydride Acide;[CX3](=O)[OX2][CX3](=O);Anhydride d'acide;Acid anhydride;Anhydride d'acide;;oic anhydride;3
+Micro;Ester;Ester;[CX3](=O)[OX2H0][#6];Dérivé d'acide R-COO-R;Acid derivative R-COO-R;Ester;alkoxycarbonyl;oate;3
+Micro;Haloformyl;Halogénure d'acyle;[CX3](=[O])[F,Cl,Br,I,At];Halogénure d'acyle;Acyl halide;Halogénure d'acyle;halocarbonyl;oyl halide;3
+Micro;Amide;Amide;[CX3](=O)[NX3];Liaison amide très stable;Very stable amide bond;Amide;carbamoyl;amide;3
+Micro;Imide;Imide;[CX3](=O)[NX3][CX3](=O);;;Imide;imido;imide;3
+Micro;Amidine;Amidine;[CX3](=[NX2])[NX3H2];Analogue azoté de l'amide;Nitrogen analogue of amide;Amidine;amidino;amidine;3
+Micro;Nitrile;Nitrile;[NX1]#[CX2];Triple liaison Carbone-Azote;Carbon-Nitrogen triple bond;Nitrile;cyano;nitrile;4
+Micro;Isocyanide;Isonitrile;[NX2]#[CX1];;;Isonitrile;isocyano;isocyanide;4
+Micro;Aldehyde;Aldéhyde;[CX3H1](=O)[#6];Carbonyle en bout de chaîne;Carbonyl at the end of the chain;Aldéhyde;formyl;al;5
+Micro;Thial;Thioaldéhyde;[CX3H1](=S);;;Thioaldéhyde;thioformyl;thial;5
+Micro;Ketone;Cétone;[#6][CX3](=O)[#6];Carbonyle inséré dans la chaîne;Carbonyl inside the carbon chain;Cétone;oxo;one;6
+Micro;Thioketone;Thiocétone;[#6][CX3](=S)[#6];;;Thiocétone;sulfanylidene;thione;6
+Micro;Alcohol;Alcool;[OX2H1];Groupe hydroxyl classique;Classic hydroxyl group;Alcool;hydroxy;ol;7
+Micro;Thiol;Thiol;[CX4][SX2H1];Equivalent soufré de l'alcool;Sulfur equivalent of alcohol;Thiol;sulfanyl;thiol;7
+Micro;Hydroperoxy;Hydroperoxyde;[OX2][OX2H1];Fonction hydroperoxyde R-O-OH;Hydroperoxide group R-O-OH;Hydroperoxyde;hydroperoxy;peroxol;8
+Micro;Primary amine;Amine I;[NX3H2];Amine primaire;Primary amine;Amine;amino;amine;9
+Micro;Secondary amine;Amine II;[NX3H1];Amine secondaire;Secondary amine;Amine;alkylamino;amine;9
+Micro;Tertiary amine;Amine III;[NX3H0];Amine tertiaire;Tertiary amine;Amine;dialkylamino;amine;9
+Micro;Primary ketimine;Cétimine I;[CX3H0]=[NH];Imine issue d'une cétone;Imine derived from a ketone;Imine;imino;imine;9
+Micro;Secondary ketimine;Cétimine II;[CX3H0]=[NX2H0];Imine de cétone substituée;Substituted ketone imine;Imine;imino;imine;9
+Micro;Primary aldimine;Aldimine I;[CX3H1]=[NH];Imine issue d'un aldéhyde;Imine derived from an aldehyde;Imine;imino;imine;9
+Micro;Secondary aldimine;Aldimine II;[CX3H1]=[NX2H0];Imine d'aldéhyde substituée;Substituted aldehyde imine;Imine;imino;imine;9
+Micro;Hydrazine;Hydrazine;[NX3][NX3];;;Hydrazine;hydrazino;hydrazine;9
+Micro;Alkenyle;Alcène;[CX3]=[CX3];Double liaison carbone-carbone;Carbon-carbon double bond;Alcène;alkenyl;ene;
+Micro;Alkynyl;Alcyne;[CX2]#[CX2];Triple liaison carbone-carbone;Carbon-carbon triple bond;Alcyne;alkynyl;yne;
+Micro;Phenyl;Phényle;c1ccccc1;Cycle aromatique dérivé du benzène;Aromatic ring derived from benzene;Dérivé benzénique;phenyl;benzene;
+Micro;Carbonate Ester;Carbonate;[OX2][CX3](=[O])[OX2];Ester de carbonate;Carbonate ester;Carbonate;alkoxycarbonyloxy;carbonate;
+Micro;Organic Peroxides;Peroxyde Organique;[OX2][OX2];Pont peroxyde R-O-O-R;Peroxide bridge R-O-O-R;Peroxyde;peroxy;peroxide;
+Micro;Ether;Ether;[OX2]([#6])[#6];R-O-R (exclut esters);R-O-R (excludes esters);Ether;alkoxy;ether;
+Micro;Hemiketal;Hemicetal;[CX4]([OH])([OX2H0]);Hémi-cétal/acétal instable;Unstable hemiketal/acetal;Hemiketal;;;
+Micro;Hémiacétal;Hémiacétal;[CX4H1]([OH])([OX2H0]);;;Hémiacétal;;;
+Micro;Acetal;Acétals;[CX4H1]([OX2H0])([OX2H0]);;;Acétal;;dialkyl acetal;
+Micro;Ketal;Cétals;[CX4H0]([OX2H0])([OX2H0]);;;Cétal;;dialkyl ketal;
+Micro;Orthoester;Orthoester;[CX4]([OX2])([OX2])([OX2]);Trois groupes alkoxy;Three alkoxy groups;Orthoester;;orthoester;
+Micro;Guanidine;Guanidine;[NX3][CX3](=[NX2])[NX3];Base organique forte;Strong organic base;Guanidine;guanidino;guanidine;
+Micro;Hydrazone;Hydrazone;[CX3]=[NX2][NX3];Fonction R=N-N;Functional group R=N-N;Hydrazone;hydrazono;hydrazone;
+Micro;Nitro;Nitro;[N+X3]([O-])=O;Groupe Nitro NO2 attracteur;Electron-withdrawing Nitro group;Nitro;nitro;;
+Micro;Thioether;Thioéther;[SX2]([#6])[#6];Sulfure R-S-R';Sulfide R-S-R';Sulfure;alkylsulfanyl;sulfide;
+Micro;Acyl chloride;Chlorure d'acyle;[CX3](=O)[Cl];Chlorure d'acide très réactif;Very reactive acid chloride;Halogénure d'acyle;chlorocarbonyl;oyl chloride;
+Micro;Fluoro;Fluoro;[F];Halogène (Fluor);Halogen (Fluorine);Haloalcane;fluoro;;
+Micro;Chloro;Chloro;[Cl];Halogène (Chlore);Halogen (Chlorine);Haloalcane;chloro;;
+Micro;Bromo;Bromo;[Br];Halogène (Brome);Halogen (Bromine);Haloalcane;bromo;;
+Micro;Iodo;Iodo;[I];Halogène (Iode);Halogen (Iodine);Haloalcane;iodo;;
+Micro;Isocyanate;Isocyanate;[NX2]=[CX2]=[OX1];Structure réactive N=C=O;Reactive structure N=C=O;Isocyanate;isocyanato;isocyanate;
+Micro;Sulfonamide;Sulfonamide;[SX4](=O)(=O)[NX3];Groupe sulfamide;Sulfonamide group;Sulfonamide;sulfamoyl;sulfonamide;

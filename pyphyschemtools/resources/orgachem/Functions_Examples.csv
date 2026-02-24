@@ -1,0 +1,45 @@
+id,smiles
+Alkenyle,C=C
+Alkynyl,C#C
+Phenyl,c1ccccc1
+Alcohol,CCO
+Aldehyde,CC=O
+Ketone,CC(=O)C
+Haloformyl,CC(=O)Cl
+Carbonate Ester,COC(=O)OC
+Carboxylic Acid,CC(=O)O
+Ester,CC(=O)OC
+Hydroperoxy,COO
+Peroxy,COOC
+Ether,COC
+Hemiketal,CC(O)(OC)C
+Acetal,CC(OC)OC
+Ketal,CC(OC)(OC)C
+Orthoester,C(OC)(OC)OC
+Orthocarbonate ester,C(OC)(OC)(OC)OC
+Carboxylic anhydride,CC(=O)OC(=O)C
+Amide,CC(=O)N
+Amidine,CC(=N)N
+Guanidine,NC(=N)N
+Amine,CN
+Primary amine,CN
+Secondary amine,CNC
+Tertiary amine,CN(C)C
+Hydrazone,CC=NN
+Primary ketimine,CC(=N)C
+Secondary ketimine,CC(=NC)C
+Primary aldimine,CC=N
+Secondary aldimine,CC=NC
+Nitrile,CC#N
+Nitro,C[N+](=O)[O-]
+Thiol,CCS
+Thioether,CSC
+Sulfonic acid,CS(=O)(=O)O
+Acyl chloride,CC(=O)Cl
+Fluoro,CF
+Chloro,CCl
+Bromo,CBr
+Iodo,CI
+Phosphine,CP
+Isocyanate,CN=C=O
+Sulfonamide,CS(=O)(=O)N

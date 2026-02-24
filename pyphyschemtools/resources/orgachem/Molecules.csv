@@ -1,0 +1,35 @@
+nom_fr,nom_en,smiles
+Paracétamol (Amide),Paracetamol (Amide),CC(=O)NC1=CC=C(O)C=C1
+Aspirine (Ester/Acide),Aspirin (Ester/Acid),CC(=O)OC1=CC=CC=C1C(=O)O
+Caféine (Amide/Imine),Caffeine (Amide/Imine),CN1C=NC2=C1C(=O)N(C)C(=O)N2C
+Adrénaline (Alcool/Amine),Adrenaline (Alcohol/Amine),CNC[C@H](O)C1=CC(O)=C(O)C=C1
+Cystéine (Thiol/Amine),Cysteine (Thiol/Amine),C(C(C(=O)O)N)S
+Méthionine (Thioether),Methionine (Thioether),CSCCC(C(=O)O)N
+Saccharine (Sulfamide),Saccharin (Sulfonamide),C1=CC=C2C(=C1)C(=O)NS2(=O)=O
+Nitrobenzène (Nitro),Nitrobenzene (Nitro),O=[N+]([O-])c1ccccc1
+TNT (Nitro),TNT (Nitro),Cc1c(cc(cc1[N+](=O)[O-])[N+](=O)[O-])[N+](=O)[O-]
+Acetonitrile (Nitrile),Acetonitrile (Nitrile),CC#N
+Chloroforme (Chlore),Chloroform (Chlorine),C(Cl)(Cl)Cl
+DDT (Chlore),DDT (Chlorine),C1=CC(=CC=C1Cl)C(C2=CC=C(C=C2)Cl)C(Cl)(Cl)Cl
+Iodobenzène (Iode),Iodobenzene (Iodine),Ic1ccccc1
+Fluorouracile (Fluor),Fluorouracil (Fluorine),C1=C(C(=O)NC(=O)N1)F
+Bromoéthane (Brome),Bromoethane (Bromine),CCBr
+Glyphosate (Phosphonate/Amine),Glyphosate (Phosphonate/Amine),C(C(=O)O)NCP(=O)(O)O
+Triphenylphosphine (Phosphine),Triphenylphosphine (Phosphine),c1ccc(cc1)P(c2ccccc2)c3ccccc3
+Sulfaméthoxazole (Sulfamide),Sulfamethoxazole (Sulfonamide),Cc1cc(no1)NS(=O)(=O)c2ccc(cc2)N
+Chlorure d'acétyle (Cl. Acyle),Acetyl chloride (Acyl chloride),CC(=O)Cl
+Isocyanate de méthyle (Isocyanate),Methyl isocyanate (Isocyanate),CN=C=O
+DMSO (Sulfoxyde),DMSO (Sulfoxide),CS(=O)C
+Taurine (Sulfonique),Taurine (Sulfonic acid),C(CS(=O)(=O)O)N
+Acétylène (Alcyne),Acetylene (Alkyne),C#C
+Acétaldéhyde (Aldéhyde),Acetaldehyde (Aldehyde),CC=O
+Acétone (Cétone),Acetone (Ketone),CC(=O)C
+Éther diéthylique (Ether),Diethyl ether (Ether),CCOCC
+Anhydride acétique (Anhydride),Acetic anhydride (Anhydride),CC(=O)OC(=O)C
+Carbonate de diméthyle (Carbonate),Dimethyl carbonate (Carbonate),COC(=O)OC
+Peroxyde de benzoyle (Peroxyde),Benzoyl peroxide (Peroxide),c1ccc(cc1)C(=O)OOC(=O)c2ccccc2
+Hydroperoxyde de cumène (Hydroperoxyde),Cumene hydroperoxide (Hydroperoxide),CC(C)(c1ccccc1)OO
+"1,1-Diéthoxyéthane","1,1-Diethoxyethane (Acetal)",CCOC(C)OCC
+Guanidine (Guanidine),Guanidine (Guanidine),C(=N)(N)N
+Acétamidine (Amidine),Acetamidine (Amidine),CC(=N)N
+Acétone hydrazone (Hydrazone),Acetone hydrazone (Hydrazone),CC(=NN)C

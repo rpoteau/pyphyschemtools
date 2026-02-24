@@ -1,0 +1,872 @@
+.
+├── Biblio
+│   └── KORD 1.1 - Manuel Utilisateur.pdf
+├── CHANGELOG.md
+├── CITATION.cff
+├── dist
+│   ├── pyphyschemtools-0.7.6-py3-none-any.whl
+│   └── pyphyschemtools-0.7.6.tar.gz
+├── docs
+│   ├── build
+│   │   ├── doctrees
+│   │   │   ├── environment.pickle
+│   │   │   ├── index.doctree
+│   │   │   ├── modules.doctree
+│   │   │   ├── nbsphinx
+│   │   │   ├── pyphyschemtools.doctree
+│   │   │   └── theoryDocs
+│   │   │       ├── Chem3D.doctree
+│   │   │       ├── Cheminformatics.doctree
+│   │   │       ├── Kinetics.doctree
+│   │   │       ├── Misc.doctree
+│   │   │       ├── Nano.doctree
+│   │   │       ├── PeriodicTable.doctree
+│   │   │       ├── QuantumChemCorner.doctree
+│   │   │       ├── Spectra.doctree
+│   │   │       └── Units.doctree
+│   │   └── html
+│   │       ├── CNAME
+│   │       ├── genindex.html
+│   │       ├── _images
+│   │       │   └── tools4pyPC_banner.svg
+│   │       ├── index.html
+│   │       ├── modules.html
+│   │       ├── objects.inv
+│   │       ├── py-modindex.html
+│   │       ├── pyphyschemtools.html
+│   │       ├── search.html
+│   │       ├── searchindex.js
+│   │       ├── _sources
+│   │       │   ├── index.rst.txt
+│   │       │   ├── modules.rst.txt
+│   │       │   ├── pyphyschemtools.rst.txt
+│   │       │   └── theoryDocs
+│   │       │       ├── Chem3D.md.txt
+│   │       │       ├── Cheminformatics.md.txt
+│   │       │       ├── Kinetics.md.txt
+│   │       │       ├── Misc.md.txt
+│   │       │       ├── Nano.md.txt
+│   │       │       ├── PeriodicTable.md.txt
+│   │       │       ├── QuantumChemCorner.md.txt
+│   │       │       ├── Spectra.md.txt
+│   │       │       └── Units.md.txt
+│   │       ├── _static
+│   │       │   ├── base-stemmer.js
+│   │       │   ├── basic.css
+│   │       │   ├── check-solid.svg
+│   │       │   ├── clipboard.min.js
+│   │       │   ├── copybutton.css
+│   │       │   ├── copybutton_funcs.js
+│   │       │   ├── copybutton.js
+│   │       │   ├── copy-button.svg
+│   │       │   ├── css
+│   │       │   │   ├── badge_only.css
+│   │       │   │   ├── fonts
+│   │       │   │   │   ├── fontawesome-webfont.eot
+│   │       │   │   │   ├── fontawesome-webfont.svg
+│   │       │   │   │   ├── fontawesome-webfont.ttf
+│   │       │   │   │   ├── fontawesome-webfont.woff
+│   │       │   │   │   ├── fontawesome-webfont.woff2
+│   │       │   │   │   ├── lato-bold-italic.woff
+│   │       │   │   │   ├── lato-bold-italic.woff2
+│   │       │   │   │   ├── lato-bold.woff
+│   │       │   │   │   ├── lato-bold.woff2
+│   │       │   │   │   ├── lato-normal-italic.woff
+│   │       │   │   │   ├── lato-normal-italic.woff2
+│   │       │   │   │   ├── lato-normal.woff
+│   │       │   │   │   ├── lato-normal.woff2
+│   │       │   │   │   ├── Roboto-Slab-Bold.woff
+│   │       │   │   │   ├── Roboto-Slab-Bold.woff2
+│   │       │   │   │   ├── Roboto-Slab-Regular.woff
+│   │       │   │   │   └── Roboto-Slab-Regular.woff2
+│   │       │   │   └── theme.css
+│   │       │   ├── doctools.js
+│   │       │   ├── documentation_options.js
+│   │       │   ├── english-stemmer.js
+│   │       │   ├── file.png
+│   │       │   ├── fonts
+│   │       │   │   ├── Lato
+│   │       │   │   │   ├── lato-bold.eot
+│   │       │   │   │   ├── lato-bolditalic.eot
+│   │       │   │   │   ├── lato-bolditalic.ttf
+│   │       │   │   │   ├── lato-bolditalic.woff
+│   │       │   │   │   ├── lato-bolditalic.woff2
+│   │       │   │   │   ├── lato-bold.ttf
+│   │       │   │   │   ├── lato-bold.woff
+│   │       │   │   │   ├── lato-bold.woff2
+│   │       │   │   │   ├── lato-italic.eot
+│   │       │   │   │   ├── lato-italic.ttf
+│   │       │   │   │   ├── lato-italic.woff
+│   │       │   │   │   ├── lato-italic.woff2
+│   │       │   │   │   ├── lato-regular.eot
+│   │       │   │   │   ├── lato-regular.ttf
+│   │       │   │   │   ├── lato-regular.woff
+│   │       │   │   │   └── lato-regular.woff2
+│   │       │   │   └── RobotoSlab
+│   │       │   │       ├── roboto-slab-v7-bold.eot
+│   │       │   │       ├── roboto-slab-v7-bold.ttf
+│   │       │   │       ├── roboto-slab-v7-bold.woff
+│   │       │   │       ├── roboto-slab-v7-bold.woff2
+│   │       │   │       ├── roboto-slab-v7-regular.eot
+│   │       │   │       ├── roboto-slab-v7-regular.ttf
+│   │       │   │       ├── roboto-slab-v7-regular.woff
+│   │       │   │       └── roboto-slab-v7-regular.woff2
+│   │       │   ├── jquery.js
+│   │       │   ├── js
+│   │       │   │   ├── badge_only.js
+│   │       │   │   ├── theme.js
+│   │       │   │   └── versions.js
+│   │       │   ├── language_data.js
+│   │       │   ├── minus.png
+│   │       │   ├── nbsphinx-broken-thumbnail.svg
+│   │       │   ├── nbsphinx-code-cells.css
+│   │       │   ├── nbsphinx-gallery.css
+│   │       │   ├── nbsphinx-no-thumbnail.svg
+│   │       │   ├── plus.png
+│   │       │   ├── pygments.css
+│   │       │   ├── searchtools.js
+│   │       │   ├── spectra
+│   │       │   │   ├── DBA-syn-syn-TDDFT_ethanol.png
+│   │       │   │   ├── DBAxx_ethanol.png
+│   │       │   │   ├── S0-S1-FranckCondon-classik.svg
+│   │       │   │   └── TDDFT-Spectrum.svg
+│   │       │   ├── sphinx_highlight.js
+│   │       │   ├── _sphinx_javascript_frameworks_compat.js
+│   │       │   ├── tools4pyPC_banner.png
+│   │       │   ├── tools4pyPC_banner.svg
+│   │       │   └── visualID.css
+│   │       └── theoryDocs
+│   │           ├── Chem3D.html
+│   │           ├── Cheminformatics.html
+│   │           ├── Kinetics.html
+│   │           ├── Misc.html
+│   │           ├── Nano.html
+│   │           ├── PeriodicTable.html
+│   │           ├── QuantumChemCorner.html
+│   │           ├── Spectra.html
+│   │           └── Units.html
+│   ├── make.bat
+│   ├── Makefile
+│   └── source
+│       ├── conf.py
+│       ├── index.rst
+│       ├── modules.rst
+│       ├── pyphyschemtools.rst
+│       ├── _static
+│       │   ├── spectra
+│       │   │   ├── DBA-syn-syn-TDDFT_ethanol.png
+│       │   │   ├── DBAxx_ethanol.png
+│       │   │   ├── S0-S1-FranckCondon-classik.svg
+│       │   │   └── TDDFT-Spectrum.svg
+│       │   ├── tools4pyPC_banner.png
+│       │   ├── tools4pyPC_banner.svg
+│       │   └── visualID.css
+│       ├── _templates
+│       └── theoryDocs
+│           ├── Chem3D.md
+│           ├── Cheminformatics.md
+│           ├── Kinetics.md
+│           ├── Misc.md
+│           ├── Nano.md
+│           ├── OrgaChem.md
+│           ├── PeriodicTable.md
+│           ├── QuantumChemCorner.md
+│           ├── Spectra.md
+│           └── Units.md
+├── Examples-dev
+│   ├── tar-tools4G16.sh
+│   ├── tar-tools4VASP.sh
+│   ├── tools4G16-Examples
+│   │   ├── ButaneScan.com
+│   │   ├── ButaneScan.log
+│   │   ├── ButaneScan.qsub
+│   │   ├── example-IRC-F.com
+│   │   ├── example-IRC-F.log
+│   │   ├── example-IRC-F.qsub
+│   │   ├── example-opt.com
+│   │   ├── example-opt.log
+│   │   ├── example-opt.qsub
+│   │   └── README
+│   ├── tools4G16-Examples.tar.bz2
+│   ├── tools4VASP-Doc
+│   │   ├── CONTCAR.xyz
+│   │   ├── drawing-Pt111-Graphene.png
+│   │   ├── drawing-Pt111-Graphene.svg
+│   │   ├── POSCAR.xyz
+│   │   ├── README.txt
+│   │   ├── Screenshot_VASPcv.png
+│   │   ├── tools4VASP-Examples.odt
+│   │   ├── tools4VASP-Examples.pdf
+│   │   └── unitcell.png
+│   ├── tools4VASP-Examples
+│   │   ├── hVASP
+│   │   │   ├── C2H4
+│   │   │   │   ├── 2ARK
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   └── OUTCAR
+│   │   │   ├── C6H6
+│   │   │   │   ├── 2ARK
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   └── POSCAR.xyz
+│   │   │   ├── H2
+│   │   │   │   ├── 2ARK
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   └── POSCAR.xyz
+│   │   │   ├── H2-not4ARK
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   └── POSCAR.xyz
+│   │   │   └── README
+│   │   ├── ManipCell
+│   │   │   ├── CONTCAR-murnfit-PBE-D3
+│   │   │   ├── CONTCAR-murnfit-PBE-D3.cif
+│   │   │   ├── CONTCAR-murnfit-PBE-D3_MC
+│   │   │   ├── CONTCAR-murnfit-PBE-D3_MC.cif
+│   │   │   ├── CONTCAR_Pt_111_PBE_D3-ShiftedC
+│   │   │   ├── CONTCAR_Pt_111_PBE_D3-ShiftedC.cif
+│   │   │   ├── CONTCAR_Pt_111_PBE_D3-ShiftedC_MC
+│   │   │   ├── CONTCAR_Pt_111_PBE_D3-ShiftedC_MC.cif
+│   │   │   ├── CONTCAR-Ru13cluster
+│   │   │   ├── CONTCAR-Ru13cluster.cif
+│   │   │   ├── CONTCAR-Ru13cluster_MC
+│   │   │   ├── CONTCAR-Ru13cluster_MC.cif
+│   │   │   ├── ManipCell-Cluster.sh
+│   │   │   ├── ManipCell-C.sh
+│   │   │   ├── ManipCell-example3.png
+│   │   │   ├── ManipCell-example3.svg
+│   │   │   ├── ManipCell-Pt.sh
+│   │   │   ├── Ru13H17-solv-GA-option
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── ManipCell.log
+│   │   │   │   ├── ManipCell.sh
+│   │   │   │   ├── radii.dat
+│   │   │   │   ├── README
+│   │   │   │   └── Ru13-water.png
+│   │   │   ├── supercell0.png
+│   │   │   └── supercell1.png
+│   │   ├── selectLOBSTER
+│   │   │   ├── Atom-d-MOs
+│   │   │   │   ├── molden.ogl
+│   │   │   │   └── MOs_K-001.mlf
+│   │   │   ├── benzene-LOBSTER-MOs
+│   │   │   │   ├── basisFunctions.lobster
+│   │   │   │   ├── BWDFCOHP.lobster
+│   │   │   │   ├── BWDF.lobster
+│   │   │   │   ├── CHARGE.lobster
+│   │   │   │   ├── CHARGEM.lobster
+│   │   │   │   ├── charges-LOBSTER.dat
+│   │   │   │   ├── coefficientMatrices.lobster
+│   │   │   │   ├── coefficientMatricesLSO1.lobster
+│   │   │   │   ├── coefficientMatricesLSO2.lobster
+│   │   │   │   ├── COHP.agr
+│   │   │   │   ├── COHPCAR.lobster
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── COOP.agr
+│   │   │   │   ├── COOPCAR.lobster
+│   │   │   │   ├── DensityOfEnergy.lobster
+│   │   │   │   ├── DOS.agr
+│   │   │   │   ├── DOSCAR.lobster
+│   │   │   │   ├── EIGENVAL
+│   │   │   │   ├── GROSSPOP.lobster
+│   │   │   │   ├── hamiltonMatrices.lobster
+│   │   │   │   ├── ICOHPLIST.lobster
+│   │   │   │   ├── ICOOPLIST.lobster
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── lobsterin
+│   │   │   │   ├── lobsterout
+│   │   │   │   ├── LOBSTER.runjob
+│   │   │   │   ├── MOs_K-001.mlf
+│   │   │   │   ├── OSZICAR
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── overlapMatrices.lobster
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POTCAR
+│   │   │   │   ├── selectLOBSTER.in
+│   │   │   │   ├── selectLOBSTER.log
+│   │   │   │   ├── slurm-565496.out
+│   │   │   │   ├── slurm-565565.out
+│   │   │   │   ├── slurm-565580.out
+│   │   │   │   ├── slurm-565584.out
+│   │   │   │   ├── slurm-565592.out
+│   │   │   │   ├── slurm-565626.out
+│   │   │   │   ├── slurm-565741.out
+│   │   │   │   ├── slurm-565746.out
+│   │   │   │   ├── slurm-565749.out
+│   │   │   │   ├── transferMatrices.lobster
+│   │   │   │   └── VASP.runjob
+│   │   │   ├── benzene-MOs-test
+│   │   │   │   ├── basisFunctions.lobster
+│   │   │   │   ├── benzene-MO.log
+│   │   │   │   ├── BWDFCOHP.lobster
+│   │   │   │   ├── BWDF.lobster
+│   │   │   │   ├── CHARGE.lobster
+│   │   │   │   ├── CHARGEM.lobster
+│   │   │   │   ├── charges-LOBSTER.dat
+│   │   │   │   ├── coefficientMatrices.lobster
+│   │   │   │   ├── coefficientMatricesLSO1.lobster
+│   │   │   │   ├── coefficientMatricesLSO2.lobster
+│   │   │   │   ├── COHP.agr
+│   │   │   │   ├── COHPCAR.lobster
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── COOP.agr
+│   │   │   │   ├── COOPCAR.lobster
+│   │   │   │   ├── DensityOfEnergy.lobster
+│   │   │   │   ├── DOS.agr
+│   │   │   │   ├── DOSCAR.lobster
+│   │   │   │   ├── EIGENVAL
+│   │   │   │   ├── GROSSPOP.lobster
+│   │   │   │   ├── hamiltonMatrices.lobster
+│   │   │   │   ├── ICOHPLIST.lobster
+│   │   │   │   ├── ICOOPLIST.lobster
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── lobsterin
+│   │   │   │   ├── lobsterout
+│   │   │   │   ├── MOs_K-001.mlf
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── output
+│   │   │   │   ├── overlapMatrices.lobster
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   ├── POSCAR.xyz
+│   │   │   │   ├── PROCAR
+│   │   │   │   ├── selectLOBSTER.in
+│   │   │   │   ├── selectLOBSTER.log
+│   │   │   │   ├── transferMatrices.lobster
+│   │   │   │   └── VASPMO_K001.out
+│   │   │   ├── CuH-ISPIN1-LOBSTER
+│   │   │   │   ├── basisFunctions.lobster
+│   │   │   │   ├── BWDFCOHP.lobster
+│   │   │   │   ├── BWDF.lobster
+│   │   │   │   ├── CHARGE.lobster
+│   │   │   │   ├── CHARGEM.lobster
+│   │   │   │   ├── charges-LOBSTER.dat
+│   │   │   │   ├── coefficientMatrices.lobster
+│   │   │   │   ├── coefficientMatricesLSO1.lobster
+│   │   │   │   ├── coefficientMatricesLSO2.lobster
+│   │   │   │   ├── COHP.agr
+│   │   │   │   ├── COHPCAR.lobster
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── COOP.agr
+│   │   │   │   ├── COOPCAR.lobster
+│   │   │   │   ├── CuH-MOs.log
+│   │   │   │   ├── DensityOfEnergy.lobster
+│   │   │   │   ├── DOS.agr
+│   │   │   │   ├── DOSCAR.lobster
+│   │   │   │   ├── EIGENVAL
+│   │   │   │   ├── GROSSPOP.lobster
+│   │   │   │   ├── hamiltonMatrices.lobster
+│   │   │   │   ├── ICOHPLIST.lobster
+│   │   │   │   ├── ICOOPLIST.lobster
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── lobsterin
+│   │   │   │   ├── lobsterout
+│   │   │   │   ├── LOBSTER.runjob
+│   │   │   │   ├── MOs_K-001.mlf
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── output
+│   │   │   │   ├── overlapMatrices.lobster
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   ├── POSCAR.xyz
+│   │   │   │   ├── PROCAR
+│   │   │   │   ├── selectLOBSTER.in
+│   │   │   │   ├── selectLOBSTER.log
+│   │   │   │   ├── transferMatrices.lobster
+│   │   │   │   └── VASPMO_K001.out
+│   │   │   ├── CuH-ISPIN1-LOBSTER-4p
+│   │   │   │   ├── basisFunctions.lobster
+│   │   │   │   ├── BWDFCOHP.lobster
+│   │   │   │   ├── BWDF.lobster
+│   │   │   │   ├── CHARGE.lobster
+│   │   │   │   ├── CHARGEM.lobster
+│   │   │   │   ├── charges-LOBSTER.dat
+│   │   │   │   ├── coefficientMatrices.lobster
+│   │   │   │   ├── coefficientMatricesLSO1.lobster
+│   │   │   │   ├── coefficientMatricesLSO2.lobster
+│   │   │   │   ├── COHP.agr
+│   │   │   │   ├── COHPCAR.lobster
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── COOP.agr
+│   │   │   │   ├── COOPCAR.lobster
+│   │   │   │   ├── CuH-MOs.log
+│   │   │   │   ├── DensityOfEnergy.lobster
+│   │   │   │   ├── DOS.agr
+│   │   │   │   ├── DOSCAR.lobster
+│   │   │   │   ├── EIGENVAL
+│   │   │   │   ├── GROSSPOP.lobster
+│   │   │   │   ├── hamiltonMatrices.lobster
+│   │   │   │   ├── ICOHPLIST.lobster
+│   │   │   │   ├── ICOOPLIST.lobster
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── lobsterin
+│   │   │   │   ├── lobsterout
+│   │   │   │   ├── LOBSTER.runjob
+│   │   │   │   ├── MOs_K-001-dummy2.mlf
+│   │   │   │   ├── MOs_K-001.mlf
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── overlapMatrices.lobster
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   ├── POSCAR.xyz
+│   │   │   │   ├── PROCAR
+│   │   │   │   ├── selectLOBSTER.in
+│   │   │   │   ├── selectLOBSTER.log
+│   │   │   │   ├── transferMatrices.lobster
+│   │   │   │   └── VASPMO_K001.out
+│   │   │   ├── H2-LOBSTER
+│   │   │   │   ├── basisFunctions.lobster
+│   │   │   │   ├── BWDFCOHP.lobster
+│   │   │   │   ├── BWDF.lobster
+│   │   │   │   ├── CHARGE.lobster
+│   │   │   │   ├── CHARGEM.lobster
+│   │   │   │   ├── charges-LOBSTER.dat
+│   │   │   │   ├── coefficientMatrices.lobster
+│   │   │   │   ├── coefficientMatricesLSO1.lobster
+│   │   │   │   ├── coefficientMatricesLSO2.lobster
+│   │   │   │   ├── COHP.agr
+│   │   │   │   ├── COHPCAR.lobster
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── COOP.agr
+│   │   │   │   ├── COOPCAR.lobster
+│   │   │   │   ├── DensityOfEnergy.lobster
+│   │   │   │   ├── DOS.agr
+│   │   │   │   ├── DOSCAR.lobster
+│   │   │   │   ├── EIGENVAL
+│   │   │   │   ├── GROSSPOP.lobster
+│   │   │   │   ├── hamiltonMatrices.lobster
+│   │   │   │   ├── ICOHPLIST.lobster
+│   │   │   │   ├── ICOOPLIST.lobster
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── lobsterin
+│   │   │   │   ├── lobsterout
+│   │   │   │   ├── MOs_K-001.mlf
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── overlapMatrices.lobster
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   ├── POSCAR.xyz
+│   │   │   │   ├── PROCAR
+│   │   │   │   ├── selectLOBSTER.in
+│   │   │   │   ├── selectLOBSTER.log
+│   │   │   │   ├── transferMatrices.lobster
+│   │   │   │   └── VASPMO_K001.out
+│   │   │   ├── MoCO6-MOs
+│   │   │   │   ├── ag.xyz
+│   │   │   │   ├── a.xyz
+│   │   │   │   ├── basisFunctions.lobster
+│   │   │   │   ├── BWDFCOHP.lobster
+│   │   │   │   ├── BWDF.lobster
+│   │   │   │   ├── CHARGE.lobster
+│   │   │   │   ├── CHARGEM.lobster
+│   │   │   │   ├── charges-LOBSTER.dat
+│   │   │   │   ├── coefficientMatrices.lobster
+│   │   │   │   ├── coefficientMatricesLSO1.lobster
+│   │   │   │   ├── coefficientMatricesLSO2.lobster
+│   │   │   │   ├── COHP.agr
+│   │   │   │   ├── COHPCAR.lobster
+│   │   │   │   ├── CONTCAR
+│   │   │   │   ├── CONTCAR.cif
+│   │   │   │   ├── CONTCAR.xyz
+│   │   │   │   ├── COOP.agr
+│   │   │   │   ├── COOPCAR.lobster
+│   │   │   │   ├── DensityOfEnergy.lobster
+│   │   │   │   ├── DOS.agr
+│   │   │   │   ├── DOSCAR.lobster
+│   │   │   │   ├── EIGENVAL
+│   │   │   │   ├── GROSSPOP.lobster
+│   │   │   │   ├── hamiltonMatrices.lobster
+│   │   │   │   ├── ICOHPLIST.lobster
+│   │   │   │   ├── ICOOPLIST.lobster
+│   │   │   │   ├── INCAR
+│   │   │   │   ├── KPOINTS
+│   │   │   │   ├── lobsterin
+│   │   │   │   ├── lobsterout
+│   │   │   │   ├── MoCO6-MOs.log
+│   │   │   │   ├── MoCO6-ZetainAngs-1.mlf
+│   │   │   │   ├── MoCO6-ZetainAngs-1-STONormalizedAngs.mlf
+│   │   │   │   ├── MoCO6-ZetainAngs-1-STONormalized.mlf
+│   │   │   │   ├── MoCO6-ZetainBohr-1.mlf
+│   │   │   │   ├── MoCO6-ZetainBohr-1-STONormalized.mlf
+│   │   │   │   ├── OUTCAR
+│   │   │   │   ├── output
+│   │   │   │   ├── overlapMatrices.lobster
+│   │   │   │   ├── POSCAR
+│   │   │   │   ├── POSCAR.cif
+│   │   │   │   ├── POSCAR.xyz
+│   │   │   │   ├── PROCAR
+│   │   │   │   ├── selectLOBSTER.in
+│   │   │   │   ├── selectLOBSTER.log
+│   │   │   │   ├── test.mlf
+│   │   │   │   ├── transferMatrices.lobster
+│   │   │   │   └── VASPMO_K001.out
+│   │   │   └── Ru13IC-Ethanoate-H
+│   │   │       ├── basisFunctions.lobster
+│   │   │       ├── bc004.dat
+│   │   │       ├── bc004-EF.dat
+│   │   │       ├── bc004F.dat
+│   │   │       ├── bc004F-EF.dat
+│   │   │       ├── bc005.dat
+│   │   │       ├── bc005-EF.dat
+│   │   │       ├── bc005F.dat
+│   │   │       ├── bc005F-EF.dat
+│   │   │       ├── bc006.dat
+│   │   │       ├── bc006-EF.dat
+│   │   │       ├── bc006F.dat
+│   │   │       ├── bc006F-EF.dat
+│   │   │       ├── BWDFCOHP.lobster
+│   │   │       ├── BWDF.lobster
+│   │   │       ├── CHARGE.lobster
+│   │   │       ├── CHARGEM.lobster
+│   │   │       ├── charges-LOBSTER.dat
+│   │   │       ├── coefficientMatrices.lobster
+│   │   │       ├── coefficientMatricesLSO1.lobster
+│   │   │       ├── coefficientMatricesLSO2.lobster
+│   │   │       ├── COHP.agr
+│   │   │       ├── COHPCAR.lobster
+│   │   │       ├── CONTCAR
+│   │   │       ├── CONTCAR.cif
+│   │   │       ├── CONTCARM.xyz
+│   │   │       ├── CONTCAR.xyz
+│   │   │       ├── COOP.agr
+│   │   │       ├── COOPCAR.lobster
+│   │   │       ├── CoreSurfaceAtoms.dat
+│   │   │       ├── DensityOfEnergy.lobster
+│   │   │       ├── DOSab.agr
+│   │   │       ├── DOS.agr
+│   │   │       ├── DOSCAR.lobster
+│   │   │       ├── EIGENVAL
+│   │   │       ├── GROSSPOP.lobster
+│   │   │       ├── hamiltonMatrices.lobster
+│   │   │       ├── ICOHPLIST.lobster
+│   │   │       ├── ICOOPLIST.lobster
+│   │   │       ├── INCAR
+│   │   │       ├── KPOINTS
+│   │   │       ├── lobsterin
+│   │   │       ├── lobsterout
+│   │   │       ├── MagMom-LOBSTER.dat
+│   │   │       ├── MOs_K-001.mlf
+│   │   │       ├── OUTCAR
+│   │   │       ├── overlapMatrices.lobster
+│   │   │       ├── POSCAR
+│   │   │       ├── POSCAR.cif
+│   │   │       ├── POSCAR.xyz
+│   │   │       ├── PROCAR
+│   │   │       ├── Ru13-ICO-Ethanoate-H-COHP.agr
+│   │   │       ├── Ru13-ICO-Ethanoate-H-COHP.eps
+│   │   │       ├── Ru13-ICO-Ethanoate-H-DOSab.agr
+│   │   │       ├── Ru13-ICO-Ethanoate-H-DOSab.eps
+│   │   │       ├── selectLOBSTER-dbc.in
+│   │   │       ├── selectLOBSTER-dbc.log
+│   │   │       ├── selectLOBSTER-Emax-dband.in
+│   │   │       ├── selectLOBSTER-Emax-dband.log
+│   │   │       ├── selectLOBSTER.in
+│   │   │       ├── selectLOBSTER.log
+│   │   │       ├── transferMatrices.lobster
+│   │   │       └── VASPMO_K001.out
+│   │   ├── tools4VASP-Examples.pdf
+│   │   └── Vibrational-and-ThermochemicalProperties
+│   │       ├── CompareWithGaussian
+│   │       │   ├── README
+│   │       │   ├── test-Benzene
+│   │       │   │   ├── benzene.com
+│   │       │   │   ├── benzene-GaussianCalc.log
+│   │       │   │   ├── CONTCAR.xyz
+│   │       │   │   ├── freq.dat
+│   │       │   │   ├── KPOINTS
+│   │       │   │   ├── OUTCAR
+│   │       │   │   ├── ThermoWithVASP.log
+│   │       │   │   └── ThermoWithVASP.log.org
+│   │       │   └── test-TransitionState
+│   │       │       ├── CONTCAR.xyz
+│   │       │       ├── freq.dat
+│   │       │       ├── KPOINTS
+│   │       │       ├── OUTCAR
+│   │       │       ├── ThermoWithVASP.log
+│   │       │       ├── ThermoWithVASP.log.org
+│   │       │       ├── ts06_2-GaussianCalc.log
+│   │       │       └── ts06_2.xyz
+│   │       ├── Ru3CO12-DoItYourself
+│   │       │   ├── README
+│   │       │   └── Ru3CO12
+│   │       │       ├── CONTCAR
+│   │       │       ├── CONTCAR.cif
+│   │       │       ├── CONTCAR.xyz
+│   │       │       ├── INCAR
+│   │       │       ├── KPOINTS
+│   │       │       ├── OUTCAR
+│   │       │       ├── POSCAR
+│   │       │       ├── POSCAR.cif
+│   │       │       └── POSCAR.xyz
+│   │       └── Ru3CO12-RefCalculations
+│   │           ├── Ru3CO12
+│   │           │   ├── CONTCAR
+│   │           │   ├── CONTCAR.cif
+│   │           │   ├── CONTCAR.xyz
+│   │           │   ├── INCAR
+│   │           │   ├── KPOINTS
+│   │           │   ├── OUTCAR
+│   │           │   ├── POSCAR
+│   │           │   ├── POSCAR.cif
+│   │           │   └── POSCAR.xyz
+│   │           ├── Ru3CO12-VIB_2CO
+│   │           │   ├── CONTCAR
+│   │           │   ├── CONTCAR.cif
+│   │           │   ├── CONTCAR.xyz
+│   │           │   ├── freq.dat
+│   │           │   ├── INCAR
+│   │           │   ├── KPOINTS
+│   │           │   ├── modes.xyz
+│   │           │   ├── OUTCAR
+│   │           │   ├── POSCAR
+│   │           │   ├── POSCAR.cif
+│   │           │   ├── POSCAR-org
+│   │           │   ├── POSCAR.xyz
+│   │           │   └── SELECTCAR
+│   │           └── Ru3CO12-VIB4Thermo
+│   │               ├── CONTCAR
+│   │               ├── CONTCAR.cif
+│   │               ├── CONTCAR.xyz
+│   │               ├── freq.dat
+│   │               ├── INCAR
+│   │               ├── KPOINTS
+│   │               ├── modes.xyz
+│   │               ├── OUTCAR
+│   │               ├── POSCAR
+│   │               ├── POSCAR.cif
+│   │               ├── POSCAR.org
+│   │               ├── POSCAR.xyz
+│   │               ├── SELECTCAR
+│   │               └── ThermoWithVASP.log
+│   └── tools4VASP-Examples.tar.bz2
+├── Examples_pyPCT.ipynb
+├── fig_examples
+│   ├── Kinetics
+│   │   └── SuiviKin_BIPS_EtOAc.svg
+│   ├── Molecules
+│   │   ├── gridMol.svg
+│   │   └── grid_stereo.svg
+│   ├── PeriodicTable
+│   │   └── Ei1_Z.png
+│   └── Spectra
+│       ├── DBA-syn-syn-TDDFT_ethanol.png
+│       └── DBAxx_ethanol.png
+├── git_push
+├── LICENSE
+├── log
+├── MANIFEST.in
+├── push_pyPi_doc.md
+├── push_pyPi.sh
+├── pyphyschemtools
+│   ├── aithermo.py
+│   ├── archives
+│   │   ├── tools4pyPhysChem.py
+│   │   ├── tools4pyPhysChem-v20251201.py
+│   │   └── tools4pyPhysChem-v20260125.py
+│   ├── Chem3D.py
+│   ├── cheminformatics.py
+│   ├── core.py
+│   ├── data_examples
+│   │   ├── Kinetics
+│   │   │   ├── Example4Kord_exp2.svg
+│   │   │   ├── Example4Kord_exp9.svg
+│   │   │   ├── Example4Kord.xlsx
+│   │   │   ├── SuiviKin_BIPS_EtOAc.csv
+│   │   │   ├── SuiviKin_BIPS_EtOAc.svg
+│   │   │   ├── SuiviKin_BIPS_EtOAc.xlsx
+│   │   │   ├── TestKORD.svg
+│   │   │   └── TestKORD.xlsx
+│   │   ├── Molecules
+│   │   │   ├── betaCD-closed.xyz
+│   │   │   ├── gridMol.png
+│   │   │   └── gridMol.svg
+│   │   ├── orgachem
+│   │   │   ├── Functions.csv
+│   │   │   ├── Functions_Examples.csv
+│   │   │   └── Molecules.csv
+│   │   ├── QCCorner
+│   │   │   ├── tools4G16-Examples.tar.bz2
+│   │   │   └── tools4VASP-Examples.tar.bz2
+│   │   └── Spectra
+│   │       ├── DBA6-syn-syn-TDDFT_ethanol_ExcStab.dat
+│   │       └── DBA-syn-syn-TDDFT_ethanol_ExcStab.dat
+│   ├── __init__.py
+│   ├── kinetics.py
+│   ├── misc.py
+│   ├── ML.py
+│   ├── nano.py
+│   ├── orgachem.py
+│   ├── PeriodicTable.py
+│   ├── __pycache__
+│   │   ├── aithermo.cpython-311.pyc
+│   │   ├── Chem3D.cpython-311.pyc
+│   │   ├── cheminformatics.cpython-311.pyc
+│   │   ├── core.cpython-311.pyc
+│   │   ├── __init__.cpython-311.pyc
+│   │   ├── kinetics.cpython-311.pyc
+│   │   ├── misc.cpython-311.pyc
+│   │   ├── ML.cpython-311.pyc
+│   │   ├── nano.cpython-311.pyc
+│   │   ├── orgachem.cpython-311.pyc
+│   │   ├── PeriodicTable.cpython-311.pyc
+│   │   ├── spectra.cpython-311.pyc
+│   │   ├── survey.cpython-311.pyc
+│   │   ├── sympyUtilities.cpython-311.pyc
+│   │   ├── tools4AS.cpython-311.pyc
+│   │   ├── units.cpython-311.pyc
+│   │   ├── visualID.cpython-311.pyc
+│   │   └── visualID_Eng.cpython-311.pyc
+│   ├── quantumChem_corner
+│   │   ├── bash_scripts
+│   │   │   ├── cleanVASPf
+│   │   │   ├── cpG
+│   │   │   ├── cpVASP
+│   │   │   ├── GP2bw
+│   │   │   ├── GParser
+│   │   │   ├── hVASP
+│   │   │   ├── RestartVASP
+│   │   │   └── VASPcv
+│   │   ├── bin
+│   │   │   ├── ManipCell
+│   │   │   ├── sel4vibVASP
+│   │   │   ├── selectLOBSTER
+│   │   │   ├── ThermoWithVASP
+│   │   │   └── vibVASP
+│   │   ├── cif2pos.py
+│   │   ├── GScan_Analyzis.py
+│   │   ├── __init__.py
+│   │   ├── pos2cif.py -> pos2xxx.py
+│   │   ├── pos2xxx.py
+│   │   ├── pos2xyz.py -> pos2xxx.py
+│   │   ├── __pycache__
+│   │   │   ├── GScan_Analyzis.cpython-311.pyc
+│   │   │   ├── __init__.cpython-311.pyc
+│   │   │   └── pos2xxx.cpython-311.pyc
+│   │   ├── ReadIterVASP.py
+│   │   └── wrappers.py
+│   ├── resources
+│   │   ├── css
+│   │   │   ├── BrainHalfHalf-120x139.base64
+│   │   │   ├── BrainHalfHalf-120x139.png
+│   │   │   ├── BrainHalfHalf.base64
+│   │   │   ├── BrainHalfHalf.png
+│   │   │   ├── BrainHalfHalf.svg
+│   │   │   └── visualID.css
+│   │   ├── img
+│   │   │   ├── pyPhysChem_1.png
+│   │   │   ├── Tranformative_3_banner.png
+│   │   │   └── Tranformative_3.webp
+│   │   └── svg
+│   │       ├── BrainHalfHalf.png
+│   │       ├── BrainHalfHalf.svg
+│   │       ├── GitHub-Logo-C.png
+│   │       ├── GitHub-Logo.png
+│   │       ├── logoAnaconda.png
+│   │       ├── logoAnaconda.webp
+│   │       ├── logoCNRS.png
+│   │       ├── logoDebut.svg
+│   │       ├── logoEnd.svg
+│   │       ├── logoFin.svg
+│   │       ├── logo_gear.svg
+│   │       ├── logo_lpcno_300_dpi_notexttransparent.png
+│   │       ├── logoPPCL.svg
+│   │       ├── logo_pyPhysChem_0.png
+│   │       ├── logo_pyPhysChem_0.svg
+│   │       ├── Logo_pyPhysChem_1.png
+│   │       ├── Logo_pyPhysChem_1.svg
+│   │       ├── Logo_pyPhysChem_1-translucentBgd.png
+│   │       ├── Logo_pyPhysChem_1-translucentBgd-woName.png
+│   │       ├── logopyPhyschem_2.webp
+│   │       ├── logopyPhyschem_3.webp
+│   │       ├── logopyPhyschem_4.webp
+│   │       ├── logopyPhyschem_5.png
+│   │       ├── Logo_pyPhysChem_5.png
+│   │       ├── Logo_pyPhysChem_5.svg
+│   │       ├── logopyPhyschem_5.webp
+│   │       ├── logopyPhyschem_6.webp
+│   │       ├── logopyPhyschem_7.webp
+│   │       ├── Logo_pyPhysChem_border.svg
+│   │       ├── logopyPhyschem.png
+│   │       ├── logo_pyPhysChem.png
+│   │       ├── logo-Pypi-large.516e776d.svg
+│   │       ├── logo_pypi.webp
+│   │       ├── logoPytChem.png
+│   │       ├── logos-Anaconda-pyPhysChem.png
+│   │       ├── logos-Anaconda-pyPhysChem.svg
+│   │       ├── logo_tools4pyphyschem.png
+│   │       ├── logo_tools4pyphyschem.svg
+│   │       ├── Logo-Universite-Toulouse-n-2023.png
+│   │       ├── pyPC_LPCNO_Banner.png
+│   │       ├── pyPC_LPCNO_Banner.svg
+│   │       ├── pyPhysChemBanner.png
+│   │       ├── pyPhysChemBanner.svg
+│   │       ├── pyPhysChem-GitHubSocialMediaTemplate.png
+│   │       ├── pyPhysChem-GitHubSocialMediaTemplate.svg
+│   │       ├── pyPhysChemTools-GitHubSocialMediaTemplate.png
+│   │       ├── pyPhysChemTools-GitHubSocialMediaTemplate.svg
+│   │       ├── PyPI-Logo-notext.svg.png
+│   │       ├── Python_logo_and_wordmark.svg.png
+│   │       ├── Python-logo-notext.svg
+│   │       ├── qrcode_logo_tools4pyphyschem.png
+│   │       ├── qrcode-pyPhysChem.png
+│   │       ├── repository-open-graph-template.png
+│   │       ├── tools4pyPC_banner.png
+│   │       ├── tools4pyPC_banner.svg
+│   │       ├── Universite-Toulouse-n-2023.svg
+│   │       ├── UT3_logoQ.jpg
+│   │       ├── UT3_logoQ.png
+│   │       └── X.png
+│   ├── spectra.py
+│   ├── survey.py
+│   ├── sympyUtilities.py
+│   ├── tools4AS.py
+│   ├── units.py
+│   ├── visualID_Eng.py
+│   └── visualID.py
+├── pyphyschemtools.egg-info
+│   ├── dependency_links.txt
+│   ├── entry_points.txt
+│   ├── PKG-INFO
+│   ├── requires.txt
+│   ├── SOURCES.txt
+│   └── top_level.txt
+├── pyproject.toml
+└── README.md
+
+79 directories, 791 files

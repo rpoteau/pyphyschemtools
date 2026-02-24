@@ -6,7 +6,8 @@ from .core import centerTitle, centertxt
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, fsolve
+from scipy.stats import norm, lognorm
 
 import os, io
 from pathlib import Path
@@ -19,7 +20,7 @@ class NanoparticleDistribution:
     and publication-ready visualization.
     """
 
-    def __init__(self, sizes, counts):
+    def __init__(self, sizes=None, counts=None):
         """
         Initialize the distribution with experimental data.
         
@@ -31,7 +32,166 @@ class NanoparticleDistribution:
         self.counts = np.array(counts)
         self.params = None  # Will store [A, mu, sigma] after fitting
         self.cov = None     # Covariance matrix for error analysis
+        self.model_type = 'gaussian'  # Default model
+        self._results_dict = {}       # Private storage for results
 
+    @classmethod
+    def from_gaussian_params(cls, mu, sigma, total_n=1000):
+        """
+        Instantiate with a specific total population (total_n).
+        The amplitude is calculated so the integral equals total_n.
+        """
+        instance = cls()
+        
+        # Calculate amplitude to ensure the sum (area) equals total_n
+        # A = N / (sigma * sqrt(2 * pi))
+        amplitude = total_n / (sigma * np.sqrt(2 * np.pi))
+        
+        instance.params = np.array([amplitude, mu, sigma])
+        
+        # Generate enough points so that np.sum(counts * dx) is accurate
+        # But for your binned stats, we just need to store the intention
+        instance.sizes = np.linspace(mu - 4*sigma, mu + 4*sigma, 500)
+        instance.counts = instance._gaussian_model(instance.sizes, *instance.params)
+        
+        # We manually set a 'total_n' attribute or just rely on the math
+        instance.total_n_expected = total_n 
+        
+        instance.cov = np.zeros((3, 3))
+        instance.total_n_expected = total_n
+        return instance
+
+    @classmethod
+    def from_polydispersity(cls, mu, pd_pct, amplitude=1000):
+        """
+        Instantiate the class using mean diameter and Polydispersity Index (CV%).
+        
+        Formula: sigma = (PD% / 100) * mu
+        """
+        sigma = (pd_pct / 100) * mu
+        return cls.from_gaussian_params(mu, sigma, amplitude)
+
+    @classmethod
+    def from_saxs_data(cls, mu_vol, pd_vol_pct, amplitude=1000):
+        """
+        Instantiate the class by converting SAXS (volume-weighted) parameters 
+        into Number-weighted parameters using numerical cube-weighting.
+        
+        This method uses a robust iterative solver to find the number-weighted 
+        mean (mu_n) that corresponds to the observed SAXS volume-weighted mean.
+        """
+        
+        cv = pd_vol_pct / 100
+
+        # --- 1. Hatch-Choate Approximation (for comparison) ---
+        mu_n_hc = mu_vol / (1 + 3 * (cv**2))
+        sigma_n_hc = mu_n_hc * cv
+
+        # --- 2. Numerical Integration Approach ---
+        def objective(mu_n_guess):
+            # fsolve can pass an array, we need the scalar value
+            m = float(mu_n_guess[0]) if isinstance(mu_n_guess, np.ndarray) else float(mu_n_guess)
+            s = m * cv
+            
+            # Use a fixed number of points and a range based on the target mu_vol 
+            # to keep the array size and limits stable for fsolve
+            x = np.linspace(mu_vol * 0.1, mu_vol * 2.0, 1000)
+            
+            # Calculate Gaussian
+            y_num = np.exp(-0.5 * ((x - m) / s)**2)
+            y_vol = y_num * (x**3)
+            
+            # Avoid division by zero
+            denom = np.trapz(y_vol, x)
+            if denom == 0:
+                return 1e6 # Penalty for invalid mu_n
+                
+            calc_mu_vol = np.trapz(y_vol * x, x) / denom
+            return calc_mu_vol - mu_vol
+
+        # Solve for the true mu_n
+        # We use mu_n_hc as a much better starting guess than mu_vol
+        solution = fsolve(objective, x0=mu_n_hc)
+        mu_n_num = float(solution[0])
+        sigma_n_num = mu_n_num * cv
+        
+        # --- Output Comparison ---
+        print(f"\n{' SAXS to Number Conversion ':-^60}")
+        print(f"Input (SAXS)       : μ={mu_vol:.3f} nm, PD={pd_vol_pct:.1f}%")
+        print("-" * 60)
+        print(f"{'Method':<20} | {'Mean (nm)':<15} | {'Sigma (nm)':<15}")
+        print(f"{'Hatch-Choate':<20} | {mu_n_hc:>14.3f} | {sigma_n_hc:>14.3f}")
+        print(f"{'Numerical (Full)':<20} | {mu_n_num:>14.3f} | {sigma_n_num:>14.3f}")
+        print("-" * 60)
+        
+        return cls.from_gaussian_params(mu_n_num, sigma_n_num, amplitude)
+
+    @classmethod
+    def from_lognormal_params(cls, median, sigma_g, amplitude=1000):
+        """
+        Instantiates the class using Log-Normal parameters.
+        
+        Args:
+            median (float): The median diameter (nm).
+            sigma_g (float): The geometric standard deviation.
+            amplitude (float): Total number of particles.
+        """
+        instance = cls()
+        instance.model_type = 'lognormal'
+        
+        # Calculate arithmetic equivalents for summary reporting
+        ln_sig_g = np.log(sigma_g)
+        arith_mean = median * np.exp((ln_sig_g**2) / 2)
+        arith_sigma = arith_mean * np.sqrt(np.exp(ln_sig_g**2) - 1)
+        
+        instance._results_dict = {
+            'mean': arith_mean,
+            'median': median,
+            'sigma': arith_sigma,
+            'sigma_g': sigma_g,
+            'amplitude': amplitude,
+            'cv_percentage': (arith_sigma / arith_mean) * 100,
+            'fwhm': 0 # FWHM is less standard for lognormal, can be calculated if needed
+        }
+        
+        # Generate representative data for plotting
+        x = np.linspace(median / (sigma_g**2), median * (sigma_g**2), 500)
+        instance.sizes = x
+        instance.counts = instance._lognormal_model(x, amplitude, median, sigma_g)
+        instance.params = [amplitude, median, sigma_g]
+        instance.total_n_expected = amplitude
+        return instance
+
+    @classmethod
+    def from_saxs_lognormal(cls, mu_vol, pd_vol_pct, total_n=1000):
+        """
+        Converts SAXS Volume-weighted Mean to Number-weighted Log-normal parameters
+        using exact Hatch-Choate identities.
+        """
+        import math
+        cv = pd_vol_pct / 100
+        ln_sig_g_sq = math.log(1 + cv**2)
+        sigma_g = math.exp(math.sqrt(ln_sig_g_sq))
+        
+        # Exact Hatch-Choate: median_n = mu_vol / exp(3.5 * ln(sigma_g)^2)
+        median_n = mu_vol / math.exp(3.5 * ln_sig_g_sq)
+        
+        print(f"\n{' SAXS to Log-Normal Conversion (Exact) ':-^60}")
+        print(f"Input (SAXS Vol): μ={mu_vol:.3f} nm, PD={pd_vol_pct:.1f}%")
+        print(f"Result (Num)    : Median={median_n:.3f} nm, σg={sigma_g:.3f}")
+        print("-" * 60)
+        
+        return cls.from_lognormal_params(median=median_n, sigma_g=sigma_g, amplitude=total_n)
+
+    @staticmethod
+    def _lognormal_model(x, amplitude, median, sigma_g):
+        """Probability Density Function for Log-normal."""
+        x = np.where(x <= 0, 1e-9, x)
+        ln_sig_g = np.log(sigma_g)
+        term1 = amplitude / (x * ln_sig_g * np.sqrt(2 * np.pi))
+        term2 = np.exp(- (np.log(x / median))**2 / (2 * ln_sig_g**2))
+        return term1 * term2
+        
     @staticmethod
     def _gaussian_model(x, A, mu, sigma):
         """
@@ -118,13 +278,16 @@ class NanoparticleDistribution:
         Raises:
             ValueError: If called before running the .fit() method.
         """
-        if self.params is None:
-            raise ValueError("Fit has not been performed yet. Call .fit() first.")
+        if self.model_type == 'lognormal' and self._results_dict:
+            return self._results_dict
         
+        if self.params is None:
+            raise ValueError("Fit has not been performed yet.")
+        
+        # Handle Gaussian logic (as per your original code)
         A, mu, sigma = self.params
         fwhm = 2 * np.sqrt(2 * np.log(2)) * sigma
         cv = (sigma / mu) * 100
-        
         return {
             "amplitude": A,
             "mean": mu,
@@ -141,88 +304,160 @@ class NanoparticleDistribution:
         return np.exp(-0.5 * z**2)
         
     def print_results(self):
-        """Print a formatted summary of the distribution statistics."""
-        # Access parameters
-        centerTitle("Summary of the distribution statistics")
-
-        stats = self.results
-        mu, sigma = stats['mean'], stats['sigma']
+        """Print a formatted summary with dynamically calculated coverage."""
+        from scipy.stats import norm, lognorm
         
+        centerTitle("Summary of the distribution statistics")
+        stats = self.results
+        model = getattr(self, 'model_type', 'gaussian')
+
+        # Basic Stats
+        print(f"Model Type          : {model.upper()}")
         print(f"Amplitude           : {stats['amplitude']:.0f} particles")
-        print(f"Average Size (μ ± σ): {stats['mean']:.2f} ± {stats['sigma']:.2f} nm")
-        print(f"Polydispersity      : {stats['cv_percentage']:.2f}%")
-        print(f"Total Span (FWHM)   :    {stats['fwhm']:.2f} nm")
-        print("-" * 40)
-        print(f"Theoretical Population Coverage:")
-        print(f"  μ ± 1σ   ({mu-sigma:>5.2f}-{mu+sigma:<5.2f} nm) : 68.3%")
-        print(f"  μ ± FWHM ({mu-stats['fwhm']/2:>5.2f}-{mu+stats['fwhm']/2:<5.2f} nm) : 76.1%")
-        print(f"  μ ± 2σ   ({mu-2*sigma:>5.2f}-{mu+2*sigma:<5.2f} nm) : 95.4%")
-        print(f"  μ ± 3σ   ({mu-3*sigma:>5.2f}-{mu+3*sigma:<5.2f} nm) : 99.7%")
+        print(f"Average Size (Mean) : {stats['mean']:.3f} nm")
+        print(f"Polydispersity (CV) : {stats['cv_percentage']:.2f}%")
+
+        if model == 'lognormal':
+            med, sg = stats['median'], stats['sigma_g']
+            s_param = np.log(sg)
+            
+            # Dynamic calculation function for Lognormal
+            def get_prob(low, high):
+                return (lognorm.cdf(high, s=s_param, scale=med) - 
+                        lognorm.cdf(low, s=s_param, scale=med)) * 100
+
+            # Ranges
+            r1 = (med/sg, med*sg)
+            r2 = (med/(sg**2), med*(sg**2))
+            r3 = (med/(sg**3), med*(sg**3))
+            
+            print(f"Geometric SD (σg)   : {sg:.3f}")
+            print(f"Median Size         : {med:.3f} nm")
+            print("-" * 40)
+            print(f"Theoretical Population Coverage (Dynamic):")
+            print(f"  Med */ 1σg ({r1[0]:>5.2f}-{r1[1]:<5.2f} nm) : {get_prob(*r1):.1f}%")
+            print(f"  Med */ 2σg ({r2[0]:>5.2f}-{r2[1]:<5.2f} nm) : {get_prob(*r2):.1f}%")
+            print(f"  Med */ 3σg ({r3[0]:>5.2f}-{r3[1]:<5.2f} nm) : {get_prob(*r3):.1f}%")
+        
+        else:
+            mu, sigma = stats['mean'], stats['sigma']
+            
+            # Dynamic calculation function for Gaussian
+            def get_prob(low, high):
+                return (norm.cdf(high, mu, sigma) - norm.cdf(low, mu, sigma)) * 100
+
+            print(f"Std Deviation (σ)   : {sigma:.3f} nm")
+            print("-" * 40)
+            print(f"Theoretical Population Coverage (Dynamic):")
+            print(f"  μ ± 1σ     ({mu-sigma:>5.2f}-{mu+sigma:<5.2f} nm) : {get_prob(mu-sigma, mu+sigma):.1f}%")
+            print(f"  μ ± 2σ     ({mu-2*sigma:>5.2f}-{mu+2*sigma:<5.2f} nm) : {get_prob(mu-2*sigma, mu+2*sigma):.1f}%")
+            print(f"  μ ± 3σ     ({mu-3*sigma:>5.2f}-{mu+3*sigma:<5.2f} nm) : {get_prob(mu-3*sigma, mu+3*sigma):.1f}%")
         
     def get_binned_statistics(self, bin_width_nm=None, total_n=None):
         """
         Calculate theoretical populations using a fixed bin width in nanometers.
-        The range automatically adjusts to cover approximately ±3.5 sigma.
-
-        Args:
-            bin_width_nm (float, optional): The width of each bin in nm. 
-                                            Defaults to the fitted sigma.
-            total_n (int, optional): Total number of particles for scaling. 
-                                     Defaults to the sum of input counts.
+        Supports both Gaussian and Log-normal models.
         """
-        from scipy.stats import norm
+        from scipy.stats import norm, lognorm
 
-        if self.params is None:
-            raise ValueError("Fit the model first using .fit()")
+        if self.params is None and not hasattr(self, '_results_dict'):
+            raise ValueError(f"No parameters available. Fit the model or instantiate from params first.")
 
-        mu, sigma = self.results['mean'], self.results['sigma']
+        # Extract stats from the unified results property
+        stats = self.results
+        mu = stats['mean']
+        sigma = stats['sigma']
         
         # Set defaults
         if bin_width_nm is None: 
             bin_width_nm = sigma
-        if total_n is None: 
-            total_n = np.sum(self.counts)
+        if total_n is None:
+            # 1. On regarde d'abord si une valeur a été stockée explicitement
+            if hasattr(self, 'total_n_expected') and self.total_n_expected is not None:
+                total_n = self.total_n_expected
+            # 2. Sinon, si c'est du Log-Normal, on prend l'amplitude stockée
+            elif getattr(self, 'model_type', 'gaussian') == 'lognormal':
+                total_n = self.results.get('amplitude', 1000)
+            # 3. En dernier recours, on somme (cas des vraies données expérimentales)
+            elif len(self.counts) > 0 and self.cov is not None and np.any(self.cov > 0):
+                total_n = np.sum(self.counts)
+            else:
+                total_n = 1000
             
         # 1. Define coverage limits (±3.5 sigma)
-        limit_min, limit_max = mu - 3.5 * sigma, mu + 3.5 * sigma
+        # For lognormal, we must ensure we don't go below or equal to zero
+        limit_min = mu - 3.5 * sigma
+        if getattr(self, 'model_type', 'gaussian') == 'lognormal':
+            limit_min = max(0.01, limit_min)
+        limit_max = mu + 3.5 * sigma
         
-        # 2. Generate bin edges starting from mu to ensure symmetry
+        # 2. Generate bin edges starting from mu to ensure symmetry (for Gaussian)
+        # or just a consistent range for Log-normal
         right_edges = np.arange(mu + bin_width_nm/2, limit_max + bin_width_nm, bin_width_nm)
         left_edges = np.arange(mu - bin_width_nm/2, limit_min - bin_width_nm, -bin_width_nm)
         edges = np.sort(np.concatenate([left_edges, right_edges]))
         
-        # 3. Alignment Setup (The fix is here: using nested braces)
-        w_range, w_count, w_ratio, w_peak = 20, 10, 12, 12
-        
-        centerTitle(f'Binned Population (Step={bin_width_nm:.3f} nm, N={total_n})')
-        
-        header = f"{'Size Range (nm)':<{w_range}} | {'Count':<{w_count}}| {'Area (%)':<{w_ratio}}| {'Ratio/Peak':<{w_peak}}"
-        print(header)
-        print("-" * len(header))
-        
-        running_count, running_prob = 0, 0
+        # --- 1. First pass: calculate data and sum of ratios for normalization ---
+        bins_results = []
+        total_ratio_sum = 0
         
         for i in range(len(edges) - 1):
             s1, s2 = edges[i], edges[i+1]
-            z1, z2 = (s1 - mu) / sigma, (s2 - mu) / sigma
-            
-            prob = norm.cdf(z2) - norm.cdf(z1)
-            count = prob * total_n
-            
-            # Ratio at the center of the bin relative to mu
             bin_center = (s1 + s2) / 2
-            ratio_to_peak = self.get_relative_height(bin_center)
             
-            running_count += count
-            running_prob += prob
+            if getattr(self, 'model_type', 'lognormal') == 'lognormal' and hasattr(self, '_lognormal_model'):
+                # Lognormal probability and relative height
+                s_param = np.log(stats['sigma_g'])
+                prob = lognorm.cdf(s2, s=s_param, scale=stats['median']) - \
+                       lognorm.cdf(s1, s=s_param, scale=stats['median'])
+                peak_val = self._lognormal_model(stats['median'], 1, stats['median'], stats['sigma_g'])
+                current_val = self._lognormal_model(bin_center, 1, stats['median'], stats['sigma_g'])
+                ratio_to_peak = current_val / peak_val
+            else:
+                # Gaussian probability and relative height
+                prob = norm.cdf(s2, mu, sigma) - norm.cdf(s1, mu, sigma)
+                ratio_to_peak = self.get_relative_height(bin_center)
             
-            # Display notation [s1 - s2[ to show that s2 is the upper bound excluded
-            s_range = f"[{s1:>5.2f}, {s2:<5.2f}["
+            total_ratio_sum += ratio_to_peak
+            bins_results.append({
+                'range': f"[{s1:>5.2f}, {s2:<5.2f}[",
+                'count': prob * total_n,
+                'prob': prob,
+                'ratio': ratio_to_peak
+            })
+
+        # --- 2. Formatting and Output ---
+        w_range, w_count, w_prob, w_ratio, w_norm = 18, 10, 10, 12, 12
+        
+        centerTitle(f'Binned Population (Step={bin_width_nm:.3f} nm, N={total_n})')
+        
+        header = (f"{'Size Range (nm)':<{w_range}} | {'Count':<{w_count}}| "
+                  f"{'Area (%)':<{w_prob}}| {'Ratio/Peak':<{w_ratio}}| {'Norm. (1)':<{w_norm}}")
+        print(header)
+        print("-" * len(header))
+        
+        running_count, running_prob, running_norm = 0, 0, 0
+        
+        for b in bins_results:
+            # Normalize so that the sum of the column equals 1.000
+            norm_val = b['ratio'] / total_ratio_sum if total_ratio_sum > 0 else 0
             
-            print(f"{s_range:<{w_range}} | {int(round(count)):>{w_count-1}} | {prob*100:>{w_ratio-2}.1f}% | {ratio_to_peak:>{w_peak-2}.3f}")
+            running_count += b['count']
+            running_prob += b['prob']
+            running_norm += norm_val
+            
+            print(f"{b['range']:<{w_range}} | "
+                  f"{int(round(b['count'])):>{w_count-1}} | "
+                  f"{b['prob']*100:>{w_prob-2}.1f}% | "
+                  f"{b['ratio']:>{w_ratio-2}.3f} | "
+                  f"{norm_val:>{w_norm-2}.3f}")
         
         print("-" * len(header))
-        print(f"{'Total Covered':<{w_range}} | {int(round(running_count)):>{w_count-1}} | {running_prob*100:>{w_ratio-2}.1f}% | {'-':>{w_peak-2}}")
+        print(f"{'Total Covered':<{w_range}} | "
+              f"{int(round(running_count)):>{w_count-1}} | "
+              f"{running_prob*100:>{w_prob-2}.1f}% | "
+              f"{'-':>{w_ratio-2}} | "
+              f"{running_norm:>{w_norm-2}.3f}")
         
     def plot(self, title='Nanoparticle Size Distribution', color_histo="skyblue", color_gaussian="red", save_img=None, dpi=300):
         """

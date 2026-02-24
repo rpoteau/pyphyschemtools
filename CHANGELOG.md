@@ -11,6 +11,20 @@
 
 # Changelog pyphyschemtools
 
+## [0.8.0] - 2026-02-24 "FunctionalGroupExplorer by Lorris Toucouere"
+
+### Added
+- **New Module `orgachem.py`**: Introduced the `OrganicChemistryMaster` class (formerly `ChimieApp`), a comprehensive tool for learning organic chemistry. **Author**: Lorris Toucouere, PhD
+    - **Interactive Explorer**: Real-time functional group detection using SMARTS patterns and RDKit.
+    - **Dual Quiz System**: Structure recognition and IUPAC nomenclature training with fuzzy logic string validation.
+    - **Advanced Visualization**: Integrated 2D SVG rendering with salmon-pink highlighting and 3D molecular modeling via `py3Dmol`.
+    - **Bilingual Support**: Full French and English localization for all UI elements and chemical terminology.
+    - **External Integration**: Automatic IUPAC name retrieval via PubChem API and structure optimization using UFF force fields.
+
+### Dependencies
+- Added `requests` (API calls)
+- Added `ipywidgets` (Interactive UI)
+
 ## [0.7.6] - 2026-02-20 "Wrong link to Examples_pyPCT.ipynb"
 
 Wrong link to `Examples_pyPCT.ipynb` in `README.md` and in `/docs/source/index.rst`, after renaming of the initial `Examples.ipynb`

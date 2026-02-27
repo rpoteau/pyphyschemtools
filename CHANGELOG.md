@@ -11,6 +11,37 @@
 
 # Changelog pyphyschemtools
 
+## [Unreleased] - 2026-02-26
+
+### Added in `units.py`
+- **Base class `PhysicalQuantity`**: Implemented a core class to handle shared logic for SI prefixes, NumPy array management, and string parsing across all physical units.
+- **Molar units support**: Added automatic handling for `/mol` suffix in conversion factors (e.g., `kJ/mol`).
+- **Standardized `parse()` method**: A class method to create objects directly from strings like `"1.5 atm"` or `"500 nm"`.
+- **New `Pressure` class**: Full support for pressure units including `Pa`, `bar`, `atm`, `torr`, and `psi`.
+- **New `Volume` class**: Full support for SI (`m3`, `L`) and Imperial units (`gallon`, `quart`, `pint`, `fluid ounce`, ...).
+- **New `Length` class**: Full support for SI (`m`) and Imperial units (`inch`, `foot`, `yard`, `mile`, `nautical mile`, ...).
+- **New `Mass` class**: Full support for SI (`g, u, t`) and Imperial units (`lb` , `oz`, ...).
+- **New `MolarMass` class**
+- **New `Density` class**
+
+### added in the documentation `units.md`
+- Quick Start section
+- Sections for  `Pressure`, `Length`, `Area`, `Volume`, `Mass`, `MolarMass`, `Density`
+
+### Changed in `units.py`
+- **Refactored `Energy` class**: Now inherits from `PhysicalQuantity`. Same logic prevails for the other classes
+- **Improved Arithmetic**:
+    - All classes now support addition (`+`) and differences (`-`) between compatible quantities (eg Mass+Mass) with automatic internal SI conversion.
+    - Addition between different types (e.g., Energy +- Pressure) is strictly prohibited to ensure physical consistency.
+    - Scalar Scaling (*, /) is also implemented
+- **Global SI Prefixes**: Moved `_PREFIX_DATA` outside of specific classes to a module-level global dictionary for better maintainability.
+- **Smart unit representation**: `__repr__` uses scientific notation for values < 1e-4 or > 1e6
+- `show_available_tools()` split into two different functions, `show_available_prefixes()` and `show_available_units()`
+
+### Fixed in `units.py`
+- **Attribute Resolution**: Fixed a bug where `show_available_tools()` failed when called as a class method.
+- **Wavelength Inversion**: Improved the logic for adding energy objects when defined in wavelength units (e.g., `nm`), ensuring the result correctly returns to the expected unit.
+
 ## [0.8.0] - 2026-02-24 "FunctionalGroupExplorer by Lorris Toucouere"
 
 ### Added

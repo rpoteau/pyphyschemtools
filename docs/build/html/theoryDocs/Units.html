@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fundamental Units &mdash; pyphyschemtools 0.8.0 documentation</title>
+  <title>Fundamental Units &mdash; pyphyschemtools 0.8.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/theoryDocs/Units.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=486e5634"></script>
+      <script src="../_static/documentation_options.js?v=ec16d22d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -59,14 +59,72 @@
 <li class="toctree-l1"><a class="reference internal" href="PeriodicTable.html">Periodic Table</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fundamental Units</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#energy">Energy</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#exploring-capabilities">Exploring Capabilities</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#traceability-of-constants">Traceability of Constants</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#creating-energy-objects">Creating Energy Objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#spectroscopic-molar-conversions">Spectroscopic &amp; Molar Conversions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#initialization">Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smart-arithmetic">Smart Arithmetic</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-operations">Basic operations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#arithmetic-rules">Arithmetic Rules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#discovering-supported-units-of-each-class">Discovering Supported Units of each class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#codata-traceability-metadata">CODATA Traceability &amp; Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#universal-prefix-support">Universal Prefix Support</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#integration-with-variables">Integration with Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#accessing-numerical-data">Accessing Numerical Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#batch-processing-vectorization">Batch Processing (Vectorization)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#energy">Energy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-relationships">Mathematical relationships</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectroscopic-molar-conversions">Spectroscopic &amp; Molar Conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supported-units">Supported units</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pressure">Pressure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#standard-industrial-units">Standard &amp; Industrial Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-conversions">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#length">Length</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-atomic-to-macroscopic-scales">From Atomic to Macroscopic Scales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#area">Area</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#surface-and-interface-dimensions">Surface and Interface Dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#volume">Volume</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#three-dimensional-capacity">Three-Dimensional Capacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mass">Mass</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-subatomic-to-industrial-scales">From Subatomic to Industrial Scales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#molar-mass">Molar Mass</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-stoichiometric-bridge">The Stoichiometric Bridge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#density">Density</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mass-per-volume-relationships">Mass per Volume Relationships</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#temperature">Temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#absolute-and-relative-scales">Absolute and Relative Scales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Common Conversions</a></li>
 </ul>
 </li>
 </ul>
@@ -113,10 +171,188 @@
   <section class="tex2jax_ignore mathjax_ignore" id="fundamental-units">
 <h1>Fundamental Units<a class="headerlink" href="#fundamental-units" title="Link to this heading"></a></h1>
 <p><strong><code class="docutils literal notranslate"><span class="pre">units.py</span></code> module</strong></p>
-<p>So far, it only contains the <code class="docutils literal notranslate"><span class="pre">Energy</span></code> class</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">units</span></code> module provides a robust framework for handling physical quantities with automatic SI prefix resolution and CODATA-precise conversions.</p>
+<p>The units converters are defined as classes: <code class="docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code>, <code class="docutils literal notranslate"><span class="pre">Energy</span></code>, <code class="docutils literal notranslate"><span class="pre">Pressure</span></code>, <code class="docutils literal notranslate"><span class="pre">Length</span></code>, <code class="docutils literal notranslate"><span class="pre">Area</span></code>, <code class="docutils literal notranslate"><span class="pre">Volume</span></code>, <code class="docutils literal notranslate"><span class="pre">Mass</span></code>, <code class="docutils literal notranslate"><span class="pre">MolarMass</span></code>, <code class="docutils literal notranslate"><span class="pre">Density</span></code>.</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading"></a></h3>
+<p>Users must first import the appropriate class from <code class="docutils literal notranslate"><span class="pre">tools4pyPhysChem</span></code>, e.g.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pressure</span>
+</pre></div>
+</div>
+<br>
+There are two ways to initialize quantities: you can create objects using standard initialization or the human-readable `parse` method.
+<ul class="simple">
+<li><p><strong>Manual Initialization:</strong> Pass a value and a unit string.</p></li>
+<li><p><strong>String Parsing:</strong> Use <code class="docutils literal notranslate"><span class="pre">.parse()</span></code> for scientific strings like <code class="docutils literal notranslate"><span class="pre">&quot;13.6</span> <span class="pre">eV&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;1.672e2</span> <span class="pre">nm&quot;</span></code>.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard way: (value, unit)</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">Pressure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;atm&#39;</span><span class="p">)</span>
+
+<span class="c1"># Scientific string parsing:</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">Pressure</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;760 torr&quot;</span><span class="p">)</span>
+
+<span class="c1"># They are equivalent:</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;Pa&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">p2</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;Pa&#39;</span><span class="p">))</span>  <span class="c1"># True</span>
+</pre></div>
+</div>
+</section>
+<section id="smart-arithmetic">
+<h3>Smart Arithmetic<a class="headerlink" href="#smart-arithmetic" title="Link to this heading"></a></h3>
+<section id="basic-operations">
+<h4>Basic operations<a class="headerlink" href="#basic-operations" title="Link to this heading"></a></h4>
+<p>Addition and subtraction operations are performed in absolute SI space, but the result is automatically returned in the unit of the first operand to maintain consistency in your calculations</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">e1</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;eV&#39;</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="mf">1.602177e-19</span><span class="p">,</span> <span class="s1">&#39;J&#39;</span><span class="p">)</span>
+
+<span class="c1"># Result will be in &#39;eV&#39; because e1 is the first variable</span>
+<span class="n">ep</span> <span class="o">=</span> <span class="n">e1</span> <span class="o">+</span> <span class="n">e2</span>  
+<span class="nb">print</span><span class="p">(</span><span class="n">ep</span><span class="p">)</span>  <span class="c1"># 4 eV</span>
+<span class="n">em</span> <span class="o">=</span> <span class="n">e1</span> <span class="o">+</span> <span class="n">e2</span>  
+<span class="nb">print</span><span class="p">(</span><span class="n">em</span><span class="p">)</span>  <span class="c1"># 2 eV</span>
+</pre></div>
+</div>
+</section>
+<section id="arithmetic-rules">
+<h4>Arithmetic Rules<a class="headerlink" href="#arithmetic-rules" title="Link to this heading"></a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">units</span></code> module enforces strict physical laws to ensure your calculations remain dimensionally sound:</p>
+<ul class="simple">
+<li><p><strong>Additive Operations (+, -)</strong>: These are allowed only between compatible quantities (e.g., Mass + Mass). The result is always expressed in the unit of the first operand.</p></li>
+<li><p><strong>Scalar Scaling (*, /)</strong>: You can multiply or divide any physical quantity by a scalar (integer, float, or NumPy array). This is useful for scaling measurements or applying coefficients.</p></li>
+<li><p><strong>Dimensional Protection</strong>: Multiplying or dividing two quantities (e.g., Pressure * Pressure) is forbidden. This prevents the accidental creation of complex derived units (like Pa<sup>2</sup>) that the specific classes are not designed to handle</p></li>
+</ul>
+<p>In summary, arithmetic is allowed between compatible quantities or with scalars, while operations that would result in complex derived units are restricted.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Operation</p></th>
+<th class="head text-left"><p>Syntax</p></th>
+<th class="head text-center"><p>Allowed?</p></th>
+<th class="head text-left"><p>Resulting Type</p></th>
+<th class="head text-left"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Addition</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span> <span class="pre">+</span> <span class="pre">Mass</span></code></p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span></code></p></td>
+<td class="text-left"><p>Performed in SI, returned in the unit of the first operand.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Scalar Addition</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span> <span class="pre">+</span> <span class="pre">5.0</span></code></p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span></code></p></td>
+<td class="text-left"><p>The scalar is assumed to share the object’s unit.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Scaling</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span> <span class="pre">*</span> <span class="pre">2.0</span></code></p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span></code></p></td>
+<td class="text-left"><p>Doubling or halving the magnitude.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Division</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span> <span class="pre">/</span> <span class="pre">2.0</span></code></p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span></code></p></td>
+<td class="text-left"><p>Reducing the magnitude.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Dimensional Error</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span> <span class="pre">*</span> <span class="pre">Mass</span></code></p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">TypeError</span></code></p></td>
+<td class="text-left"><p>Forbidden to prevent uncontrolled unit exponentiation (<span class="math notranslate nohighlight">\(g^2\)</span>).</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Inversion Error</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">/</span> <span class="pre">Mass</span></code></p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">TypeError</span></code></p></td>
+<td class="text-left"><p>Forbidden to prevent unit inversion (<span class="math notranslate nohighlight">\(g^{-1}\)</span>).</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Incompatibility</strong></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Mass</span> <span class="pre">+</span> <span class="pre">Energy</span></code></p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">TypeError</span></code></p></td>
+<td class="text-left"><p>Strictly forbidden (cannot add apples to oranges).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="discovering-supported-units-of-each-class">
+<h3>Discovering Supported Units of each class<a class="headerlink" href="#discovering-supported-units-of-each-class" title="Link to this heading"></a></h3>
+<p>Each class knows its own supported base units. You can inspect them alongside global SI prefixes, with the command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Volume</span><span class="o">.</span><span class="n">show_available_units</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="codata-traceability-metadata">
+<h3>CODATA Traceability &amp; Metadata<a class="headerlink" href="#codata-traceability-metadata" title="Link to this heading"></a></h3>
+<p>Transparency is key in Physical Chemistry and in numerical calculations. You can inspect the exact physical constants (Planck, Boltzmann, etc.) used for internal calculations, sourced from the latest CODATA values via <code class="docutils literal notranslate"><span class="pre">scipy.constants</span></code>. It can be done either from a class associated to a physical quantity (<code class="docutils literal notranslate"><span class="pre">Energy</span></code>, etc…) of from the base <code class="docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Energy</span>
+<span class="n">Energy</span><span class="o">.</span><span class="n">show_constants_metadata</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalQuantity</span>
+<span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">show_constants_metadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="universal-prefix-support">
+<h3>Universal Prefix Support<a class="headerlink" href="#universal-prefix-support" title="Link to this heading"></a></h3>
+<p>The recursive prefix manager allows for extreme physical scales. It treats prefixes like <strong>da</strong> (<strong>deca</strong>) or <strong>y</strong> (<strong>yocto</strong>) as dynamic multipliers applicable to (almost) any base unit. Supported SI prefixes range from <strong>yocto</strong>, <span class="math notranslate nohighlight">\(10^{-30}\)</span>, to <strong>quetta</strong>, <span class="math notranslate nohighlight">\(10^{30}\)</span>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;4000 ym-1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;GeV&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;4000 ym-1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;ZJ/mol&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The list of prefixes can also be obtained either from a class associated to a physical quantity (<code class="docutils literal notranslate"><span class="pre">Energy</span></code>, etc…) of from the base <code class="docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code> class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Energy</span>
+<span class="n">Energy</span><span class="o">.</span><span class="n">show_available_prefixes</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalQuantity</span>
+<span class="n">PhysicalQuantity</span><span class="o">.</span><span class="n">show_available_prefixes</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="accessing-numerical-data">
+<h3>Accessing Numerical Data<a class="headerlink" href="#accessing-numerical-data" title="Link to this heading"></a></h3>
+<p>The primary way to extract numerical values from a <code class="docutils literal notranslate"><span class="pre">unit</span></code> object, for example when you need to perform external calculations or pass the data to a plotting function (like <code class="docutils literal notranslate"><span class="pre">Matplotlib</span></code>) while keeping the original unit’s scale is to address it with :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pressure</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Pressure</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;10.45 MPa&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="c1"># 104.5000 bar</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="c1"># &lt;class &#39;pyphyschemtools.units.Pressure&#39;&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="c1"># 104.5</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">))</span> <span class="c1"># &lt;class &#39;float&#39;&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="c1"># </span>
+<span class="nb">print</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="c1"># </span>
+</pre></div>
+</div>
+</section>
+<section id="batch-processing-vectorization">
+<h3>Batch Processing (Vectorization)<a class="headerlink" href="#batch-processing-vectorization" title="Link to this heading"></a></h3>
+<p>All classes are fully compatible with <code class="docutils literal notranslate"><span class="pre">NumPy</span></code>. You can pass a list or array of values to perform batch conversions. Let’s consider the energy levels of the Hydrogen atom:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">K</span> <span class="o">=</span> <span class="mf">13.59844</span>
+<span class="n">Etab_eV</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">K</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">25</span><span class="p">]</span>
+
+<span class="c1"># Convert the entire list from eV to hartree</span>
+<span class="n">Etab_hartree</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="n">Etab_eV</span><span class="p">,</span> <span class="s1">&#39;eV&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;hartree&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Etab_hartree</span><span class="p">)</span> <span class="c1"># Formatted output: Energy Array (hartree, shape=(5,))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Etab_hartree</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="c1"># Formatted output: [-0.49973345 -0.12493336 -0.05552594 -0.03123334 -0.01998934]</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
 <section id="energy">
 <h2>Energy<a class="headerlink" href="#energy" title="Link to this heading"></a></h2>
 <div class="intro">
+<section id="mathematical-relationships">
+<h3>Mathematical relationships<a class="headerlink" href="#mathematical-relationships" title="Link to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">Energy</span></code> class is a high-level physical chemistry utility designed to handle the complex conversions between energy, wavelength, temperature, and molar quantities. It features a recursive prefix manager and native support for different energy contexts:</p>
 <ul class="simple">
 <li><p>Photon Energy: Relates energy to wavelength (<span class="math notranslate nohighlight">\(\lambda\)</span>) or frequency (<span class="math notranslate nohighlight">\(\nu\)</span>):</p></li>
@@ -142,32 +378,6 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Energy</span>
 </pre></div>
 </div>
-<section id="exploring-capabilities">
-<h3>Exploring Capabilities<a class="headerlink" href="#exploring-capabilities" title="Link to this heading"></a></h3>
-<p>To inspect the internal logic and supported units, you can display the built-in reference tables. This provides a live view of all supported SI prefixes (from <strong>yocto</strong> <span class="math notranslate nohighlight">\(10^{-30}\)</span> to <strong>quetta</strong> <span class="math notranslate nohighlight">\(10^{30}\)</span>) and recognized base units.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">show_available_tools</span><span class="p">())</span>
-</pre></div>
-</div>
-</section>
-<section id="traceability-of-constants">
-<h3>Traceability of Constants<a class="headerlink" href="#traceability-of-constants" title="Link to this heading"></a></h3>
-<p>The class ensures scientific rigor by using the latest CODATA values via <code class="docutils literal notranslate"><span class="pre">scipy.constants</span></code>. You can query the metadata to see the exact values, units, and uncertainties for the constants used in the background.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Energy</span><span class="o">.</span><span class="n">show_constants_metadata</span><span class="p">()</span>
-</pre></div>
-</div>
-</section>
-<section id="creating-energy-objects">
-<h3>Creating Energy Objects<a class="headerlink" href="#creating-energy-objects" title="Link to this heading"></a></h3>
-<p>You can instantiate an <code class="docutils literal notranslate"><span class="pre">Energy</span></code> object using two different methods depending on your data source.</p>
-<p><strong>String Parsing</strong>.
-Useful for user inputs or reading from text files.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;13.59844 eV&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;hartree&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-<p><strong>Direct Instantiation</strong>. Recommended for programmatic usage and mathematical variables.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="p">(</span><span class="mf">13.59844</span><span class="p">,</span> <span class="s1">&#39;eV&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;hartree&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
 </section>
 <section id="spectroscopic-molar-conversions">
 <h3>Spectroscopic &amp; Molar Conversions<a class="headerlink" href="#spectroscopic-molar-conversions" title="Link to this heading"></a></h3>
@@ -179,38 +389,544 @@ Useful for user inputs or reading from text files.</p>
 </pre></div>
 </div>
 </section>
-<section id="universal-prefix-support">
-<h3>Universal Prefix Support<a class="headerlink" href="#universal-prefix-support" title="Link to this heading"></a></h3>
-<p>The recursive prefix manager allows for extreme physical scales. It treats prefixes like <strong>da</strong> (<strong>deca</strong>) or <strong>y</strong> (<strong>yocto</strong>) as dynamic multipliers applicable to any base unit.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;4000 ym-1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;GeV&#39;</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;4000 ym-1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;ZJ/mol&#39;</span><span class="p">))</span>
-</pre></div>
+<section id="supported-units">
+<h3>Supported units<a class="headerlink" href="#supported-units" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">J</span></code></p></td>
+<td class="text-left"><p>Joule (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">eV</span></code></p></td>
+<td class="text-left"><p>Electronvolt</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">hartree</span></code></p></td>
+<td class="text-left"><p>Hartree</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cal</span></code></p></td>
+<td class="text-left"><p>Calorie (thermochemical)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">erg</span></code></p></td>
+<td class="text-left"><p>Erg</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">BTU</span></code></p></td>
+<td class="text-left"><p>British Thermal Unit</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
+<td class="text-left"><p>Kelvin</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">m</span></code></p></td>
+<td class="text-left"><p>Meter</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Å</span></code>, <code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td class="text-left"><p>Ångström</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cm-1</span></code></p></td>
+<td class="text-left"><p>Reciprocal Centimeter</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">unit-1</span></code></p></td>
+<td class="text-left"><p>Any reciprocal <code class="docutils literal notranslate"><span class="pre">unit</span></code> length</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">unit/mol</span></code></p></td>
+<td class="text-left"><p>Molar units</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
-<section id="integration-with-variables">
-<h3>Integration with Variables<a class="headerlink" href="#integration-with-variables" title="Link to this heading"></a></h3>
-<p>Using Python f-strings, you can easily inject variables into the parsing logic for dynamic workflows.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">e</span> <span class="o">=</span> <span class="n">Energy</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;1 kcal/mol&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;kJ/mol&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>        <span class="c1"># Formatted Output: 4.1840 kJ/mol</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># Numerical Output: 4.184</span>
-</pre></div>
-</div>
 </section>
-<section id="batch-processing-vectorization">
-<h3>Batch Processing (Vectorization)<a class="headerlink" href="#batch-processing-vectorization" title="Link to this heading"></a></h3>
-<p>The class is fully compatible with <code class="docutils literal notranslate"><span class="pre">NumPy</span></code>. You can pass a list or array of values (such as the energy levels of the Hydrogen atom) to perform batch conversions.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">K</span> <span class="o">=</span> <span class="mf">13.59844</span>
-<span class="n">Etab_eV</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">K</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="n">K</span><span class="o">/</span><span class="mi">25</span><span class="p">]</span>
+<section id="pressure">
+<h2>Pressure<a class="headerlink" href="#pressure" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="standard-industrial-units">
+<h3>Standard &amp; Industrial Units<a class="headerlink" href="#standard-industrial-units" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Pressure</span></code> class manages conversions between the SI unit (Pascal), common laboratory units (atm, torr), and industrial standards (bar, psi). It uses exact CODATA values from <code class="docutils literal notranslate"><span class="pre">scipy.constants</span></code> to ensure that even small pressure differences are captured accurately.</p>
+</section>
+<section id="id1">
+<h3>Supported Units<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>The following units are handled natively:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Pa</span></code></p></td>
+<td class="text-left"><p>Pascal (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">bar</span></code></p></td>
+<td class="text-left"><p>Bar</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">atm</span></code></p></td>
+<td class="text-left"><p>Standard Atmosphere</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">torr</span></code></p></td>
+<td class="text-left"><p>Torr (mmHg)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">psi</span></code></p></td>
+<td class="text-left"><p>Pound per Square Inch</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="common-conversions">
+<h3>Common Conversions<a class="headerlink" href="#common-conversions" title="Link to this heading"></a></h3>
+<p>Whether you are working with vacuum systems (mTorr) or high-pressure reactors (MPa), the class resolves prefixes automatically.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pressure</span>
 
-<span class="c1"># Convert the entire list from eV to hartree</span>
-<span class="n">Etab_hartree</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="n">Etab_eV</span><span class="p">,</span> <span class="s1">&#39;eV&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;hartree&#39;</span><span class="p">)</span>
+<span class="c1"># Vacuum science: Convert mTorr to Pascal</span>
+<span class="n">p_vac</span> <span class="o">=</span> <span class="n">Pressure</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;10 mtorr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;Pa&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_vac</span><span class="p">)</span> 
 
-<span class="nb">print</span><span class="p">(</span><span class="n">Etab_hartree</span><span class="p">)</span> <span class="c1"># Formatted output: Energy Array (hartree, shape=(5,))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Etab_hartree</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="c1"># Formatted output: [-0.49973345 -0.12493336 -0.05552594 -0.03123334 -0.01998934]</span>
+<span class="c1"># Industrial monitoring: Convert MPa to bar</span>
+<span class="n">p_gauge</span> <span class="o">=</span> <span class="n">Pressure</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;2.5 MPa&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_gauge</span><span class="p">)</span> 
+
+<span class="c1"># Diving/Geology: Convert psi to atm</span>
+<span class="n">p_deep</span> <span class="o">=</span> <span class="n">Pressure</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="s1">&#39;psi&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;atm&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_deep</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>`</p>
+</div>
 </section>
+</section>
+<section id="length">
+<h2>Length<a class="headerlink" href="#length" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="from-atomic-to-macroscopic-scales">
+<h3>From Atomic to Macroscopic Scales<a class="headerlink" href="#from-atomic-to-macroscopic-scales" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Length</span></code> class handles spatial dimensions across a vast range of magnitudes. It is specifically optimized for physical chemists who frequently switch between spectroscopic units (Ångströms) and standard SI or Imperial units.</p>
+</section>
+<section id="id2">
+<h3>Supported Units<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>The following units are handled natively:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">m</span></code></p></td>
+<td class="text-left"><p>Meter (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Å</span></code>, <code class="docutils literal notranslate"><span class="pre">A</span></code>, <code class="docutils literal notranslate"><span class="pre">angstrom</span></code></p></td>
+<td class="text-left"><p>Ångström</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">inch</span></code></p></td>
+<td class="text-left"><p>Inch</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ft</span></code>, <code class="docutils literal notranslate"><span class="pre">foot</span></code></p></td>
+<td class="text-left"><p>Foot</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">yd</span></code>, <code class="docutils literal notranslate"><span class="pre">yard</span></code></p></td>
+<td class="text-left"><p>Yard</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">mi</span></code>, <code class="docutils literal notranslate"><span class="pre">mile</span></code></p></td>
+<td class="text-left"><p>Mile</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">nmi</span></code></p></td>
+<td class="text-left"><p>Nautical Mile</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h3>Common Conversions<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>Whether you are defining a bond length or the dimensions of a chromatography column, the <code class="docutils literal notranslate"><span class="pre">Length</span></code> class ensures dimensional accuracy.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Length</span>
+
+<span class="c1"># Structural Chemistry: Convert Ångströms to nm</span>
+<span class="n">bond_len</span> <span class="o">=</span> <span class="n">Length</span><span class="p">(</span><span class="mf">1.54</span><span class="p">,</span> <span class="s1">&#39;Å&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;nm&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bond_len</span><span class="p">)</span>
+
+<span class="c1"># Lab Equipment: Convert inches to centimeters</span>
+<span class="n">tube_dia</span> <span class="o">=</span> <span class="n">Length</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;0.25 inch&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tube_dia</span><span class="p">)</span>
+
+<span class="c1"># Geographical scale: Convert kilometers to miles</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">Length</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;km&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;mi&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="area">
+<h2>Area<a class="headerlink" href="#area" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="surface-and-interface-dimensions">
+<h3>Surface and Interface Dimensions<a class="headerlink" href="#surface-and-interface-dimensions" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Area</span></code> class handles two-dimensional spatial measurements. In physical chemistry, this is critical for calculating cross-sectional areas of molecular beams, the active surface of electrodes, or the footprint of Langmuir monolayers.</p>
+</section>
+<section id="id4">
+<h3>Supported Units<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>The following units are handled natively:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">m2</span></code></p></td>
+<td class="text-left"><p>Square Meter (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cm2</span></code></p></td>
+<td class="text-left"><p>Square Centimeter</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">mm2</span></code></p></td>
+<td class="text-left"><p>Square Millimeter</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">A2,</span> <span class="pre">Å2</span></code></p></td>
+<td class="text-left"><p>Square Ångström</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ha</span></code></p></td>
+<td class="text-left"><p>Hectare</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">are</span></code></p></td>
+<td class="text-left"><p>Are</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">in2</span></code>, <code class="docutils literal notranslate"><span class="pre">sq_inch</span></code></p></td>
+<td class="text-left"><p>Square Inch</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ft2</span></code>, <code class="docutils literal notranslate"><span class="pre">sq_ft</span></code></p></td>
+<td class="text-left"><p>Square Foot</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ac</span></code>, <code class="docutils literal notranslate"><span class="pre">acre</span></code></p></td>
+<td class="text-left"><p>Acre</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">sq_mi</span></code></p></td>
+<td class="text-left"><p>Square Mile</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h3>Common Conversions<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>Whether you are calculating the area of a microscope slide or the cross-section of a capillary, the <code class="docutils literal notranslate"><span class="pre">Area</span></code> class simplifies the math.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Area</span>
+
+<span class="c1"># Microscopy: Convert square inches to square centimeters</span>
+<span class="n">slide_area</span> <span class="o">=</span> <span class="n">Area</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;sq_inch&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cm2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">slide_area</span><span class="p">)</span>
+
+<span class="c1"># Surface Science: Convert Å² (atomic scale) to nm²</span>
+<span class="n">site_area</span> <span class="o">=</span> <span class="n">Area</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;Å2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;nm2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">site_area</span><span class="p">)</span>
+
+<span class="c1"># Agriculture/Environment: Convert hectares to acres</span>
+<span class="n">field</span> <span class="o">=</span> <span class="n">Area</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;2.5 ha&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;acre&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="volume">
+<h2>Volume<a class="headerlink" href="#volume" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="three-dimensional-capacity">
+<h3>Three-Dimensional Capacity<a class="headerlink" href="#three-dimensional-capacity" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Volume</span></code> class manages three-dimensional space measurements. It is essential for stoichiometry, titrations, and chemical engineering, bridging the gap between metric laboratory glassware (L, mL) and industrial containers (gallons, barrels).</p>
+</section>
+<section id="id6">
+<h3>Supported Units<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>The following units are handled natively:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">m3</span></code></p></td>
+<td class="text-left"><p>Cubic Meter (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cm3</span></code></p></td>
+<td class="text-left"><p>Cubic Centimeter (mL)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td class="text-left"><p>Liter</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">gal</span></code>, <code class="docutils literal notranslate"><span class="pre">gallon</span></code></p></td>
+<td class="text-left"><p>US Liquid Gallon</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">qt</span></code>, <code class="docutils literal notranslate"><span class="pre">quart</span></code></p></td>
+<td class="text-left"><p>US Liquid Quart</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">pt</span></code>, <code class="docutils literal notranslate"><span class="pre">pint</span></code></p></td>
+<td class="text-left"><p>US Liquid Pint</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cup</span></code></p></td>
+<td class="text-left"><p>US Cup</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">tsp</span></code></p></td>
+<td class="text-left"><p>Teaspoon</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">tbsp</span></code></p></td>
+<td class="text-left"><p>Tablespoon</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">oz</span></code>, <code class="docutils literal notranslate"><span class="pre">fluid_ounce</span></code></p></td>
+<td class="text-left"><p>US Fluid Ounce</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">bbl</span></code>, <code class="docutils literal notranslate"><span class="pre">barrel</span></code></p></td>
+<td class="text-left"><p>Oil Barrel</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id7">
+<h3>Common Conversions<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>Whether you are preparing a buffer or scaling a pilot plant reactor, the <code class="docutils literal notranslate"><span class="pre">Volume</span></code> class ensures precise fluid management.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Volume</span>
+
+<span class="c1"># Lab Preparation: Convert Liters to Milliliters</span>
+<span class="n">v_flask</span> <span class="o">=</span> <span class="n">Volume</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;mL&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">v_flask</span><span class="p">)</span>
+
+<span class="c1"># US Standards: Convert fluid ounces to mL</span>
+<span class="n">v_sample</span> <span class="o">=</span> <span class="n">Volume</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;8 oz&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;mL&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">v_sample</span><span class="p">)</span>
+
+<span class="c1"># Bulk Chemistry: Convert Gallons to Liters</span>
+<span class="n">v_tank</span> <span class="o">=</span> <span class="n">Volume</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="s1">&#39;gal&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">v_tank</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="mass">
+<h2>Mass<a class="headerlink" href="#mass" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="from-subatomic-to-industrial-scales">
+<h3>From Subatomic to Industrial Scales<a class="headerlink" href="#from-subatomic-to-industrial-scales" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Mass</span></code> class manages the physical quantity of matter. It is designed to handle the extreme scales encountered in physical chemistry, from the mass of a single proton (atomic mass units) to the mass of large-scale chemical reactors (metric tons).</p>
+</section>
+<section id="id8">
+<h3>Supported Units<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>The following units are handled natively:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">kg</span></code></p></td>
+<td class="text-left"><p>Kilogram (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g</span></code></p></td>
+<td class="text-left"><p>Gram</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">t</span></code></p></td>
+<td class="text-left"><p>Metric Ton</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">u</span></code>, <code class="docutils literal notranslate"><span class="pre">amu</span></code></p></td>
+<td class="text-left"><p>Unified Atomic Mass Unit</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">carat</span></code></p></td>
+<td class="text-left"><p>Carat</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">lb</span></code></p></td>
+<td class="text-left"><p>Pound</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">oz</span></code></p></td>
+<td class="text-left"><p>Ounce</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">gr</span></code></p></td>
+<td class="text-left"><p>Grain</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h3>Common Conversions<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>Whether you are weighing a catalyst on a microbalance or ordering bulk solvents, the <code class="docutils literal notranslate"><span class="pre">Mass</span></code> class ensures CODATA precision.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mass</span>
+
+<span class="c1"># Analytical Chemistry: Convert grams to milligrams</span>
+<span class="n">reagent</span> <span class="o">=</span> <span class="n">Mass</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;mg&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">reagent</span><span class="p">)</span>
+
+<span class="c1"># Particle Physics: Convert atomic mass units to grams</span>
+<span class="n">proton_mass</span> <span class="o">=</span> <span class="n">Mass</span><span class="p">(</span><span class="mf">1.007</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">proton_mass</span><span class="p">)</span>
+
+<span class="c1"># Logistics: Convert kilograms to pounds</span>
+<span class="n">shipping_wt</span> <span class="o">=</span> <span class="n">Mass</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="s1">&#39;kg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;lb&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shipping_wt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="molar-mass">
+<h2>Molar Mass<a class="headerlink" href="#molar-mass" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="the-stoichiometric-bridge">
+<h3>The Stoichiometric Bridge<a class="headerlink" href="#the-stoichiometric-bridge" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">MolarMass</span></code> class (or Molecular Weight) is the fundamental scaling factor in chemical calculations. It relates the mass of a substance to the amount of substance (moles), bridging the gap between single molecules and bulk materials using the Avogadro constant (<span class="math notranslate nohighlight">\(N_A\)</span>).</p>
+</section>
+<section id="id10">
+<h3>Supported Units<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>The following units are handled natively:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">kg/mol</span></code></p></td>
+<td class="text-left"><p>Kilogram per mole (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g/mol</span></code></p></td>
+<td class="text-left"><p>Gram per mole</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">Da</span></code>, <code class="docutils literal notranslate"><span class="pre">Dalton</span></code></p></td>
+<td class="text-left"><p>Dalton</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">u</span></code></p></td>
+<td class="text-left"><p>Unified atomic mass unit</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id11">
+<h3>Common Conversions<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>Whether you are calculating the molecular weight of a small organic molecule or a massive protein, the <code class="docutils literal notranslate"><span class="pre">MolarMass</span></code> class ensures consistent dimensionality.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolarMass</span>
+
+<span class="c1"># Organic Synthesis: Convert g/mol to kg/mol for industrial scaling</span>
+<span class="n">mw_glucose</span> <span class="o">=</span> <span class="n">MolarMass</span><span class="p">(</span><span class="mf">180.16</span><span class="p">,</span> <span class="s1">&#39;g/mol&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;kg/mol&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mw_glucose</span><span class="p">)</span>
+
+<span class="c1"># Biochemistry: Working with Daltons for proteins</span>
+<span class="n">bsa_mw</span> <span class="o">=</span> <span class="n">MolarMass</span><span class="p">(</span><span class="mi">66463</span><span class="p">,</span> <span class="s1">&#39;Da&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;g/mol&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bsa_mw</span><span class="p">)</span>
+
+<span class="c1"># High-Precision Physics: Convert unified atomic mass units</span>
+<span class="n">c12_mass</span> <span class="o">=</span> <span class="n">MolarMass</span><span class="p">(</span><span class="mf">12.000</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;g/mol&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c12_mass</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="density">
+<h2>Density<a class="headerlink" href="#density" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="mass-per-volume-relationships">
+<h3>Mass per Volume Relationships<a class="headerlink" href="#mass-per-volume-relationships" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Density</span></code> class manages the concentration of matter within a specific space (<span class="math notranslate nohighlight">\(\rho = m/V\)</span>). It is a vital property for solvent preparation, determining the concentration of solutions, and identifying unknown substances in the laboratory.</p>
+</section>
+<section id="id12">
+<h3>Supported Units<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>The following units are handled natively:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">kg/m3</span></code></p></td>
+<td class="text-left"><p>Kilogram per Cubic Meter (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g/cm3</span></code></p></td>
+<td class="text-left"><p>Gram per Cubic Centimeter</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g/mL</span></code></p></td>
+<td class="text-left"><p>Gram per Milliliter</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g/L</span></code></p></td>
+<td class="text-left"><p>Gram per Liter</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">lb/ft3</span></code></p></td>
+<td class="text-left"><p>Pound per Cubic Foot</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id13">
+<h3>Common Conversions<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>Whether you are converting from high-density materials (gold) to industrial fluids, the <code class="docutils literal notranslate"><span class="pre">Density</span></code> class ensures accuracy.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Density</span>
+
+<span class="c1"># Materials Characterization: Convert g/cm3 to SI units</span>
+<span class="n">rho_au</span> <span class="o">=</span> <span class="n">Density</span><span class="p">(</span><span class="mf">19.3</span><span class="p">,</span> <span class="s1">&#39;g/cm3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;kg/m3&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rho_au</span><span class="p">)</span>
+
+<span class="c1"># Industrial Standards: Convert pounds per cubic foot to g/cm3</span>
+<span class="n">rho_gasoline</span> <span class="o">=</span> <span class="n">Density</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;45 lb/ft3&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;g/cm3&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rho_gasoline</span><span class="p">)</span>
+
+<span class="c1"># Solution Prep: Convert g/L (common in biology) to g/mL</span>
+<span class="n">rho_sol</span> <span class="o">=</span> <span class="n">Density</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="s1">&#39;g/L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;g/mL&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rho_sol</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="temperature">
+<h2>Temperature<a class="headerlink" href="#temperature" title="Link to this heading"></a></h2>
+<div class="intro">
+<section id="absolute-and-relative-scales">
+<h3>Absolute and Relative Scales<a class="headerlink" href="#absolute-and-relative-scales" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Temperature</span></code> class handles conversions between thermodynamic temperature (Kelvin) and common relative scales (Celsius, Fahrenheit). Unlike other physical quantities, temperature conversions involve both a scaling factor and a numerical offset.</p>
+</section>
+<section id="id14">
+<h3>Supported Units<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<p>The following units are handled natively by the <code class="docutils literal notranslate"><span class="pre">Temperature</span></code> class:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>Name of the Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
+<td class="text-left"><p>Kelvin (SI Base Unit)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">°C</span></code>, <code class="docutils literal notranslate"><span class="pre">celsius</span></code></p></td>
+<td class="text-left"><p>Degree Celsius</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">°F</span></code>, <code class="docutils literal notranslate"><span class="pre">fahrenheit</span></code></p></td>
+<td class="text-left"><p>Degree Fahrenheit</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">°R</span></code>, <code class="docutils literal notranslate"><span class="pre">rankine</span></code></p></td>
+<td class="text-left"><p>Degree Rankine</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id15">
+<h3>Common Conversions<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Temperature</span></code> class ensures that the delicate offsets (like the 273.15 constant for Celsius) are applied with scientific precision.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyphyschemtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Temperature</span>
+
+<span class="c1"># Laboratory Standard: Convert Celsius to Kelvin</span>
+<span class="n">t_room</span> <span class="o">=</span> <span class="n">Temperature</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="s1">&#39;°C&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t_room</span><span class="p">)</span>
+
+<span class="c1"># US Engineering: Convert Fahrenheit to Celsius</span>
+<span class="n">t_body</span> <span class="o">=</span> <span class="n">Temperature</span><span class="p">(</span><span class="mf">98.6</span><span class="p">,</span> <span class="s1">&#39;°F&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;°C&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t_body</span><span class="p">)</span>
+
+<span class="c1"># Cryogenics: Convert Kelvin to Fahrenheit</span>
+<span class="n">t_liquid_N2</span> <span class="o">=</span> <span class="n">Temperature</span><span class="p">(</span><span class="mi">77</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;°C&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t_liquid_N2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></section>
 </section>
 </section>
 

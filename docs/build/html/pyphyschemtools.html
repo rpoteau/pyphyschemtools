@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.8.0 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.8.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=486e5634"></script>
+      <script src="_static/documentation_options.js?v=ec16d22d"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -127,7 +127,16 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.units">pyphyschemtools.units module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Area"><code class="docutils literal notranslate"><span class="pre">Area</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Density"><code class="docutils literal notranslate"><span class="pre">Density</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Length"><code class="docutils literal notranslate"><span class="pre">Length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Mass"><code class="docutils literal notranslate"><span class="pre">Mass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.MolarMass"><code class="docutils literal notranslate"><span class="pre">MolarMass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity"><code class="docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Pressure"><code class="docutils literal notranslate"><span class="pre">Pressure</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Temperature"><code class="docutils literal notranslate"><span class="pre">Temperature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.units.Volume"><code class="docutils literal notranslate"><span class="pre">Volume</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.misc">pyphyschemtools.misc module</a><ul>
@@ -1685,72 +1694,146 @@ and block names instead of A–F.</p>
 <section id="module-pyphyschemtools.units">
 <span id="pyphyschemtools-units-module"></span><h2>pyphyschemtools.units module<a class="headerlink" href="#module-pyphyschemtools.units" title="Link to this heading"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Area">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Area</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'m2'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Area" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<p>Area management.
+Supports SI and Si-related units (m2, hectare) and Imperial units (sq inch, sq ft, acre).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Area.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Area.to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Density">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kg/cm3'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Density" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<p>Density (Mass per Volume) management.
+Supports SI (kg/m3) and common lab units (g/cm3, g/mL, lb/ft3).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Density.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Density.to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pyphyschemtools.units.Energy">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'J'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>An advanced utility class for Energy management in Physical Chemistry.</p>
-<p>This class handles the conversion between standard energy units (J, eV),
-thermal energy (K), and spectroscopic units (wavelengths in m/nm/Å or
-wavenumbers in cm-1).</p>
-<p>Features:
-- Supports scalar values and NumPy arrays.
-- Automatic handling of SI prefixes (milli, micro, kilo, etc.).
-- Seamless conversion between energy (E) and wavelength (lambda) using E = hc/lambda.
-- Support for reciprocal space units (unit-1) and molar units (unit/mol).
-- Integrated error guidance for users</p>
-<p>Accessing numerical values:
-- Use float(obj) to get the scalar value.
-- Use obj.value to get the NumPy array.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.list_prefixes">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">list_prefixes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.list_prefixes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.list_units">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">list_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.list_units" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.parse">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.parse" title="Link to this definition"></a></dt>
-<dd><p>Parses strings like ‘13.6 eV’ or ‘500 nm’.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.show_available_tools">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_available_tools</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.show_available_tools" title="Link to this definition"></a></dt>
-<dd><p>Displays available units and prefixes as styled DataFrames.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.units.Energy.show_constants_metadata">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_constants_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.show_constants_metadata" title="Link to this definition"></a></dt>
-<dd><p>Displays a styled table of the physical constants used for calculations,
-including their current CODATA values, units, and uncertainties.</p>
-</dd></dl>
-
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.units.Energy.to">
 <span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Energy.to" title="Link to this definition"></a></dt>
-<dd><p>Converts the current Energy instance to a target unit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>str</em>) – Target unit string.
-Examples:
-- Any SI prefix + ‘J’, ‘eV’, ‘cal’, or ‘m’ (e.g., ‘fJ’, ‘PeV’, ‘ym’, ‘dam’)
-- Molar versions (e.g., ‘MJ/mol’, ‘ueV/mol’, ‘ncal/mol’)
-- Reciprocal versions (e.g., ‘cm-1’, ‘pm-1’, ‘am-1’)
-- Special units: ‘K’, ‘hartree’, ‘Å’, ‘Å-1’</p>
-</dd>
-</dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Energy</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;nm&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;eV&#39;</span><span class="p">)</span>
-<span class="go">2.4798 eV</span>
-</pre></div>
-</div>
+<dd></dd></dl>
+
 </dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Length">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'m'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Length" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<p>Distance and Length management.
+Supports SI (m) and Imperial units (inch, foot, yard, mile, nautical mile).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Length.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Length.to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Mass">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Mass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kg'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Mass" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<p>Mass management.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Mass.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Mass.to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.MolarMass">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">MolarMass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kg/mol'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.MolarMass" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<p>Molar Mass management for chemical species.
+Converts between g/mol, kg/mol, and Da (Daltons/amu).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.MolarMass.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.MolarMass.to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.PhysicalQuantity">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">PhysicalQuantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conversion_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.PhysicalQuantity" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.PhysicalQuantity.parse">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.PhysicalQuantity.parse" title="Link to this definition"></a></dt>
+<dd><p>Parses strings like ‘13.6 eV’ or ‘1013 hPa’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.PhysicalQuantity.show_available_units">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_available_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.PhysicalQuantity.show_available_units" title="Link to this definition"></a></dt>
+<dd><p>Displays available base units, underlining the SI base unit (factor 1.0).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.PhysicalQuantity.show_constants_metadata">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_constants_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.PhysicalQuantity.show_constants_metadata" title="Link to this definition"></a></dt>
+<dd><p>Displays a styled table of the physical constants used for calculations,
+including CODATA values, units, and uncertainties.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Pressure">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Pa'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Pressure" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<p>Pressure management class (Pa, bar, atm, torr, psi).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Pressure.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Pressure.to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Temperature">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Temperature" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Temperature.show_available_units">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">show_available_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Temperature.show_available_units" title="Link to this definition"></a></dt>
+<dd><p>Displays available temperature units as a styled DataFrame, highlighting Kelvin in blue.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Temperature.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Temperature.to" title="Link to this definition"></a></dt>
+<dd><p>Converts the absolute temperature to a target scale.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Volume">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.units.</span></span><span class="sig-name descname"><span class="pre">Volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'m3'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Volume" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyphyschemtools.units.PhysicalQuantity" title="pyphyschemtools.units.PhysicalQuantity"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></p>
+<p>Volume management.
+Supports SI and SI-related units (m3, L) and Imperial units (gallon, quart, pint, fluid ounce).
+Note: Uses US liquid measures from SciPy.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyphyschemtools.units.Volume.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.units.Volume.to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -2247,7 +2330,7 @@ solid white background. Defaults to False.</p></li>
 <dt class="sig sig-object py" id="pyphyschemtools.visualID_Eng.apply_css_style">
 <span class="sig-prename descclassname"><span class="pre">pyphyschemtools.visualID_Eng.</span></span><span class="sig-name descname"><span class="pre">apply_css_style</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.visualID_Eng.apply_css_style" title="Link to this definition"></a></dt>
 <dd><p>Explicitly reads and applies the visualID CSS stylesheet
-from the package resources.</p>
+from the package resources, with a fix for Google Colab.</p>
 </dd></dl>
 
 <dl class="py class">

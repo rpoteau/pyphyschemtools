@@ -1,6 +1,6 @@
 [project]
 name = "pyphyschemtools"
-version = "0.8.2"
+version = "0.8.3"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
@@ -27,7 +27,7 @@ dependencies = [
     "pubchempy",        # Python interface to interact with the PubChem database
     "py3Dmol",          # WebGL-based molecular viewer for Jupyter notebooks
     "pymatgen",         # Materials analysis for VASP, band structures, and crystallography
-    "pyviz",            # (Pyvis) Interactive network graph visualizations (molecular connectivity)
+    "pyvis",            # (Pyvis) Interactive network graph visualizations (molecular connectivity)
     "qrcode",           # Generates QR codes (useful for linking notebooks to physical samples)
     "requests",         # Standard library for making HTTP/API calls to online chemical databases
     "rdkit",            # Open-source cheminformatics for SMILES, fingerprints, and 3D descriptors

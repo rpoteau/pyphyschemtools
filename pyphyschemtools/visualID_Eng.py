@@ -69,48 +69,18 @@ class bg:
 def apply_css_style():
     """
     Explicitly reads and applies the visualID CSS stylesheet 
-    from the package resources, with a fix for Google Colab.
+    from the package resources.
     """
     css_path = os.path.join(_PKG_PATH, "resources", "css", "visualID.css")
-    
     if os.path.exists(css_path):
         with open(css_path, "r") as f:
             styles = f.read()
-        
-        # Nettoyage si les balises <style> sont déjà présentes
-        raw_css = styles.replace("<style>", "").replace("</style>", "").strip()
-        
-        # 1. Application standard (Jupyter classique)
-        display(HTML(f"<style>{raw_css}</style>"))
-        
-        # 2. Hack pour Google Colab (Injection dans le DOM parent)
-        # On utilise JS pour forcer l'insertion dans le <head> de la page
-        js_script = f"""
-            var style = document.createElement('style');
-            style.innerHTML = `{raw_css}`;
-            document.head.appendChild(style);
-        """
-        display(HTML(f"<script>{js_script}</script>"))
-        
+        # Some CSS files might not have the <style> tag if they are raw CSS
+        if not styles.strip().startswith("<style>"):
+            styles = f"<style>{styles}</style>"
+        display(HTML(styles))
     else:
         print(f"[Warning] CSS file not found at {css_path}")
-        
-# version before the daptation to Google Colab
-# def apply_css_style():
-#     """
-#     Explicitly reads and applies the visualID CSS stylesheet 
-#     from the package resources.
-#     """
-#     css_path = os.path.join(_PKG_PATH, "resources", "css", "visualID.css")
-#     if os.path.exists(css_path):
-#         with open(css_path, "r") as f:
-#             styles = f.read()
-#         # Some CSS files might not have the <style> tag if they are raw CSS
-#         if not styles.strip().startswith("<style>"):
-#             styles = f"<style>{styles}</style>"
-#         display(HTML(styles))
-#     else:
-#         print(f"[Warning] CSS file not found at {css_path}")
 
 def init(which=None):
     """

@@ -30,11 +30,17 @@ The package provides a versatile ecosystem for researchers:
    theoryDocs/Chem3D
    theoryDocs/Kinetics
    theoryDocs/Nano
-   theorDocs/OrgaChem
+   theoryDocs/OrgaChem
    theoryDocs/PeriodicTable
    theoryDocs/Spectra
    theoryDocs/Units
    theoryDocs/Misc
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 🐍 Python Environment Management
+
+   theoryDocs/pipManagement
 
 .. toctree::
    :maxdepth: 2

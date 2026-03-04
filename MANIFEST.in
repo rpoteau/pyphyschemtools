@@ -14,6 +14,8 @@ recursive-include pyphyschemtools *
 # This ensures non-Python files are not stripped during the build process
 recursive-include pyphyschemtools/quantumChem_corner/bash_scripts *
 recursive-include pyphyschemtools/quantumChem_corner/bin *
+# Ensure the utils directory is included (for pipManagement and __init__)
+recursive-include pyphyschemtools/utils *
 
 # Include example notebooks
 include *.ipynb

@@ -1,34 +1,43 @@
 [project]
 name = "pyphyschemtools"
-version = "0.8.1"
+version = "0.8.2"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "GPL-3.0-or-later"}
 dependencies = [
-    "ase",
-    "bokeh",
-    "CageCavityCalc",
-    "ipython",
-    "ipywidgets",
-    "jupyter",
-    "matplotlib",
-    "mendeleev",
-    "numpy",
-    "openpyxl",
-    "pandas",
-    "Pillow",
-    "plotly",
-    "pubchempy",
-    "py3Dmol",
-    "pymatgen",
-    "qrcode",
-    "requests",
-    "rdkit",
-    "scikit-learn",
-    "scipy",
-    "sympy",
+    "ase",              # Atomic Simulation Environment: manipulating and visualizing atomistic structures
+    "bokeh",            # Interactive web-based visualizations for large datasets
+    "CageCavityCalc",   # Specialized tool for calculating chemical cage and cavity volumes
+    "cclib",            # Parser for output files from Quantum Chemistry packages (Gaussian, VASP, ORCA)
+    "ipython",          # Enhanced interactive Python shell for rapid testing and research
+    "ipywidgets",       # Interactive HTML widgets for Jupyter notebooks (sliders, buttons)
+    "jupyter",          # The complete ecosystem for interactive computing and notebooks
+    "jupyter_bokeh",    # Extension to render Bokeh plots seamlessly inside Jupyter
+    "matplotlib",       # The standard 2D plotting library for publication-quality figures
+    "mendeleev",        # Database for periodic table properties (electronegativity, radii, etc.)
+    "molmass",          # Accurate molecular weight and isotope pattern calculations
+    "numpy",            # Fundamental package for linear algebra and multi-dimensional arrays
+    "openpyxl",         # Library to read and write Excel (.xlsx) files (needed by Pandas)
+    "pandas",           # Powerful data structures for tabular data analysis and manipulation
+    "Pillow",           # Image processing library for opening, rotating, and resizing images
+    "pipdeptree",       # Utility to visualize the dependency tree of installed packages
+    "plotly",           # High-level interactive 3D and 2D charting library
+    "pubchempy",        # Python interface to interact with the PubChem database
+    "py3Dmol",          # WebGL-based molecular viewer for Jupyter notebooks
+    "pymatgen",         # Materials analysis for VASP, band structures, and crystallography
+    "pyviz",            # (Pyvis) Interactive network graph visualizations (molecular connectivity)
+    "qrcode",           # Generates QR codes (useful for linking notebooks to physical samples)
+    "requests",         # Standard library for making HTTP/API calls to online chemical databases
+    "rdkit",            # Open-source cheminformatics for SMILES, fingerprints, and 3D descriptors
+    "scikit-learn",     # Machine Learning library for regression, clustering, and data mining
+    "scipy",            # Advanced scientific computing (optimization, integration, constants)
+    "seaborn",          # Statistical data visualization based on Matplotlib
+    "sympy",            # Symbolic mathematics for algebraic derivation and formula solving
+    "tqdm",             # Fast, extensible progress bars for long-running calculations
+    "wordcloud",        # Visualizes text data frequency (useful for literature mining)
+    "xarray",           # N-dimensional labeled arrays (handling multi-dimensional physical data)
 ]
 
 [project.urls]
@@ -71,8 +80,9 @@ docs = [
   "sphinx-copybutton"
 ]
 ml = [
+    "keras",
     "tensorflow",
-    "keras"
+    "shap"
 ]
 
 [project.scripts]
@@ -98,3 +108,6 @@ ThermoWithVASP = "pyphyschemtools.quantumChem_corner.wrappers:thermo_vasp"
 vibVASP = "pyphyschemtools.quantumChem_corner.wrappers:vib_vasp"
 sel4vibVASP = "pyphyschemtools.quantumChem_corner.wrappers:sel4vib_vasp"
 selectLOBSTER = "pyphyschemtools.quantumChem_corner.wrappers:select_lobster"
+
+# pip management
+pipManagement = "pyphyschemtools.utils.pipManagement:run"

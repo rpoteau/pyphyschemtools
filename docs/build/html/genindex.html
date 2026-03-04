@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; pyphyschemtools 0.8.1 documentation</title>
+  <title>Index &mdash; pyphyschemtools 0.8.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://pyphyschemtools.readthedocs.io/genindex.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=ec16d22d"></script>
+      <script src="_static/documentation_options.js?v=dbee5847"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -47,14 +47,161 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">📚 Docs and Theory</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Cheminformatics.html">Cheminformatics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Cheminformatics.html">Cheminformatics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Cheminformatics.html#d-representation-of-organic-and-inorganic-compounds">2D representation of organic and inorganic compounds</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Cheminformatics.html#principle">Principle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Cheminformatics.html#molecular-descriptors-reference">Molecular Descriptors Reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#physico-chemical-properties-lipinski-veber-criteria">Physico-chemical Properties (Lipinski &amp; Veber Criteria)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#topological-structural-indices">Topological &amp; Structural Indices</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Cheminformatics.html#practical-examples">Practical examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#a-basic-use">A. Basic use</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#b-comprehensive-electronic-view-lewis-structure">B. Comprehensive Electronic View: Lewis structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#c-fetching-a-smiles-from-its-pubchem-cid">C. Fetching a SMILES from its PubChem CID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#d-mastering-complex-geometry">D. Mastering Complex Geometry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#e-calculation-of-descriptors">E. Calculation of descriptors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#f-store-descriptors-in-a-dataframe">F. Store descriptors in a dataframe</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Cheminformatics.html#g-display-the-smiles-of-a-dataframe-on-a-grid-with-legends">G. Display the smiles of a dataframe on a grid, with legends</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Chem3D.html">Structural Chemistry - Chemistry in 3 dimensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Kinetics.html">Chemical Kinetics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Kinetics.html">Chemical Kinetics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Kinetics.html#kinetic-order-of-reaction-determination-kord">Kinetic Order of Reaction Determination, KORD</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Kinetics.html#principle">1. Principle</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Kinetics.html#experimental-measurements-g-mathrm-exp">1.1 Experimental Measurements (<span class="math notranslate nohighlight">\(G_\mathrm{EXP}\)</span>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Kinetics.html#theoretical-model-g-mathrm-theo">1.2 Theoretical Model (<span class="math notranslate nohighlight">\(G_\mathrm{THEO}\)</span>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Kinetics.html#optimization-rmsd">1.3 Optimization (RMSD)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Kinetics.html#input">1.4 Input</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Kinetics.html#theoretical-model">2. Theoretical Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Kinetics.html#reactant-expression-a-t">2.1 Reactant Expression <span class="math notranslate nohighlight">\(a(t)\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Kinetics.html#product-expression-b-t">2.2 Product Expression <span class="math notranslate nohighlight">\(B(t)\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Kinetics.html#global-expression-g-mathrm-theo-t">2.3 Global Expression <span class="math notranslate nohighlight">\(G_\mathrm{THEO}(t)\)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/Nano.html">Nanochemistry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/OrgaChem.html">Organic Chemsitry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoryDocs/PeriodicTable.html">Periodic Table</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Spectra.html">Spectra</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Units.html">Fundamental Units</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Misc.html">Miscellaneous tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Spectra.html">Spectra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Spectra.html#simulation-of-vuv-spectra-by-tddft-calculations">Simulation of VUV spectra by TDDFT calculations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Spectra.html#principle">Principle</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Spectra.html#pre-requisite-the-jablonski-energy-diagram">Pre-requisite: the Jablonski energy diagram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Spectra.html#vertical-transitions">Vertical transitions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Spectra.html#from-quantum-chemistry-to-uv-vis-spectra">From Quantum Chemistry to UV-Vis Spectra</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Spectra.html#the-nature-of-tddft-results">The Nature of TDDFT Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Spectra.html#basic-equations">Basic equations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Spectra.html#practical-examples">Practical examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Spectra.html#a-data-input-format">A. Data Input Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Spectra.html#b-basic-td-dft-simulation">B. Basic TD-DFT Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Spectra.html#c-comparative-absorbance-analysis">C. Comparative Absorbance Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Units.html">Fundamental Units</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#initialization">Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#smart-arithmetic">Smart Arithmetic</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Units.html#basic-operations">Basic operations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="theoryDocs/Units.html#arithmetic-rules">Arithmetic Rules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#discovering-supported-units-of-each-class">Discovering Supported Units of each class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#codata-traceability-metadata">CODATA Traceability &amp; Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#universal-prefix-support">Universal Prefix Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#accessing-numerical-data">Accessing Numerical Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#batch-processing-vectorization">Batch Processing (Vectorization)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#energy">Energy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#mathematical-relationships">Mathematical relationships</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#spectroscopic-molar-conversions">Spectroscopic &amp; Molar Conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#supported-units">Supported units</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#pressure">Pressure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#standard-industrial-units">Standard &amp; Industrial Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id1">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#common-conversions">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#length">Length</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#from-atomic-to-macroscopic-scales">From Atomic to Macroscopic Scales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id2">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id3">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#area">Area</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#surface-and-interface-dimensions">Surface and Interface Dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id4">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id5">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#volume">Volume</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#three-dimensional-capacity">Three-Dimensional Capacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id6">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id7">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#mass">Mass</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#from-subatomic-to-industrial-scales">From Subatomic to Industrial Scales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id8">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id9">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#molar-mass">Molar Mass</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#the-stoichiometric-bridge">The Stoichiometric Bridge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id10">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id11">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#density">Density</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#mass-per-volume-relationships">Mass per Volume Relationships</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id12">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id13">Common Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Units.html#temperature">Temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#absolute-and-relative-scales">Absolute and Relative Scales</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id14">Supported Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/Units.html#id15">Common Conversions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/Misc.html">Miscellaneous tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/Misc.html#branded-qr-code-generation">Branded QR Code Generation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🐍 Python Environment Management</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/pipManagement.html">Python environmennt management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/pipManagement.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/pipManagement.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/pipManagement.html#configuration-setting-up-pip-mgmt-folder">Configuration: Setting up PIP_MGMT_FOLDER</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/pipManagement.html#linux-macos-zsh-bash">🐧 Linux &amp; 🍎 macOS (Zsh/Bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/pipManagement.html#windows-powershell-cmd">🪟 Windows (PowerShell / CMD)</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🚀 Interactive Examples</span></p>
 <ul>
@@ -62,11 +209,163 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">⚛️ Quantum Chemistry Corner</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html">Quantum Chemistry Corner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html">Quantum Chemistry Corner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#brief-introduction-dependencies-and-examples">🚀 Brief introduction, dependencies and examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#tools-for-vasp">⚛️ Tools for VASP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#citation">📖 Citation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#vaspcv-bash-python">✅ <strong>VASPcv</strong> (bash &amp; python)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#cpvasp-bash">✅ <strong>cpVASP</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#restartvasp-bash">✅ <strong>RestartVASP</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#cleanvaspf-bash-python">✅ <strong>cleanVASPf</strong> (bash &amp; python)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#manipcell-fortran-binary">✅ <strong>ManipCell</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#sel4vibvasp-fortran-binary">✅ <strong>sel4vibVASP</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#vibvasp-fortran-binary">✅ <strong>vibVASP</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#thermowithvasp-fortran-binary">✅ <strong>ThermoWithVASP</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#selectlobster-fortran-binary">✅ <strong>selectLOBSTER</strong> (fortran binary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#hvasp-bash">✅ <strong>hVASP</strong> (bash)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#tools-for-gaussian">⚛️ Tools for Gaussian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#gparser-bash">✅ <strong>GParser</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#cpg-bash">✅ <strong>cpG</strong> (bash)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#gscan-analyzis-python">✅ <strong>GScan_Analyzis</strong> (python)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#how-to-contribute">🤝 How to contribute?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#technical-requirements">📋 Technical Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#documentation-requirements">📖 Documentation Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#integration-procedure">🚀 Integration Procedure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="theoryDocs/QuantumChemCorner.html#why-the-wrapper-approach">💡 Why the “Wrapper” approach?</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🛠️ API Reference (Technical)</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">pyphyschemtools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pyphyschemtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyphyschemtools.html">pyphyschemtools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.get_ppct_data"><code class="docutils literal notranslate"><span class="pre">get_ppct_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.Chem3D">pyphyschemtools.Chem3D module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.Chem3D.XYZData"><code class="docutils literal notranslate"><span class="pre">XYZData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.Chem3D.molView"><code class="docutils literal notranslate"><span class="pre">molView</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.ML">pyphyschemtools.ML module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.ML.categorizeY_2ohe"><code class="docutils literal notranslate"><span class="pre">categorizeY_2ohe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.ML.y2c"><code class="docutils literal notranslate"><span class="pre">y2c()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.PeriodicTable">pyphyschemtools.PeriodicTable module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.PeriodicTable.TableauPeriodique"><code class="docutils literal notranslate"><span class="pre">TableauPeriodique</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.aithermo">pyphyschemtools.aithermo module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.aithermo.aiThermo"><code class="docutils literal notranslate"><span class="pre">aiThermo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.cheminformatics">pyphyschemtools.cheminformatics module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.cheminformatics.easy_rdkit"><code class="docutils literal notranslate"><span class="pre">easy_rdkit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.core">pyphyschemtools.core module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.core.centerTitle"><code class="docutils literal notranslate"><span class="pre">centerTitle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.core.centertxt"><code class="docutils literal notranslate"><span class="pre">centertxt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.core.crop_images"><code class="docutils literal notranslate"><span class="pre">crop_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.core.get_qc_examples"><code class="docutils literal notranslate"><span class="pre">get_qc_examples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.core.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.core.save_fig"><code class="docutils literal notranslate"><span class="pre">save_fig()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.core.smart_trim"><code class="docutils literal notranslate"><span class="pre">smart_trim()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.kinetics">pyphyschemtools.kinetics module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.kinetics.KORD"><code class="docutils literal notranslate"><span class="pre">KORD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.nano">pyphyschemtools.nano module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.nano.NanoparticleDistribution"><code class="docutils literal notranslate"><span class="pre">NanoparticleDistribution</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.nano.get_coordination_numbers"><code class="docutils literal notranslate"><span class="pre">get_coordination_numbers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.nano.view_coordination"><code class="docutils literal notranslate"><span class="pre">view_coordination()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.spectra">pyphyschemtools.spectra module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.spectra.SpectrumSimulator"><code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.survey">pyphyschemtools.survey module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.survey.SurveyApp"><code class="docutils literal notranslate"><span class="pre">SurveyApp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.sympyUtilities">pyphyschemtools.sympyUtilities module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.sympyUtilities.PrintLatexStyleSymPyEquation"><code class="docutils literal notranslate"><span class="pre">PrintLatexStyleSymPyEquation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.sympyUtilities.e2Lists"><code class="docutils literal notranslate"><span class="pre">e2Lists()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.units">pyphyschemtools.units module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Area"><code class="docutils literal notranslate"><span class="pre">Area</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Density"><code class="docutils literal notranslate"><span class="pre">Density</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Length"><code class="docutils literal notranslate"><span class="pre">Length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Mass"><code class="docutils literal notranslate"><span class="pre">Mass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.MolarMass"><code class="docutils literal notranslate"><span class="pre">MolarMass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.PhysicalQuantity"><code class="docutils literal notranslate"><span class="pre">PhysicalQuantity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Pressure"><code class="docutils literal notranslate"><span class="pre">Pressure</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Temperature"><code class="docutils literal notranslate"><span class="pre">Temperature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.units.Volume"><code class="docutils literal notranslate"><span class="pre">Volume</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.misc">pyphyschemtools.misc module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.misc.QRCodeGenerator"><code class="docutils literal notranslate"><span class="pre">QRCodeGenerator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.tools4AS">pyphyschemtools.tools4AS module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.ApplySecondeChance"><code class="docutils literal notranslate"><span class="pre">ApplySecondeChance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcours"><code class="docutils literal notranslate"><span class="pre">BoiteAMoustachesByMentionEtParcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.BoiteAMoustachesByMentionEtParcoursHue"><code class="docutils literal notranslate"><span class="pre">BoiteAMoustachesByMentionEtParcoursHue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.ComparaisonMoyennesDMCC"><code class="docutils literal notranslate"><span class="pre">ComparaisonMoyennesDMCC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.CreationDfADMAJGH"><code class="docutils literal notranslate"><span class="pre">CreationDfADMAJGH()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.Histogrammes"><code class="docutils literal notranslate"><span class="pre">Histogrammes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.MentionAuModule"><code class="docutils literal notranslate"><span class="pre">MentionAuModule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.RenameDfHeader"><code class="docutils literal notranslate"><span class="pre">RenameDfHeader()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.ReplaceABSByNan"><code class="docutils literal notranslate"><span class="pre">ReplaceABSByNan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.ReplaceNanBy0"><code class="docutils literal notranslate"><span class="pre">ReplaceNanBy0()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.ReplaceNanBy0OLD"><code class="docutils literal notranslate"><span class="pre">ReplaceNanBy0OLD()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.StackedBarPop"><code class="docutils literal notranslate"><span class="pre">StackedBarPop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.StackedBarPopPO"><code class="docutils literal notranslate"><span class="pre">StackedBarPopPO()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcours"><code class="docutils literal notranslate"><span class="pre">StatsRéussiteParMentionOuParcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.StatsReussiteParMentionOuParcoursWithAb"><code class="docutils literal notranslate"><span class="pre">StatsRéussiteParMentionOuParcoursWithAb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.checkNoID_DuplicateID"><code class="docutils literal notranslate"><span class="pre">checkNoID_DuplicateID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.concat2ApoG"><code class="docutils literal notranslate"><span class="pre">concat2ApoG()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.css_styling"><code class="docutils literal notranslate"><span class="pre">css_styling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.dropColumnsByIndex"><code class="docutils literal notranslate"><span class="pre">dropColumnsByIndex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.kdePlotByMentionEtParcours"><code class="docutils literal notranslate"><span class="pre">kdePlotByMentionEtParcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.mentionD"><code class="docutils literal notranslate"><span class="pre">mentionD()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.parcours"><code class="docutils literal notranslate"><span class="pre">parcours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.plotTauxADMasBars"><code class="docutils literal notranslate"><span class="pre">plotTauxADMasBars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.read_excel"><code class="docutils literal notranslate"><span class="pre">read_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.tools4AS.verifNotes"><code class="docutils literal notranslate"><span class="pre">verifNotes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyphyschemtools.html#module-pyphyschemtools.visualID_Eng">pyphyschemtools.visualID_Eng module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.apply_css_style"><code class="docutils literal notranslate"><span class="pre">apply_css_style()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.bg"><code class="docutils literal notranslate"><span class="pre">bg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.chrono_show"><code class="docutils literal notranslate"><span class="pre">chrono_show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.chrono_start"><code class="docutils literal notranslate"><span class="pre">chrono_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.chrono_stop"><code class="docutils literal notranslate"><span class="pre">chrono_stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.color"><code class="docutils literal notranslate"><span class="pre">color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.display_md"><code class="docutils literal notranslate"><span class="pre">display_md()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.end"><code class="docutils literal notranslate"><span class="pre">end()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.fg"><code class="docutils literal notranslate"><span class="pre">fg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.hdelay"><code class="docutils literal notranslate"><span class="pre">hdelay()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.hdelay_ms"><code class="docutils literal notranslate"><span class="pre">hdelay_ms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.hl"><code class="docutils literal notranslate"><span class="pre">hl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyphyschemtools.html#pyphyschemtools.visualID_Eng.init"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>

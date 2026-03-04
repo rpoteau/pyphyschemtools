@@ -10,7 +10,7 @@ project = 'pyphyschemtools'
 version = '0.8'
 copyright = '2026, Romuald Poteau'
 author = 'Romuald Poteau'
-release = '0.8.1'
+release = '0.8.2'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -24,6 +24,14 @@ extensions = [
     'nbsphinx', # Notebooks
     'sphinx.ext.mathjax', # LaTeX
 ]
+
+html_theme_options = {
+    'collapse_navigation': False,  # This prevents the menu from hiding other sections
+    'sticky_navigation': True,    # Keeps the menu in place as you scroll
+    'navigation_depth': 4,         # Adjust how deep the menu goes
+    'includehidden': True,         # Ensures hidden toctree items are shown
+    'titles_only': False           # Shows sub-headers in the sidebar
+}
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']

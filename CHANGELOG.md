@@ -11,6 +11,23 @@
 
 # Changelog pyphyschemtools
 
+## [0.8.2] - 2026-03-04 "pipManagement"
+
+Integrated `pipManagement.py` as a core utility in `pyphyschemtools/utils`.
+
+### Added
+- Added automatic virtual environment detection (scans for `bin/activate` or `Scripts/activate`).
+- Added cross-platform support (Linux, macOS, Windows).
+- Added `pipManagement` entry point for terminal access.
+- Added version check flag (`--version`).
+- Replaced manual dictionary management with dynamic alphabetical sorting (case-insensitive).
+
+### Fixed
+- Fixed path handling using `pathlib` for better reliability.
+
+### Changed
+- updated list of dependencies in pyproject.toml
+
 ## [Unreleased] - 2026-02-26
 
 ### Added in `units.py`

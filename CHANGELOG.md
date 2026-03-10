@@ -8,22 +8,11 @@
 * [Changelog pyphyschemtools](#changelog-pyphyschemtools)
 * [Changelog tools4Gaussian](#changelog-tools4gaussian)
 * [Changelog tools4VASP](#changelog-tools4vasp)
+* [Changelog pipManagement](#changelog-pipmanagement)
 
 # Changelog pyphyschemtools
 
 ## [0.8.2] - 2026-03-04 "pipManagement"
-
-Integrated `pipManagement.py` as a core utility in `pyphyschemtools/utils`.
-
-### Added
-- Added automatic virtual environment detection (scans for `bin/activate` or `Scripts/activate`).
-- Added cross-platform support (Linux, macOS, Windows).
-- Added `pipManagement` entry point for terminal access.
-- Added version check flag (`--version`).
-- Replaced manual dictionary management with dynamic alphabetical sorting (case-insensitive).
-
-### Fixed
-- Fixed path handling using `pathlib` for better reliability.
 
 ### Changed
 - updated list of dependencies in pyproject.toml
@@ -483,3 +472,27 @@ also saved as `CHARGESM.lobster`)
 - New `Tools4VASP-Examples/selectLOBSTER/Ru13IC-Ethanoate-H` folder with an example of analysis for a Ru13 cluster
 ## 20210302.
 - `ManipCell-Cluster.sh` example in `Tools4VASP-Examples/ManipCell/` (application of ManipCell to supercells)
+
+---
+
+# Changelog pipManagement
+
+## [0.8.4] - 2026-03-10 "pipManagement v.20260310"
+
+### Fixed
+- `systemCom = "cd " + p_home + ";\n ls -lrt *req*.txt |grep " + env` replaced with `systemCom = f"cd '{p_home}';\n ls -lrt *req*.txt | grep {env}"` (option 23)
+- `systemCom = "cd " + p_home + ";\nvirtualenv " + NewEnvTxt + ";\n ls -lrt *req*.txt"` replaced with `systemCom = f"cd '{p_home}';\nvirtualenv {NewEnvTxt};\n ls -lrt *req*.txt"` (option 40)
+
+## [0.8.2] - 2026-03-04 "pipManagement"
+
+Integrated `pipManagement.py` as a core utility in `pyphyschemtools/utils`.
+
+### Added
+- Added automatic virtual environment detection (scans for `bin/activate` or `Scripts/activate`).
+- Added cross-platform support (Linux, macOS, Windows).
+- Added `pipManagement` entry point for terminal access.
+- Added version check flag (`--version`).
+- Replaced manual dictionary management with dynamic alphabetical sorting (case-insensitive).
+
+### Fixed
+- Fixed path handling using `pathlib` for better reliability.

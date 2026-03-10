@@ -8,7 +8,7 @@ from pathlib import Path
 import string
 import platform
 
-pMversion = "20260304"
+pMversion = "20260310"
 
 ################################################################################################
 
@@ -241,7 +241,7 @@ def run(python_folder=None):
             pipCom += f"pip freeze > '{p_home}/{now}requirements_{env}_AfterUpdate.txt'"
     
         if choice == "23":
-            systemCom = "cd " + p_home + ";\n ls -lrt *req*.txt |grep " + env
+            systemCom = f"cd '{p_home}';\n ls -lrt *req*.txt | grep {env}"
             subprocess.run(systemCom, shell=True)
             print(f"\nFiles found in {p_home} (sorted by date):")
             reqtxt = input("copy/paste the reference requirements/txt file you want to restore: ")
@@ -258,7 +258,7 @@ def run(python_folder=None):
     
         if choice == "40":
             NewEnvTxt = input("Name of the new environment: ")
-            systemCom = "cd " + p_home + ";\nvirtualenv " + NewEnvTxt + ";\n ls -lrt *req*.txt"
+            systemCom = f"cd '{p_home}';\nvirtualenv {NewEnvTxt};\n ls -lrt *req*.txt"
             subprocess.run(systemCom, shell=True)
             ReqTxt = input(f"\033[33mcopy/paste from the previous list the reference requirements.txt file, i.e. the environment you want to clone: \033[0m")
             pyAct = f"source '{p_home}/{NewEnvTxt}/bin/activate';\n"

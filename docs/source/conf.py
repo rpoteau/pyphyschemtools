@@ -10,7 +10,7 @@ project = 'pyphyschemtools'
 version = '0.8'
 copyright = '2026, Romuald Poteau'
 author = 'Romuald Poteau'
-release = '0.8.4'
+release = '0.8.5'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -45,7 +45,7 @@ myst_heading_anchors = 3
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-html_baseurl = "https://pyphyschemtools.readthedocs.io/"
+html_baseurl = "https://pynanomatbuilder.readthedocs.io/"
 html_extra_path = []
 
 def setup(app):

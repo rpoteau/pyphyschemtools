@@ -3,12 +3,13 @@
 The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.
 """
 
-__version__ = "0.8.4"
-__last_update__ = "2026-03-10"
+__version__ = "0.8.5"
+__last_update__ = "2026-03-14"
 
 import importlib
 import importlib.util
 from pathlib import Path
+from importlib import resources
 
 # 1. FAST IMPORTS
 from .visualID_Eng import fg, hl, bg, color, init, apply_css_style, chrono_start, chrono_stop, chrono_show, end
@@ -58,10 +59,6 @@ def __getattr__(name):
             error_msg += f"\n{err}"
 
     raise AttributeError(error_msg)
-
-
-from pathlib import Path
-from importlib import resources
 
 def get_ppct_data(file: str, main_folder: str="data_examples") -> Path:
     """

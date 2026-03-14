@@ -510,7 +510,7 @@ class molView:
                 margin='5px'
             ))
             
-        return grid
+        display(grid)
 
     def _get_ase_atoms(self, content, fmt):
         """Helper to convert string content to ASE Atoms and apply supercell."""

@@ -5,7 +5,7 @@ from .visualID_Eng import fg, bg, hl
 from .core import centerTitle, centertxt
 
 import py3Dmol
-import io, os
+import io, os, sys
 from ase import Atoms
 from ase.io import read, write
 from ase.data import vdw_radii, atomic_numbers

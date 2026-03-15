@@ -464,6 +464,7 @@ class molView:
         >>> molView.view_grid(files, n_cols=2, titles=labels, source='file', w=400)
         """
         from ipywidgets import GridspecLayout, VBox, Label, Layout, Output
+        from ipywidgets import HTML as WidgetHTML
         from IPython.display import display
 
         # 1. Gestion des dimensions
@@ -509,11 +510,13 @@ class molView:
             #     overflow='hidden',
             #     margin='5px'
             # ))
-            grid[row, col] = VBox([
-                Label(value=t, layout=Layout(display='flex', justify_content='center')),
-                out
-            ])
-            
+            # grid[row, col] = VBox([
+            #     Label(value=t, layout=Layout(display='flex', justify_content='center')),
+            #     out
+            # ])
+            title_widget = WidgetHTML(value=f"<b>{t}</b>", layout=Layout(display='flex', justify_content='center'))
+            grid[row, col] = VBox([title_widget, out], layout=Layout(align_items='center'))
+
             if 'google.colab' in sys.modules:
                 from google.colab import output
                 output.enable_custom_widget_manager()

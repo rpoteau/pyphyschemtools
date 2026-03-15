@@ -514,6 +514,10 @@ class molView:
                 out
             ])
             
+            if 'google.colab' in sys.modules:
+                from google.colab import output
+                output.enable_custom_widget_manager()
+            
         display(grid)
 
     def _get_ase_atoms(self, content, fmt):

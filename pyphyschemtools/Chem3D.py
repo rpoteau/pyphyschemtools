@@ -497,18 +497,22 @@ class molView:
             ))
             
             with out:
-                display(obj.v)
+                display(obj.v.show())
             
             # Assemblage Titre + Molécule dans la cellule
+            # grid[row, col] = VBox([
+            #     Label(value=t, layout=Layout(display='flex', justify_content='center', width='100%')),
+            #     out
+            # ], layout=Layout(
+            #     width=f'{w_cell + 15}px', 
+            #     align_items='center', 
+            #     overflow='hidden',
+            #     margin='5px'
+            # ))
             grid[row, col] = VBox([
-                Label(value=t, layout=Layout(display='flex', justify_content='center', width='100%')),
+                Label(value=t, layout=Layout(display='flex', justify_content='center')),
                 out
-            ], layout=Layout(
-                width=f'{w_cell + 15}px', 
-                align_items='center', 
-                overflow='hidden',
-                margin='5px'
-            ))
+            ])
             
         display(grid)
 

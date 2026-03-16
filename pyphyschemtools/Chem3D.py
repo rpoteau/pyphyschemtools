@@ -463,7 +463,7 @@ class molView:
         >>> labels = ["Reactant", "TS", "Intermediate", "Product"]
         >>> molView.view_grid(files, n_cols=2, titles=labels, source='file', w=400)
         """
-        from ipywidgets import GridspecLayout, VBox, Label, Layout, Output
+        from ipywidgets import GridspecLayout, VBox, Layout, Output
         from ipywidgets import HTML as WidgetHTML
         from IPython.display import display
 
@@ -920,7 +920,7 @@ class molView:
                 # Search for the tag in the raw string: _tag_name  'value'
                 # This regex looks for the tag followed by whitespace and a value in quotes or on the next line
                 for tag in ['_publ_section_title', '_chemical_name_systematic', '_chemical_formula_sum']:
-                    match = re.search(f"{tag}\s+['\"]?([^'\"\n;]+)", content)
+                    match = re.search(rf"{tag}\s+['\"]?([^'\"\n;]+)", content)
                     if match:
                         valid_info.append(match.group(1).strip())
 

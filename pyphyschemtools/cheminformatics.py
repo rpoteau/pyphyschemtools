@@ -8,8 +8,8 @@ import rdkit
 from rdkit import Chem
 from rdkit.Chem import AllChem, GetPeriodicTable, Draw, rdCoordGen
 from rdkit.Chem import Descriptors, QED, rdMolDescriptors
-import pandas as pd
 from rdkit.Chem.Draw import rdMolDraw2D
+import pandas as pd
 from IPython.display import SVG
 from PIL import Image
 import os, math
@@ -720,3 +720,67 @@ class easy_rdkit():
         
         # 3. Return the object so the user can still use it if they want
         return grid
+        
+    @staticmethod
+    def draw_consistent_svg(smiles_list, size_per_mol=300, mols_per_row=3,
+                            bond_length=35.0, font_size=12,
+                            save_img="export/molecules.svg",
+                           ):
+        """
+        Generates an SVG file with a grid of molecules having consistent bond lengths.
+        Ideal for high-quality printing and comparison.
+        
+        Args:
+            smiles_list (list): List of SMILES strings to draw.
+            size_per_mol (int): Size of the square panel for each molecule.
+            mols_per_row (int): Number of molecules per row.
+            bond_length (float): Fixed length for bonds in pixels.
+            size_per_mol (int): Size of the square panel for each molecule.
+            font_size (int): Font size for atom labels
+            save_img (str): Output SVG file path.
+        """
+        mols = []
+        for s in smiles_list:
+            m = Chem.MolFromSmiles(s)
+            if m:
+                # Use CoordGen for a more aesthetic rendering if available
+                rdCoordGen.AddCoords(m)
+                mols.append(m)
+
+        if not mols:
+            print("⚠️ No valid molecules to draw.")
+            return
+
+        # Calculate canvas dimensions
+        n_mols = len(mols)
+        n_rows = math.ceil(n_mols / mols_per_row)
+        width = size_per_mol * mols_per_row
+        height = size_per_mol * n_rows
+
+        # Initialize the SVG drawer (Width, Height, PanelWidth, PanelHeight)
+        drawer = rdMolDraw2D.MolDraw2DSVG(width, height, size_per_mol, size_per_mol)
+        options = drawer.drawOptions()
+
+        # --- Consistency parameters ---
+        options.fixedBondLength = bond_length
+        options.addStereoAnnotation = True
+        options.prepareMolsBeforeDrawing = True # Handle aromaticity and labels properly
+        drawer.SetFontSize(font_size)
+        drawer.SetFontWeight("bold")
+
+        # Draw the complete grid
+        drawer.DrawMolecules(mols)
+        drawer.FinishDrawing()
+
+        # Save the file
+        save_path = Path(save_img)
+        if save_path.parent:
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+            
+        with open(save_img, "w") as f:
+            f.write(drawer.GetDrawingText())
+        
+        print(f"✅ Consistent SVG saved to: {save_img}")
+        
+        # display in Jupyter
+        return SVG(drawer.GetDrawingText())

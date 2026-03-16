@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.8.10 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.8.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pynanomatbuilder.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=3e0d02fa"></script>
+      <script src="_static/documentation_options.js?v=9a7586e3"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -902,19 +902,19 @@ Returns a dictionary with counts and specific assignments.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyphyschemtools.cheminformatics.easy_rdkit.draw_consistent_svg">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">draw_consistent_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_per_mol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mols_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'export/molecules.svg'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.draw_consistent_svg" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">draw_consistent_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_per_mol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mols_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'export/molecules.svg'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.cheminformatics.easy_rdkit.draw_consistent_svg" title="Link to this definition"></a></dt>
 <dd><p>Generates an SVG file with a grid of molecules having consistent bond lengths.
 Ideal for high-quality printing and comparison.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>smiles_list</strong> (<em>list</em>) – List of SMILES strings to draw.</p></li>
-<li><p><strong>size_per_mol</strong> (<em>int</em>) – Size of the square panel for each molecule.</p></li>
-<li><p><strong>mols_per_row</strong> (<em>int</em>) – Number of molecules per row.</p></li>
-<li><p><strong>bond_length</strong> (<em>float</em>) – Fixed length for bonds in pixels.</p></li>
-<li><p><strong>size_per_mol</strong> – Size of the square panel for each molecule.</p></li>
-<li><p><strong>font_size</strong> (<em>int</em>) – Font size for atom labels</p></li>
-<li><p><strong>save_img</strong> (<em>str</em>) – Output SVG file path.</p></li>
+<li><p><strong>size_per_mol</strong> (<em>int</em>) – Size of the square panel for each molecule (Default: 300).</p></li>
+<li><p><strong>mols_per_row</strong> (<em>int</em>) – Number of molecules per row (Default: 3).</p></li>
+<li><p><strong>bond_length</strong> (<em>float</em>) – Fixed length for bonds in pixels (Default: 35.0).</p></li>
+<li><p><strong>bond_width</strong> (<em>float</em>) – Thickness of the bonds (Default: 1.2).</p></li>
+<li><p><strong>font_size</strong> (<em>int</em>) – Font size for atom labels (Default: 12).</p></li>
+<li><p><strong>save_img</strong> (<em>str</em>) – Output SVG file path (Default: “export/molecules.svg”).</p></li>
 </ul>
 </dd>
 </dl>

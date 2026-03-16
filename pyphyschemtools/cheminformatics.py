@@ -723,7 +723,7 @@ class easy_rdkit():
         
     @staticmethod
     def draw_consistent_svg(smiles_list, size_per_mol=300, mols_per_row=3,
-                            bond_length=35.0, font_size=12,
+                            bond_length=35.0, bond_width=1.2, font_size=12,
                             save_img="export/molecules.svg",
                            ):
         """
@@ -732,12 +732,12 @@ class easy_rdkit():
         
         Args:
             smiles_list (list): List of SMILES strings to draw.
-            size_per_mol (int): Size of the square panel for each molecule.
-            mols_per_row (int): Number of molecules per row.
-            bond_length (float): Fixed length for bonds in pixels.
-            size_per_mol (int): Size of the square panel for each molecule.
-            font_size (int): Font size for atom labels
-            save_img (str): Output SVG file path.
+            size_per_mol (int): Size of the square panel for each molecule (Default: 300).
+            mols_per_row (int): Number of molecules per row (Default: 3).
+            bond_length (float): Fixed length for bonds in pixels (Default: 35.0).
+            bond_width (float): Thickness of the bonds (Default: 1.2).
+            font_size (int): Font size for atom labels (Default: 12).
+            save_img (str): Output SVG file path (Default: "export/molecules.svg").
         """
         mols = []
         for s in smiles_list:
@@ -763,10 +763,10 @@ class easy_rdkit():
 
         # --- Consistency parameters ---
         options.fixedBondLength = bond_length
+        options.bondLineWidth = bond_width
         options.addStereoAnnotation = True
         options.prepareMolsBeforeDrawing = True # Handle aromaticity and labels properly
         drawer.SetFontSize(font_size)
-        drawer.SetFontWeight("bold")
 
         # Draw the complete grid
         drawer.DrawMolecules(mols)

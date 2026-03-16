@@ -12,6 +12,17 @@
 
 # Changelog pyphyschemtools
 
+## [0.8.11] - 2026-03-16 "svg plot of molecules"
+
+### Added: `easy_rdkit.draw_consistent_svg()`
+
+A new static method for generating high-quality molecular grids in SVG format with absolute scale consistency. This is specifically designed for publication-quality figures and chemical comparisons.
+
+* **Bond Length Consistency:** Forcing `options.fixedBondLength = bond_length` ensures that a small molecule and a large one share the same scale.
+* **Customizable Line Weight:** Full control over bond thickness (`options.bondLineWidth = bond_width`).
+* **Vector Precision:** SVG output with outlined fonts for perfect resolution regardless of zoom.
+* **Stereo Support:** Automatic rendering of R/S and E/Z annotations.
+ 
 ## [0.8.2] - 2026-03-04 "pipManagement"
 
 ### Changed

@@ -722,7 +722,7 @@ class easy_rdkit():
         return grid
         
     @staticmethod
-    def draw_consistent_svg(smiles_list, size_per_mol=300, mols_per_row=3,
+    def draw_consistent_svg(smiles_list, legends=None, size_per_mol=300, mols_per_row=3,
                             bond_length=35.0, bond_width=1.2, font_size=12,
                             save_img="export/molecules.svg",
                            ):
@@ -732,6 +732,7 @@ class easy_rdkit():
         
         Args:
             smiles_list (list): List of SMILES strings to draw.
+            legends (list, optional): List of strings to display under each molecule.
             size_per_mol (int): Size of the square panel for each molecule (Default: 300).
             mols_per_row (int): Number of molecules per row (Default: 3).
             bond_length (float): Fixed length for bonds in pixels (Default: 35.0).
@@ -750,6 +751,11 @@ class easy_rdkit():
         if not mols:
             print("⚠️ No valid molecules to draw.")
             return
+            
+        if legends is None:
+            legends = [""] * len(mols)
+        elif len(legends) < len(mols):
+            legends.extend([""] * (len(mols) - len(legends)))
 
         # Calculate canvas dimensions
         n_mols = len(mols)
@@ -766,10 +772,11 @@ class easy_rdkit():
         options.bondLineWidth = bond_width
         options.addStereoAnnotation = True
         options.prepareMolsBeforeDrawing = True # Handle aromaticity and labels properly
+        options.legendFontSize = font_size
         drawer.SetFontSize(font_size)
 
         # Draw the complete grid
-        drawer.DrawMolecules(mols)
+        drawer.DrawMolecules(mols, legends=legends)
         drawer.FinishDrawing()
 
         # Save the file

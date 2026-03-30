@@ -12,6 +12,17 @@
 
 # Changelog pyphyschemtools
 
+## [0.8.12] - 2026-03-23 "bye bye NanoparticleDistribution"
+
+### Changed
+`NanoparticleDistribution` class has been removed from `nano.py`. It is now part of the new **pyNanoMatBuilder** project
+
+### Added
+Link to the example in `pyproject.toml` => direct sidebar link in pyPi
+
+### Fixed
+Link to the example in `README.md` was wrong
+
 ## [0.8.11] - 2026-03-16 "svg plot of molecules"
 
 ### Added: `easy_rdkit.draw_consistent_svg()`

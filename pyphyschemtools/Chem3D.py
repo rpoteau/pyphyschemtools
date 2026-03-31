@@ -407,6 +407,7 @@ class molView:
         self.zoom = zoom
         self.sphere_radius = None
         self.sphere_volume = None
+        self.structure = None
         if source is None and os.path.exists(str(mol)):
             self.source = 'file'
         elif source in valid_sources:
@@ -930,7 +931,8 @@ class molView:
             else:
                 self.name = "None found"
 
-            
+        self.structure = atoms
+        
         # Finalize
         if self.viewer:
             self._apply_style()

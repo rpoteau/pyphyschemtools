@@ -12,6 +12,12 @@
 
 # Changelog pyphyschemtools
 
+## [0.8.13] - 2026-03-31 ""
+
+### Changed
+
+- **New Core Attribute in the `molView` class of `Chem3D.py`: `self.structure`**: The full `ase.Atoms` object is now systematically stored upon initialization. This serves for all scientific calculations and ASE-based manipulations.
+
 ## [0.8.12] - 2026-03-23 "bye bye NanoparticleDistribution"
 
 ### Changed

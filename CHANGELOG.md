@@ -12,7 +12,13 @@
 
 # Changelog pyphyschemtools
 
-## [0.8.13] - 2026-03-31 ""
+## [0.8.14] - 2026-03-31 "view CN"
+
+### Changed
+
+- **New arguments in the `view_coordination()` function of `nano.py`: width (`w`) and height (`h`) of the window.
+
+## [0.8.13] - 2026-03-31 "molView"
 
 ### Changed
 

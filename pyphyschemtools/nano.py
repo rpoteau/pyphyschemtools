@@ -60,7 +60,7 @@ def get_coordination_numbers(mol: Atoms, cutoff: float = None):
     cn = np.array([len(nl.get_neighbors(i)[0]) for i in range(nat)], dtype=int)
     return cn, used_cutoff
 
-def view_coordination(mol: Atoms, cutoff: float = None, stick_radius: float = 0.1, sphere_scale: float = 0.6, color_map = "YlOrRd"):
+def view_coordination(mol: Atoms, cutoff: float = None, stick_radius: float = 0.1, sphere_scale: float = 0.6, w=600, h=400, color_map = "YlOrRd"):
     """
     Visualizes a structure using py3Dmol with atoms color-coded by coordination number.
     
@@ -81,6 +81,10 @@ def view_coordination(mol: Atoms, cutoff: float = None, stick_radius: float = 0.
             Defaults to 0.1.
         sphere_scale (float, optional): The size multiplier for the atomic spheres. 
             Defaults to 0.6.
+        w (float, optional): Width of the window
+            Defaults to 600
+        h (float, optional): Height of the window
+            Defaults to 400
         color_map (str, optional): The Matplotlib colormap to use for discrete CN values.
             Defaults to "YlOrRd" (recommended!).
 
@@ -146,7 +150,7 @@ def view_coordination(mol: Atoms, cutoff: float = None, stick_radius: float = 0.
     xyz_str = buf.getvalue()
     buf.close()
 
-    v = py3Dmol.view(width=600, height=400)
+    v = py3Dmol.view(width=w, height=h)
     v.addModel(xyz_str, "xyz")
 
     for i, color in enumerate(colors):

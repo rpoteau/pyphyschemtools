@@ -8,6 +8,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.constants as sc
 
+import pandas as pd
+from scipy import stats
+from pathlib import Path
+
 class SpectrumSimulator:
 
     """
@@ -485,4 +489,263 @@ class SpectrumSimulator:
             self.fig.savefig(save_path, dpi=300, bbox_inches='tight')
     
         return
+
+class QuantitativeAnalysis:
+    """
+    A comprehensive tool for chemical analysis calibration (e.g., Chromatography, Spectroscopy).
+    
+    This class handles data ingestion from multiple sources, performs linear regression, 
+    provides statistical diagnostics (R², LOD, LOQ), and generates publication-quality 
+    plots including residual analysis and confidence intervals.
+
+    Attributes
+    ----------
+    x : numpy.ndarray
+        Independent variable data (usually concentration or amount).
+    y : numpy.ndarray
+        Dependent variable data (usually peak area, absorbance, or signal).
+    x_label : str
+        Label for the x-axis used in plotting.
+    y_label : str
+        Label for the y-axis used in plotting.
+    model : scipy.stats._stats_mstats_common.LinregressResult or None
+        Storage for the regression parameters after fitting.
+
+    Methods
+    -------
+    from_excel(file_path, x_col, y_col, sheet_name=0)
+        Alternative constructor to initialize the class from an .xlsx or .ods file.
+    fit_linear()
+        Performs ordinary least squares (OLS) linear regression.
+    plot(save_path=None)
+        Generates a dual-plot figure showing the calibration curve and residuals.
+    """
+    
+    def __init__(self, x, y, x_label="Concentration", y_label="Area"):
+        self.x = np.array(x)
+        self.y = np.array(y)
+        self.x_label = x_label
+        self.y_label = y_label
+        self.model = None
+
+    @classmethod
+    def from_excel(cls, file_path, x_col, y_col, sheet_name=0):
+        """
+        Creates a Calibration instance by reading data from an Excel or LibreOffice Calc file.
+
+        Parameters
+        ----------
+        file_path : str
+            Path to the .xlsx or .ods file.
+        x_col : str
+            Name of the column containing the independent variable (e.g., concentration).
+        y_col : str
+            Name of the column containing the dependent variable (e.g., peak area, absorbance).
+        sheet_name : str or int, optional
+            The specific sheet to read from (default is the first sheet).
+
+        Returns
+        -------
+        Calibration
+            An initialized instance of the Calibration class.
+            
+        Notes
+        -----
+        Requires 'odfpy' library to be installed for OpenDocument (.ods) files.
+        """
+        path = Path(file_path)
+        extension = path.suffix.lower()
         
+        # Selecting the engine based on file extension
+        engine = 'odf' if extension == '.ods' else None
+        
+        try:
+            df = pd.read_excel(path, sheet_name=sheet_name, engine=engine)
+            return cls(df[x_col], df[y_col], x_col, y_col)
+        except ImportError as e:
+            missing_pkg = "odfpy" if engine == "odf" else "openpyxl"
+            raise ImportError(f"Missing dependency: install '{missing_pkg}' to read {extension} files.") from e
+
+    def fit_linear(self):
+        """
+        Perform ordinary least squares (OLS) linear regression and compute analytical diagnostics.
+
+        This method calculates the best-fit line (y = ax + b) for the calibration data. 
+        It computes standard statistical metrics (Slope, Intercept, R²) and specific 
+        analytical chemistry performance indicators (MAE, LOD, LOQ) to evaluate 
+        the method's sensitivity and reliability.
+
+        The results are printed to the console in a formatted table and stored 
+        within the `self.diagnostics` dictionary for programmatic access.
+
+        Creates
+        -------
+        scipy.stats._stats_mstats_common.LinregressResult
+            An object containing:
+            - slope: Slope of the regression line.
+            - intercept: Intercept of the regression line.
+            - rvalue: Correlation coefficient.
+            - pvalue: Two-sided p-value for a hypothesis test (null hypothesis: slope is zero).
+            - stderr: Standard error of the estimated gradient.
+
+        Notes
+        -----
+        The following diagnostics are calculated:
+        * **MAE (Mean Absolute Error)**: Average of the absolute residuals, 
+          expressed in the same units as the signal (y).
+        * **LOD (Limit of Detection)**: The lowest concentration detectable with 
+          statistical significance ($3 \sigma / \text{slope}$).
+        * **LOQ (Limit of Quantification)**: The lowest concentration that can be 
+          quantified with acceptable precision ($10 \sigma / \text{slope}$).
+        * **sy_x**: Residual standard deviation, used as an estimate for 
+          experimental noise.
+
+        Example
+        -------
+        >>> calib = Calibration(conc, area)
+        >>> results = calib.fit_linear()
+        >>> print(calib.diagnostics['lod'])
+        """
+        # Core regression
+        res = stats.linregress(self.x, self.y)
+        self.model = res
+        
+        # Predictions and Residuals
+        y_pred = res.slope * self.x + res.intercept
+        residuals = self.y - y_pred
+        
+        # Diagnostics calculations
+        r_squared = res.rvalue**2
+        mae = np.mean(np.abs(residuals))
+        
+        # LOD/LOQ calculation (Standard Error of the Estimate)
+        n = len(self.x)
+        sy_x = np.sqrt(np.sum(residuals**2) / (n - 2))
+        lod = (3 * sy_x) / res.slope
+        loq = (10 * sy_x) / res.slope
+
+        # Store diagnostics
+        self.diagnostics = {
+            'r_squared': r_squared, 'mae': mae, 
+            'lod': lod, 'loq': loq, 'sy_x': sy_x
+        }
+
+        # --- FORMATTED TABLE OUTPUT ---
+        header = f"{'Parameter':<15} | {'Value':<15} | {'Unit/Note':<15}"
+        sep = "-" * len(header)
+        
+        print(f"\nREGRESSION REPORT: {self.y_label} = f({self.x_label})")
+        print(sep)
+        print(header)
+        print(sep)
+        print(f"{'Slope':<15} | {res.slope:<15.4e} | (y/x)")
+        print(f"{'Intercept':<15} | {res.intercept:<15.4e} | ({self.y_label})")
+        print(f"{'R²':<15} | {r_squared:<15.5f} | (Linearity)")
+        print(f"{'MAE':<15} | {mae:<15.4e} | ({self.y_label})")
+        print(f"{'LOD':<15} | {lod:<15.4e} | ({self.x_label})")
+        print(f"{'LOQ':<15} | {loq:<15.4e} | ({self.x_label})")
+        print(sep + "\n")
+        
+    def plot_calibration(self, save_path=None):
+        """
+        Generates a diagnostic plot featuring the calibration curve and residual analysis.
+        
+        The upper panel displays the experimental data, the regression line, and 
+        the 95% prediction interval (uncertainty). The lower panel shows 
+        the residuals to check for homoscedasticity and model validity.
+        """
+        if self.model is None:
+            raise ValueError("Model not fitted. Call fit_linear() before plotting.")
+
+        # 1. Prepare data
+        x = self.x
+        y = self.y
+        y_pred = self.model.slope * x + self.model.intercept
+        residuals = y - y_pred
+        
+        # 2. Setup Figure (2 rows, 1 column)
+        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 8), 
+                                       gridspec_kw={'height_ratios': [3, 1]})
+        
+        # --- TOP PANEL: Regression & Uncertainty ---
+        ax1.scatter(x, y, color='black', marker='o', label='Experimental Data')
+        ax1.plot(x, y_pred, color='red', linestyle='-', label=f'Linear Fit (R²={self.diagnostics["r_squared"]:.5f})')
+        
+        # Visualizing Uncertainty: Prediction Interval (approximate 95%)
+        # Using the residual standard deviation (sy_x) stored in diagnostics
+        sy_x = self.diagnostics['sy_x']
+        prediction_interval = 1.96 * sy_x 
+        
+        ax1.fill_between(x, y_pred - prediction_interval, y_pred + prediction_interval, 
+                         color='red', alpha=0.1, label='95% Prediction Interval')
+        
+        ax1.set_ylabel(self.y_label)
+        ax1.set_title(f"Calibration Tool: {self.y_label} vs {self.x_label}")
+        ax1.legend(loc='best', fontsize='small')
+        ax1.grid(True, linestyle=':', alpha=0.6)
+
+        # --- BOTTOM PANEL: Residuals ---
+        ax2.scatter(x, residuals, color='blue', edgecolor='white', s=50)
+        ax2.axhline(y=0, color='black', linestyle='--', linewidth=1)
+        ax2.set_ylabel("Residuals")
+        ax2.set_xlabel(self.x_label)
+        ax2.grid(True, linestyle=':', alpha=0.6)
+
+        plt.tight_layout()
+
+        if save_path:
+            save_path = Path(save_path)
+            plt.savefig(save_path, dpi=300)
+            print(f"Figure exported to: {save_path}")
+
+        plt.show()
+
+    def predict(self, signals, sample_name="Sample"):
+        """
+        Predicts concentration(s) from analytical signal(s).
+        
+        If a list of signals is provided, it calculates the mean, 
+        standard deviation, and the corresponding concentration.
+        
+        Parameters
+        ----------
+        signals : float or list/numpy.ndarray
+            The analytical signal(s) measured (e.g., Absorbance, Area).
+        sample_name : str, optional
+            A name for the sample for the report (default is "Sample").
+            
+        Creates
+        -------
+        dict
+            A dictionary containing the mean concentration and statistics.
+        """
+        if self.model is None:
+            raise ValueError("Model not fitted. Call fit_linear() first.")
+            
+        # Convert to numpy array for easy math
+        signals = np.atleast_1d(signals)
+        mean_signal = np.mean(signals)
+        std_signal = np.std(signals, ddof=1) if len(signals) > 1 else 0
+        
+        # Inversion of the equation: x = (y - intercept) / slope
+        conc = (mean_signal - self.model.intercept) / self.model.slope
+        
+        # Simple uncertainty estimation (based on calibration noise sy_x)
+        # For a more rigorous approach, one would use the Working-Hotelling formula
+        sy_x = self.diagnostics['sy_x']
+        conc_err = (sy_x / self.model.slope) / np.sqrt(len(signals))
+
+        # Display result
+        print(f"\n--- ANALYSIS REPORT: {sample_name} ---")
+        if len(signals) > 1:
+            print(f"Signals measured: {len(signals)} replicates")
+            print(f"Mean Signal:      {mean_signal:.4e} ± {std_signal:.4e}")
+        else:
+            print(f"Signal measured:  {mean_signal:.4e}")
+            
+        print(f"RESULT:           {conc:.4e} ± {conc_err:.4e} {self.x_label}")
+        print("-" * 35)
+
+        self.mean_conc = conc
+        self.std_conc = conc_err
+        self.mean_signal = mean_signal

@@ -1,6 +1,6 @@
 [project]
 name = "pyphyschemtools"
-version = "0.8.14"
+version = "0.9.0"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
@@ -19,6 +19,7 @@ dependencies = [
     "mendeleev",        # Database for periodic table properties (electronegativity, radii, etc.)
     "molmass",          # Accurate molecular weight and isotope pattern calculations
     "numpy",            # Fundamental package for linear algebra and multi-dimensional arrays
+    "odfpy",            # A Python library for manipulating OpenDocument format files (.ods, .odt)
     "openpyxl",         # Library to read and write Excel (.xlsx) files (needed by Pandas)
     "pandas",           # Powerful data structures for tabular data analysis and manipulation
     "Pillow",           # Image processing library for opening, rotating, and resizing images

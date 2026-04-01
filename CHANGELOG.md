@@ -12,6 +12,28 @@
 
 # Changelog pyphyschemtools
 
+## [0.9.0] - 2026-04-01 "spectro"
+
+### Changed
+
+- renamed `spectra.py` as `spectro.py`
+
+### 🚀 Added
+- **New `QuantitativeAnalysis` Class in `sepectro.py`**: complete workflow for analytical chemistry.
+    - **Multi-format Data Ingestion**:
+        - x and y arrays
+        - `from_excel()` method using `pathlib` for robust path handling. 
+        - full support for `.xlsx` (via `openpyxl`) and `.ods` LibreOffice files (via `odfpy`).
+    - **Advanced Statistical Reporting**: The `fit_linear()` method now prints a professionally formatted ASCII table in the console including:
+        - **Slope & Intercept** with scientific notation.
+        - **Linearity Diagnostic**: $R^2$ calculation.
+        - **Precision Metric**: Mean Absolute Error (**MAE**) in the signal's unit.
+        - **Sensitivity Thresholds**: Automatic calculation of **LOD** (Limit of Detection) and **LOQ** (Limit of Quantification).
+    - **Dual-Panel Visualization**: `plot_calibration()` generates a synchronized figure:
+        - **Top Plot**: Regression line with a **95% Prediction Interval** (shaded area) to visualize measurement uncertainty.
+        - **Bottom Plot**: Residual analysis to verify model homoscedasticity and detect non-linear trends.
+    - **Quantification Engine**: `predict()` method to convert experimental signals (including replicates/triplicates) into concentrations with associated uncertainty.
+
 ## [0.8.14] - 2026-03-31 "view CN"
 
 ### Changed

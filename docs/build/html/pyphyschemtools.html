@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyphyschemtools package &mdash; pyphyschemtools 0.8.14 documentation</title>
+  <title>pyphyschemtools package &mdash; pyphyschemtools 0.9.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://pynanomatbuilder.readthedocs.io/pyphyschemtools.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=c27c185d"></script>
+      <script src="_static/documentation_options.js?v=39bb1c6d"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -289,10 +289,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.nano.view_coordination"><code class="docutils literal notranslate"><span class="pre">view_coordination()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.spectra">pyphyschemtools.spectra module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.spectra.SpectrumSimulator"><code class="docutils literal notranslate"><span class="pre">SpectrumSimulator</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#pyphyschemtools-spectra-module">pyphyschemtools.spectra module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyphyschemtools.survey">pyphyschemtools.survey module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyphyschemtools.survey.SurveyApp"><code class="docutils literal notranslate"><span class="pre">SurveyApp</span></code></a></li>
 </ul>
@@ -1478,133 +1475,8 @@ Defaults to “YlOrRd” (recommended!).</p></li>
 </dd></dl>
 
 </section>
-<section id="module-pyphyschemtools.spectra">
-<span id="pyphyschemtools-spectra-module"></span><h2>pyphyschemtools.spectra module<a class="headerlink" href="#module-pyphyschemtools.spectra" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyphyschemtools.spectra.</span></span><span class="sig-name descname"><span class="pre">SpectrumSimulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma_ev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotWH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_axisText</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_axisLabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontSize_legends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#3e89be'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorVT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#469cd6'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Initializes the spectrum simulator</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sigma_ev</strong> (<em>-</em>) – Gaussian half-width at half-maximum in electron-volts (eV).
-Default is 0.3 eV (GaussView default is 0.4 eV).</p></li>
-<li><p><strong>plotWH</strong> (<em>-</em>) – Width and Height of the matplotlib figures in inches. Default is (12,8).</p></li>
-<li><p><strong>colorS</strong> (<em>-</em>) – color of the simulated spectrum (default =’#3e89be’)</p></li>
-<li><p><strong>colorVT</strong> (<em>-</em>) – color of the vertical transition line (default = ‘#469cd6’)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>This method initializes the instance attributes.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Calculates:</dt><dd><p>sigmanm = half-width of the Gaussian band, in nm</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT">
-<span class="sig-name descname"><span class="pre">plotAbs_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resetColors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_TDDFT" title="Link to this definition"></a></dt>
-<dd><p>Plots a simulated TDDFT VUV absorbance spectrum (transitions summed with gaussian functions)
-between lambdamin and lambdamax (sum of states done in the range [lambdamin-50, lambdamlax+50] nm)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>datFiles</strong> – list of pathway/name to files generated by ‘GParser Gaussian.log -S’</p></li>
-<li><p><strong>C0</strong> – list of concentrations needed to calculate A = epsilon x l x c (in mol.L-1)</p></li>
-<li><p><strong>lambdamin</strong> – plot range (x axis)</p></li>
-<li><p><strong>lambdamax</strong> – plot range (x axis)</p></li>
-<li><p><strong>Amax</strong> – y axis graph limit</p></li>
-<li><p><strong>titles</strong> – list of titles (1 per spectrum plot)</p></li>
-<li><p><strong>linestyles</strong> – list of line styles(default = “-”, i.e. a continuous line)</p></li>
-<li><p><strong>annotateP</strong> – list of Boolean (annotate lambda max True or False. Default = True)</p></li>
-<li><p><strong>tP</strong> – threshold for finding the peaks (default = 0.1)</p></li>
-<li><p><strong>resetColors</strong> (<em>bool</em>) – If True, resets the matplotlib color cycle
-to the first color. This allows different series
-(e.g., gas phase vs. solvent) to share the same
-color coding for each molecule across multiple calls. Default: False</p></li>
-<li><p><strong>save</strong> – saves in a png file (300 dpi) if True (default = False)</p></li>
-<li><p><strong>save_img</strong> – saves figure in a 300 dpi png file if not None (default), with save_img=full pathway</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_exp">
-<span class="sig-name descname"><span class="pre">plotAbs_lambda_exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csvFiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Amax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotateP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotAbs_lambda_exp" title="Link to this definition"></a></dt>
-<dd><p>Plots an experimental VUV absorbance spectrum read from a csv file between lambdamin and lambdamax</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>superpose</strong> (<em>-</em>) – False = plots a new graph, otherwise the plot is superposed to a previously created one
-(probably with plotAbs_lambda_TDDFT())</p></li>
-<li><p><strong>csvfiles</strong> (<em>-</em>) – list of pathway/name to experimental csvFiles (see examples for the format)</p></li>
-<li><p><strong>C0</strong> (<em>-</em>) – list of experimental concentrations, i.e. for each sample</p></li>
-<li><p><strong>lambdamin</strong> (<em>-</em>) – plot range (x axis)</p></li>
-<li><p><strong>lambdamax</strong> – plot range (x axis)</p></li>
-<li><p><strong>Amax</strong> (<em>-</em>) – graph limit (y axis)</p></li>
-<li><p><strong>titles</strong> (<em>-</em>) – list of titles (1 per spectrum plot)</p></li>
-<li><p><strong>linestyles</strong> (<em>-</em>) – list of line styles(default = “–”, i.e. a dashed line)</p></li>
-<li><p><strong>annotateP</strong> (<em>-</em>) – list of Boolean (annotate lambda max True or False. Default = True)</p></li>
-<li><p><strong>tP</strong> (<em>-</em>) – threshold for finding the peaks (default = 0.1)</p></li>
-<li><p><strong>save</strong> (<em>-</em>) – saves in a png file (300 dpi) if True (default = False)</p></li>
-<li><p><strong>save_img</strong> (<em>-</em>) – saves figure in a 300 dpi png file if not None (default), with save_img=full pathway</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotEps_lambda_TDDFT">
-<span class="sig-name descname"><span class="pre">plotEps_lambda_TDDFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambdamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">800</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotEps_lambda_TDDFT" title="Link to this definition"></a></dt>
-<dd><p>Plots a TDDFT VUV simulated spectrum (vertical transitions and transitions summed with gaussian functions)
-between lambdamin and lambdamax</p>
-<p>The sum of states is done in the range
-[lambdamin-50, lambdamax+50] nm.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>datFile</strong> – list of pathway/names to “XXX_ExcStab.dat” files generated by ‘GParser Gaussian.log -S’</p></li>
-<li><p><strong>lambdamin</strong> – plot range</p></li>
-<li><p><strong>lambdamax</strong> – plot range</p></li>
-<li><p><strong>epsMax</strong> – y axis graph limit</p></li>
-<li><p><strong>titles</strong> – list of titles (1 per spectrum plot)</p></li>
-<li><p><strong>tP</strong> – threshold for finding the peaks (default = 10 L. mol-1 cm-1)</p></li>
-<li><p><strong>ylog</strong> – y logarithmic axis (default: False).</p></li>
-<li><p><strong>save</strong> – saves in a png file (300 dpi) if True (default = False)</p></li>
-<li><p><strong>save_img</strong> – saves figure in a 300 dpi png file if not None (default), with save_img=full pathway</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyphyschemtools.spectra.SpectrumSimulator.plotTDDFTSpectrum">
-<span class="sig-name descname"><span class="pre">plotTDDFTSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sumInt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelTAB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feTAB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelSpectrum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#0000ff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#0000cf'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyphyschemtools.spectra.SpectrumSimulator.plotTDDFTSpectrum" title="Link to this definition"></a></dt>
-<dd><p>Called by plotEps_lambda_TDDFT. Plots a single simulated UV-Vis spectrum, i.e. after
-gaussian broadening, together with the TDDFT vertical transitions (i.e. plotted as lines)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>wavel</strong> – array of gaussian-broadened wavelengths, in nm</p></li>
-<li><p><strong>sumInt</strong> – corresponding molar absorptiopn coefficients, in L. mol-1 cm-1</p></li>
-<li><p><strong>wavelTAB</strong> – wavelength of TDDFT, e.g. discretized, transitions</p></li>
-<li><p><strong>ylog</strong> – log plot of epsilon</p></li>
-<li><p><strong>tP</strong> – threshold for finding the peaks</p></li>
-<li><p><strong>feTAB</strong> – TDDFT oscillator strength for each transition of wavelTAB</p></li>
-<li><p><strong>labelSpectrum</strong> – title for the spectrum</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="pyphyschemtools-spectra-module">
+<h2>pyphyschemtools.spectra module<a class="headerlink" href="#pyphyschemtools-spectra-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-pyphyschemtools.survey">
 <span id="pyphyschemtools-survey-module"></span><h2>pyphyschemtools.survey module<a class="headerlink" href="#module-pyphyschemtools.survey" title="Link to this heading"></a></h2>

@@ -32,6 +32,9 @@ Biblio/
 tools4pyPhysChem/build/
 Examples-dev/
 
+# Local development folder
+dev/
+
 # Swap and temporary
 *~
 *.swp

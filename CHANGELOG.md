@@ -12,7 +12,7 @@
 
 # Changelog pyphyschemtools
 
-## [0.9.1] - 2026-04-01 "spectro"
+## [0.9.2] - 2026-04-01 "spectro"
 
 ### Changed
 
@@ -33,6 +33,15 @@
         - **Top Plot**: Regression line with a **95% Prediction Interval** (shaded area) to visualize measurement uncertainty.
         - **Bottom Plot**: Residual analysis to verify model homoscedasticity and detect non-linear trends.
     - **Quantification Engine**: `predict()` method to convert experimental signals (including replicates/triplicates) into concentrations with associated uncertainty.
+    - - **Robust Image Export**: Enhanced `plot_calibration()` with a `save_img` parameter.
+        - **Overwrite Protection**: Added an interactive user prompt (`y/n`) to prevent accidental overwriting of existing plots.
+        - **Auto-Directory Creation**: The method now automatically creates the target folder hierarchy if it doesn't exist (using `pathlib`).
+        - **High-Quality Defaults**: Standardized export with `300 DPI` and `bbox_inches='tight'` to ensure professional, non-cropped figures.
+    - **New Documentation**: Updated `docs/spectro.md`, providing a full guide on this class:
+        - Manual initialization (from lists/arrays).
+        - Data ingestion from Excel/ODS.
+        - Statistical interpretation of results (LOD, LOQ, MAE).
+        - Quantification of unknown samples using.
 
 ## [0.8.14] - 2026-03-31 "view CN"
 

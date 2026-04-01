@@ -71,10 +71,10 @@ pyphyschemtools.nano module
    :show-inheritance:
    :undoc-members:
 
-pyphyschemtools.spectra module
+pyphyschemtools.spectro module
 ------------------------------
 
-.. automodule:: pyphyschemtools.spectra
+.. automodule:: pyphyschemtools.spectro
    :members:
    :show-inheritance:
    :undoc-members:

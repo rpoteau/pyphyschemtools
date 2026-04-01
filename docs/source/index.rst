@@ -32,7 +32,7 @@ The package provides a versatile ecosystem for researchers:
    theoryDocs/Nano
    theoryDocs/OrgaChem
    theoryDocs/PeriodicTable
-   theoryDocs/Spectra
+   theoryDocs/Spectro
    theoryDocs/Units
    theoryDocs/Misc
 

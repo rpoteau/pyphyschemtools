@@ -1,7 +1,7 @@
 ############################################################
 #                       Absorption spectra
 ############################################################
-from .visualID_Eng import fg, bg, hl
+from .visualID_Eng import fg, bg, hl, color
 from .core import centerTitle, centertxt
 
 import numpy as np
@@ -11,6 +11,8 @@ import scipy.constants as sc
 import pandas as pd
 from scipy import stats
 from pathlib import Path
+
+import os
 
 class SpectrumSimulator:
 
@@ -646,13 +648,16 @@ class QuantitativeAnalysis:
         print(f"{'LOQ':<15} | {loq:<15.4e} | ({self.x_label})")
         print(sep + "\n")
         
-    def plot_calibration(self, save_path=None):
+    def plot_calibration(self, save_img=None):
         """
         Generates a diagnostic plot featuring the calibration curve and residual analysis.
         
         The upper panel displays the experimental data, the regression line, and 
         the 95% prediction interval (uncertainty). The lower panel shows 
         the residuals to check for homoscedasticity and model validity.
+
+        If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
+        Vectorial svg is recommended
         """
         if self.model is None:
             raise ValueError("Model not fitted. Call fit_linear() before plotting.")
@@ -693,10 +698,26 @@ class QuantitativeAnalysis:
 
         plt.tight_layout()
 
-        if save_path:
-            save_path = Path(save_path)
-            plt.savefig(save_path, dpi=300)
-            print(f"Figure exported to: {save_path}")
+        if save_img:
+            save_path = Path(save_img)  # Convert string to Path object
+            
+            # 1. Check if the file already exists
+            if save_path.exists():
+                # Prompt the user for confirmation
+                print(f"{color.RED}{hl.BOLD}⚠️ File '{save_img}' already exists. Overwrite? (y/n): {color.OFF}", end="")
+                response = input().lower().strip()
+                if response != 'y':
+                    print("💾 Save cancelled. Plot not saved.")
+                    plt.show() 
+                    return 
+        
+            # 2. Security: ensure the target directory exists
+            # save_path.parent gives the directory containing the file
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # 3. Universal save
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"💾 Plot saved as: {hl.BOLD}{save_img}{color.OFF}")
 
         plt.show()
 

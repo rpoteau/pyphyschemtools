@@ -523,50 +523,67 @@ class QuantitativeAnalysis:
         Generates a dual-plot figure showing the calibration curve and residuals.
     """
     
-    def __init__(self, x, y, x_label="Concentration", y_label="Area"):
-        self.x = np.array(x)
-        self.y = np.array(y)
+    def __init__(self, x=None, y=None, x_label="Concentration", y_label="Area"):
+        self.x = np.array(x) if x is not None else None
+        self.y = np.array(y) if y is not None else None
         self.x_label = x_label
         self.y_label = y_label
         self.model = None
 
     @classmethod
-    def from_excel(cls, file_path, x_col, y_col, sheet_name=0):
+    def from_excel(cls, file_path, x_col=1, y_col=2, sheet_name=0):
         """
-        Creates a Calibration instance by reading data from an Excel or LibreOffice Calc file.
+        Classmethod to create a QuantitativeAnalysis instance from an Excel or ODS file.
 
         Parameters
         ----------
-        file_path : str
+        file_path : str or Path
             Path to the .xlsx or .ods file.
-        x_col : str
-            Name of the column containing the independent variable (e.g., concentration).
-        y_col : str
-            Name of the column containing the dependent variable (e.g., peak area, absorbance).
+        x_col : int or str, optional
+            Column number (starting at 1) or Name (str) for X. Default is 1.
+        y_col : int or str, optional
+            Column number (starting at 1) or Name (str) for Y. Default is 2.
         sheet_name : str or int, optional
-            The specific sheet to read from (default is the first sheet).
-
-        Returns
-        -------
-        Calibration
-            An initialized instance of the Calibration class.
-            
-        Notes
-        -----
-        Requires 'odfpy' library to be installed for OpenDocument (.ods) files.
+            The specific sheet to read from. Default is 0 (the first sheet).
         """
+        import pandas as pd
+        from pathlib import Path
+
         path = Path(file_path)
         extension = path.suffix.lower()
         
         # Selecting the engine based on file extension
         engine = 'odf' if extension == '.ods' else None
+
+        print(engine)
         
         try:
             df = pd.read_excel(path, sheet_name=sheet_name, engine=engine)
-            return cls(df[x_col], df[y_col], x_col, y_col)
+            
+            # Handle 1-based indexing for integers, leave strings as is
+            ix = x_col - 1 if isinstance(x_col, int) else x_col
+            iy = y_col - 1 if isinstance(y_col, int) else y_col
+
+            # Extract data and labels
+            # .iloc for integer positions, direct access for names
+            x_data = df.iloc[:, ix] if isinstance(ix, int) else df[ix]
+            y_data = df.iloc[:, iy] if isinstance(iy, int) else df[iy]
+            
+            x_label = df.columns[ix] if isinstance(ix, int) else ix
+            y_label = df.columns[iy] if isinstance(iy, int) else iy
+
+            # Return a new instance of the class
+            return cls(x=x_data, y=y_data, x_label=x_label, y_label=y_label)
+
+            print(x_data, y_data, x_label, y_label)
+
         except ImportError as e:
             missing_pkg = "odfpy" if engine == "odf" else "openpyxl"
-            raise ImportError(f"Missing dependency: install '{missing_pkg}' to read {extension} files.") from e
+            raise ImportError(
+                f"Missing dependency: install '{missing_pkg}' to read {extension} files."
+            ) from e
+        except Exception as e:
+            raise ValueError(f"Error reading file '{file_path}': {e}")
 
     def fit_linear(self):
         """

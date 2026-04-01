@@ -12,7 +12,7 @@
 
 # Changelog pyphyschemtools
 
-## [0.9.2] - 2026-04-01 "spectro"
+## [0.9.0-0.9.3] - 2026-04-01 "spectro"
 
 ### Changed
 

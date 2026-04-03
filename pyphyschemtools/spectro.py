@@ -628,6 +628,8 @@ class QuantitativeAnalysis:
         # Core regression
         res = stats.linregress(self.x, self.y)
         self.model = res
+        slope_err = res.stderr
+        intercept_err = res.intercept_stderr
         
         # Predictions and Residuals
         y_pred = res.slope * self.x + res.intercept
@@ -645,40 +647,96 @@ class QuantitativeAnalysis:
 
         # Store diagnostics
         self.diagnostics = {
-            'r_squared': r_squared, 'mae': mae, 
-            'lod': lod, 'loq': loq, 'sy_x': sy_x
+            'slope_err': slope_err,
+            'intercept_err': intercept_err,
+            'r_squared': r_squared,
+            'mae': mae, 
+            'lod': lod,
+            'loq': loq,
+            'sy_x': sy_x
         }
-
+        
         # --- FORMATTED TABLE OUTPUT ---
-        header = f"{'Parameter':<15} | {'Value':<15} | {'Unit/Note':<15}"
+        header = f"{'Parameter':<15} | {'Value':<25} | {'Unit/Note':<15}"
         sep = "-" * len(header)
+        
+        slope_str = f"{res.slope:.4e} ± {slope_err:.4e}"
+        intercept_str = f"{res.intercept:.4e} ± {intercept_err:.4e}"
         
         print(f"\nREGRESSION REPORT: {self.y_label} = f({self.x_label})")
         print(sep)
         print(header)
         print(sep)
-        print(f"{'Slope':<15} | {res.slope:<15.4e} | (y/x)")
-        print(f"{'Intercept':<15} | {res.intercept:<15.4e} | ({self.y_label})")
-        print(f"{'R²':<15} | {r_squared:<15.5f} | (Linearity)")
-        print(f"{'MAE':<15} | {mae:<15.4e} | ({self.y_label})")
-        print(f"{'LOD':<15} | {lod:<15.4e} | ({self.x_label})")
-        print(f"{'LOQ':<15} | {loq:<15.4e} | ({self.x_label})")
+        # On utilise maintenant les versions "_str" préparées
+        print(f"{'Slope':<15} | {slope_str:<25} | (Sensitivity)")
+        print(f"{'Intercept':<15} | {intercept_str:<25} | ({self.y_label})")
+        print(f"{'R²':<15} | {r_squared:<25.5f} | (Linearity)")
+        print(f"{'MAE':<15} | {mae:<25.4e} | ({self.y_label})")
+        print(f"{'LOD':<15} | {lod:<25.4e} | ({self.x_label})")
+        print(f"{'LOQ':<15} | {loq:<25.4e} | ({self.x_label})")
         print(sep + "\n")
         
-    def plot_calibration(self, save_img=None):
+    def plot_calibration(self, save_img=None, figsize=(20,20), scientific=True, marker="o", color_marker="#780000", color_fit="#0b78b3", linestyle="-", fontsize=12):
         """
         Generates a diagnostic plot featuring the calibration curve and residual analysis.
         
-        The upper panel displays the experimental data, the regression line, and 
-        the 95% prediction interval (uncertainty). The lower panel shows 
-        the residuals to check for homoscedasticity and model validity.
+        The figure consists of two subplots:
+        1. Top Panel: Regression Line & Uncertainty
+           Displays the experimental data points (x, y), the calculated OLS regression 
+           line, and a 95% Prediction Interval. The interval is calculated as 
+           1.96 * sigma, where sigma (sy_x) is the Standard Deviation of the Residuals.
+           
+        2. Bottom Panel: Residual Analysis
+           Plots the residuals (y_exp - y_calc) against concentration. This panel is 
+           essential for checking homoscedasticity. A random distribution around 
+           the zero-line validates the linear model, whereas a structured pattern 
+           (e.g., U-shape) indicates non-linearity.
 
-        If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
-        Vectorial svg is recommended
+        Parameters
+        ----------
+        save_img : str, optional
+            Path or filename to save the figure (e.g., 'plot.png', 'report.svg').
+            If the file exists, a manual confirmation will be requested.
+            Vectorial formats (.svg, .pdf) are recommended for publications.
+        figsize : tuple, default (20, 20)
+            Width and height of the figure, in cm.
+        scientific : bool, default True
+            If True, forces scientific notation (e.g., 1e+05) on the Y-axis.
+        marker : str, default "o"
+            Style of the experimental data points.
+        color_marker : str, default "#780000"
+            Color of the experimental scatter points.
+        color_fit : str, default "#0b78b3"
+            Color of the regression line and the prediction interval.
+        linestyle : str, default "-"
+            Line style for the linear fit.
+        fontsize : int, default 12
+            Base font size for all text elements in the figure. 
+            The titles are set to `fontsize + 2`, while the axis labels 
+            use `fontsize`. The legend and tick labels are automatically 
+            scaled to `fontsize - 2` and `fontsize - 1` respectively.
+
+        Raises
+        ------
+        ValueError
+            If the method is called before fitting the model with `fit_linear()`.
+
+        Notes
+        -----
+        The 95% Prediction Interval represents the range within which a new 
+        single observation is expected to fall. It is wider than a Confidence 
+        Interval as it accounts for both the model uncertainty and the 
+        inherent variance (sigma) of the residuals.
         """
+
+        from matplotlib.ticker import ScalarFormatter
+        
         if self.model is None:
             raise ValueError("Model not fitted. Call fit_linear() before plotting.")
 
+        width_in = figsize[0] / 2.54
+        height_in = figsize[1] / 2.54
+    
         # 1. Prepare data
         x = self.x
         y = self.y
@@ -686,34 +744,60 @@ class QuantitativeAnalysis:
         residuals = y - y_pred
         
         # 2. Setup Figure (2 rows, 1 column)
-        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 8), 
+        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(width_in, height_in), 
                                        gridspec_kw={'height_ratios': [3, 1]})
         
         # --- TOP PANEL: Regression & Uncertainty ---
-        ax1.scatter(x, y, color='black', marker='o', label='Experimental Data')
-        ax1.plot(x, y_pred, color='red', linestyle='-', label=f'Linear Fit (R²={self.diagnostics["r_squared"]:.5f})')
+        ax1.scatter(x, y, color=color_marker, marker=marker, label='Experimental Data')
+        ax1.plot(x, y_pred, color=color_fit, linestyle=linestyle, label=f'Linear Fit (R²={self.diagnostics["r_squared"]:.5f})')
         
         # Visualizing Uncertainty: Prediction Interval (approximate 95%)
         # Using the residual standard deviation (sy_x) stored in diagnostics
+
+        for ax in [ax1, ax2]:
+            if scientific:
+                formatter = ScalarFormatter(useMathText=True)
+                formatter.set_scientific(True)
+                formatter.set_powerlimits((-3, 3)) 
+                ax.yaxis.set_major_formatter(formatter)
+
+                formatter_x = ScalarFormatter(useMathText=True)
+                formatter_x.set_scientific(True)
+                formatter_x.set_powerlimits((-3, 3))
+                ax.xaxis.set_major_formatter(formatter_x)
+                
+                # Ensure the exponent label (e.g., x10^6) matches your style
+                ax.yaxis.get_offset_text().set_fontsize(fontsize - 2)
+                ax.yaxis.get_offset_text().set_fontweight('bold')
+                ax.xaxis.get_offset_text().set_fontsize(fontsize - 2)
+                ax.xaxis.get_offset_text().set_fontweight('bold')
+            else:
+                # Standard scalar formatting (no scientific notation)
+                ax.yaxis.set_major_formatter(ScalarFormatter(useMathText=False))
+            ax.tick_params(axis='both', labelsize=fontsize - 1)
+            for label in ax.get_xticklabels() + ax.get_yticklabels():
+                label.set_fontweight('bold')
+                
         sy_x = self.diagnostics['sy_x']
         prediction_interval = 1.96 * sy_x 
         
         ax1.fill_between(x, y_pred - prediction_interval, y_pred + prediction_interval, 
-                         color='red', alpha=0.1, label='95% Prediction Interval')
+                         color=color_fit, alpha=0.1, label='95% Prediction Interval')
         
-        ax1.set_ylabel(self.y_label)
+        ax1.set_ylabel(self.y_label, fontsize=fontsize)
         ax1.set_title(f"Calibration Tool: {self.y_label} vs {self.x_label}")
-        ax1.legend(loc='best', fontsize='small')
+        ax1.legend(loc='best', fontsize=fontsize-2)
         ax1.grid(True, linestyle=':', alpha=0.6)
 
         # --- BOTTOM PANEL: Residuals ---
-        ax2.scatter(x, residuals, color='blue', edgecolor='white', s=50)
+        ax2.scatter(x, residuals, color=color_marker, marker=marker, edgecolor='white', s=50)
         ax2.axhline(y=0, color='black', linestyle='--', linewidth=1)
-        ax2.set_ylabel("Residuals")
-        ax2.set_xlabel(self.x_label)
+        ax2.set_ylabel("Residuals", fontsize=fontsize)
+        ax2.set_xlabel(self.x_label, fontsize=fontsize)
         ax2.grid(True, linestyle=':', alpha=0.6)
 
         plt.tight_layout()
+
 
         if save_img:
             save_path = Path(save_img)  # Convert string to Path object

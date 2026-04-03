@@ -12,14 +12,27 @@
 
 # Changelog pyphyschemtools
 
+## [0.9.4] - 2026-04-03 "QuantitativeAnalysis refinment"
+
+### Added
+- `QuantitativeAnalysis` Class in `spectro.py`
+    - **Uncertainty Reporting**: The `fit_linear` method now calculates and displays standard errors ($\pm$) for both **Slope** (Analytical Sensitivity) and **Intercept**.
+    - **Advanced Plotting Features**:
+        - Added support for `figsize` in centimeters for publication-ready exports.
+        - New `fontsize` parameter with automatic hierarchical scaling (-2 for legends, -1 for tick labels).
+        - Implemented **bold font** weight for axis tick labels to ensure legibility in high-resolution PNG/SVG files.
+    - **Global Scientific Notation**: Added a `scientific` boolean toggle to `plot_calibration` for easy switching between decimal and power-of-ten notation.
+        - Integrated `ScalarFormatter` for both X and Y axes, ensuring consistency when dealing with trace concentrations (e.g., $10^{-6}$ M) or high-intensity signals.
+        - Implemented `useMathText=True` to render axis multipliers as proper LaTeX exponents (e.g., $10^{7}$ instead of `1e7`).
+
 ## [0.9.0-0.9.3] - 2026-04-01 "spectro"
 
 ### Changed
 
 - renamed `spectra.py` as `spectro.py`
 
-### 🚀 Added
-- **New `QuantitativeAnalysis` Class in `sepectro.py`**: complete workflow for analytical chemistry.
+### Added
+- **New `QuantitativeAnalysis` Class in `spectro.py`**: complete workflow for analytical chemistry.
     - **Multi-format Data Ingestion**:
         - x and y arrays
         - `from_excel()` method using `pathlib` for robust path handling. 

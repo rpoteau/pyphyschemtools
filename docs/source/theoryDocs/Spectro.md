@@ -2,9 +2,96 @@
 
 **`spectro.py` module**
 
-So far, it contains only the `SpectrumSimulator` class
+So far, it contains only two classes, namely `QuantitativeAnalysis` and `SpectrumSimulator`.
 
-## Simulation of VUV spectra by TDDFT calculations
+## `QuantitativeAnalysis` Class Documentation
+
+The `QuantitativeAnalysis` class is a core component of the `pyphyschemtools` library. It provides a complete workflow for analytical chemistry—from raw data ingestion to the final quantification of unknown samples with statistical confidence.
+
+### Initialization & Data Ingestion
+
+The class can be initialized manually with arrays or loaded directly from spreadsheets. It features built-in support for both `.xlsx` (Excel) and `.ods` (LibreOffice) formats using `pathlib` for robust path management.
+
+```python
+from pyphyschemtools.spectro import QuantitativeAnalysis
+
+# Loading data from a LibreOffice Calc file
+analysis = QuantitativeAnalysis.from_excel(
+    file_path="calibration_data.ods", 
+)
+```
+
+If your data is already in Python variables, you can instantiate the class directly without using a file. This is ideal for quick tests or manual data entry.
+
+```python
+from pyphyschemtools.spectro import QuantitativeAnalysis
+
+# Experimental data as lists
+concentrations = [1.0, 2.0, 3.0, 4.0, 5.0]
+absorbance = [0.12, 0.25, 0.38, 0.49, 0.62]
+
+# Direct initialization
+analysis = QuantitativeAnalysis(
+    x=concentrations, 
+    y=absorbance, 
+    x_label="Concentration (mol/L)", 
+    y_label="Absorbance"
+)
+```
+
+### Method Fitting & Diagnostics
+
+The `fit_linear()` method performs an Ordinary Least Squares (OLS) linerar regression: $$y = ax + b$$
+It automatically generates a formatted summary table in the console to validate the analytical method.
+
+```python
+analysis.fit_linear()
+```
+
+To validate the reliability of the quantitative method, several statistical metrics are calculated during the `fit_linear()` process.
+
+**Key Statistical Indicators**:
+* $R^2$: Evaluates the linearity of the response.
+* MAE (Mean Absolute Error): Represents the average accuracy in signal units. The MAE represents the average physical error of the model. It calculates the average of the absolute differences between the experimental values ($y_{exp}$) and the values predicted by the linear model ($\hat{y}$).
+    $$\mathrm{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_{\mathrm{exp},i} - \hat{y}_{i}|$$
+* LOD (Limit of Detection): Lowest concentration detectable:
+  $$\mathrm{LOD} = \frac{3 \sigma}{a}$$
+* LOQ (Limit of Quantification): Lowest concentration quantifiable:
+  $$\mathrm{LOQ} = \frac{10 \sigma}{a}$$
+
+  where $\sigma$ refers to the **Standard Deviation of the Residuals** (also known as the Residual Standard Error), where the residuals are plotted in the graphical output of this class (see `plot_calibration()`).
+
+### Advanced Visualization
+
+The `plot_calibration()` method creates a dual-panel figure designed for scientific reporting.
+- Top Panel: Displays experimental points, the regression line, and a 95% Prediction Interval (shaded area) representing the uncertainty of the model.
+- Bottom Panel: Displays Residuals ($y_{exp} - y_{calc}$). A random distribution of residuals confirms the validity of the linear model, while a pattern (e.g., a "U" shape) suggests non-linearity
+
+```Python
+# Generate and save the diagnostic plot
+analysis.plot_calibration(save_img="calibration_report.png")
+```
+
+### Sample Quantification
+
+Once the model is validated, the `predict()` method allows you to convert experimental signals into concentrations. It is designed to handle replicates (e.g., triplicates) and provides the mean result with an associated uncertainty.
+
+```python
+# Measuring an unknown sample in triplicate
+signals = [943, 986, 1021]
+result = analysis.predict(signals, sample_name="Paracetamol_Batch_A")
+```
+
+### Summary of Methods
+
+| Method | Description |
+| :--- | :--- |
+| `from_excel()` | **Classmethod**: Loads data from `.xlsx` or `.ods` files. |
+| `fit_linear()` | Performs OLS regression and prints the diagnostic table. |
+| `plot_calibration()` | Generates the dual-panel fit and residual plot. |
+| `predict()` | Calculates concentration and uncertainty from raw signals. |
+
+## Simulation of VUV spectra by TDDFT calculations (`SpectrumSimulator`)
 
 `SpectrumSimulator` is a high-level orchestration engine designed to bridge the gap between TD-DFT quantum chemical calculations and experimental laboratory data. It automates the Gaussian broadening of discrete electronic transitions, converting dimensionless oscillator strengths into physically meaningful molar absorption coefficients ($\epsilon$) and Absorbance ($A$).
 
@@ -184,82 +271,3 @@ sim.plotAbs_lambda_TDDFT(files_TDDFT, C0theo, lambdaMin, lambdaMax, Amax, titles
 <img src="../_static/spectra/DBAxx_ethanol.png" alt="TDDFT simulated spectra" style="width:600dpi;">
 <figcaption>TDDFT simulated absorbance spectra of DBA and DBA6</figcaption>
 </figure>
-
-## `QuantitativeAnalysis` Class Documentation
-
-The `QuantitativeAnalysis` class is a core component of the `pyphyschemtools` library. It provides a complete workflow for analytical chemistry—from raw data ingestion to the final quantification of unknown samples with statistical confidence.
-
-### Initialization & Data Ingestion
-
-The class can be initialized manually with arrays or loaded directly from spreadsheets. It features built-in support for both `.xlsx` (Excel) and `.ods` (LibreOffice) formats using `pathlib` for robust path management.
-
-```python
-from pyphyschemtools.spectro import QuantitativeAnalysis
-
-# Loading data from a LibreOffice Calc file
-analysis = QuantitativeAnalysis.from_excel(
-    file_path="calibration_data.ods", 
-)
-```
-
-If your data is already in Python variables, you can instantiate the class directly without using a file. This is ideal for quick tests or manual data entry.
-
-```python
-from pyphyschemtools.spectro import QuantitativeAnalysis
-
-# Experimental data as lists
-concentrations = [1.0, 2.0, 3.0, 4.0, 5.0]
-absorbance = [0.12, 0.25, 0.38, 0.49, 0.62]
-
-# Direct initialization
-analysis = QuantitativeAnalysis(
-    x=concentrations, 
-    y=absorbance, 
-    x_label="Concentration (mol/L)", 
-    y_label="Absorbance"
-)
-```
-
-### Method Fitting & Diagnostics
-
-The `fit_linear()` method performs an Ordinary Least Squares (OLS) linerar regression ($y = ax + b$). It automatically generates a formatted summary table in the console to validate the analytical method.
-
-```python
-analysis.fit_linear()
-```
-
-**Key Statistical Indicators**:
-* $R^2$: Evaluates the linearity of the response.
-* MAE (Mean Absolute Error): Represents the average accuracy in signal units.
-* LOD (Limit of Detection): Lowest concentration detectable ($3\sigma / \text{slope}$).
-* LOQ (Limit of Quantification): Lowest concentration quantifiable ($10\sigma / \text{slope}$).
-
-### Advanced Visualization
-
-The `plot_calibration()` method creates a dual-panel figure designed for scientific reporting.
-- Top Panel: Displays experimental points, the regression line, and a 95% Prediction Interval (shaded area) representing the uncertainty of the model.
-- Bottom Panel: Displays Residuals ($y_{exp} - y_{calc}$). A random distribution of residuals confirms the validity of the linear model, while a pattern (e.g., a "U" shape) suggests non-linearity
-
-```Python
-# Generate and save the diagnostic plot
-analysis.plot_calibration(save_img="calibration_report.png")
-```
-
-### Sample Quantification
-
-Once the model is validated, the `predict()` method allows you to convert experimental signals into concentrations. It is designed to handle replicates (e.g., triplicates) and provides the mean result with an associated uncertainty.
-
-```python
-# Measuring an unknown sample in triplicate
-signals = [943, 986, 1021]
-result = analysis.predict(signals, sample_name="Paracetamol_Batch_A")
-```
-
-### Summary of Methods
-
-| Method | Description |
-| :--- | :--- |
-| `from_excel()` | **Classmethod**: Loads data from `.xlsx` or `.ods` files. |
-| `fit_linear()` | Performs OLS regression and prints the diagnostic table. |
-| `plot_calibration()` | Generates the dual-panel fit and residual plot. |
-| `predict()` | Calculates concentration and uncertainty from raw signals. |

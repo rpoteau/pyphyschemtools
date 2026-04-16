@@ -12,6 +12,13 @@
 
 # Changelog pyphyschemtools
 
+## [0.9.5] - 2026-04-16 "ReadIterVASP"
+
+### Fixed
+
+- `ReadIterVASP.py` was not found. Moved from `pyphyschemtools/quantumChem_corner` to `pyphyschemtools/quantumChem_corner/bash_scripts` 
+
+
 ## [0.9.4] - 2026-04-03 "QuantitativeAnalysis refinment"
 
 ### Added

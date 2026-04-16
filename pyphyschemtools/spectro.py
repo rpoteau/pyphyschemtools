@@ -511,19 +511,11 @@ class QuantitativeAnalysis:
     y_label : str
         Label for the y-axis used in plotting.
     model : scipy.stats._stats_mstats_common.LinregressResult or None
-        Storage for the regression parameters after fitting.
-
-    Methods
-    -------
-    from_excel(file_path, x_col, y_col, sheet_name=0)
-        Alternative constructor to initialize the class from an .xlsx or .ods file.
-    fit_linear()
-        Performs ordinary least squares (OLS) linear regression.
-    plot(save_path=None)
-        Generates a dual-plot figure showing the calibration curve and residuals.
+            Storage for the regression parameters after fitting.
     """
     
     def __init__(self, x=None, y=None, x_label="Concentration", y_label="Area"):
+                
         self.x = np.array(x) if x is not None else None
         self.y = np.array(y) if y is not None else None
         self.x_label = x_label
@@ -597,19 +589,26 @@ class QuantitativeAnalysis:
         The results are printed to the console in a formatted table and stored 
         within the `self.diagnostics` dictionary for programmatic access.
 
-        Creates
-        -------
-        scipy.stats._stats_mstats_common.LinregressResult
-            An object containing:
-            - slope: Slope of the regression line.
-            - intercept: Intercept of the regression line.
-            - rvalue: Correlation coefficient.
-            - pvalue: Two-sided p-value for a hypothesis test (null hypothesis: slope is zero).
-            - stderr: Standard error of the estimated gradient.
+        Attributes
+        ----------
+        model : scipy.stats._stats_mstats_common.LinregressResult
+            The full regression result object containing slope, intercept, 
+            rvalue, pvalue, and stderr.
+        diagnostics : dict
+            A dictionary containing key analytical performance indicators:
+            
+            * 'slope_err': Standard error of the slope.
+            * 'intercept_err': Standard error of the intercept.
+            * 'r_squared': Coefficient of determination.
+            * 'mae': Mean Absolute Error.
+            * 'lod': Limit of Detection.
+            * 'loq': Limit of Quantification.
+            * 'sy_x': Residual standard deviation.
 
         Notes
         -----
         The following diagnostics are calculated:
+        
         * **MAE (Mean Absolute Error)**: Average of the absolute residuals, 
           expressed in the same units as the signal (y).
         * **LOD (Limit of Detection)**: The lowest concentration detectable with 
@@ -645,7 +644,7 @@ class QuantitativeAnalysis:
         lod = (3 * sy_x) / res.slope
         loq = (10 * sy_x) / res.slope
 
-        # Store diagnostics
+        # Store diagnostics and results
         self.diagnostics = {
             'slope_err': slope_err,
             'intercept_err': intercept_err,
@@ -676,11 +675,13 @@ class QuantitativeAnalysis:
         print(f"{'LOQ':<15} | {loq:<25.4e} | ({self.x_label})")
         print(sep + "\n")
         
-    def plot_calibration(self, save_img=None, figsize=(20,20), scientific=True, marker="o", color_marker="#780000", color_fit="#0b78b3", linestyle="-", fontsize=12):
+    def plot_calibration(self, save_img=None, figsize=(20,20), scientific=True, marker="o",
+                         color_marker="#780000", color_fit="#0b78b3", linestyle="-", fontsize=12):
         """
         Generates a diagnostic plot featuring the calibration curve and residual analysis.
         
         The figure consists of two subplots:
+        
         1. Top Panel: Regression Line & Uncertainty
            Displays the experimental data points (x, y), the calculated OLS regression 
            line, and a 95% Prediction Interval. The interval is calculated as 
@@ -824,10 +825,11 @@ class QuantitativeAnalysis:
 
     def predict(self, signals, sample_name="Sample"):
         """
-        Predicts concentration(s) from analytical signal(s).
-        
-        If a list of signals is provided, it calculates the mean, 
-        standard deviation, and the corresponding concentration.
+        Prediction of concentration statistics from analytical signals.
+
+        Calculates the mean and standard deviation of the provided signals, 
+        applies the inverse linear model, prints a formatted analysis report,
+        and store values in attributes.
         
         Parameters
         ----------
@@ -836,10 +838,13 @@ class QuantitativeAnalysis:
         sample_name : str, optional
             A name for the sample for the report (default is "Sample").
             
-        Creates
-        -------
-        dict
-            A dictionary containing the mean concentration and statistics.
+        Notes
+        -----
+        This method updates the following instance attributes:
+        
+        * **mean_conc**: The calculated mean concentration.
+        * **std_conc**: The estimated uncertainty of the concentration.
+        * **mean_signal**: The average value of the input signals.
         """
         if self.model is None:
             raise ValueError("Model not fitted. Call fit_linear() first.")

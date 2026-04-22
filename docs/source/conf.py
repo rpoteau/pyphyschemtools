@@ -10,7 +10,7 @@ project = 'pyphyschemtools'
 version = '0.9'
 copyright = '2026, Romuald Poteau'
 author = 'Romuald Poteau'
-release = '0.9.5'
+release = '0.9.6'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -23,6 +23,7 @@ extensions = [
     "sphinx.ext.githubpages",
     'nbsphinx', # Notebooks
     'sphinx.ext.mathjax', # LaTeX
+    'sphinx.ext.viewcode', # view code in the doc
 ]
 
 html_theme_options = {

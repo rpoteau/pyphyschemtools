@@ -12,6 +12,12 @@
 
 # Changelog pyphyschemtools
 
+## [0.9.5] - 2026-04-22 "Source available in readthedocs"
+
+### Added
+
+- `'sphinx.ext.viewcode'` added as a sphinx option in `conf.py`
+
 ## [0.9.5] - 2026-04-16 "ReadIterVASP"
 
 ### Fixed

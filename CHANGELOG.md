@@ -12,7 +12,26 @@
 
 # Changelog pyphyschemtools
 
-## [0.9.5] - 2026-04-22 "Source available in readthedocs"
+## [0.9.8] - 2026-06-08 "new kbasic class in kinetic.py"
+
+### Added
+- **New `kbasic` Class in `kinetics.py`**: a deliberately simple, fully commented pedagogical tool for finding a rate constant `k` by RMSD minimization, designed as a teaching step *upstream* of the more complete `KORD` class (it exposes the RMSD and the optimization rather than hiding them).
+    - **Three-Operation Workflow**: a minimal, stateful interface kept to exactly three public methods.
+        - `read()`: data ingestion from a two-column Excel file (time, G).
+        - `fit()`: rate-constant determination by explicit RMSD minimization.
+        - `plot()`: side-by-side comparison of data, fitted model, and RMSD landscape.
+    - **Smart Data Ingestion**: `read()` automatically detects whether the first row is a header (string) or already data (numbers), and forces numeric (`float`) conversion of both columns.
+        - **Google Colab Support**: a `colab=True` flag triggers `google.colab.files.upload()` for in-browser file selection, with the heavy import scoped locally so the class stays importable outside Colab.
+        - **Pandas Recap**: prints a clean `DataFrame` summary of the loaded points (via `IPython.display` in notebooks, with a `print` fallback elsewhere).
+    - **Multi-Order Models**: support for orders 0 (linear), 1 (exponential), and 2 (hyperbolic), each reduced to its simplest two-parameter form `G(t; k, G0)` decaying to zero, with `G0` defaulting to the first measured point or set manually.
+    - **Explicit RMSD Minimization**: `fit()` uses `scipy.optimize.minimize` on `k` alone (with `G0` fixed), keeping the one-dimensional RMSD(k) landscape readable; the RMSD is written out by hand rather than delegated to `curve_fit`.
+    - **Dual-Panel Visualization**: `plot()` generates a synchronized figure:
+        - **Left Plot**: experimental points and the fitted model curve.
+        - **Right Plot**: the RMSD(k) landscape with the located minimum highlighted, making visible what the optimizer explores.
+    - **Pedagogical Documentation**: extensive inline comments aimed at chemistry students, including a cross-referenced explanation of why `minimize` expects a list (`x0=[k_depart]`) and why the objective therefore receives `k` as a one-element array (`k = k[0]`).
+- **New Example**: added a worked `kbasic` example to `Examples_pyPCT.ipynb` (read, fit, plot on a simple kinetics dataset).
+
+## [0.9.5-0.9.7] - 2026-04-22 "Source available in readthedocs"
 
 ### Added
 

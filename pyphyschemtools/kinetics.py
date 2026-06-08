@@ -9,6 +9,279 @@ from .visualID_Eng import fg, hl, bg, color
 import os
 import re
 
+# =====================================================================
+#  kbasic : recherche de la constante de vitesse k par minimisation du RMSD
+#  Version pédagogique, simple et autonome.
+#
+#  Une classe avec trois operations, dans l'ordre :
+#     1) kb.read(fichier)  : lire le fichier Excel (temps, G) + recapitulatif
+#     2) kb.fit(ordre)     : faire le fit (trouver le meilleur k)
+#     3) kb.plot()         : tracer le resultat (comparer modele et donnees)
+#
+#  Idee : on a des points expérimentaux (temps, grandeur mesuree G) et un
+#  modele théorique qui depend de k. On cherche le k qui MINIMISE l'ecart
+#  entre modèle et données. Cet ecart est le RMSD.
+# =====================================================================
+
+# =====================================================================
+#  kbasic : recherche de la constante de vitesse k par minimisation du RMSD
+#  Version pédagogique, simple et autonome.
+#
+#  Une classe avec trois opérations, dans l'ordre :
+#     1) kb.read(fichier)  : lire le fichier Excel (temps, G) + récapitulatif
+#     2) kb.fit(ordre)     : faire le fit (trouver le meilleur k)
+#     3) kb.plot()         : tracer le résultat (comparer modèle et données)
+#
+#  Idée : on a des points expérimentaux (temps, grandeur mesurée G) et un
+#  modèle théorique qui dépend de k. On cherche le k qui MINIMISE l'écart
+#  entre modèle et données. Cet écart est le RMSD.
+# =====================================================================
+
+import numpy as np                      # calcul numérique (tableaux, exp, etc.)
+import pandas as pd                     # lecture Excel et affichage en tableau
+import matplotlib.pyplot as plt         # tracé des graphiques
+from scipy.optimize import minimize     # outil qui cherche le minimum d'une fonction
+
+
+class kbasic:
+    """
+    Recherche pédagogique de la constante de vitesse k.
+
+    Utilisation typique :
+        kb = kbasic()
+        kb.read("mesures.xlsx")   # 1) lire les données
+        kb.fit(ordre=1)           # 2) chercher le meilleur k
+        kb.plot()                 # 3) tracer le résultat
+
+    La grandeur mesurée G décroît avec le temps depuis sa valeur initiale
+    G0. La forme de G(t) dépend de l'ordre de la réaction :
+        - ordre 0 : décroissance LINÉAIRE
+        - ordre 1 : décroissance EXPONENTIELLE (le cas le plus courant)
+        - ordre 2 : décroissance HYPERBOLIQUE
+    """
+
+    def __init__(self):
+        # Les données expérimentales (remplies par read).
+        self.t_exp = None      # temps mesurés
+        self.G_exp = None      # grandeurs mesurées
+        # Les en-têtes lus dans le fichier (remplis par read), pour les axes.
+        self.label_t = "Temps" # nom de l'axe des temps (par défaut)
+        self.label_G = "G"     # nom de l'axe de la grandeur (par défaut)
+        # Les résultats du fit (remplis par fit).
+        self.G0 = None         # valeur de G à t=0
+        self.ordre = None      # ordre choisi pour le fit
+        self.k_opt = None      # meilleure valeur de k trouvée
+        self.rmsd_min = None   # RMSD au minimum
+
+    # -----------------------------------------------------------------
+    #  Les trois modèles théoriques.
+    #  Chacun ne dépend que du temps t, de la constante k et de G0.
+    # -----------------------------------------------------------------
+    def _modele(self, t, k, G0, ordre):
+        """Renvoie G(t) prédit par le modèle de l'ordre demandé."""
+        if ordre == 0:
+            # Ordre 0 : droite qui descend, bornée à zéro une fois le
+            # réactif épuisé (np.maximum empêche de passer sous zéro).
+            return np.maximum(G0 - k * t, 0)
+        elif ordre == 1:
+            # Ordre 1 : exponentielle. À t=0, G=G0 ; à t grand, G->0.
+            return G0 * np.exp(-k * t)
+        elif ordre == 2:
+            # Ordre 2 : hyperbole. À t=0, G=G0.
+            return G0 / (1 + k * t)
+        else:
+            raise ValueError("ordre doit valoir 0, 1 ou 2")
+
+    # -----------------------------------------------------------------
+    #  Le RMSD : la mesure de l'écart entre données et modèle.
+    #  RMSD = racine de la moyenne des carrés des écarts.
+    #  Plus il est petit, mieux le modèle colle aux données.
+    # -----------------------------------------------------------------
+    def _rmsd(self, k, ordre, G0):
+        """Calcule le RMSD pour une valeur de k donnée."""
+        # ATTENTION : ce n'est pas nous qui appelons cette fonction, c'est
+        # minimize (voir la méthode fit). Or minimize travaille toujours avec
+        # un TABLEAU de paramètres, jamais avec un simple nombre. Comme on lui
+        # donne x0=[k_depart] (une liste), il rappelle _rmsd en passant k sous
+        # forme de tableau à un élément, par exemple [0.1] puis [0.093]...
+        # La VALEUR change à chaque itération, mais la forme reste [un_element].
+        # On extrait donc ce nombre unique avec k[0] pour pouvoir l'utiliser
+        # dans le modèle. np.ndim(k) vaut 0 pour un nombre, 1 pour un tableau :
+        # le test rend la fonction utilisable aussi avec un simple nombre.
+        if np.ndim(k) > 0:
+            k = k[0]
+        G_modele = self._modele(self.t_exp, k, G0, ordre)
+        return np.sqrt(np.mean((self.G_exp - G_modele) ** 2))
+
+    # =================================================================
+    #  1) LIRE LES DONNÉES
+    #
+    #  Fichier Excel à deux colonnes : temps à gauche, G à droite.
+    #  La première ligne PEUT être un en-tête (texte) ou déjà des
+    #  données (nombres). On regarde la première cellule :
+    #     - texte  -> c'est un en-tête, on saute la 1ère ligne
+    #     - nombre -> ce sont déjà des données, on garde tout
+    # =================================================================
+    def read(self, fichier=None, colab=False):
+        """
+        Lit un fichier Excel à deux colonnes (temps, G) et affiche un
+        récapitulatif sous forme de DataFrame pandas.
+
+        Détecte automatiquement si la première ligne est un en-tête. Si oui,
+        les noms de colonnes serviront de labels pour les axes du tracé.
+
+        Retourne le DataFrame des données lues.
+
+        Arguments :
+            fichier : chemin (ou URL) du fichier Excel à lire.
+                      Inutile si colab=True (on choisit le fichier à l'upload).
+            colab   : si True, ouvre le bouton d'upload de Google Colab
+                      et lit le fichier choisi. Défaut False.
+        """
+        # Mode Google Colab : on ouvre le sélecteur de fichier, l'utilisateur
+        # choisit son .xlsx, et on récupère son nom pour le lire ensuite.
+        if colab:
+            from google.colab import files   # disponible uniquement sur Colab
+            uploaded = files.upload()         # bouton "Parcourir"
+            # files.upload() renvoie un dictionnaire {nom_fichier: contenu}.
+            # On prend le nom du premier (et normalement seul) fichier choisi.
+            fichier = list(uploaded.keys())[0]
+            print(f"Fichier reçu : {fichier}")
+
+        # On lit d'abord SANS supposer d'en-tête (header=None), pour
+        # examiner nous-mêmes la première cellule.
+        brut = pd.read_excel(fichier, header=None)
+
+        # isinstance(x, str) répond à : "est-ce que x est du texte ?"
+        if isinstance(brut.iloc[0, 0], str):
+            # En-tête présent : on garde les deux noms de colonnes pour
+            # les utiliser comme labels d'axes dans plot(), puis les vraies
+            # données commencent à la ligne 1.
+            self.label_t = str(brut.iloc[0, 0])
+            self.label_G = str(brut.iloc[0, 1])
+            donnees = brut.iloc[1:]
+        else:
+            # Pas d'en-tête : tout le tableau est déjà des données, et on
+            # garde les labels par défaut ("Temps" et "G").
+            donnees = brut
+
+        # Colonne 0 = temps, colonne 1 = G. On force en nombres (float).
+        self.t_exp = donnees.iloc[:, 0].astype(float).values
+        self.G_exp = donnees.iloc[:, 1].astype(float).values
+
+        # Récapitulatif propre sous forme de DataFrame, qu'on affiche.
+        # On y réutilise les en-têtes lus (ou les labels par défaut).
+        recap = pd.DataFrame({self.label_t: self.t_exp, self.label_G: self.G_exp})
+        print(f"{len(self.t_exp)} points lus.")
+        try:
+            # display() rend un joli tableau dans un notebook Jupyter.
+            from IPython.display import display
+            display(recap)
+        except ImportError:
+            # En dehors d'un notebook, un simple print suffit.
+            print(recap)
+
+        return recap
+
+    # =================================================================
+    #  2) FAIRE LE FIT : chercher le meilleur k (minimiser le RMSD)
+    # =================================================================
+    def fit(self, ordre=1, G0=None, k_depart=0.1):
+        """
+        Trouve la valeur de k qui minimise le RMSD pour l'ordre choisi.
+
+        Si G0 n'est pas donné, on le prend égal à la première valeur
+        mesurée. Sinon, on utilise la valeur fournie par l'utilisateur.
+
+        Retourne : (k_optimal, rmsd_au_minimum)
+        """
+        # Valeur par défaut de G0 : le premier point mesuré.
+        if G0 is None:
+            G0 = self.G_exp[0]
+
+        # minimize cherche le k qui rend le RMSD le plus petit possible.
+        #   - self._rmsd    : la fonction à minimiser
+        #   - x0=[k_depart] : valeur de départ de la recherche
+        #   - args=(...)    : les autres arguments fixes passés à _rmsd
+        #   - bounds        : on impose k >= 0 (une vitesse n'est pas négative)
+        #
+        # Pourquoi x0=[k_depart] avec des crochets, et pas juste k_depart ?
+        # minimize est conçu pour optimiser plusieurs paramètres à la fois ; il
+        # attend donc TOUJOURS une LISTE de valeurs de départ, même quand il n'y
+        # a qu'un seul paramètre (ici k). On écrit donc [k_depart], c.-à-d.
+        # [0.1], et non 0.1. C'est aussi pour cela que _rmsd reçoit k sous forme
+        # de tableau et fait k = k[0] (voir le commentaire dans _rmsd).
+        resultat = minimize(
+            self._rmsd,
+            x0=[k_depart],
+            args=(ordre, G0),
+            bounds=[(0, None)],
+        )
+
+        # On mémorise tout dans l'objet, pour que plot() puisse s'en servir.
+        self.ordre = ordre
+        self.G0 = G0
+        self.k_opt = resultat.x[0]   # meilleure valeur de k
+        self.rmsd_min = resultat.fun # RMSD correspondant (le plus petit)
+
+        print(f"Ordre {ordre} : k optimal = {self.k_opt:.4e}"
+              f"  (RMSD = {self.rmsd_min:.4e})")
+        return self.k_opt, self.rmsd_min
+
+    # =================================================================
+    #  3) TRACER LE RÉSULTAT : comparer données et modèle ajusté
+    #
+    #  Deux graphiques côte à côte :
+    #    - à gauche : les données et la courbe du modèle ajusté
+    #    - à droite : le "paysage" du RMSD en fonction de k, qui montre
+    #                 la vallée dont minimize a trouvé le fond.
+    # =================================================================
+    def plot(self):
+        """Trace la comparaison données / modèle et le paysage du RMSD."""
+        # On a besoin du résultat du fit. Si fit() n'a pas encore été appelé,
+        # k_opt vaut None : on prévient l'utilisateur au lieu de planter.
+        if self.k_opt is None:
+            raise RuntimeError("Faites d'abord kb.fit(...) avant kb.plot().")
+
+        figure, (gauche, droite) = plt.subplots(1, 2, figsize=(13, 5))
+
+        # ---- Graphique de gauche : données + modèle ----
+        # Grille de temps fine et régulière pour une courbe bien lisse.
+        t_lisse = np.linspace(self.t_exp.min(), self.t_exp.max(), 400)
+        G_lisse = self._modele(t_lisse, self.k_opt, self.G0, self.ordre)
+
+        gauche.scatter(self.t_exp, self.G_exp, color="black", marker="x",
+                       label="Données expérimentales")
+        gauche.plot(t_lisse, G_lisse, color="red",
+                    label=f"Modèle ordre {self.ordre} (k = {self.k_opt:.4e})")
+        # On utilise les en-têtes lus dans le fichier comme labels d'axes
+        # (ou les valeurs par défaut "Temps" et "G" s'il n'y avait pas d'en-tête).
+        gauche.set_xlabel(self.label_t)
+        gauche.set_ylabel(self.label_G)
+        gauche.legend()
+        gauche.grid(True)
+        gauche.set_title('Données et modèle ajusté ("fitté")')
+
+        # ---- Graphique de droite : le paysage du RMSD ----
+        # On essaie plein de valeurs de k autour de l'optimum et on calcule
+        # le RMSD pour chacune, afin de "voir" la vallée.
+        k_essais = np.linspace(max(self.k_opt * 0.1, 1e-9), self.k_opt * 3, 300)
+        rmsd_essais = [self._rmsd(k, self.ordre, self.G0) for k in k_essais]
+
+        droite.plot(k_essais, rmsd_essais, color="blue", label="RMSD(k)")
+        # On marque le minimum trouvé par minimize d'un gros point rouge.
+        droite.scatter([self.k_opt], [self.rmsd_min], color="red", zorder=5,
+                       label=f"minimum (k = {self.k_opt:.4e})")
+        droite.axvline(self.k_opt, color="red", linestyle="--", alpha=0.5)
+        droite.set_xlabel("k")
+        droite.set_ylabel("RMSD")
+        droite.legend()
+        droite.grid(True)
+        droite.set_title("Le paysage du RMSD : minimize en cherche le 'fond'")
+
+        figure.tight_layout()
+        plt.show()
+
 class KORD:
     """
     Initialize the kinetic study with experimental data.

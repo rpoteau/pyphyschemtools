@@ -12,6 +12,13 @@
 
 # Changelog pyphyschemtools
 
+## [0.9.9] - 2026-06-09 "molView fix"
+
+### Fixed
+- **`molView` class in `Chem3D.py`**:
+    - `source='mol'` now accepts MDL molblocks (V2000/V3000) in addition to XYZ strings, with automatic format detection.
+    - fixed an `AttributeError` on `source='mol'` and `source='cif'` where `self.server` was left unset, breaking the load confirmation message.
+
 ## [0.9.8] - 2026-06-08 "new kbasic class in kinetic.py"
 
 ### Added

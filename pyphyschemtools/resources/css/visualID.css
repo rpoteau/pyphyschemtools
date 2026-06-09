@@ -1,4 +1,7 @@
 <style>
+.jp-RenderedHTMLCommon, .jp-RenderedMarkdown, .jp-Cell {
+    font-family: Verdana, "DejaVu Sans", "Bitstream Vera Sans", Geneva, sans-serif;
+}
 h1, h2, h3, h4, h5, h6 {
   font-family: Verdana, "DejaVu Sans", "Bitstream Vera Sans", Geneva, sans-serif;
   font-weight: bold;

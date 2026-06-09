@@ -327,7 +327,7 @@ class molView:
             The molecular structure to visualize.
             
             - If `source='file'`, this should be a path to a structure file (XYZ, PDB, etc.)
-            - If `source='mol'`, this should be a string containing the structure (XYZ, PDB...)
+            - If `source='mol'`, this should be a string containing the structure (XYZ, PDB, MDL mol/SDF...)
             - If `source='cif'`, this should be a cif file (string)
             - If `source='cid'`, this should be a PubChem CID (string or int)
             - If `source='rscb'`, this should be a RSCB PDB ID (string)
@@ -787,11 +787,19 @@ class molView:
         
         elif self.source == 'cif':
             content = self.mol
+            self.server = 'cif'
             fmt = 'cif'
         
         elif self.source == 'mol':
             content = self.mol
-            fmt = 'xyz'
+            self.server = 'mol'
+            # 'mol' accepts a raw coordinate string in several formats.
+            if 'V2000' in content or 'V3000' in content or 'M  END' in content:
+                fmt = 'mol'                    # MDL molblock / SDF
+            elif content.lstrip().startswith(('ATOM', 'HETATM', 'HEADER', 'COMPND', 'CRYST1')):
+                fmt = 'proteindatabank'        # PDB
+            else:
+                fmt = 'xyz'
 
         # --- EXTRACTION XYZData (Interne) ---
         # On extrait les données ici avant toute modification (RDKit ou Supercell)

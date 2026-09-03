@@ -11,6 +11,7 @@ dependencies = [
     "bokeh",            # Interactive web-based visualizations for large datasets
     "CageCavityCalc",   # Specialized tool for calculating chemical cage and cavity volumes
     "cclib",            # Parser for output files from Quantum Chemistry packages (Gaussian, VASP, ORCA)
+    "ipympl",           # Backend that makes matplotlib figures interactive (zoom, pan) inside Jupyter, via %matplotlib widget
     "ipython",          # Enhanced interactive Python shell for rapid testing and research
     "ipywidgets",       # Interactive HTML widgets for Jupyter notebooks (sliders, buttons)
     "jupyter",          # The complete ecosystem for interactive computing and notebooks

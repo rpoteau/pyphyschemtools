@@ -3,9 +3,17 @@
 │   └── KORD 1.1 - Manuel Utilisateur.pdf
 ├── CHANGELOG.md
 ├── CITATION.cff
-├── dist
-│   ├── pyphyschemtools-0.7.6-py3-none-any.whl
-│   └── pyphyschemtools-0.7.6.tar.gz
+├── dev
+│   ├── chromato
+│   │   ├── eMailStephaneB.pdf
+│   │   ├── poly_TP_KCHCPH41_2025_final2.pdf
+│   │   ├── Python_L3_infos.pdf
+│   │   ├── Python_L3_linregress.pdf
+│   │   ├── TP_HPLC_L3_python_corr.pdf
+│   │   └── TP_HPLC_L3_python.ipynb
+│   └── kin
+│       ├── exemples_Romu.ods
+│       └── Romu_equations_etude d ordre.docx
 ├── docs
 │   ├── build
 │   │   ├── doctrees
@@ -20,9 +28,11 @@
 │   │   │       ├── Kinetics.doctree
 │   │   │       ├── Misc.doctree
 │   │   │       ├── Nano.doctree
+│   │   │       ├── OrgaChem.doctree
 │   │   │       ├── PeriodicTable.doctree
+│   │   │       ├── pipManagement.doctree
 │   │   │       ├── QuantumChemCorner.doctree
-│   │   │       ├── Spectra.doctree
+│   │   │       ├── Spectro.doctree
 │   │   │       └── Units.doctree
 │   │   └── html
 │   │       ├── CNAME
@@ -30,6 +40,25 @@
 │   │       ├── _images
 │   │       │   └── tools4pyPC_banner.svg
 │   │       ├── index.html
+│   │       ├── _modules
+│   │       │   ├── index.html
+│   │       │   ├── pyphyschemtools
+│   │       │   │   ├── aithermo.html
+│   │       │   │   ├── Chem3D.html
+│   │       │   │   ├── cheminformatics.html
+│   │       │   │   ├── core.html
+│   │       │   │   ├── kinetics.html
+│   │       │   │   ├── misc.html
+│   │       │   │   ├── ML.html
+│   │       │   │   ├── nano.html
+│   │       │   │   ├── PeriodicTable.html
+│   │       │   │   ├── spectro.html
+│   │       │   │   ├── survey.html
+│   │       │   │   ├── sympyUtilities.html
+│   │       │   │   ├── tools4AS.html
+│   │       │   │   ├── units.html
+│   │       │   │   └── visualID_Eng.html
+│   │       │   └── pyphyschemtools.html
 │   │       ├── modules.html
 │   │       ├── objects.inv
 │   │       ├── py-modindex.html
@@ -46,9 +75,11 @@
 │   │       │       ├── Kinetics.md.txt
 │   │       │       ├── Misc.md.txt
 │   │       │       ├── Nano.md.txt
+│   │       │       ├── OrgaChem.md.txt
 │   │       │       ├── PeriodicTable.md.txt
+│   │       │       ├── pipManagement.md.txt
 │   │       │       ├── QuantumChemCorner.md.txt
-│   │       │       ├── Spectra.md.txt
+│   │       │       ├── Spectro.md.txt
 │   │       │       └── Units.md.txt
 │   │       ├── _static
 │   │       │   ├── base-stemmer.js
@@ -141,9 +172,11 @@
 │   │           ├── Kinetics.html
 │   │           ├── Misc.html
 │   │           ├── Nano.html
+│   │           ├── OrgaChem.html
 │   │           ├── PeriodicTable.html
+│   │           ├── pipManagement.html
 │   │           ├── QuantumChemCorner.html
-│   │           ├── Spectra.html
+│   │           ├── Spectro.html
 │   │           └── Units.html
 │   ├── make.bat
 │   ├── Makefile
@@ -170,8 +203,9 @@
 │           ├── Nano.md
 │           ├── OrgaChem.md
 │           ├── PeriodicTable.md
+│           ├── pipManagement.md
 │           ├── QuantumChemCorner.md
-│           ├── Spectra.md
+│           ├── Spectro.md
 │           └── Units.md
 ├── Examples-dev
 │   ├── tar-tools4G16.sh
@@ -681,16 +715,19 @@
 │   │   └── SuiviKin_BIPS_EtOAc.svg
 │   ├── Molecules
 │   │   ├── gridMol.svg
-│   │   └── grid_stereo.svg
+│   │   ├── grid_stereo.svg
+│   │   └── grid.svg
 │   ├── PeriodicTable
 │   │   └── Ei1_Z.png
 │   └── Spectra
+│       ├── calibration.png
 │       ├── DBA-syn-syn-TDDFT_ethanol.png
 │       └── DBAxx_ethanol.png
 ├── git_push
 ├── LICENSE
 ├── log
 ├── MANIFEST.in
+├── misc.ipynb
 ├── push_pyPi_doc.md
 ├── push_pyPi.sh
 ├── pyphyschemtools
@@ -707,6 +744,7 @@
 │   │   │   ├── Example4Kord_exp2.svg
 │   │   │   ├── Example4Kord_exp9.svg
 │   │   │   ├── Example4Kord.xlsx
+│   │   │   ├── kbasic.xlsx
 │   │   │   ├── SuiviKin_BIPS_EtOAc.csv
 │   │   │   ├── SuiviKin_BIPS_EtOAc.svg
 │   │   │   ├── SuiviKin_BIPS_EtOAc.xlsx
@@ -716,14 +754,11 @@
 │   │   │   ├── betaCD-closed.xyz
 │   │   │   ├── gridMol.png
 │   │   │   └── gridMol.svg
-│   │   ├── orgachem
-│   │   │   ├── Functions.csv
-│   │   │   ├── Functions_Examples.csv
-│   │   │   └── Molecules.csv
 │   │   ├── QCCorner
 │   │   │   ├── tools4G16-Examples.tar.bz2
 │   │   │   └── tools4VASP-Examples.tar.bz2
 │   │   └── Spectra
+│   │       ├── calib_chromato.ods
 │   │       ├── DBA6-syn-syn-TDDFT_ethanol_ExcStab.dat
 │   │       └── DBA-syn-syn-TDDFT_ethanol_ExcStab.dat
 │   ├── __init__.py
@@ -746,6 +781,7 @@
 │   │   ├── orgachem.cpython-311.pyc
 │   │   ├── PeriodicTable.cpython-311.pyc
 │   │   ├── spectra.cpython-311.pyc
+│   │   ├── spectro.cpython-311.pyc
 │   │   ├── survey.cpython-311.pyc
 │   │   ├── sympyUtilities.cpython-311.pyc
 │   │   ├── tools4AS.cpython-311.pyc
@@ -760,6 +796,9 @@
 │   │   │   ├── GP2bw
 │   │   │   ├── GParser
 │   │   │   ├── hVASP
+│   │   │   ├── __pycache__
+│   │   │   │   └── ReadIterVASP.cpython-311.pyc
+│   │   │   ├── ReadIterVASP.py
 │   │   │   ├── RestartVASP
 │   │   │   └── VASPcv
 │   │   ├── bin
@@ -777,8 +816,8 @@
 │   │   ├── __pycache__
 │   │   │   ├── GScan_Analyzis.cpython-311.pyc
 │   │   │   ├── __init__.cpython-311.pyc
-│   │   │   └── pos2xxx.cpython-311.pyc
-│   │   ├── ReadIterVASP.py
+│   │   │   ├── pos2xxx.cpython-311.pyc
+│   │   │   └── wrappers.cpython-311.pyc
 │   │   └── wrappers.py
 │   ├── resources
 │   │   ├── css
@@ -792,6 +831,10 @@
 │   │   │   ├── pyPhysChem_1.png
 │   │   │   ├── Tranformative_3_banner.png
 │   │   │   └── Tranformative_3.webp
+│   │   ├── orgachem
+│   │   │   ├── Functions.csv
+│   │   │   ├── Functions_Examples.csv
+│   │   │   └── Molecules.csv
 │   │   └── svg
 │   │       ├── BrainHalfHalf.png
 │   │       ├── BrainHalfHalf.svg
@@ -852,11 +895,18 @@
 │   │       ├── UT3_logoQ.jpg
 │   │       ├── UT3_logoQ.png
 │   │       └── X.png
-│   ├── spectra.py
+│   ├── spectro.py
 │   ├── survey.py
 │   ├── sympyUtilities.py
 │   ├── tools4AS.py
 │   ├── units.py
+│   ├── utils
+│   │   ├── __init__.py
+│   │   ├── pipManagement_202507_dev.py
+│   │   ├── pipManagement.py
+│   │   └── __pycache__
+│   │       ├── __init__.cpython-311.pyc
+│   │       └── pipManagement.cpython-311.pyc
 │   ├── visualID_Eng.py
 │   └── visualID.py
 ├── pyphyschemtools.egg-info
@@ -867,6 +917,7 @@
 │   ├── SOURCES.txt
 │   └── top_level.txt
 ├── pyproject.toml
-└── README.md
+├── README.md
+└── test.ipynb
 
-79 directories, 791 files
+86 directories, 835 files

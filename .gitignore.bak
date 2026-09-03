@@ -4,12 +4,12 @@ __pycache__/
 *-dev.py
 *.so
 *.pyd
+*.pyc
 *.egg-info/
 .eggs/
 build/
-!docs/build/
 dist/
-# *.log
+*.log
 
 # Jupyter notebooks
 .ipynb_checkpoints/
@@ -30,6 +30,10 @@ Thumbs.db
 # Custom project
 Biblio/
 tools4pyPhysChem/build/
+Examples-dev/
+
+# Local development folder
+dev*/
 
 # Swap and temporary
 *~
@@ -37,3 +41,5 @@ tools4pyPhysChem/build/
 *.swo
 
 
+.git/objects/pack/pack-5f351856cda59f27d5d176fc803aad8bf21fe02f.pack
+dist/pyphyschemtools-0.9.8.tar.gz

@@ -78,7 +78,7 @@ h5 {
 .rq::before {    
     background-color: #fcd3d3;
     color: #ff0000;
-    content:"Remarque";
+    content:"Remarque. ";
     margin-left:-0.5em;
     margin-right:-0.5em;
     padding-left:0.5em;
@@ -95,7 +95,7 @@ h5 {
 .rqE::before {    
     background-color: #fcd3d3;
     color: #ff0000;
-    content:"Pay attention";
+    content:"Pay attention. ";
     margin-left:-0.5em;
     margin-right:-0.5em;
     padding-left:0.5em;
@@ -210,7 +210,7 @@ h5 {
 }
 .app::before {
     background-color: #b2dbea;
-    content:"Application";
+    content:"Application. ";
     margin-left:-0.5em;
     margin-right:-0.5em;
     padding-left:0.5em;
@@ -236,22 +236,7 @@ h5 {
     color : #117996;
     display: block;
 }
-.solFr {    
-    background-color: #bbeab880;
-    padding: 0.5em;
-    padding-top: 0em;
-    position:relative;
-}
-.solFr::before {
-    background-color: #bbeab8;
-    content:"Solution";
-    margin-left:-0.5em;
-    margin-right:-0.5em;
-    padding-left:0.5em;
-    padding-right:0.5em;
-    font-weight: 600;
-    display: block;
-}.sol {    
+.sol {    
     background-color: #bbeab880;
     padding: 0.5em;
     padding-top: 0em;
@@ -259,7 +244,23 @@ h5 {
 }
 .sol::before {
     background-color: #bbeab8;
-    content:"Answer";
+    content:"Solution. ";
+    margin-left:-0.5em;
+    margin-right:-0.5em;
+    padding-left:0.5em;
+    padding-right:0.5em;
+    font-weight: 600;
+    display: block;
+}
+.solE {    
+    background-color: #bbeab880;
+    padding: 0.5em;
+    padding-top: 0em;
+    position:relative;
+}
+.solE::before {
+    background-color: #bbeab8;
+    content:"Answer. ";
     margin-left:-0.5em;
     margin-right:-0.5em;
     padding-left:0.5em;
@@ -275,7 +276,23 @@ h5 {
 }
 .com::before {
     background-color: #ffff7f;
-    content:"Comment.";
+    content:"Commentaire. ";
+    margin-left:-0.5em;
+    margin-right:-0.5em;
+    padding-left:0.5em;
+    padding-right:0.5em;
+    font-weight: 600;
+    display: block;
+}
+.comE {    
+    background-color: #ffff7f80;
+    padding: 0.5em;
+    padding-top: 0em;
+    position:relative;
+}
+.comE::before {
+    background-color: #ffff7f;
+    content:"Comment. ";
     margin-left:-0.5em;
     margin-right:-0.5em;
     padding-left:0.5em;

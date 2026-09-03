@@ -6,6 +6,18 @@ pyphyschemtools package
    :show-inheritance:
    :undoc-members:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pyphyschemtools.quantumChem_corner
+   pyphyschemtools.utils
+
+Submodules
+----------
+
 pyphyschemtools.Chem3D module
 -----------------------------
 
@@ -62,11 +74,26 @@ pyphyschemtools.kinetics module
    :show-inheritance:
    :undoc-members:
 
+pyphyschemtools.misc module
+---------------------------
+
+.. automodule:: pyphyschemtools.misc
+   :members:
+   :show-inheritance:
+   :undoc-members:
 
 pyphyschemtools.nano module
-------------------------------
+---------------------------
 
 .. automodule:: pyphyschemtools.nano
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+pyphyschemtools.orgachem module
+-------------------------------
+
+.. automodule:: pyphyschemtools.orgachem
    :members:
    :show-inheritance:
    :undoc-members:
@@ -95,6 +122,14 @@ pyphyschemtools.sympyUtilities module
    :show-inheritance:
    :undoc-members:
 
+pyphyschemtools.tools4AS module
+-------------------------------
+
+.. automodule:: pyphyschemtools.tools4AS
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 pyphyschemtools.units module
 ----------------------------
 
@@ -103,18 +138,10 @@ pyphyschemtools.units module
    :show-inheritance:
    :undoc-members:
 
-pyphyschemtools.misc module
-----------------------------
-
-.. automodule:: pyphyschemtools.misc
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-pyphyschemtools.tools4AS module
+pyphyschemtools.visualID module
 -------------------------------
 
-.. automodule:: pyphyschemtools.tools4AS
+.. automodule:: pyphyschemtools.visualID
    :members:
    :show-inheritance:
    :undoc-members:

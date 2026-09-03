@@ -12,6 +12,12 @@
 
 # Changelog pyphyschemtools
 
+## [0.9.10] - 2026-09-02 "css"
+
+### Added
+
+- new solE style in visualID.css
+
 ## [0.9.9] - 2026-06-09 "molView fix"
 
 ### Fixed

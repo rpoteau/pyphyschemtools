@@ -12,7 +12,13 @@
 
 # Changelog pyphyschemtools
 
-## [0.9.10] - 2026-09-02 "css"
+## [0.9.11] - 2026-09-04 "centertxt"
+
+### Changed
+
+- `centertxt` (utils/core.py): added a `style` parameter with predefined presets (grey, title, warning, info); explicit arguments override the chosen style.
+
+## [0.9.10] - 2026-09-02 "visualID"
 
 ### Added
 

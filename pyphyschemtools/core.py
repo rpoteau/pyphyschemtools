@@ -4,28 +4,51 @@
 from .visualID_Eng import fg, bg, hl
 
 def centerTitle(content=None):
+    centertxt(content, style='title')
+    
+def centertxt(content=None, style=None, font=None, size=None,
+              weight=None, bgc=None, fgc=None):
     '''
-    centers and renders as HTML a text in the notebook
-    font size = 16px, background color = dark grey, foreground color = white
+    Centers and renders text as HTML in the notebook.
+
+    input:
+    - content = text to render (default: None)
+    - style   = predefined style name (default: None). See STYLES below.
+                Any explicit parameter overrides the style.
+    - font    = font family (default: 'sans')
+    - size    = font size in px (default: 12)
+    - weight  = font weight (default: 'normal')
+    - bgc     = background color, name or hex (default: '#ffffff')
+    - fgc     = foreground color, name or hex (default: '#000000')
     '''
     from IPython.display import display, HTML
-    display(HTML(f"<div style='text-align:center; font-weight: bold; font-size:16px;background-color: #343132;color: #ffffff'>{content}</div>"))
-    
-    
-def centertxt(content=None,font='sans', size=12,weight="normal",bgc="#000000",fgc="#ffffff"):
-    '''
-    centers and renders as HTML a text in the notebook
-    
-    input: 
-    - content = the text to render (default: None)
-    - font = font family (default: 'sans', values allowed =  'sans-serif' | 'serif' | 'monospace' | 'cursive' | 'fantasy' | ...)
-    - size = font size (default: 12)
-    - weight = font weight (default: 'normal', values allowed = 'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 )
-    - bgc = background color (name or hex code, default = '#ffffff')
-    - fgc = foreground color (name or hex code, default = '#000000')
-    '''
-    from IPython.display import display, HTML
-    display(HTML(f"<div style='text-align:center; font-family: {font}; font-weight: {weight}; font-size:{size}px;background-color: {bgc};color: {fgc}'>{content}</div>"))
+
+    # base defaults
+    base = dict(font='sans', size=12, weight='normal', bgc='#ffffff', fgc='#000000')
+
+    # predefined styles (only the keys that differ from base)
+    STYLES = {
+        'grey':   dict(fgc='black', bgc='#dddddd', weight='bold'),
+        'title':  dict(fgc='#ffffff', bgc='#343132', weight='bold', size=16),
+        'warning':dict(fgc='#ffffff', bgc='#b22222', weight='bold'),
+        'info':   dict(fgc='#003366', bgc='#cce5ff', weight='normal'),
+    }
+
+    cfg = dict(base)
+    if style is not None:
+        if style not in STYLES:
+            raise ValueError(f"unknown style '{style}'. Available: {list(STYLES)}")
+        cfg.update(STYLES[style])
+
+    # explicit arguments override style and base
+    explicit = dict(font=font, size=size, weight=weight, bgc=bgc, fgc=fgc)
+    cfg.update({k: v for k, v in explicit.items() if v is not None})
+
+    display(HTML(
+        f"<div style='text-align:center; font-family: {cfg['font']}; "
+        f"font-weight: {cfg['weight']}; font-size:{cfg['size']}px; "
+        f"background-color: {cfg['bgc']}; color: {cfg['fgc']}'>{content}</div>"
+    ))
 
 
 def smart_trim(img):

@@ -182,24 +182,31 @@ class PhysicalQuantity:
         centerTitle("Physical Constants Metadata from SciPy (CODATA)")
         styled_df = df.style.format({"Value": "{:.8e}", "Uncertainty": "{:.2e}"}).hide(axis='index')
         display(styled_df)
-
-    @classmethod
-    def show_available_units(cls):
-        """
-        Displays available base units for this class as styled DataFrames.
-        """
-        # 1. Show Base Units for the specific class (Energy, Pressure, etc.)
-        valid_bases = [u for u, v in cls._base_map.items() if v is not None]
-        # Add 'm' for Energy if it exists in the map as None (wavelength logic)
-        if 'm' in cls._base_map:
-            valid_bases.append('m')
-            
-        units_df = pd.DataFrame({'Available Base Units': sorted(list(set(valid_bases)))})
         
-        # 3. Display both only if list_prefixes is True
-        centerTitle(f"Available Units for {cls.__name__}")
-        display(units_df.T)
-            
+    @staticmethod
+    def show_available_prefixes():
+        """
+        Displays a styled table of all supported SI prefixes
+        (symbol, factor, SI prefix name, French and English names).
+        """
+        data = [
+            {
+                "Symbol": sym,
+                "Factor": factor,
+                "SI prefix": prefix_si,
+                "Nom (FR)": name_fr,
+                "Name (EN)": name_en,
+            }
+            for sym, (factor, prefix_si, name_fr, name_en) in sorted(
+                _PREFIX_DATA.items(), key=lambda item: item[1][0]
+            )
+        ]
+    
+        df = pd.DataFrame(data)
+        centerTitle("Available SI Prefixes")
+        styled_df = df.style.format({"Factor": "{:.0e}"}).hide(axis='index')
+        display(styled_df)
+    
     @classmethod
     def show_available_units(cls):
         """

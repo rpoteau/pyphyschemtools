@@ -160,3 +160,12 @@ easy_rdkit.plot_grid_from_df(
     save_img="fig_examples/Molecules/gridMol.svg"
 )
 ```
+
+## API reference
+
+```{eval-rst}
+.. automodule:: pyphyschemtools.cheminformatics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

@@ -171,4 +171,11 @@ G_{0}+\beta\dfrac{kt}{b_{\infty}}\left(G_{\infty}-G_{0}\right) & t\leq\dfrac{a_{
 G_{\infty} & t>\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
 \end{cases}$$
 
+## API reference
 
+```{eval-rst}
+.. automodule:: pyphyschemtools.kinetics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

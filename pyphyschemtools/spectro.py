@@ -577,100 +577,135 @@ class QuantitativeAnalysis:
         except Exception as e:
             raise ValueError(f"Error reading file '{file_path}': {e}")
 
-    def fit_linear(self):
+    def fit_linear(self, intercept=None):
         """
-        Perform ordinary least squares (OLS) linear regression and compute analytical diagnostics.
+        Perform a linear least-squares regression and compute analytical diagnostics.
 
-        This method calculates the best-fit line (y = ax + b) for the calibration data. 
-        It computes standard statistical metrics (Slope, Intercept, R²) and specific 
-        analytical chemistry performance indicators (MAE, LOD, LOQ) to evaluate 
+        This method calculates the best-fit line (y = ax + b) for the calibration data.
+        The intercept b is either fitted (ordinary least squares, default) or forced
+        to a given value (e.g. b = 0 for the Beer-Lambert law); in the latter case,
+        only the slope is fitted, with scipy.optimize.curve_fit.
+
+        It computes standard statistical metrics (Slope, Intercept, R²) and specific
+        analytical chemistry performance indicators (MAE, RMSE, LOD, LOQ) to evaluate
         the method's sensitivity and reliability.
 
-        The results are printed to the console in a formatted table and stored 
+        The results are printed to the console in a formatted table and stored
         within the `self.diagnostics` dictionary for programmatic access.
+
+        Parameters
+        ----------
+        intercept : float or None, default None
+            None  -> slope and intercept are both fitted (scipy.stats.linregress).
+            float -> intercept forced to this value; only the slope is fitted (scipy.optimize.curve_fit).
 
         Attributes
         ----------
-        model : scipy.stats._stats_mstats_common.LinregressResult
-            The full regression result object containing slope, intercept, 
-            rvalue, pvalue, and stderr.
+        model : types.SimpleNamespace
+            Regression parameters, with attributes `slope`, `intercept`, `rvalue`,
+            `stderr` (slope standard error) and `intercept_stderr` (0 if forced).
+            Used by `plot_calibration()` and `predict()`.
         diagnostics : dict
             A dictionary containing key analytical performance indicators:
-            
+
             * 'slope_err': Standard error of the slope.
-            * 'intercept_err': Standard error of the intercept.
+            * 'intercept_err': Standard error of the intercept (0 if forced).
             * 'r_squared': Coefficient of determination.
             * 'mae': Mean Absolute Error.
+            * 'rmse': Root Mean Square Error.
             * 'lod': Limit of Detection.
             * 'loq': Limit of Quantification.
             * 'sy_x': Residual standard deviation.
+            * 'forced_intercept': True if the intercept was forced.
 
         Notes
         -----
-        The following diagnostics are calculated:
-        
-        * **MAE (Mean Absolute Error)**: Average of the absolute residuals, 
-          expressed in the same units as the signal (y).
-        * **LOD (Limit of Detection)**: The lowest concentration detectable with 
-          statistical significance ($3 \sigma / \text{slope}$).
-        * **LOQ (Limit of Quantification)**: The lowest concentration that can be 
-          quantified with acceptable precision ($10 \sigma / \text{slope}$).
-        * **sy_x**: Residual standard deviation, used as an estimate for 
-          experimental noise.
+        * **R²** is computed as 1 - SS_res/SS_tot, with SS_tot calculated around the
+          mean of y, in both cases, so that free and forced fits can be compared.
+        * **MAE (Mean Absolute Error)** and **RMSE (Root Mean Square Error)**:
+          average error on the signal, in the same units as y.
+        * **sy_x**: Residual standard deviation, with n - 2 degrees of freedom
+          (free intercept) or n - 1 (forced intercept).
+        * **LOD (Limit of Detection)**: 3 sy_x / slope.
+        * **LOQ (Limit of Quantification)**: 10 sy_x / slope.
 
         Example
         -------
-        >>> calib = Calibration(conc, area)
-        >>> results = calib.fit_linear()
+        >>> calib = QuantitativeAnalysis(conc, absorbance)
+        >>> calib.fit_linear()             # free intercept
+        >>> calib.fit_linear(intercept=0)  # line forced through the origin
         >>> print(calib.diagnostics['lod'])
         """
-        # Core regression
-        res = stats.linregress(self.x, self.y)
-        self.model = res
-        slope_err = res.stderr
-        intercept_err = res.intercept_stderr
-        
-        # Predictions and Residuals
-        y_pred = res.slope * self.x + res.intercept
-        residuals = self.y - y_pred
-        
-        # Diagnostics calculations
-        r_squared = res.rvalue**2
-        mae = np.mean(np.abs(residuals))
-        
-        # LOD/LOQ calculation (Standard Error of the Estimate)
-        n = len(self.x)
-        sy_x = np.sqrt(np.sum(residuals**2) / (n - 2))
-        lod = (3 * sy_x) / res.slope
-        loq = (10 * sy_x) / res.slope
+        from types import SimpleNamespace
+        from scipy.optimize import curve_fit
 
-        # Store diagnostics and results
+        x, y = self.x, self.y
+        n = len(x)
+
+        # Core regression
+        if intercept is None:
+            res = stats.linregress(x, y)
+            slope, b = res.slope, res.intercept
+            slope_err, intercept_err = res.stderr, res.intercept_stderr
+            dof = n - 2
+        else:
+            b = float(intercept)
+            popt, pcov = curve_fit(lambda x, a: a * x + b, x, y)
+            slope = popt[0]
+            slope_err = np.sqrt(pcov[0, 0])
+            intercept_err = 0.0
+            dof = n - 1
+
+        # Predictions and Residuals
+        y_pred = slope * x + b
+        residuals = y - y_pred
+
+        # Diagnostics calculations
+        ss_res = np.sum(residuals**2)
+        r_squared = 1 - ss_res / np.sum((y - np.mean(y))**2)
+        mae = np.mean(np.abs(residuals))
+        rmse = np.sqrt(np.mean(residuals**2))
+
+        # LOD/LOQ calculation (Standard Error of the Estimate)
+        sy_x = np.sqrt(ss_res / dof)
+        lod = (3 * sy_x) / slope
+        loq = (10 * sy_x) / slope
+
+        # Store model and diagnostics
+        self.model = SimpleNamespace(slope=slope, intercept=b,
+                                     rvalue=np.sqrt(max(r_squared, 0)),
+                                     stderr=slope_err, intercept_stderr=intercept_err)
         self.diagnostics = {
             'slope_err': slope_err,
             'intercept_err': intercept_err,
             'r_squared': r_squared,
-            'mae': mae, 
+            'mae': mae,
+            'rmse': rmse,
             'lod': lod,
             'loq': loq,
-            'sy_x': sy_x
+            'sy_x': sy_x,
+            'forced_intercept': intercept is not None
         }
-        
+
         # --- FORMATTED TABLE OUTPUT ---
         header = f"{'Parameter':<15} | {'Value':<25} | {'Unit/Note':<15}"
         sep = "-" * len(header)
-        
-        slope_str = f"{res.slope:.4e} ± {slope_err:.4e}"
-        intercept_str = f"{res.intercept:.4e} ± {intercept_err:.4e}"
-        
+
+        slope_str = f"{slope:.4e} ± {slope_err:.4e}"
+        if intercept is None:
+            intercept_str = f"{b:.4e} ± {intercept_err:.4e}"
+        else:
+            intercept_str = f"{b:.4e} (forced)"
+
         print(f"\nREGRESSION REPORT: {self.y_label} = f({self.x_label})")
         print(sep)
         print(header)
         print(sep)
-        # On utilise maintenant les versions "_str" préparées
         print(f"{'Slope':<15} | {slope_str:<25} | (Sensitivity)")
         print(f"{'Intercept':<15} | {intercept_str:<25} | ({self.y_label})")
         print(f"{'R²':<15} | {r_squared:<25.5f} | (Linearity)")
         print(f"{'MAE':<15} | {mae:<25.4e} | ({self.y_label})")
+        print(f"{'RMSE':<15} | {rmse:<25.4e} | ({self.y_label})")
         print(f"{'LOD':<15} | {lod:<25.4e} | ({self.x_label})")
         print(f"{'LOQ':<15} | {loq:<25.4e} | ({self.x_label})")
         print(sep + "\n")
@@ -779,10 +814,24 @@ class QuantitativeAnalysis:
             for label in ax.get_xticklabels() + ax.get_yticklabels():
                 label.set_fontweight('bold')
                 
+        # 95% Prediction Interval for a new single measurement:
+        # y_hat(x0) ± t(0.975, dof) * sy_x * sqrt(1 + 1/n + (x0 - x_mean)² / Sxx)   (free intercept)
+        # y_hat(x0) ± t(0.975, dof) * sy_x * sqrt(1 + x0² / Σx²)                      (forced intercept)
+        n = len(x)
         sy_x = self.diagnostics['sy_x']
-        prediction_interval = 1.96 * sy_x 
-        
-        ax1.fill_between(x, y_pred - prediction_interval, y_pred + prediction_interval, 
+        forced = self.diagnostics.get('forced_intercept', False)
+        dof = n - 1 if forced else n - 2
+        t_crit = stats.t.ppf(0.975, dof)
+
+        x_grid = np.linspace(np.min(x), np.max(x), 200)
+        y_grid = self.model.slope * x_grid + self.model.intercept
+        if forced:
+            lever = x_grid**2 / np.sum(x**2)
+        else:
+            lever = 1/n + (x_grid - np.mean(x))**2 / np.sum((x - np.mean(x))**2)
+        half_width = t_crit * sy_x * np.sqrt(1 + lever)
+
+        ax1.fill_between(x_grid, y_grid - half_width, y_grid + half_width,
                          color=color_fit, alpha=0.1, label='95% Prediction Interval')
         
         ax1.set_ylabel(self.y_label, fontsize=fontsize)

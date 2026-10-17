@@ -14,177 +14,34 @@
 │   └── kin
 │       ├── exemples_Romu.ods
 │       └── Romu_equations_etude d ordre.docx
+├── dist
+│   ├── pyphyschemtools-0.9.11-py3-none-any.whl
+│   └── pyphyschemtools-0.9.11.tar.gz
 ├── docs
 │   ├── build
 │   │   ├── doctrees
-│   │   │   ├── environment.pickle
 │   │   │   ├── index.doctree
 │   │   │   ├── modules.doctree
 │   │   │   ├── nbsphinx
 │   │   │   ├── pyphyschemtools.doctree
-│   │   │   └── theoryDocs
-│   │   │       ├── Chem3D.doctree
-│   │   │       ├── Cheminformatics.doctree
-│   │   │       ├── Kinetics.doctree
-│   │   │       ├── Misc.doctree
-│   │   │       ├── Nano.doctree
-│   │   │       ├── OrgaChem.doctree
-│   │   │       ├── PeriodicTable.doctree
-│   │   │       ├── pipManagement.doctree
-│   │   │       ├── QuantumChemCorner.doctree
-│   │   │       ├── Spectro.doctree
-│   │   │       └── Units.doctree
+│   │   │   └── pyphyschemtools.quantumChem_corner.doctree
 │   │   └── html
-│   │       ├── CNAME
-│   │       ├── genindex.html
-│   │       ├── _images
-│   │       │   └── tools4pyPC_banner.svg
-│   │       ├── index.html
-│   │       ├── _modules
-│   │       │   ├── index.html
-│   │       │   ├── pyphyschemtools
-│   │       │   │   ├── aithermo.html
-│   │       │   │   ├── Chem3D.html
-│   │       │   │   ├── cheminformatics.html
-│   │       │   │   ├── core.html
-│   │       │   │   ├── kinetics.html
-│   │       │   │   ├── misc.html
-│   │       │   │   ├── ML.html
-│   │       │   │   ├── nano.html
-│   │       │   │   ├── PeriodicTable.html
-│   │       │   │   ├── spectro.html
-│   │       │   │   ├── survey.html
-│   │       │   │   ├── sympyUtilities.html
-│   │       │   │   ├── tools4AS.html
-│   │       │   │   ├── units.html
-│   │       │   │   └── visualID_Eng.html
-│   │       │   └── pyphyschemtools.html
-│   │       ├── modules.html
-│   │       ├── objects.inv
-│   │       ├── py-modindex.html
-│   │       ├── pyphyschemtools.html
-│   │       ├── search.html
-│   │       ├── searchindex.js
-│   │       ├── _sources
-│   │       │   ├── index.rst.txt
-│   │       │   ├── modules.rst.txt
-│   │       │   ├── pyphyschemtools.rst.txt
-│   │       │   └── theoryDocs
-│   │       │       ├── Chem3D.md.txt
-│   │       │       ├── Cheminformatics.md.txt
-│   │       │       ├── Kinetics.md.txt
-│   │       │       ├── Misc.md.txt
-│   │       │       ├── Nano.md.txt
-│   │       │       ├── OrgaChem.md.txt
-│   │       │       ├── PeriodicTable.md.txt
-│   │       │       ├── pipManagement.md.txt
-│   │       │       ├── QuantumChemCorner.md.txt
-│   │       │       ├── Spectro.md.txt
-│   │       │       └── Units.md.txt
-│   │       ├── _static
-│   │       │   ├── base-stemmer.js
-│   │       │   ├── basic.css
-│   │       │   ├── check-solid.svg
-│   │       │   ├── clipboard.min.js
-│   │       │   ├── copybutton.css
-│   │       │   ├── copybutton_funcs.js
-│   │       │   ├── copybutton.js
-│   │       │   ├── copy-button.svg
-│   │       │   ├── css
-│   │       │   │   ├── badge_only.css
-│   │       │   │   ├── fonts
-│   │       │   │   │   ├── fontawesome-webfont.eot
-│   │       │   │   │   ├── fontawesome-webfont.svg
-│   │       │   │   │   ├── fontawesome-webfont.ttf
-│   │       │   │   │   ├── fontawesome-webfont.woff
-│   │       │   │   │   ├── fontawesome-webfont.woff2
-│   │       │   │   │   ├── lato-bold-italic.woff
-│   │       │   │   │   ├── lato-bold-italic.woff2
-│   │       │   │   │   ├── lato-bold.woff
-│   │       │   │   │   ├── lato-bold.woff2
-│   │       │   │   │   ├── lato-normal-italic.woff
-│   │       │   │   │   ├── lato-normal-italic.woff2
-│   │       │   │   │   ├── lato-normal.woff
-│   │       │   │   │   ├── lato-normal.woff2
-│   │       │   │   │   ├── Roboto-Slab-Bold.woff
-│   │       │   │   │   ├── Roboto-Slab-Bold.woff2
-│   │       │   │   │   ├── Roboto-Slab-Regular.woff
-│   │       │   │   │   └── Roboto-Slab-Regular.woff2
-│   │       │   │   └── theme.css
-│   │       │   ├── doctools.js
-│   │       │   ├── documentation_options.js
-│   │       │   ├── english-stemmer.js
-│   │       │   ├── file.png
-│   │       │   ├── fonts
-│   │       │   │   ├── Lato
-│   │       │   │   │   ├── lato-bold.eot
-│   │       │   │   │   ├── lato-bolditalic.eot
-│   │       │   │   │   ├── lato-bolditalic.ttf
-│   │       │   │   │   ├── lato-bolditalic.woff
-│   │       │   │   │   ├── lato-bolditalic.woff2
-│   │       │   │   │   ├── lato-bold.ttf
-│   │       │   │   │   ├── lato-bold.woff
-│   │       │   │   │   ├── lato-bold.woff2
-│   │       │   │   │   ├── lato-italic.eot
-│   │       │   │   │   ├── lato-italic.ttf
-│   │       │   │   │   ├── lato-italic.woff
-│   │       │   │   │   ├── lato-italic.woff2
-│   │       │   │   │   ├── lato-regular.eot
-│   │       │   │   │   ├── lato-regular.ttf
-│   │       │   │   │   ├── lato-regular.woff
-│   │       │   │   │   └── lato-regular.woff2
-│   │       │   │   └── RobotoSlab
-│   │       │   │       ├── roboto-slab-v7-bold.eot
-│   │       │   │       ├── roboto-slab-v7-bold.ttf
-│   │       │   │       ├── roboto-slab-v7-bold.woff
-│   │       │   │       ├── roboto-slab-v7-bold.woff2
-│   │       │   │       ├── roboto-slab-v7-regular.eot
-│   │       │   │       ├── roboto-slab-v7-regular.ttf
-│   │       │   │       ├── roboto-slab-v7-regular.woff
-│   │       │   │       └── roboto-slab-v7-regular.woff2
-│   │       │   ├── jquery.js
-│   │       │   ├── js
-│   │       │   │   ├── badge_only.js
-│   │       │   │   ├── theme.js
-│   │       │   │   └── versions.js
-│   │       │   ├── language_data.js
-│   │       │   ├── minus.png
-│   │       │   ├── nbsphinx-broken-thumbnail.svg
-│   │       │   ├── nbsphinx-code-cells.css
-│   │       │   ├── nbsphinx-gallery.css
-│   │       │   ├── nbsphinx-no-thumbnail.svg
-│   │       │   ├── plus.png
-│   │       │   ├── pygments.css
-│   │       │   ├── searchtools.js
-│   │       │   ├── spectra
-│   │       │   │   ├── DBA-syn-syn-TDDFT_ethanol.png
-│   │       │   │   ├── DBAxx_ethanol.png
-│   │       │   │   ├── S0-S1-FranckCondon-classik.svg
-│   │       │   │   └── TDDFT-Spectrum.svg
-│   │       │   ├── sphinx_highlight.js
-│   │       │   ├── _sphinx_javascript_frameworks_compat.js
-│   │       │   ├── tools4pyPC_banner.png
-│   │       │   ├── tools4pyPC_banner.svg
-│   │       │   └── visualID.css
-│   │       └── theoryDocs
-│   │           ├── Chem3D.html
-│   │           ├── Cheminformatics.html
-│   │           ├── Kinetics.html
-│   │           ├── Misc.html
-│   │           ├── Nano.html
-│   │           ├── OrgaChem.html
-│   │           ├── PeriodicTable.html
-│   │           ├── pipManagement.html
-│   │           ├── QuantumChemCorner.html
-│   │           ├── Spectro.html
-│   │           └── Units.html
+│   │       └── _static
+│   │           ├── jquery.js
+│   │           ├── nbsphinx-broken-thumbnail.svg
+│   │           ├── nbsphinx-code-cells.css
+│   │           ├── nbsphinx-gallery.css
+│   │           ├── nbsphinx-no-thumbnail.svg
+│   │           └── _sphinx_javascript_frameworks_compat.js
 │   ├── make.bat
 │   ├── Makefile
 │   └── source
 │       ├── conf.py
 │       ├── index.rst
 │       ├── modules.rst
+│       ├── pyphyschemtools.quantumChem_corner.rst
 │       ├── pyphyschemtools.rst
+│       ├── pyphyschemtools.utils.rst
 │       ├── _static
 │       │   ├── spectra
 │       │   │   ├── DBA-syn-syn-TDDFT_ethanol.png
@@ -723,6 +580,8 @@
 │       ├── calibration.png
 │       ├── DBA-syn-syn-TDDFT_ethanol.png
 │       └── DBAxx_ethanol.png
+├── figs
+│   └── orbital_3d.html
 ├── git_push
 ├── LICENSE
 ├── log
@@ -732,6 +591,7 @@
 ├── push_pyPi.sh
 ├── pyphyschemtools
 │   ├── aithermo.py
+│   ├── AO.py
 │   ├── archives
 │   │   ├── tools4pyPhysChem.py
 │   │   ├── tools4pyPhysChem-v20251201.py
@@ -761,6 +621,7 @@
 │   │       ├── calib_chromato.ods
 │   │       ├── DBA6-syn-syn-TDDFT_ethanol_ExcStab.dat
 │   │       └── DBA-syn-syn-TDDFT_ethanol_ExcStab.dat
+│   ├── hydrogen.py
 │   ├── __init__.py
 │   ├── kinetics.py
 │   ├── misc.py
@@ -769,24 +630,9 @@
 │   ├── orgachem.py
 │   ├── PeriodicTable.py
 │   ├── __pycache__
-│   │   ├── aithermo.cpython-311.pyc
-│   │   ├── Chem3D.cpython-311.pyc
-│   │   ├── cheminformatics.cpython-311.pyc
+│   │   ├── AO.cpython-311.pyc
 │   │   ├── core.cpython-311.pyc
 │   │   ├── __init__.cpython-311.pyc
-│   │   ├── kinetics.cpython-311.pyc
-│   │   ├── misc.cpython-311.pyc
-│   │   ├── ML.cpython-311.pyc
-│   │   ├── nano.cpython-311.pyc
-│   │   ├── orgachem.cpython-311.pyc
-│   │   ├── PeriodicTable.cpython-311.pyc
-│   │   ├── spectra.cpython-311.pyc
-│   │   ├── spectro.cpython-311.pyc
-│   │   ├── survey.cpython-311.pyc
-│   │   ├── sympyUtilities.cpython-311.pyc
-│   │   ├── tools4AS.cpython-311.pyc
-│   │   ├── units.cpython-311.pyc
-│   │   ├── visualID.cpython-311.pyc
 │   │   └── visualID_Eng.cpython-311.pyc
 │   ├── quantumChem_corner
 │   │   ├── bash_scripts
@@ -796,8 +642,6 @@
 │   │   │   ├── GP2bw
 │   │   │   ├── GParser
 │   │   │   ├── hVASP
-│   │   │   ├── __pycache__
-│   │   │   │   └── ReadIterVASP.cpython-311.pyc
 │   │   │   ├── ReadIterVASP.py
 │   │   │   ├── RestartVASP
 │   │   │   └── VASPcv
@@ -813,11 +657,6 @@
 │   │   ├── pos2cif.py -> pos2xxx.py
 │   │   ├── pos2xxx.py
 │   │   ├── pos2xyz.py -> pos2xxx.py
-│   │   ├── __pycache__
-│   │   │   ├── GScan_Analyzis.cpython-311.pyc
-│   │   │   ├── __init__.cpython-311.pyc
-│   │   │   ├── pos2xxx.cpython-311.pyc
-│   │   │   └── wrappers.cpython-311.pyc
 │   │   └── wrappers.py
 │   ├── resources
 │   │   ├── css
@@ -903,10 +742,7 @@
 │   ├── utils
 │   │   ├── __init__.py
 │   │   ├── pipManagement_202507_dev.py
-│   │   ├── pipManagement.py
-│   │   └── __pycache__
-│   │       ├── __init__.cpython-311.pyc
-│   │       └── pipManagement.cpython-311.pyc
+│   │   └── pipManagement.py
 │   ├── visualID_Eng.py
 │   └── visualID.py
 ├── pyphyschemtools.egg-info
@@ -920,4 +756,4 @@
 ├── README.md
 └── test.ipynb
 
-86 directories, 835 files
+71 directories, 686 files

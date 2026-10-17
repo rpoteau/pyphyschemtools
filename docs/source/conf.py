@@ -7,10 +7,10 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'pyphyschemtools'
-version = '0.9'
+version = '0.10'
 copyright = '2026, Romuald Poteau'
 author = 'Romuald Poteau'
-release = '0.9.11'
+release = '0.10.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -40,6 +40,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 # Configuration MyST to authorize titlew with anchors
 myst_enable_extensions = ["dollarmath", "amsmath"]
 myst_heading_anchors = 3
+
+suppress_warnings = ["ref.ref"]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

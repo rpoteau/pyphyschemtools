@@ -23,6 +23,7 @@ def e2Lists(eigenvectors, sort=False):
     returns two separate lists from the list of tuples returned by the eigenvects() function of SymPy
     
     input:
+
     - the list of tuples returned by eigenvects
     - sort (default: False): returns sorted eigenvalues and corresponding eigenvectors if True
     

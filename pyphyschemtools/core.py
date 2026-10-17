@@ -12,9 +12,9 @@ def centertxt(content=None, style=None, font=None, size=None,
     Centers and renders text as HTML in the notebook.
 
     input:
+
     - content = text to render (default: None)
-    - style   = predefined style name (default: None). See STYLES below.
-                Any explicit parameter overrides the style.
+    - style   = predefined style name (default: None). See STYLES below; any explicit parameter overrides the style.
     - font    = font family (default: 'sans')
     - size    = font size in px (default: 12)
     - weight  = font weight (default: 'normal')

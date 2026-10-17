@@ -98,7 +98,7 @@ read -r REPLY < /dev/tty
 
 if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     echo -e "${CYAN}Which level? ([p]atch / [m]inor / [M]ajor)${RESET}"
-    read -r LEVEL
+    read -r LEVEL < /dev/tty
 
     IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
 
@@ -116,11 +116,14 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
             PATCH=0
             ;;
         *)
-            echo -e "${RED}Unknown type, version not modified.${RESET}"
+            echo -e "${RED}Unknown type '$LEVEL', aborting (version not modified).${RESET}"
+            exit 1
             ;;
     esac
 
     NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+    VERSION_XY=$(echo "$NEW_VERSION" | cut -d'.' -f1,2)
+    VERSION_XY_OLD=$(echo "$CURRENT_VERSION" | cut -d'.' -f1,2)
     echo -e "${GREEN}Updating version $CURRENT_VERSION to: $NEW_VERSION${RESET}"
     # Update pyproject.toml in place
     sed -i "s/^version = \".*\"/version = \"$NEW_VERSION\"/" $PYPROJECT
@@ -142,9 +145,6 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     # Update version in docs/source/conf.py
     CONF_PY="docs/source/conf.py"
     if [ -f "$CONF_PY" ]; then
-        # On extrait X.Y pour le paramètre 'version' de Sphinx
-        VERSION_XY=$(echo "$NEW_VERSION" | cut -d'.' -f1,2)
-        
         # Mise à jour de 'version' (ex: 1.2)
         if grep -q "^version =" "$CONF_PY"; then
             sed -i "s/^version *= *['\"].*['\"]/version = '$VERSION_XY'/" "$CONF_PY"
@@ -188,7 +188,7 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     print_padded_line_wbg "Git status before commit:" "$SEPARATOR_WIDTH"
     git status
     echo "Proceed with commit? (y/n)"
-    read -r CONFIRM
+    read -r CONFIRM < /dev/tty
     if [[ "$CONFIRM" =~ ^[Yy]$ ]]; then
         # Prepare the commit message
         COMMIT_MSG="Bump version: $CURRENT_VERSION → $NEW_VERSION"
@@ -202,18 +202,10 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
         fi
 
 	echo -e "${GREEN}Commit message: $COMMIT_MSG${RESET}"
-        git commit -m "$COMMIT_MSG"
-        git tag "v$NEW_VERSION"
-        git push
-        git push --tags
-	# Create GitHub Release if gh cli is installed
-        if command -v gh >/dev/null 2>&1; then
-            echo -e "${CYAN}Creating GitHub Release...${RESET}"
-            gh release create "v$NEW_VERSION" dist/* --title "Release v$NEW_VERSION" --notes "$COMMIT_MSG"
-            echo "     - GitHub Release created ... Done"
-        else
-            echo -e "${RED}     - Warning: gh CLI not found. Please create the release manually on GitHub.${RESET}"
-        fi
+        git commit -m "$COMMIT_MSG" || { echo -e "${RED}❌ git commit failed, aborting.${RESET}"; exit 1; }
+        git tag "v$NEW_VERSION" || { echo -e "${RED}❌ git tag failed (tag may already exist), aborting.${RESET}"; exit 1; }
+        git push || { echo -e "${RED}❌ git push failed, aborting before build/upload.${RESET}"; exit 1; }
+        git push --tags || { echo -e "${RED}❌ git push --tags failed, aborting before build/upload.${RESET}"; exit 1; }
     else
         echo -e "${RED}Commit cancelled. Reverting version numbers only...${RESET}"
 	sed -i "s/^version = \"$NEW_VERSION\"/version = \"$CURRENT_VERSION\"/" "$PYPROJECT"
@@ -221,7 +213,6 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
 	sed -i "s/^__version__ = \"$NEW_VERSION\"/__version__ = \"$CURRENT_VERSION\"/" "${project_name}/__init__.py"
 	echo "     - pyphyschemtools/__init__.py version number reverted"
 	if [ -f "docs/source/conf.py" ]; then
-            VERSION_XY_OLD=$(echo "$CURRENT_VERSION" | cut -d'.' -f1,2)
 	    sed -i "s/^version = '$VERSION_XY'/version = '$VERSION_XY_OLD'/" "docs/source/conf.py"
             sed -i "s/^release = '$NEW_VERSION'/release = '$CURRENT_VERSION'/" "docs/source/conf.py"
 	    echo "     - docs/source/conf.py version number reverted"
@@ -249,14 +240,26 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     echo -e "$SEPARATOR"
     print_padded_line_wbg "Building the package: python -m build" "$SEPARATOR_WIDTH"
     echo -e "$SEPARATOR"
-    python -m build
+    python -m build || { echo -e "${RED}❌ Build failed. Git tag/push already done — fix and upload dist/* manually once rebuilt.${RESET}"; exit 1; }
     echo
 
     # Upload to PyPI
     echo -e "$SEPARATOR"
     print_padded_line_wbg "Uploading to PyPI: twine upload dist/*" "$SEPARATOR_WIDTH"
     echo -e "$SEPARATOR"
-    twine upload dist/*
+    twine upload dist/* || { echo -e "${RED}❌ twine upload failed. Git tag/push already done — retry 'twine upload dist/*' manually.${RESET}"; exit 1; }
+    echo
+
+    # Create GitHub Release now that dist/ holds the freshly built artifacts
+    echo -e "$SEPARATOR"
+    print_padded_line_wbg "Creating GitHub Release..." "$SEPARATOR_WIDTH"
+    echo -e "$SEPARATOR"
+    if command -v gh >/dev/null 2>&1; then
+        gh release create "v$NEW_VERSION" dist/* --title "Release v$NEW_VERSION" --notes "$COMMIT_MSG"
+        echo "     - GitHub Release created ... Done"
+    else
+        echo -e "${RED}     - Warning: gh CLI not found. Please create the release manually on GitHub.${RESET}"
+    fi
     echo
 
     # Reinstall in editable mode

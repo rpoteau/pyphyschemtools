@@ -25,3 +25,14 @@ gen.generate(
     logo_ratio=4, #default ratio of logo size relative to QR code size
     flatten=True # removes transparency by placing the logo on a solid white background. Defaults to False.
 )
+```
+
+## API reference
+
+```{eval-rst}
+.. automodule:: pyphyschemtools.misc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```
+

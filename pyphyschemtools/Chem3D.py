@@ -297,47 +297,49 @@ class molView:
     """
     Initializes a molecular/crystal viewer and coordinate extractor.
 
-    This class acts as a bridge between various molecular data sources and 
-    the py3Dmol interactive viewer. It can operate in 'Full' mode (display + 
+    This class acts as a bridge between various molecular data sources and
+    the py3Dmol interactive viewer. It can operate in 'Full' mode (display +
     analysis) or 'Headless' mode (analysis only) by toggling the `viewer` parameter.
 
-    The class automatically extracts geometric data into the `self.data` attribute 
+    The class automatically extracts geometric data into the `self.data` attribute
     (an XYZData object), allowing for volume, dimension, and cavity calculations.
-        
+
     Display molecular and crystal structures in py3Dmol from various sources:
-    
+
     - XYZ/PDB/CIF local files
     - XYZ-format string
     - PubChem CID
     - ASE Atoms object
     - COD ID
-    - RSCB PDB ID
+    - RCSB PDB ID
+    - SMILES string (PubChem lookup by default, optional local RDKit 3D generation)
 
     Three visualization styles are available:
-    
+
     - 'bs'     : ball-and-stick (default)
     - 'cpk'    : CPK space-filling spheres (with adjustable size)
     - 'cartoon': protein backbone representation
-      
+
     Upon creation, an interactive 3D viewer is shown directly in a Jupyter notebook cell, unless the headless viewer parameter is set to False.
 
     Parameters
     ----------
         mol : str or ase.Atoms
             The molecular structure to visualize.
-            
+
             - If `source='file'`, this should be a path to a structure file (XYZ, PDB, etc.)
             - If `source='mol'`, this should be a string containing the structure (XYZ, PDB, MDL mol/SDF...)
             - If `source='cif'`, this should be a cif file (string)
             - If `source='cid'`, this should be a PubChem CID (string or int)
-            - If `source='rscb'`, this should be a RSCB PDB ID (string)
+            - If `source='rcsb'`, this should be a RCSB PDB ID (string)
             - If `source='cod'`, this should be a COD ID (string)
             - If `source='ase'`, this should be an `ase.Atoms` object
-        source : {'file', 'mol', 'cif', 'cid', 'rscb', 'ase'}, optional
+            - If `source='smiles'`, this should be a SMILES string
+        source : {'file', 'mol', 'cif', 'cid', 'rcsb', 'ase', 'smiles'}, optional
             The type of the input `mol` (default: 'file').
         style : {'bs', 'cpk', 'cartoon'}, optional
             Visualization style (default: 'bs').
-            
+
             - 'bs'  → ball-and-stick
             - 'cpk' → CPK space-filling spheres
             - 'cartoon' → draws a smooth tube or ribbon through the protein backbone
@@ -353,21 +355,37 @@ class molView:
         h : int, optional
             Height of the viewer in pixels (default: 400).
         detect_BondOrders : bool, optional
-            If True (default) and input is XYZ, uses RDKit to perceive connectivity 
-            and bond orders (detects double/triple bonds). 
-            Requires the `rdkit` library. If False, fallback to standard 3Dmol 
+            If True (default) and input is XYZ, uses RDKit to perceive connectivity
+            and bond orders (detects double/triple bonds).
+            Requires the `rdkit` library. If False, fallback to standard 3Dmol
             distance-based single bonds.
         display_now : bool, optional
-                If True (default), renders the molecule immediately. 
-                Set to False to prevent immediate display when you plan to call 
+                If True (default), renders the molecule immediately.
+                Set to False to prevent immediate display when you plan to call
                 further visualization methods provided by the molView class
         viewer : bool, optional
             If True (default), initializes the py3Dmol engine and prepares the 3D model.
-            If False, operates in 'headless' mode: only geometric data is processed 
-            for analysis (volume, CM, etc.), saving significant memory for 
+            If False, operates in 'headless' mode: only geometric data is processed
+            for analysis (volume, CM, etc.), saving significant memory for
             high-throughput processing.
         zoom : None, optional
             scaling factor
+        show_n : bool, optional
+            If True, permanently displays each atom's element symbol and index
+            directly on the figure (as opposed to on-hover labels).
+            Default: False.
+        highlight_atoms : list of int, optional
+            Indices of atoms to highlight with an overlaid translucent sphere,
+            without altering the base style (`bs`/`cpk`/`cartoon`). Default: None.
+        highlight_color : str, optional
+            Color of the highlight overlay (default: 'yellow').
+            Ignored if `highlight_atoms` is None.
+        highlight_scale : float, optional
+            Scale factor of the highlight sphere relative to the atom's own sphere
+            (default: 1.3). Ignored if `highlight_atoms` is None.
+        prefer_local_3d : bool, optional
+            Only used when `source='smiles'`. If True, generates the 3D structure
+            locally with RDKit instead of querying PubChem (default: False).
 
     Attributes
     ----------
@@ -388,12 +406,18 @@ class molView:
         >>> # Headless mode for high-throughput volume calculations
         >>> mv = molView("cage.xyz", viewer=False)
         >>> vol = mv.data.get_cage_volume()
+        >>> # Permanent atom numbering on the figure
+        >>> molView("molecule.xyz", source="file", show_n=True)
+        >>> # Highlight a reactive center (e.g. atoms 0 and 5) without changing the style
+        >>> molView("molecule.xyz", source="file", highlight_atoms=[0, 5], highlight_color="magenta")
     """
 
-    def __init__(self, mol, source=None, style='bs', displayHbonds=True, cpk_scale=0.6, w=600, h=400,\
-                 supercell=(1, 1, 1), display_now=True, detect_BondOrders=True, viewer=True, zoom=None):
+    def __init__(self, mol, source=None, style='bs', displayHbonds=True, cpk_scale=0.6, w=600, h=400,
+             supercell=(1, 1, 1), display_now=True, detect_BondOrders=True, viewer=True, zoom=None,
+             show_n=False, highlight_atoms=None, highlight_color='yellow', highlight_scale=1.3,
+             prefer_local_3d=False):
         # For the automatic detection or source validation
-        valid_sources = ['file', 'mol', 'cif', 'cid', 'rscb', 'cod', 'ase']
+        valid_sources = ['file', 'mol', 'cif', 'cid', 'rcsb', 'cod', 'ase', 'smiles']
 
         self.mol = mol
         self.style = style
@@ -408,6 +432,11 @@ class molView:
         self.sphere_radius = None
         self.sphere_volume = None
         self.structure = None
+        self.prefer_local_3d = prefer_local_3d
+        self.show_n = show_n
+        self.highlight_atoms = highlight_atoms
+        self.highlight_color = highlight_color
+        self.highlight_scale = highlight_scale
         if source is None and os.path.exists(str(mol)):
             self.source = 'file'
         elif source in valid_sources:
@@ -445,7 +474,7 @@ class molView:
             of the 'mol' input is used as the title.
         **kwargs : dict
             Additional arguments passed to the molView constructor:
-            - source : {'file', 'mol', 'cif', 'cid', 'rscb', 'ase'}
+            - source : {'file', 'mol', 'cif', 'cid', 'rcsb', 'ase'}
             - style : {'bs', 'cpk', 'cartoon'}
             - displayHbonds : plots hydrogen bonds (default: True)
             - w : width of each individual viewer in pixels (default: 300)
@@ -658,7 +687,22 @@ class molView:
                 "fromCap": True,
                 "toCap": True
                 })
-
+            
+    def _show_atom_labels(self, font_size=12, bg_color='white', bg_opacity=0.7, font_color='black'):
+        symbols = self.structure.get_chemical_symbols()
+        positions = self.structure.get_positions()
+        for i, (sym, pos) in enumerate(zip(symbols, positions)):
+            self.v.addLabel(f"{sym}{i}", {
+                "position": {"x": float(pos[0]), "y": float(pos[1]), "z": float(pos[2])},
+                "fontColor": font_color, "fontSize": font_size,
+                "backgroundColor": bg_color, "backgroundOpacity": bg_opacity,
+                "borderThickness": 0, "inFront": True
+            })
+    
+    def _highlight_atoms(self, indices, color='yellow', scale=1.3):
+        """Overlays a translucent sphere on selected atoms, without touching the base style."""
+        self.v.addStyle({'index': indices}, {'sphere': {'color': color, 'scale': scale, 'opacity': 0.5}})
+    
     def _add_h_bonds(self, atoms, dist_max=2.5, angle_min=120):
         """
         Detects and renders realistic H-bonds using ASE neighbor list.
@@ -706,6 +750,73 @@ class molView:
                         })
                 except Exception:
                     continue
+
+    def _resolve_smiles(self, smiles, use_pubchem=True):
+        """
+        Resolve a SMILES string into a 3D structure.
+
+        The SMILES is first canonicalized with RDKit (same as in
+        easy_rdkit.__init__), which normalizes the syntax before any
+        PubChem lookup and avoids failures caused by valid but
+        non-canonical SMILES. If use_pubchem=True (default), PubChem is
+        queried first (same pattern as easy_rdkit.fetch_pubchem_data:
+        pcp.get_compounds(smiles, namespace='smiles')), and the 3D SDF of
+        the matching CID is fetched, consistent with source='cid'. If the
+        molecule is not found on PubChem (or the request fails), or if
+        use_pubchem=False, a 3D conformer is generated locally with RDKit
+        (ETKDG embedding + MMFF94 optimization, UFF as fallback).
+
+        Returns
+        -------
+        content : str
+        fmt : str
+        name : str
+        resolved_via : str
+            'PubChem' or 'RDKit (local)' — which path actually produced
+            the structure, for display in molView.msg.
+        """
+        from rdkit import Chem
+
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            raise ValueError(f"Invalid SMILES: {smiles}")
+        smiles = Chem.MolToSmiles(mol, isomericSmiles=True, canonical=True)
+
+        if use_pubchem:
+            try:
+                import pubchempy as pcp
+                results = pcp.get_compounds(smiles, namespace='smiles')
+                if results:
+                    compound = results[0]
+                    cid = compound.cid
+                    sdf_url = (f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/"
+                               f"cid/{cid}/SDF?record_type=3d")
+                    r = requests.get(sdf_url)
+                    if r.status_code == 200 and r.text.strip():
+                        return r.text, "sdf", compound.iupac_name or smiles, "PubChem"
+            except Exception:
+                pass  # fall back to local RDKit generation below
+
+        # --- Local 3D generation (RDKit) ---
+        try:
+            from rdkit.Chem import AllChem
+
+            mol = Chem.AddHs(mol)  # reuse the already-parsed/canonical mol
+            params = AllChem.ETKDGv3()
+            params.randomSeed = 0xf00d
+            if AllChem.EmbedMolecule(mol, params) != 0:
+                raise RuntimeError("3D embedding failed (ETKDG)")
+            if AllChem.MMFFHasAllMoleculeParams(mol):
+                AllChem.MMFFOptimizeMolecule(mol)
+            else:
+                AllChem.UFFOptimizeMolecule(mol)
+            return Chem.MolToMolBlock(mol), "sdf", smiles, "RDKit (local)"
+        except ImportError:
+            raise ImportError(
+                "RDKit is required to generate 3D coordinates locally."
+            )
+
+
     
     def _load_and_display(self, show):
 
@@ -730,8 +841,8 @@ class molView:
                 self.name = c.iupac_name
             except: pass
                 
-        elif self.source == 'rscb':
-            self.server = 'rscb'
+        elif self.source == 'rcsb':
+            self.server = 'rcsb'
             if self.viewer: self.v = py3Dmol.view(query=f'pdb:{self.mol}', width=self.w, height=self.h)
             url = f"https://files.rcsb.org/view/{self.mol}.pdb"
             response = requests.get(url)
@@ -739,7 +850,7 @@ class molView:
                 content = response.text
                 fmt = "proteindatabank"
             else:
-                raise ValueError(f"Could not find PDB ID: {self.mol} on RSCB")
+                raise ValueError(f"Could not find PDB ID: {self.mol} on RCSB")
             try:
                 r = requests.get(f"https://data.rcsb.org/rest/v1/core/entry/{self.mol}")
                 if r.status_code == 200:
@@ -755,6 +866,12 @@ class molView:
                 self.source = 'cif'
             else:
                 raise ValueError(f"Could not find COD ID: {self.mol}")
+
+        elif self.source == 'smiles':
+            content, fmt, self.name, resolved_via = self._resolve_smiles(
+                self.mol, use_pubchem=not self.prefer_local_3d
+            )
+            self.server = f'smiles ({resolved_via})'
 
         # --- FIX 1: Initialisation par défaut pour les sources non-API ---
         if self.viewer and self.v is None:
@@ -946,15 +1063,24 @@ class molView:
             self._apply_style()
             self._add_interactions()
             self.v.removeAllLabels()
-            # Detect and add H-bonds if hydrogens are present
+        
             symbols = atoms.get_chemical_symbols()
             if 'H' in symbols and self.displayHbonds:
                 self._add_h_bonds(atoms)
+        
+            # --- Permanent atom numbering ---
+            if self.show_n:
+                self._show_atom_labels()
+        
+            # --- Highlight selected atoms ---
+            if self.highlight_atoms:
+                self._highlight_atoms(self.highlight_atoms, self.highlight_color, self.highlight_scale)
+        
             self.v.zoomTo()
             if self.zoom is not None:
                 self.v.zoom(self.zoom)
             elif self.source != 'cif':
-                self.v.zoom(0.9) # Zoom par défaut pour ne pas coller aux bords
+                self.v.zoom(0.9)
             if show: self.v.show()
 
         # Print confirmation
@@ -1000,7 +1126,8 @@ class molView:
             raise ValueError("style must be 'bs', 'cpk' or 'cartoon'")
 
     def _add_interactions(self):
-        """Add basic JavaScript Hover labels for atom identification."""
+        if self.show_n:
+            return  # pas de hover si les numéros sont déjà affichés en permanence
         label_js = "function(atom,viewer) { viewer.addLabel(atom.elem+atom.serial,{position:atom, backgroundColor:'black'}); }"
         reset_js = "function(atom,viewer) { viewer.removeAllLabels(); }"
         self.v.setHoverable({}, True, label_js, reset_js)

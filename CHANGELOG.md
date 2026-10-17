@@ -12,7 +12,221 @@
 
 # Changelog pyphyschemtools
 
-## [0.9.11] - 2026-09-04 "centertxt"
+## [0.10.0] - 2026-10-17 "AO, H, PT, calibration, HMO, easy_rdkit, MolSym"
+
+### Added
+
+- **New `hydrogen.py` module**: hydrogen atom / hydrogenic ions — Bohr
+  model / analytical Schrödinger solution for a one-electron system
+  (H, He⁺, Li²⁺, ...), with an optional finite-nuclear-mass (reduced-mass)
+  correction.
+    - `rydberg_Z(Z=1, A=None, M_atom=None)`: Rydberg constant (m⁻¹)
+      corrected for the finite nuclear mass of a given isotope (looked up
+      via `mendeleev`, or overridden with an explicit `M_atom`).
+    - `En_hydrogenic(n, Z=1, A=None, M_atom=None, reduced_mass=True,
+      unit='eV')`: energy of level n of a hydrogenic atom/ion, in J or eV,
+      using either the reduced-mass-corrected R_M (default) or the
+      infinite-nucleus constant R_inf.
+    - `Ei_hydrogenic(Z, A=None, M_atom=None, reduced_mass=True)`:
+      ionization energy (eV) of a hydrogenic ion of nuclear charge Z
+      (ground-state → continuum); notes that the Z-th ionization energy of
+      an element matches the hydrogen-like ion of charge Z, for comparison
+      with `mendeleev`.
+    - `spectral_series(Z=1, A=None, M_atom=None, reduced_mass=True,
+      n2_max=12, series_names=None)`: prints, for each series, the series
+      limit and every transition n2→n1 with its energy, wavelength and
+      frequency (series named "...-like" for Z>1, since Lyman/Balmer/...
+      are historically defined for H).
+    - `plot_energy_levels(Z=1, A=None, M_atom=None, reduced_mass=True,
+      n2_max=7, series_names=None, to_scale=True,
+      transition_type="absorption", size=(9,11), show_level_labels=True,
+      show_transition_labels=True, save_as=None)`: energy-level diagram —
+      levels drawn either at their true 1/n² energy on an eV axis
+      (`to_scale=True`, showing the levels crowd near the ionization limit)
+      or evenly spaced by rank (`to_scale=False`, schematic); ionization
+      limit at 0 eV with the continuum shaded above it; transitions of each
+      series drawn as colored arrows labeled with Greek letters (α, β, …),
+      as absorption (n1→n2, upward) or emission (n2→n1, downward,
+      converging on n1).
+    - `plot_line_spectrum(Z=1, A=None, M_atom=None, reduced_mass=True,
+      n2_max=12, series_names=None, show_visible=True, log_scale=True,
+      ax=None)`: line spectrum on a (by default log-scale) wavelength
+      axis, one colored vertical line per transition, the visible range
+      (380–780 nm) shaded, and each series' α-line labeled (e.g. "Ly-α").
+    - `SERIES_NAMES`, `SERIES_SHORT_NAMES`, `SERIES_COLORS`,
+      `GREEK_LETTERS`: module-level constants shared by
+      `plot_energy_levels` and `plot_line_spectrum` so a given series
+      always gets the same color/name.
+    - Figure saving in `plot_energy_levels` goes through
+      `pyphyschemtools.core.save_fig` (auto-creates missing directories).
+
+- **New `AO.py` module**: hydrogenic atomic orbitals, built on sympy's radial
+  wavefunctions (`R_nl`) and real spherical harmonics (`Znm`), with both
+  static and interactive visualizations.
+    - `plot_radial(orbitals, Z=1, density=False, show_formula=False, ...)`:
+      radial part R_nl(r) or radial probability density r²R_nl(r)² for one
+      or several orbitals on the same axes.
+    - `plot_polar(l, m, plane="xy", density=False, show_formula=False, ...)`:
+      2D polar diagram of the angular part (or angular density) in a chosen
+      coordinate plane, colored by sign.
+    - `plot_electron_cloud(n, l, m, plane="xz", ...)`: density-weighted
+      point-cloud ("electron cloud") projection of a full orbital onto a
+      chosen plane, showing both angular and radial nodes.
+    - `plot_orbital_3D(n, l, m, prob_fraction=0.7, show_nodes=False,
+      show_cloud=False, ...)`: interactive 3D (Plotly) rendering of an
+      orbital's lobes as isosurfaces enclosing a chosen fraction of the
+      total electron probability — correctly showing nested lobes for
+      orbitals with radial nodes (e.g. 4d). Optionally overlays the exact
+      nodal surfaces (radial nodes as spheres, angular nodes as cones/planes,
+      found analytically via 1D root-finding — no extra dependency) and/or
+      the sampled electron cloud.
+    - `show_formula=True` (where applicable) displays the underlying R_nl
+      and Z_l^m symbolic expressions via `IPython.display`.
+
+- **New methods in `TableauPeriodique` (`PeriodicTable.py`)**:
+    - `isotopes(elt_id)`: pandas table of an element's isotopes (mass
+      number, isotopic mass in u, natural abundance, half-life), sorted by
+      mass number; prints the element's molar mass; automatically flags
+      (with an explanatory note) elements reclassified as binuclidic by
+      IUPAC/CIAAW due to a trace radiogenic isotope (`exceptionsRadiogeniques`
+      class attribute, currently thorium/²³⁰Th), and elements for which
+      IUPAC/CIAAW gives a *range* rather than a single standard atomic
+      weight because of naturally variable isotopic composition
+      (`intervallesCIAAW` class attribute: H, Li, B, C, N, O, Mg, Si, S,
+      Cl, Br, Tl).
+    - `mononucleides(exclure_radiogeniques=True)`: pandas table of
+      mononuclidic elements (elements with a single isotope of measurable
+      natural abundance), with mass number, isotopic mass, molar mass, and
+      half-life (or "stable"); computed from a single bulk query
+      (`fetch_table("isotopes")` + `fetch_table("elements")`) instead of
+      118 individual `element(Z)` ORM calls, for near-instant execution;
+      `exclure_radiogeniques=False` reinstates elements like thorium
+      (marked with a `*` in the symbol column) despite their trace
+      radiogenic isotope.
+- **`QuantitativeAnalysis` in `spectro.py`**:
+    - RMSE (root mean square error) in the regression report and in `diagnostics['rmse']`.
+    - `diagnostics['forced_intercept']` (bool).
+    - The regression report flags a forced intercept with "(forced)".
+
+- **New `HMO` class in the `huckel.py` module**: Simple Hückel (pi-MO) method applied directly to a molecule described by a **full SMILES** (sigma skeleton + pi system), with automatic detection of the conjugated pi system by RDKit (aromatic atoms, dienes, enones...) and Streitwieser parametrization for heteroatoms. The class aims at building and diagonalizing the Hückel matrix, fills the MOs by the Aufbau principle (+ Hund's rule for degenerate levels), and derives the usual set of quantities and diagrams:
+    - energy-level diagram (`plot_energy_diagram()`), including `"FMO"` mode (diagram plus HOMO/LUMO panels assembled automatically at a fixed total height of 700 px, LUMO(s) on top and HOMO(s)/SOMO(s) on the bottom, handling degeneracies and radical/SOMO cases);
+    - MO coefficients drawn on the molecule's actual 2D geometry (`plot_mo_on_graph()`, `plot_all_mo()`, `plot_mo_list()`);
+    - pi charges and pi bond orders, computed relative to a neutral-carbon reference so a formally charged center (carbocation/carbanion) always carries a physically sensible sign even after delocalization (`pi_charge`, `bond_order`, `plot_pi_population()`);
+    - density matrix (`density_matrix()`), symbolic or numeric Hückel matrix (`huckel_matrix()`), displayed without column truncation or scientific notation (fixed at 3 decimal places on screen; Excel/ODS export keeps full, unrounded values) and with `β` shown as the Greek letter;
+    - total, atomization and conjugation pi energies (`total_pi_energy()`, `atomization_energy()`, `conjugation_energy()`, stored as `.E_total`/`.E_atomization`/`.E_conjugation`): atomization energy relative to fully isolated, non-interacting atoms; conjugation (resonance) energy relative to a localized Kekulé reference structure (RDKit Kekulization to identify the formal double bonds, each diagonalized locally as its own isolated 2-center bond, correctly generalizing to heteroatom-involving double bonds such as pyridine's C=N); both also reported by `summary()` and included in `properties()`/`hmo_properties_table()`;
+    - reactivity descriptors (HOMO/LUMO energies, hardness, softness, chemical potential, electronegativity, electrophilicity) via `properties()`;
+    - full molecular skeleton rendering (`show()`), highlighting the detected pi system and annotating hybridization;
+    - multi-sheet export (MO table + density matrix) to Excel/ODS via `save_results()`.
+    - Module-level functions: `parameter_table()` (Streitwieser / Van Catledge parameter tables, the latter extended to bromine, missing from the original 1980 publication, carried over from the historical Streitwieser parametrization), `hmo_properties_table()`, `save_fig()`, `save_data()`.
+    - Support for **aromatic ions** (cyclopentadienyl, tropylium...) and **radicals**.
+    - Ability to **override** any parameter (`h_overrides`, `k_overrides`, `electron_overrides`) or electron count instead of relying on the automatic heuristics.
+    - **`charge`** keyword at instantiation (`HMO(smiles, charge=...)`) to add or remove pi electrons *globally*, without having to write an explicit carbocation/carbanion in the SMILES.
+    - **Automatic inclusion of conjugated halogens** (F, Cl, Br) directly bonded to the pi system (lone pair folded into the pi system), with an explicit warning and an opt-out (`include_halogen_lone_pairs=False`).
+    - **Hyperconjugation**: optional inclusion of a methyl/alkyl substituent attached to the pi system (`include_hyperconjugation`, `alkyl_scope`).
+    - **Fixed-pixel C-C bond-length rendering** (via `bond_length_px`) for `show()` (80 px by default), `plot_pi_population()` (100 px) and the MO plots (70 px) — figure size adapts to the molecule's actual extent rather than the other way around, so neither ethylene (tiny) nor a large molecule like coronene or C60 renders poorly.
+
+- **`easy_rdkit`, in `cheminformatics.py`**:
+    - `from_name`: new classmethod to build an instance directly from a
+      compound name via PubChem (e.g. `easy_rdkit.from_name("aspirin",
+      lang="Fr")`), symmetrical to `from_cid`. Sets `self.cid` and
+      `self.iupac_name` from the first PubChem match.
+
+- **`molView` in `Chem3D.py`**:
+    - now accepts `source='smiles'`: by default, queries PubChem
+    first (pcp.get_compounds, consistent with `source='cid'`) for a
+    curated 3D conformer, with automatic fallback to a local RDKit
+    generation (ETKDG + MMFF94, UFF as fallback) if the molecule is not
+    found there or the request fails. New parameter `prefer_local_3d`
+    (default `False`); pass `True` to skip PubChem and always generate
+    the conformer locally — fast and usable offline. Examples added to
+    `Examples_pyPCT.ipynb`.
+    - new `show_n` option to permanently display element symbol + atom index on the figure (instead of hover-only labels).
+    - new `highlight_atoms` / `highlight_color` / `highlight_scale` options to overlay a translucent sphere on selected atoms without altering the base style.
+
+- **New `symmetry.py` module**: molecular symmetry, from symmetry operations to IR / Raman activity.
+    - Symmetry operations as 3×3 matrices: `identity()`, `inversion()`, `Cn(n, axis, k)`, `sigma(plane)`, `Sn(n, axis, k)`, `inv(M)`; `identify(M)` names any operation given as a matrix (`C3²(z)`, `σ(z,60°)`, `C2(xy,30°)`...); `show_matrix(M)` displays it in LaTeX, with exact entries (1/2, √3/2...) when possible.
+    - Character tables of 55 point groups (`character_table(group, functions=True, complex=False)`, `available_groups()`): low-symmetry groups, Cn, S2n, Cnv, Cnh, Dn, Dnh, Dnd up to n = 8, cubic and icosahedral groups. Basis functions computed with the projection operators; complex conjugate pairs given as one real row (`*`) or, with `complex=True`, as their two components (ε notation); other names accepted with a message (S3 = C3h, C3i = S6...). All the tables are checked (classes, orthogonality, Σd² = h, Mulliken labels, Γxyz).
+    - `reduce_representation(group, chi)` and `ir_raman_activity(group, chi)`: reduction of a representation given by its characters, and IR / Raman activity, without any molecule; warning and non-integer coefficients if the characters are not those of a representation.
+    - `point_group_flowchart(group=None)`: decision tree of the point groups (matplotlib), with the path leading to a given group highlighted.
+    - **`MolSym` class**: a molecule built from its 3D structure, read by `molView` (`MolSym.from_molView(molView(...))`: SMILES, xyz/pdb/mol files, PubChem CID...) or typed by hand (`MolSym(symbols, coords, group)`).
+        - point group detected with pymatgen (`PointGroupAnalyzer`) or given; molecule placed in the standard orientation of its group (Mulliken conventions, as the "Standard orientation" of Gaussian) and symmetrized; message at creation (`verbose=True`): point group, stored in the attribute `group`, and orientation status; `orientation()`, `flowchart()`.
+        - atom tracking: `track(op)`, `fixed_atoms(op)`, `is_symmetry(op)`, `equivalent_atoms()`; matrices of the operations (`matrices()`) and of their representation in a basis of atomic orbitals (`representation_matrix(op, basis)`, s, p, d, f shells).
+        - representations and their reduction: `gamma_atoms()`, `gamma_orbitals(basis)` (SALCs for each set of equivalent atoms and each shell; valence basis by default, or shells such as `"pz"`, `"s pxy"`, `{"Fe": "spd", "C": "pz"}`), `gamma_bonds(bonds)` (bond stretchings), `gamma_3N()`, `gamma_vib()`, `reduce(chi)`, `activity(chi)`.
+        - symmetry of molecular orbitals: `orbital_symmetry(C, atoms, shell)`, `orbital_symmetries(coeffs, energies, atoms, shell)`, e.g. with the Hückel MOs of `HMO` (`c_MOs`, `E_MOs`).
+        - 3D views (py3Dmol): `show()`, `show_elements(op)` (axes, planes, inversion center), `show_operation(op, highlight)` (molecule before / after an operation, linked views).
+        - messages in English or French (`lang="En"` / `"Fr"`).
+    - Idealized xyz models in `data_examples/Symmetry/` (SF6, PF5, SF5Cl, cis/trans-SF4Cl2, mer/fac-SF3Cl3, B(OH)3, Fe(CO)5, eclipsed and staggered ferrocene, cerocene, ethylene, benzene), for the compounds whose 3D structure cannot be obtained from a SMILES.
+
+### Changed
+- **New examples in `Examples_pyPCT.ipynb`**: worked usage of the new modules; `demo-symmetry.ipynb`: demo of the `symmetry` module.
+- **`QuantitativeAnalysis` in `spectro.py`**:
+    - `QuantitativeAnalysis.fit_linear()`: new optional argument `intercept` (default `None`).
+      - `None`: slope and intercept are both fitted with `scipy.stats.linregress` (unchanged behaviour).
+      - float: the intercept is forced to this value (e.g. `intercept=0` for the Beer-Lambert law) and only the slope is fitted with `scipy.optimize.curve_fit`. The slope standard error is taken from the covariance matrix; the residual standard deviation `sy_x` uses n − 1 degrees of freedom instead of n − 2.
+    - `QuantitativeAnalysis.model` is now a `types.SimpleNamespace` (attributes `slope`, `intercept`, `rvalue`, `stderr`, `intercept_stderr`) instead of a `LinregressResult`, so that both fitting modes expose the same interface to `plot_calibration()` and `predict()`.
+    - R² is now computed as 1 − SS_res/SS_tot (SS_tot around the mean of y) in both modes, so that free and forced fits can be compared.
+    - `QuantitativeAnalysis.plot_calibration()`: the 95 % prediction interval is now computed exactly, for a new single measurement:
+      - free intercept: ŷ(x₀) ± t(0.975, n − 2) · s_y/x · √(1 + 1/n + (x₀ − x̄)²/Σ(xᵢ − x̄)²);
+      - forced intercept: ŷ(x₀) ± t(0.975, n − 1) · s_y/x · √(1 + x₀²/Σxᵢ²).
+    
+      It replaces the former constant band ±1.96 · s_y/x, which ignored the Student factor (too narrow for small n) and the widening of the interval at the edges of the calibration range. The band is now drawn on a sorted grid of 200 points spanning the calibration range, so it is correct whatever the order of the input data.
+- **`easy_rdkit`, in `cheminformatics.py`**:
+    - `show_mol(show_Lewis=True)` no longer automatically adds explicit
+      hydrogens (`show_H`) or mutates `self.mol`. The Lewis analysis now
+      focuses on heavy atoms by default; pass `show_H=True` as well for full
+      detail including H atoms.
+    - `analyze_lewis`: new `heavy_only` parameter (default `True`). H/He atoms
+      no longer appear as individual table rows; instead, a single summary
+      message (✅/❌) reports whether all H atoms satisfy the duet rule,
+      computed on an internal explicit-H copy without modifying `self.mol`.
+    - `from_cid`, `from_name`: PubChem lookup failures (no match found, or
+      network/API error) now raise `ValueError` / `ConnectionError` instead
+      of printing an error and silently returning `None`. Since these
+      classmethods have nothing valid to return on failure, a silent `None`
+      used to cause confusing downstream errors (e.g. `AttributeError`) if
+      the printed message was missed in notebook output.
+- **push_pyPi.sh**
+    - VERSION_XY / VERSION_XY_OLD computed once, right after NEW_VERSION, instead
+      of being recomputed (or relied upon) inside separate conditional blocks.
+
+### Fixed
+
+- **`TableauPeriodique` in `PeriodicTable.py`**: `TableauPeriodique.__init__` crashed with
+  SQLAlchemy ≥ 2.0 (`ObjectNotExecutableError`, from `mendeleev`'s
+  `fetch_ionization_energies` passing an already-compiled statement to
+  `pd.read_sql_query`). First ionization energies are now fetched via
+  `mendeleev.fetch.fetch_table("ionizationenergies")` (filtered on
+  `ion_charge == 0`), which does not have this issue.
+- **`easy_rdkit`, in `cheminformatics.py`**:
+    - `from_cid`: the `canonical` and `lang` parameters were not passed through
+      to the constructor; an instance created via `from_cid(cid, lang="Fr")`
+      always fell back to English. Both are now correctly propagated.
+    - `get_isomers`: generated isomers did not inherit the `lang` of the parent
+      molecule, always defaulting back to English. Fixed to inherit `self.lang`.
+- **push_pyPi.sh**
+    - GitHub Release creation now runs after `python -m build`, so it attaches
+      the freshly built dist/ artifacts instead of the previous version's (or
+      nothing, if dist/ was empty).
+    - Unknown version-bump type (anything other than p/m/M) now aborts with
+      exit 1 instead of silently continuing with NEW_VERSION = CURRENT_VERSION.
+    - git commit, git tag, git push, git push --tags, python -m build, and
+      twine upload are now checked; a failure stops the script with a message
+      stating what already succeeded and what to re-run manually.
+    - `read -r LEVEL` and `read -r CONFIRM` now read from /dev/tty, consistent
+      with the initial REPLY prompt.
+
+### Deprecated
+- `source='rscb'` is deprecated in favor of `source='rcsb'`, in **`molView`** (correct RCSB PDB acronym).
+
+### Documentation
+- **`symmetry` module**: new documentation page `Symmetry.md` (principle, operations, character tables, `MolSym`, representations, visualization, conventions, limitations, API reference).
+- **`easy_rdkit`, in `cheminformatics.py`**:
+    - Added/clarified docstrings for `fetch_pubchem_data`, `from_cid`,
+      `descriptors`, `show_descriptors`, `to_dict`, `analyze_stereochemistry`,
+      `analyze_lewis`, and `show_mol` (behavior, side effects on `self.mol`,
+      interactions between options).
+
+## [0.9.11-0.9.12] - 2026-09-04 "centertxt"
 
 ### Changed
 

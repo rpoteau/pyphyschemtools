@@ -18,6 +18,15 @@ Subpackages
 Submodules
 ----------
 
+pyphyschemtools.AO module
+-----------------------------
+
+.. automodule:: pyphyschemtools.AO
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
+
 pyphyschemtools.Chem3D module
 -----------------------------
 
@@ -25,6 +34,7 @@ pyphyschemtools.Chem3D module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.ML module
 -------------------------
@@ -33,6 +43,7 @@ pyphyschemtools.ML module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.PeriodicTable module
 ------------------------------------
@@ -41,6 +52,7 @@ pyphyschemtools.PeriodicTable module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.aithermo module
 -------------------------------
@@ -49,6 +61,7 @@ pyphyschemtools.aithermo module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.cheminformatics module
 --------------------------------------
@@ -57,6 +70,7 @@ pyphyschemtools.cheminformatics module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.core module
 ---------------------------
@@ -65,6 +79,25 @@ pyphyschemtools.core module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
+
+pyphyschemtools.huckel module
+-------------------------------
+
+.. automodule:: pyphyschemtools.huckel
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
+
+pyphyschemtools.hydrogen module
+-------------------------------
+
+.. automodule:: pyphyschemtools.hydrogen
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
 
 pyphyschemtools.kinetics module
 -------------------------------
@@ -73,6 +106,7 @@ pyphyschemtools.kinetics module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.misc module
 ---------------------------
@@ -81,6 +115,7 @@ pyphyschemtools.misc module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.nano module
 ---------------------------
@@ -89,6 +124,7 @@ pyphyschemtools.nano module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.orgachem module
 -------------------------------
@@ -97,6 +133,7 @@ pyphyschemtools.orgachem module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.spectro module
 ------------------------------
@@ -105,6 +142,16 @@ pyphyschemtools.spectro module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
+
+pyphyschemtools.symmetry module
+-------------------------------
+
+.. automodule:: pyphyschemtools.symmetry
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :no-index:
 
 pyphyschemtools.survey module
 -----------------------------
@@ -113,6 +160,7 @@ pyphyschemtools.survey module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.sympyUtilities module
 -------------------------------------
@@ -121,6 +169,7 @@ pyphyschemtools.sympyUtilities module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.tools4AS module
 -------------------------------
@@ -129,6 +178,7 @@ pyphyschemtools.tools4AS module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.units module
 ----------------------------
@@ -137,6 +187,7 @@ pyphyschemtools.units module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.visualID module
 -------------------------------
@@ -145,6 +196,7 @@ pyphyschemtools.visualID module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:
 
 pyphyschemtools.visualID\_Eng module
 ------------------------------------
@@ -153,3 +205,4 @@ pyphyschemtools.visualID\_Eng module
    :members:
    :show-inheritance:
    :undoc-members:
+   :no-index:

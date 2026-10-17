@@ -47,7 +47,8 @@ class kbasic:
     """
     Recherche pédagogique de la constante de vitesse k.
 
-    Utilisation typique :
+    Utilisation typique ::
+
         kb = kbasic()
         kb.read("mesures.xlsx")   # 1) lire les données
         kb.fit(ordre=1)           # 2) chercher le meilleur k
@@ -55,9 +56,10 @@ class kbasic:
 
     La grandeur mesurée G décroît avec le temps depuis sa valeur initiale
     G0. La forme de G(t) dépend de l'ordre de la réaction :
-        - ordre 0 : décroissance LINÉAIRE
-        - ordre 1 : décroissance EXPONENTIELLE (le cas le plus courant)
-        - ordre 2 : décroissance HYPERBOLIQUE
+
+    - ordre 0 : décroissance LINÉAIRE
+    - ordre 1 : décroissance EXPONENTIELLE (le cas le plus courant)
+    - ordre 2 : décroissance HYPERBOLIQUE
     """
 
     def __init__(self):

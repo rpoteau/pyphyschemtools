@@ -556,3 +556,12 @@ print(t_liquid_N2)
 ```
 
 </div>
+
+## API reference
+
+```{eval-rst}
+.. automodule:: pyphyschemtools.units
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

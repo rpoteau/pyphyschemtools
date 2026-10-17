@@ -48,35 +48,65 @@ class easy_rdkit():
             self.mol=mol
             self.smiles = smiles
         self.lang = lang.lower().capitalize()
-
+    
     @classmethod
-    def from_cid(cls, cid):
+    def from_cid(cls, cid, canonical=True, lang="En"):
         """
-        Create an easy_rdkit instance directly from a PubChem CID.
-        
-        Parameters:
-        -----------
-        cid : int or str
-            The PubChem Compound ID.
+        Builds an easy_rdkit instance directly from a PubChem CID.
+    
+        Fetches the compound from PubChem, extracts its connectivity SMILES,
+        and uses it to construct the molecule (equivalent to
+        `easy_rdkit(smiles)` but starting from a known CID instead).
+        self.cid and self.iupac_name are set from the PubChem record.
+    
+        Args:
+            cid (int or str): The PubChem Compound ID.
+            canonical (bool): Passed through to __init__.
+            lang (str): Passed through to __init__ ("En" or "Fr").
+    
+        Returns:
+            easy_rdkit: The constructed instance.
+    
+        Raises:
+            ValueError: if the CID does not correspond to a valid PubChem
+                compound.
+            ConnectionError: if the PubChem request fails (network/API issue).
         """
         import pubchempy as pcp
         try:
             compound = pcp.Compound.from_cid(cid)
-            smiles = compound.connectivity_smiles
-            print(f"✅ Successfully retrieved: {compound.iupac_name}")
-            # In your from_cid method
-            instance = cls(smiles)
-            instance.cid = cid
-            instance.iupac_name = compound.iupac_name
-            return instance
         except Exception as e:
-            print(f"❌ Error fetching CID {cid} from PubChem: {e}")
-            return None
-
+            raise ConnectionError(f"Error fetching CID {cid} from PubChem: {e}") from e
+    
+        if compound is None:
+            raise ValueError(f"No PubChem compound found for CID: {cid}")
+    
+        print(f"✅ Successfully retrieved: {compound.iupac_name}")
+        instance = cls(compound.connectivity_smiles, canonical=canonical, lang=lang)
+        instance.cid = cid
+        instance.iupac_name = compound.iupac_name
+        return instance
+        
     def fetch_pubchem_data(self):
         """
-        Retrieves CID and IUPAC name from PubChem based on the current SMILES.
-        Useful for molecules initialized directly via SMILES.
+        Queries PubChem using the molecule's current SMILES to retrieve its
+        PubChem CID and IUPAC name, and stores them on the instance
+        (self.cid, self.iupac_name).
+    
+        This is the reverse of `from_cid`: instead of building the molecule
+        from a known CID, it looks up an already-built molecule (e.g. created
+        via `easy_rdkit("CCO")`) to see if it exists in PubChem.
+    
+        Only the first match returned by PubChem is used. If the SMILES is
+        ambiguous (e.g. corresponds to several close PubChem entries such as
+        tautomers or salts), this may not be the expected compound — check
+        self.cid against the PubChem page if in doubt.
+    
+        Notes:
+            - Requires an internet connection (PubChem REST API via pubchempy).
+            - Does not raise on failure: if no match is found, or if the
+              request fails, a warning/error is printed and self.cid /
+              self.iupac_name are left unchanged.
         """
         import pubchempy as pcp
         try:
@@ -91,10 +121,62 @@ class easy_rdkit():
                 print(f"⚠️ No PubChem match found for SMILES: {self.smiles}")
         except Exception as e:
             print(f"❌ Error syncing with PubChem: {e}")
-            
+
+    @classmethod
+    def from_name(cls, name, canonical=True, lang="En"):
+        """
+        Builds an easy_rdkit instance directly from a compound name, by
+        querying PubChem (e.g. "aspirin", "caffeine", "benzene").
+    
+        Args:
+            name (str): Compound name to search for on PubChem.
+            canonical (bool): Passed through to __init__.
+            lang (str): Passed through to __init__ ("En" or "Fr").
+    
+        Returns:
+            easy_rdkit: The constructed instance, with self.cid and
+            self.iupac_name set from the first PubChem match.
+    
+        Raises:
+            ValueError: if no PubChem compound matches the given name.
+            ConnectionError: if the PubChem request fails (network/API issue).
+    
+        Note:
+            If several compounds match the name, only the first PubChem
+            result is used — check self.cid if the match seems ambiguous.
+        """
+        import pubchempy as pcp
+        try:
+            compounds = pcp.get_compounds(name, namespace='name')
+        except Exception as e:
+            raise ConnectionError(f"Error fetching '{name}' from PubChem: {e}") from e
+    
+        if not compounds:
+            raise ValueError(f"No PubChem match found for name: {name}")
+    
+        compound = compounds[0]
+        print(f"✅ Successfully retrieved: {compound.iupac_name}")
+        instance = cls(compound.connectivity_smiles, canonical=canonical, lang=lang)
+        instance.cid = compound.cid
+        instance.iupac_name = compound.iupac_name
+        return instance
+    
     @property
     def descriptors(self):
-        """Compute and return a dictionary of key molecular descriptors."""
+        """
+        Computes (once, then caches) a set of standard molecular descriptors.
+    
+        Returns:
+            dict: MW, LogP, QED, HBA, HBD, RotB (rotatable bonds), TPSA,
+            aromatic/non-aromatic ring counts, Fsp3, and connectivity
+            indices (Chi0, Chi1). Values are rounded for display.
+    
+        Note:
+            Computed lazily on first access and cached in
+            self._descriptors_cache; if self.mol changes afterward (e.g. via
+            show_mol adding explicit Hs), the cache is NOT automatically
+            invalidated — delete self._descriptors_cache if you need a refresh.
+        """
         if not hasattr(self, '_descriptors_cache') or self._descriptors_cache is None:
             mol = self.mol
             self._descriptors_cache = {
@@ -114,7 +196,10 @@ class easy_rdkit():
         return self._descriptors_cache
 
     def show_descriptors(self):
-        """Print all computed descriptors in a formatted table."""
+        """
+        Prints the molecular descriptors (see `descriptors`) as a simple
+        formatted table to stdout. Display-only; returns nothing.
+        """
         d = self.descriptors
         print(f"--------- Molecular Descriptors ---")
         print(f"{'Property':<20} | {'Value':<10}")
@@ -125,8 +210,18 @@ class easy_rdkit():
 
     def to_dict(self, auto_fetch=False):
         """
-        Export identity and descriptors as a flat dictionary.
-        If auto_fetch is True, it will attempt to find missing CID/Name on PubChem.
+        Exports identity and descriptors as a flat dictionary, ready for use
+        in a DataFrame row (e.g. with plot_grid_from_df).
+    
+        Args:
+            auto_fetch (bool): If True and self.cid is not already set,
+                calls fetch_pubchem_data() first to try to retrieve the
+                CID/IUPAC name before building the dictionary.
+    
+        Returns:
+            dict: {"IUPAC Name", "CID", "SMILES"} plus all keys from
+            `descriptors` (MW, LogP, QED, ...). CID/IUPAC Name are "N/A"
+            if unavailable.
         """
         if auto_fetch and self.cid is None:
             self.fetch_pubchem_data()
@@ -139,56 +234,93 @@ class easy_rdkit():
         # Merges the descriptors (MW, LogP, Chi, etc.)
         data.update(self.descriptors)
         return data
-    
-    def analyze_lewis(self):
-        """
-        Performs a Lewis structure analysis for each atom in the molecule.
-        Calculates valence electrons, lone pairs, formal charges, and octet rule compliance.
         
+    def analyze_lewis(self, heavy_only=True):
+        """
+        Performs a simplified Lewis-structure analysis of the molecule, atom
+        by atom, based on RDKit's valence/bond perception (no 3D geometry
+        involved).
+    
+        For each atom, derives:
+            - valence electrons (from the periodic table)
+            - bonding electrons (RDKit's total valence)
+            - formal charge
+            - lone pairs (nonbonding electrons / 2)
+            - vacancies (missing electrons to reach octet/duet, if any)
+            - total electron count and whether the octet (or duet, for H/He)
+              rule is satisfied, electron-deficient, or hypervalent
+    
+        This is a teaching aid, not a rigorous electronic-structure
+        calculation: it relies on RDKit's bond-order perception from the
+        SMILES, so it reflects whatever Lewis structure RDKit infers and will
+        not be meaningful for molecules with unusual/ambiguous valence (e.g.
+        hypervalent or radical species) beyond the simple flags above.
+    
+        Args:
+            heavy_only (bool): If True (default), only heavy atoms (Z > 2)
+                get a row in the returned table. H atoms are checked for
+                duet compliance on an internal copy of the molecule with
+                explicit Hs (self.mol itself is not modified), and a single
+                summary line is printed after the table (✅ if all H satisfy
+                the duet rule, ❌ with the offending atom indices otherwise).
+                If False, H/He atoms are included in the table with full
+                LP/vacancy detail, like heavy atoms.
+    
         Returns:
-            pd.DataFrame: A table containing detailed Lewis electronic data per atom.
+            pd.DataFrame: One row per analyzed atom, with columns depending
+            on self.lang ("En": Atom Index, Symbol, Valence e-, Bonding e-,
+            Formal Charge, Lone Pairs (LP), Vacancies ([]), Number of Bonds,
+            Total e- (octet?), Octet Status (O/H/D); "Fr": French equivalents).
+            H/He atoms are excluded from the rows when heavy_only is True.
+    
+        Raises:
+            ValueError: if self.mol is None (invalid SMILES), with a message
+            in English or French depending on self.lang.
         """
         if self.mol is None and self.lang == "En":
             raise ValueError(f"Invalid molecule for {self.smiles} (Check if SMILES is correct) ")
         if self.mol is None and self.lang == "Fr":
             raise ValueError(f"Molécule invalide pour {self.smiles} (Vérifier si le SMILES est correct) ")
-        
+    
         pt = GetPeriodicTable()
         rows = []
     
-        for atom in self.mol.GetAtoms():
+        # Use an explicit-H copy for the loop so implicit H are visible,
+        # but only when heavy_only needs to check them separately;
+        # self.mol is never modified here.
+        work_mol = Chem.AddHs(self.mol) if heavy_only else self.mol
+        h_duet_ok = []  # [(atom_idx, bool), ...] for H atoms, only used if heavy_only
+    
+        for atom in work_mol.GetAtoms():
             Z = atom.GetAtomicNum()
             valence_e = pt.GetNOuterElecs(Z)
             bonding_e = atom.GetTotalValence()
             formal_charge = atom.GetFormalCharge()
             num_bonds = int(sum(bond.GetBondTypeAsDouble() for bond in atom.GetBonds()))
-            # hybridization = atom.GetHybridization()
             nonbonding = valence_e - bonding_e - formal_charge
-    
             lone_pairs = max(0, nonbonding // 2)
     
-            if Z==1 or Z==2:  # règle du duet
-                target = 2
-            else:       # règle de l’octet
-                target = 8
-    
+            target = 2 if Z in (1, 2) else 8
             missing_e = max(0, target/2 - (bonding_e + 2*lone_pairs))
             vacancies = int(missing_e)
             total_e = 2*(lone_pairs + bonding_e)
-
-            
+    
+            if heavy_only and Z in (1, 2):
+                h_duet_ok.append((atom.GetIdx(), total_e == 2))
+                continue  # H excluded from the table
+    
             if self.lang == 'En':
                 if total_e > 8:
                     octet_msg = "❌ hypervalent"
                 elif total_e < 8 and Z > 2:
                     octet_msg = "❌ electron-deficient"
                 elif total_e == 8:
-                    octet_msg = "✅ octet"    
+                    octet_msg = "✅ octet"
                 elif total_e == 2 and (Z == 1 or Z == 2):
                     octet_msg = "✅ duet"
                 else:
                     octet_msg = "🤔"
-                    
+    
                 rows.append({
                     "Atom Index": atom.GetIdx(),
                     "Symbol": atom.GetSymbol(),
@@ -207,7 +339,7 @@ class easy_rdkit():
                 elif total_e < 8 and Z > 2:
                     octet_msg = "❌ électron-déficient"
                 elif total_e == 8:
-                    octet_msg = "✅ octet"    
+                    octet_msg = "✅ octet"
                 elif total_e == 2 and (Z == 1 or Z == 2):
                     octet_msg = "✅ duet"
                 else:
@@ -224,8 +356,24 @@ class easy_rdkit():
                     "e- total (octet ?)": total_e,
                     "O/H/D ?": octet_msg
                 })
-            
-        return pd.DataFrame(rows)    
+    
+        df = pd.DataFrame(rows)
+    
+        if heavy_only and h_duet_ok:
+            all_ok = all(ok for _, ok in h_duet_ok)
+            bad = [idx for idx, ok in h_duet_ok if not ok]
+            if self.lang == "Fr":
+                if all_ok:
+                    print(f"{fg.GREEN}✅ Tous les atomes H ({len(h_duet_ok)}) respectent la règle du duet.{fg.OFF}")
+                else:
+                    print(f"{fg.RED}❌ Atomes H ne respectant pas le duet (indices) : {bad}{fg.OFF}")
+            else:
+                if all_ok:
+                    print(f"{fg.GREEN}✅ All H atoms ({len(h_duet_ok)}) satisfy the duet rule.{fg.OFF}")
+                else:
+                    print(f"{fg.RED}❌ H atoms not satisfying the duet rule (indices): {bad}{fg.OFF}")
+    
+        return df
             
     def show_mol(self,
                  size: tuple=(400,400),
@@ -243,41 +391,76 @@ class easy_rdkit():
                  save_img: str=None
                 ):
         """
-        Renders the molecule in 2D SVG format with optional property overlays.
-        
+        Renders the molecule as a 2D (SVG or PNG) depiction, with optional
+        annotations, and displays it inline (Jupyter/Colab). Can also save
+        the image to disk.
+    
+        This is the main "do everything" drawing method of the class: most
+        arguments toggle an independent overlay or computation that gets
+        combined onto the same drawing. A few interactions to know about:
+    
+            - show_Lewis implies show_H (explicit Hs are added so lone pairs/
+              vacancies can be computed and displayed) and internally calls
+              analyze_lewis(), which also prints/displays its DataFrame.
+            - show_Lewis and show_hybrid share the same atom-note area (the
+              little text under each atom); both can be shown together.
+            - rep3D adds explicit Hs and computes a 3D-like embedding
+              (AllChem.EmbedMolecule) before generating a (still 2D) drawing
+              from it — mainly useful to get a more realistic bond geometry.
+            - plot_conjugation and plot_aromatic each highlight bonds/atoms
+              in a different color (blue / red) but use the same
+              highlighting machinery, so combining both silently uses
+              whichever was computed last (not an additive overlay).
+            - show_stereo perceives and labels R/S and E/Z. If any chiral
+              center or double bond is unassigned ("?"), it prints a warning
+              and automatically turns on atom (and, for double bonds, bond)
+              index display so you can identify what needs fixing in the
+              SMILES.
+            - Side effect: several options (show_H, show_Lewis, rep3D,
+              macrocycle) mutate self.mol in place (adding Hs, 3D coords,
+              atom notes), so self.mol may differ after calling show_mol
+              even without save_img.
+    
         Args:
-            size (tuple): Drawing dimensions in pixels.
-            show_Lewis (bool): Annotates atoms with Lone Pairs and Vacancies.
-            plot_conjugation (bool): Highlights conjugated bonds in blue.
-            plot_aromatic (bool): Highlights aromatic rings in red.
-            show_n (bool): Displays atom indices.
-            show_hybrid (bool): Displays atom hybridization (sp3, sp2, etc.).
-            show_H (bool): Adds explicit Hydrogens to the drawing.
-            show_stereo (bool): Shows R,S,Z,E labels - if relevant
-            rep3D (bool): Computes a 3D-like conformation before drawing.
-            macrocycle (bool): Uses CoordGen for better rendering of large rings (e.g., Cyclodextrins).
-            highlightAtoms (list): List of indices to highlight.
-            legend (str): Title or legend text for the drawing.
-            save_img (str):  File path to save the resulting image. 
-                Supports '.svg' (vector) and '.png' (raster) extensions. 
-                Defaults to None.
+            size (tuple): Drawing dimensions in pixels (width, height).
+            show_Lewis (bool): Annotate atoms with lone pairs / vacancies
+                (implies show_H; runs analyze_lewis() and displays its table).
+            plot_conjugation (bool): Highlight conjugated bonds in blue.
+            plot_aromatic (bool): Highlight aromatic atoms/bonds in red.
+            show_n (bool): Display atom indices.
+            show_hybrid (bool): Display atom hybridization (sp, sp2, sp3...).
+            show_H (bool): Add explicit hydrogens to the drawing.
+            show_stereo (bool): Compute and display R/S, E/Z labels; warns
+                and auto-enables index display if stereochemistry is
+                undefined in the input SMILES.
+            rep3D (bool): Embed a 3D-like conformation (via AllChem) before
+                drawing, for more realistic bond angles.
+            macrocycle (bool): Use CoordGen for better layout of large rings
+                (e.g. cyclodextrins).
+            highlightAtoms (list): Atom indices to highlight (ignored if
+                plot_conjugation or plot_aromatic is used).
+            legend (str): Caption displayed under the structure.
+            save_img (str, optional): Output file path; extension decides
+                format ('.svg' or '.png'). Image is also always displayed
+                inline regardless of this argument.
+    
+        Returns:
+            None. Displays the image (IPython.display.SVG) as a side effect;
+            if save_img ends in '.png', also regenerates and displays an SVG
+            version for screen viewing (via a recursive call).
         """
 
-        def safe_add_hs():
-            try:
-                return Chem.AddHs(self.mol)
-            except Exception as e:
-                print(f"[Warning] Impossible d'ajouter les H pour {self.smiles} ({e}), on garde la version brute.")
-                return mol      
-        
-        if show_H and not show_Lewis:
+        if show_H:
             mol = Chem.AddHs(self.mol)
+            self.mol = mol
         else:
             mol = self.mol
+        
         if show_Lewis:
-            mol = safe_add_hs()
-            self.mol = mol
-            df = self.analyze_lewis()
+            # heavy_only=True par défaut (show_H=False) : seuls les atomes
+            # lourds sont détaillés, les H sont juste vérifiés (duet) et
+            # résumés en un message. Si show_H=True, détail complet H inclus.
+            df = self.analyze_lewis(heavy_only=not show_H)
             if self.lang == "Fr":
                 lewis_info = {row["index atome"]: (row["doublets non-liants (DNL)"], row["lacunes ([])"])
                               for _, row in df.iterrows()}
@@ -616,11 +799,21 @@ class easy_rdkit():
         )
 
         return grid_img
-
+    
     def analyze_stereochemistry(self):
         """
-        Identifies chiral centers and stereogenic double bonds.
-        Returns a dictionary with counts and specific assignments.
+        Summarizes the stereochemical features of the molecule as currently
+        perceived by RDKit (chiral centers and stereogenic double bonds).
+    
+        Unlike `get_isomers`, this does not enumerate alternative
+        configurations — it only reports what is already encoded (or left
+        unassigned, i.e. "?") in self.mol.
+    
+        Returns:
+            dict: Dictionary with keys ``chiral_centers_count`` (int),
+            ``chiral_centers`` (list of (atom_index, "R"/"S"/"?")),
+            ``stereo_bonds_count`` (int), and ``stereo_bonds``
+            (list of (begin_atom_idx, end_atom_idx, "STEREOE"/"STEREOZ"/...)).
         """
         # Find chiral centers (includes centers with unassigned stereo)
         chiral_centers = Chem.FindMolChiralCenters(self.mol, includeUnassigned=True)
@@ -660,16 +853,14 @@ class easy_rdkit():
                 fully-defined stereoisomer of the parent molecule.
         """
         from rdkit.Chem.EnumerateStereoisomers import EnumerateStereoisomers, StereoEnumerationOptions
-        
-        # Options to ensure we explore the full space
+    
         opts = StereoEnumerationOptions(tryEmbedding=True)
         isomers_mols = list(EnumerateStereoisomers(self.mol, options=opts))
-        
+    
         if verbose:
             print(f"{fg.CYAN}✨ {len(isomers_mols)} stereoisomers found for {self.smiles}{fg.OFF}")
-
-        # Wrap the resulting RDKit molecules back into easy_rdkit objects
-        return [easy_rdkit(Chem.MolToSmiles(iso)) for iso in isomers_mols[:max_isomers]]
+    
+        return [easy_rdkit(Chem.MolToSmiles(iso), lang=self.lang) for iso in isomers_mols[:max_isomers]]
 
     def show_isomers(self, mols_per_row=4, size=(250, 250), save_img=None):
         """

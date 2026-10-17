@@ -26,15 +26,27 @@ The package provides a versatile ecosystem for researchers:
    :maxdepth: 2
    :caption: 📚 Docs and Theory
 
+   theoryDocs/Units
+   theoryDocs/Hydrogen
+   theoryDocs/AO
+   theoryDocs/PeriodicTable
    theoryDocs/Cheminformatics
    theoryDocs/Chem3D
+   theoryDocs/Huckel
+   theoryDocs/Symmetry
    theoryDocs/Kinetics
    theoryDocs/Nano
    theoryDocs/OrgaChem
-   theoryDocs/PeriodicTable
    theoryDocs/Spectro
-   theoryDocs/Units
    theoryDocs/Misc
+   theoryDocs/Aithermo
+   theoryDocs/Core
+   theoryDocs/ML
+   theoryDocs/Survey
+   theoryDocs/SympyUtilities
+   theoryDocs/Tools4AS
+   theoryDocs/VisualID
+   theoryDocs/VisualID_Eng
 
 .. toctree::
    :maxdepth: 2

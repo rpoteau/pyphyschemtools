@@ -271,3 +271,13 @@ sim.plotAbs_lambda_TDDFT(files_TDDFT, C0theo, lambdaMin, lambdaMax, Amax, titles
 <img src="../_static/spectra/DBAxx_ethanol.png" alt="TDDFT simulated spectra" style="width:600dpi;">
 <figcaption>TDDFT simulated absorbance spectra of DBA and DBA6</figcaption>
 </figure>
+
+## API reference
+
+```{eval-rst}
+.. automodule:: pyphyschemtools.spectro
+   :no-index:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

@@ -2,41 +2,45 @@
 
 **`kinetics.py` module**
 
-This module contains two classes:
+This module contains two classes and one standalone function:
 
 * **`kbasic`** — a minimal, self-contained, pedagogical tool: fit a single rate
-  constant $k$ for one chosen reaction order. See [3. `kbasic`](#kbasic).
+  constant $k$ for one chosen reaction order. See [3. `kbasic`](kbasic).
 * **`KORD`** (Kinetic Order of Reaction Determination) — the full tool: fit
   $k$, $Y_0$, $Y_\infty$ (and $b_\infty$) for reaction orders 0, 1 and 2, and
   decide which order the data actually support. See
-  [4. `KORD`](#kord).
+  [4. `KORD`](kord).
+* **`superpose_plots()`** — the module's only standalone function (not a
+  method of either class): overlays the fitted curves of several `KORD`
+  studies on one plot, e.g. to compare the same data fitted freely vs. with
+  `fix_Y0`/`fix_Yinf`. See [4.4.1 Comparing several fits](kord-advanced-compare).
 
 ## Table of Contents
 
-* [1. Finding a Mathematical Model That Fits the Data](#rmsd)
-* [2. Integrated rate laws: $a(t)$, $b(t)$ and half-lives for orders 0, 1, 2](#rate-laws)
-  * [2.1 Reactant Expression $a(t)$](#rate-laws-a)
-  * [2.2 Product Expression $b(t)$](#rate-laws-b)
-  * [2.3 Half-life $t_{1/2}$](#rate-laws-halflife)
-* [3. `kbasic`: a minimal, pedagogical rate-constant fit](#kbasic)
-  * [3.1 Purpose and limitations](#kbasic-purpose)
-  * [3.2 Data format](#kbasic-format)
-  * [3.3 Quick Start](#kbasic-quickstart)
-  * [3.4 Theory](#kbasic-theory)
-* [4. `KORD`: Kinetic Order of Reaction Determination](#kord)
-  * [4.1 Quick Start](#kord-quickstart)
-    * [4.1.1 Basic use](#kord-quickstart-basic)
-    * [4.1.2 Specific fit](#kord-quickstart-specific)
-  * [4.2 Principle](#principle)
-  * [4.3 Theoretical Model](#theoretical-model)
-  * [4.4 Advanced use](#kord-advanced)
-    * [4.4.1 Comparing several fits](#kord-advanced-compare)
-    * [4.4.2 `from_spreadsheet` vs `load_from_spreadsheet`](#kord-advanced-loading)
-    * [4.4.3 Reading a different sheet / experiment](#kord-advanced-sheet)
+* [1. Finding a Mathematical Model That Fits the Data](rmsd)
+* [2. Integrated rate laws: $a(t)$, $b(t)$ and half-lives for orders 0, 1, 2](rate-laws)
+  * [2.1 Reactant Expression $a(t)$](rate-laws-a)
+  * [2.2 Product Expression $b(t)$](rate-laws-b)
+  * [2.3 Half-life $t_{1/2}$](rate-laws-halflife)
+* [3. `kbasic`: a minimal, pedagogical rate-constant fit](kbasic)
+  * [3.1 Purpose and limitations](kbasic-purpose)
+  * [3.2 Data format](kbasic-format)
+  * [3.3 Quick Start](kbasic-quickstart)
+  * [3.4 Theory](kbasic-theory)
+* [4. `KORD`: Kinetic Order of Reaction Determination](kord)
+  * [4.1 Quick Start](kord-quickstart)
+    * [4.1.1 Basic use](kord-quickstart-basic)
+    * [4.1.2 Specific fit](kord-quickstart-specific)
+  * [4.2 Principle](principle)
+  * [4.3 Theoretical Model](theoretical-model)
+  * [4.4 Advanced use](kord-advanced)
+    * [4.4.1 Comparing several fits](kord-advanced-compare)
+    * [4.4.2 `from_spreadsheet` vs `load_from_spreadsheet`](kord-advanced-loading)
+    * [4.4.3 Reading a different sheet / experiment](kord-advanced-sheet)
 
 ---
 
-<a id="rmsd"></a>
+(rmsd)=
 ## 1. Finding a Mathematical Model That Fits the Data
 
 Curve fitting, in general, is the search for the free parameters — generically
@@ -67,12 +71,12 @@ model, once its parameters are optimized, reproduces the measurements almost
 exactly. A wrong model (the wrong reaction order, say) cannot be pushed to a
 near-zero RMSE no matter how its parameters are tuned, simply because its
 shape doesn't match the data's. `KORD` builds on this further — see
-[4.2.4 Model Selection](#model-selection) — to compare reaction orders
+[4.2.4 Model Selection](model-selection) — to compare reaction orders
 against each other, not just to fit one order's parameters.
 
 ---
 
-<a id="rate-laws"></a>
+(rate-laws)=
 ## 2. Integrated rate laws: $a(t)$, $b(t)$ and half-lives for orders 0, 1, 2
 
 Consider a single-reactant, single-product transformation $\alpha A
@@ -98,10 +102,10 @@ This section gives the integrated form $a(t)=[A](t)$, the corresponding
 product expression $b(t)=[B](t)$, and the resulting half-life, for
 $n \in \{0,1,2\}$. `kbasic` (section 3) and `KORD` (section 4) both build on
 these — `kbasic` as the special case $\alpha=1$, $Y_\infty=0$ (see
-[3.4 Theory](#kbasic-theory)), `KORD` directly (see
-[4.3 Theoretical Model](#theoretical-model)).
+[3.4 Theory](kbasic-theory)), `KORD` directly (see
+[4.3 Theoretical Model](theoretical-model)).
 
-<a id="rate-laws-a"></a>
+(rate-laws-a)=
 ### 2.1 Reactant Expression $a(t)$
 
 * **Order 0**:
@@ -119,7 +123,7 @@ $$a(t) = a_{0} \exp(-\alpha kt)$$
 
 $$a(t) = \frac{1}{\frac{1}{a_{0}} + \alpha kt}$$
 
-<a id="rate-laws-b"></a>
+(rate-laws-b)=
 ### 2.2 Product Expression $b(t)$
 
 Derived from mass balance ($M_{A} a(t) + M_{B} b(t) = M_{A} a_{0} = M_{B} b_{\infty}$):
@@ -139,7 +143,7 @@ $$b(t) = b_{\infty} \{1 - \exp(-\alpha kt)\}$$
 
 $$b(t)=\frac{b_{\infty}}{1+\frac{\beta}{b_{\infty}\alpha^{2}kt}}$$
 
-<a id="rate-laws-halflife"></a>
+(rate-laws-halflife)=
 ### 2.3 Half-life $t_{1/2}$
 
 The half-life is the time at which $a(t)$ has fallen to half its initial
@@ -157,15 +161,15 @@ for each order:
 
 ---
 
-<a id="kbasic"></a>
+(kbasic)=
 ## 3. `kbasic`: a minimal, pedagogical rate-constant fit
 
-<a id="kbasic-purpose"></a>
+(kbasic-purpose)=
 ### 3.1 Purpose and limitations
 
 `kbasic` is a deliberately minimal teaching tool. Given a single time series
 $(t, Y)$, it finds the one rate constant $k$ that minimizes the RMSE (see
-[1. Finding a Mathematical Model That Fits the Data](#rmsd) above), for a
+[1. Finding a Mathematical Model That Fits the Data](rmsd) above), for a
 reaction order you choose yourself (0, 1 or 2). Its point is to make the
 fitting procedure itself — build a model, define an RMSE, call
 `scipy.optimize.minimize` — easy to read and follow end to end in a first
@@ -190,7 +194,7 @@ not, and these are real **limitations**, not just simplifications:
   there is no AIC/BIC-based verdict. You pick the order yourself, and `kbasic`
   only reports the RMSE for that one choice.
 * **Order 2 gives an apparent $k$, not the true rate constant**: see
-  [3.4 Theory](#kbasic-theory) below for why, and how to recover the true
+  [3.4 Theory](kbasic-theory) below for why, and how to recover the true
   value if you need it.
 
 **In short**: reach for `kbasic` for a quick, from-scratch look at a single
@@ -198,7 +202,7 @@ order on data that genuinely decays to 0 at large $t$. Reach for `KORD` as
 soon as $Y_\infty \ne 0$, stoichiometry matters, or you want the reaction
 order itself determined for you rather than assumed.
 
-<a id="kbasic-format"></a>
+(kbasic-format)=
 ### 3.2 Data format
 
 `kbasic.read()` expects a plain two-column spreadsheet: time in the first
@@ -214,14 +218,14 @@ default labels "Temps"/"Y" are used.
 | ... | ... |
 
 There are no parameter rows here (unlike `KORD`'s format, see
-[4.2.3 Input](#input) below) — `kbasic` has no $\alpha$, $\beta$ or $a_0$ to
+[4.2.3 Input](input) below) — `kbasic` has no $\alpha$, $\beta$ or $a_0$ to
 read from the file.
 
-<a id="kbasic-quickstart"></a>
+(kbasic-quickstart)=
 ### 3.3 Quick Start
 
 ```python
-from pyphyschemtools.kinetics import kbasic
+from pyphyschemtools import kbasic   # lazy-loaded from the package root
 
 kb = kbasic()
 kb.read("measurements.xlsx")   # 2-column file: time, Y
@@ -230,16 +234,16 @@ kb.plot()                      # data vs. model, and the RMSE landscape
 ```
 
 `fit()` estimates its own starting value for $k$ directly from the data: it
-inverts the chosen order's $Y(t)$ equation (see [3.4 Theory](#kbasic-theory)
+inverts the chosen order's $Y(t)$ equation (see [3.4 Theory](kbasic-theory)
 below) at one reference point, rather than always starting from an arbitrary
 constant. You can still impose your own starting value with `k_depart=...`
 if needed.
 
-<a id="kbasic-theory"></a>
+(kbasic-theory)=
 ### 3.4 Theory
 
 `kbasic`'s three models are the special case $\alpha=1$, $Y_\infty=0$ of the
-general $a(t)$ expressions in [2.1](#rate-laws-a) above, with $a_0$ renamed
+general $a(t)$ expressions in [2.1](rate-laws-a) above, with $a_0$ renamed
 $Y_0$:
 
 * **Order 0**: $Y(t)=\max(Y_{0}-kt,\ 0)$
@@ -247,7 +251,7 @@ $Y_0$:
 * **Order 2**: $Y(t)=\dfrac{Y_{0}}{1+kt}$
 
 and correspondingly, the half-life (special case $\alpha=1$, $a_0=Y_0$ of
-[2.3](#rate-laws-halflife)):
+[2.3](rate-laws-halflife)):
 
 * **Order 0**: $t_{1/2} = \dfrac{Y_{0}}{2k}$
 * **Order 1**: $t_{1/2} = \dfrac{\ln 2}{k}$
@@ -260,7 +264,7 @@ stores it in `self.t_half`.
 
 **Order 2 caveat.** The true integrated second-order rate law is
 $a(t) = a_{0}/(1+a_{0}kt)$ — note the extra $a_0$ multiplying $kt$ in the
-denominator (consistent with [2.1](#rate-laws-a) for $\alpha=1$). `kbasic`'s
+denominator (consistent with [2.1](rate-laws-a) for $\alpha=1$). `kbasic`'s
 order-2 model, $Y(t)=Y_{0}/(1+kt)$, omits that factor. As a result, the $k$
 `kbasic` reports for order 2 is an **apparent** constant,
 $k_{\mathrm{app}} = k_{\mathrm{true}} \times Y_{0}$, not the true molecular
@@ -272,13 +276,13 @@ result by $Y_0$, or use `KORD` instead, which tracks $a_0$ explicitly.
 
 ---
 
-<a id="kord"></a>
+(kord)=
 ## 4. `KORD`: Kinetic Order of Reaction Determination
 
-<a id="kord-quickstart"></a>
+(kord-quickstart)=
 ### 4.1 Quick Start
 
-<a id="kord-quickstart-basic"></a>
+(kord-quickstart-basic)=
 #### 4.1.1 Basic use
 
 ```python
@@ -301,14 +305,14 @@ If that creates a mismatch (some orders fitted under different
 `fix_Y0`/`fix_Yinf` than the others), a warning table is printed, since
 comparing orders fitted under different constraints can be misleading. The
 same rule, and the same warning, apply to
-[`superpose_plots()`](#kord-advanced-compare) below.
+[`superpose_plots()`](kord-advanced-compare) below.
 
-<a id="kord-quickstart-specific"></a>
+(kord-quickstart-specific)=
 #### 4.1.2 Specific fit
 
 You can also fix $Y_0$ (or $Y_\infty$) at a chosen value instead of letting
 the optimizer adjust it freely — fully explained in
-[4.2 Principle](#principle) below:
+[4.2 Principle](principle) below:
 
 ```python
 # A better starting point than the raw first data point (e.g. because it's
@@ -337,7 +341,7 @@ draw a figure.
 
 ---
 
-<a id="principle"></a>
+(principle)=
 ### 4.2 Principle
 
 <div class="rqE">
@@ -379,7 +383,7 @@ In chemical kinetics, we track the evolution of molar concentrations over time: 
 
 **General Form:** $Y_\mathrm{EXP}(t) = \sum_{i} \eta_{i} \cdot C_{i}(t)$
 
-<a id="theoretical-model-principle"></a>
+(theo-model-def)=
 #### 4.2.2 Theoretical Model ($Y_\mathrm{THEO}$)
 
 The model has three different expressions (see <a href="#theoretical-model">Theoretical model section</a>), depending on the order of the reaction:
@@ -440,7 +444,7 @@ and leaving it free can make the optimizer report a spurious non-zero plateau.
 below, which is never a free fit parameter for any order). BIC is computed
 using the actual number of free parameters, so
 model comparison across orders stays meaningful whichever switches are used
-(see [4.2.4 Model Selection](#model-selection) below — `fit()` also stores an
+(see [4.2.4 Model Selection](model-selection) below — `fit()` also stores an
 AIC for reference in `study.results[order]['AIC']`, but the printed verdict
 is based on BIC only).
 
@@ -455,7 +459,7 @@ or merely as the optimizer's starting point.
 `Yinf_guess`/`binf_guess` as arguments: it always reads the current
 `self.k_guess`, `self.Y0_guess`, `self.Yinf_guess`, `self.binf_guess` —
 set once at `KORD(...)`/`from_spreadsheet(...)` creation time, or changed
-later by assigning the attribute directly. See [4.1.2](#kord-quickstart-specific)
+later by assigning the attribute directly. See [4.1.2](kord-quickstart-specific)
 above for an example.
 
 **There is no `fix_binf` switch, because $b_\infty$ is never a free fit
@@ -470,7 +474,7 @@ pairs then trace the exact same curve and give the exact same RMSE, so
 one happens to sit closest to `binf_guess` — rather than to a unique,
 physically meaningful value. Deriving $b_\infty$ removes that degeneracy:
 `binf_guess` still exists (used only to draw the guess curve in
-[`simulate_plot()`](#kord-quickstart-specific) before any fit is run), but
+[`simulate_plot()`](kord-quickstart-specific) before any fit is run), but
 `fit()` itself ignores it and always uses the mass-balance value, so `k` is
 the only quantity the data actually has to say about $b_\infty$'s combined
 effect — and it reports a `binf` value you can trust.
@@ -488,13 +492,13 @@ depend on $b_\infty$ at all, so there is nothing in the order-1 curve shape
 that could identify it — `fit()` always derives $b_\infty$ from $a_0$,
 $\alpha$, $\beta$ instead of optimizing it, for order 1 only.
 
-<a id="input"></a>
+(input)=
 #### 4.2.3 Input
 
 Data input is performed through a structured spreadsheet file (`.xlsx`, `.ods`,
 ...), read by `KORD.load_from_spreadsheet(file_path, exp_number, sheet_name=0)`
 — or, more conveniently, by `KORD.from_spreadsheet(...)`, which calls it for
-you (see [4.1 Quick Start](#kord-quickstart)). Within the chosen sheet, each
+you (see [4.1 Quick Start](kord-quickstart)). Within the chosen sheet, each
 experiment occupies a pair of columns (t, Y), laid out like this:
 
 | Row | Column $2k{-}1$ (t) | Column $2k$ (Y) |
@@ -519,7 +523,7 @@ reminding you of the expected format, since this usually means the data
 doesn't follow the layout above (e.g. actual $(t,Y)$ data starting at row 2
 instead of row 5).
 
-<a id="model-selection"></a>
+(model-selection)=
 #### 4.2.4 Model Selection: `get_best_order()` and $\Delta$BIC
 
 `get_best_order()` fits orders 0, 1 and 2 (any order not already in
@@ -585,13 +589,13 @@ instead of row 5).
 
 ---
 
-<a id="theoretical-model"></a>
+(theoretical-model)=
 ### 4.3 Theoretical Model
 
 $Y_\mathrm{THEO}(t)$ is built directly from the integrated rate laws of
-[section 2](#rate-laws): it is a linear combination of the reactant
-expression [$a(t)$](#rate-laws-a) and the product expression
-[$b(t)$](#rate-laws-b) introduced there, under the same assumptions
+[section 2](rate-laws): it is a linear combination of the reactant
+expression [$a(t)$](rate-laws-a) and the product expression
+[$b(t)$](rate-laws-b) introduced there, under the same assumptions
 (single-component, total, closed, homogeneous, isochoric reaction):
 
 $$\hat{Y}_\mathrm{THEO}(t) = \frac{Y_{0}}{a_{0}} \cdot a(t) + \frac{Y_{\infty}}{b_{\infty}} \cdot b(t)$$
@@ -622,10 +626,10 @@ $$\hat{Y}^{[1]}(t)=Y_{\infty}+\exp\left(-\alpha kt\right)\left(Y_{0}-Y_{\infty}\
 $$\hat{Y}^{[2]}(t)=
 Y_{0}+\dfrac{\left(Y_{\infty}-Y_{0}\right)}{1+\dfrac{\beta}{b_{\infty}\alpha^{2}kt}}=Y_{0}+\frac{\left(Y_{\infty}-Y_{0}\right)b_{\infty}\alpha^{2}kt}{b_{\infty}\alpha^{2}kt+\beta}$$
 
-<a id="kord-advanced"></a>
+(kord-advanced)=
 ### 4.4 Advanced use
 
-<a id="kord-advanced-compare"></a>
+(kord-advanced-compare)=
 #### 4.4.1 Comparing several fits
 
 `superpose_plots(studies, order=1, show_experimental=True, labels=None,
@@ -663,10 +667,10 @@ Each study's legend entry is tagged automatically (`free fit`, `Y0 fixed`,
 If an order isn't fitted yet for a given study, it is fitted now with
 `fix_Y0`/`fix_Yinf`; if it's already cached under *different* settings,
 the cache is kept as-is (same rule as `plot_all_fits()`, see
-[4.1.1](#kord-quickstart-basic) above) and a warning is printed for that
+[4.1.1](kord-quickstart-basic) above) and a warning is printed for that
 study.
 
-<a id="kord-advanced-loading"></a>
+(kord-advanced-loading)=
 #### 4.4.2 `from_spreadsheet` vs `load_from_spreadsheet`
 
 `from_spreadsheet(file_path, exp_number, sheet_name=0, show_data=True, colab=False, **kwargs)`
@@ -697,7 +701,7 @@ t, Y, headers, parameters = KORD.load_from_spreadsheet(file, exp_number=1)
 study = KORD(t, Y, headers, a0=parameters[0], alpha=parameters[1], beta=parameters[2])
 ```
 
-<a id="kord-advanced-sheet"></a>
+(kord-advanced-sheet)=
 #### 4.4.3 Reading a different sheet / experiment
 
 `load_from_spreadsheet(file_path, exp_number, sheet_name=0, show_data=True)`
@@ -708,7 +712,7 @@ works, as a deprecated alias.) reads **one** sheet (`sheet_name`, by index or
 by name — the first sheet by default) and, within that sheet, picks the
 column pair identified by `exp_number` (1 for the first pair of columns, 2
 for the next pair, etc. — see the data format in
-[4.2.3 Input](#input) above). `from_spreadsheet` takes the exact same
+[4.2.3 Input](input) above). `from_spreadsheet` takes the exact same
 `sheet_name`/`exp_number` arguments and forwards them:
 
 * If every experiment lives in its own pair of columns **within the same

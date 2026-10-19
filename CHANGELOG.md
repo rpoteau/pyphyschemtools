@@ -12,7 +12,7 @@
 
 # Changelog pyphyschemtools
 
-## [0.11.0] - 2026-10-19 "kinetics.py: Y notation, binf identifiability, KORD comparison tools"
+## [0.11.0]-[0.11.1] - 2026-10-19 "kinetics.py: Y notation, binf identifiability, KORD comparison tools"
 
 ### Added
 - **`KORD` in `kinetics.py`**:

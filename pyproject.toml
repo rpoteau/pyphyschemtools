@@ -1,11 +1,11 @@
 [project]
 name = "pyphyschemtools"
-version = "0.10.0"
+version = "0.10.1"
 description = "A comprehensive Python toolbox for physical chemistry and cheminformatics"
 authors = [{name = "Romuald POTEAU, LPCNO", email = "romuald.poteau@utoulouse.fr"}]
 readme = "README.md"
 requires-python = ">=3.8"
-license = {text = "GPL-3.0-or-later"}
+license = "GPL-3.0-or-later"
 dependencies = [
     "ase",              # Atomic Simulation Environment: manipulating and visualizing atomistic structures
     "bokeh",            # Interactive web-based visualizations for large datasets

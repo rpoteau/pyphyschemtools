@@ -12,6 +12,21 @@
 
 # Changelog pyphyschemtools
 
+## [0.10.1] - "Documentation, PeriodicTable"
+
+### Added
+- `PeriodicTable.py`
+    - New `PeriodicTable(TableauPeriodique)` class: an English-language version, without the French localization patch (element/family names and `prop`/`isotopes`/`mononucleides`/`afficher` output are in English).
+    - Refactor: extracted the French localization step into `_localize_names()`, overridable (no-op in `PeriodicTable`), so the rest of `patch_elements()` is shared between the two classes.
+
+### Fixed
+- `__init__.py`
+    - Fixed the lazy-loading (`__getattr__`): a module and a class sharing the same name (e.g. `PeriodicTable.py` / `class PeriodicTable`) could get silently shadowed at import time (the module overwriting the class), making the class unimportable/uncallable.
+    - Fix: the relevant attribute is now explicitly restored after each submodule import, so `from pyphyschemtools import TableauPeriodique, PeriodicTable` works reliably and repeatably.
+
+### Changed
+- Documentation (`PeriodicTable.md`): Added an English readthedocs page for `PeriodicTable.py`: Quick Start, method descriptions, and the two pedagogical warnings (radiogenic reclassification, CIAAW ranges).
+
 ## [0.10.0] - 2026-10-17 "AO, H, PT, calibration, HMO, easy_rdkit, MolSym"
 
 ### Added

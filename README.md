@@ -6,10 +6,9 @@
 
 **pyphyschemtools** is a collection of Python utilities designed to facilitate data processing and analysis in the field of physical chemistry
 
-This library is an integral part of the broader [**pyPhysChem project**](https://github.com/rpoteau/pyPhysChem/), aimed at integrating Python programming into physical chemistry education, spanning from Bachelor’s level to PhD students and early-career researchers. The pyPhysChem project is strategically positioned at the interface between higher education and cutting-edge research. 
+This library is an integral part of the broader [**pyPhysChem project**](https://github.com/rpoteau/pyPhysChem/), aimed at integrating Python programming into physical chemistry education, spanning from Bachelor's level to PhD students and early-career researchers. The pyPhysChem project is strategically positioned at the interface between higher education and cutting-edge research.
 
-
-The pyPhysChem notebooks provide commented and illustrated examples covering fundamental topics—such as derivatives, integrals, NMR, or the hydrogen atom - while extending into advanced research applications. The repository also includes comprehensive resources for machine learning in chemistry, including artificial neural networks and autoencoders, bridging the gap between classroom theory and modern laboratory practice.
+The pyPhysChem notebooks provide commented and illustrated examples covering fundamental topics — such as derivatives, integrals, NMR, or the hydrogen atom — while extending into advanced research applications. Among them, **ULR_DigitalChem1** (Université de La Réunion, L3 Chemistry) is a full semester-long TD/TP course built entirely on `pyphyschemtools`: fundamental constants and units, the hydrogen atom and atomic orbitals, loading and analyzing experimental data, measurement statistics, calibration and regression, and molecular symmetry (point groups, Lewis/VSEPR structures, SMILES, molecular orbitals). The repository also includes comprehensive resources for machine learning in chemistry, including artificial neural networks and autoencoders, bridging the gap between classroom theory and modern laboratory practice.
 
 ---
 

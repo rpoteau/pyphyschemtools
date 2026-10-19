@@ -3,8 +3,8 @@
 The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.
 """
 
-__version__ = "0.10.0"
-__last_update__ = "2026-10-17"
+__version__ = "0.10.1"
+__last_update__ = "2026-10-19"
 
 import importlib
 import importlib.util
@@ -45,8 +45,28 @@ def __getattr__(name):
         try:
             # On tente l'import relatif
             module = importlib.import_module(mod_name, __package__)
+
+            # Effet de bord documenté de Python : importer un sous-module le lie
+            # automatiquement comme attribut du package parent, sous son propre
+            # nom (ex: pyphyschemtools.PeriodicTable = <module ...>). Si un module
+            # définit un objet (classe, fonction) portant EXACTEMENT le même nom
+            # que lui-même (ex: PeriodicTable.py / class PeriodicTable), cet effet
+            # de bord écrase silencieusement l'entrée déjà posée par ce lazy
+            # loader avec le module, au lieu de la classe — et ce dès le tout
+            # premier import, quel que soit l'attribut initialement demandé. On
+            # restaure donc systématiquement la bonne valeur ici.
+            bare_mod_name = mod_name.lstrip(".")
+            if (
+                bare_mod_name != name
+                and hasattr(module, bare_mod_name)
+                and getattr(module, bare_mod_name) is not module
+            ):
+                globals()[bare_mod_name] = getattr(module, bare_mod_name)
+
             if hasattr(module, name):
-                return getattr(module, name)
+                value = getattr(module, name)
+                globals()[name] = value
+                return value
         except (ImportError, AttributeError) as e:
             # Track errors to help the user diagnose missing dependencies
             import_errors.append(f"  - In {mod_name}: {e}")

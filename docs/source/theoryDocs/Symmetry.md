@@ -74,7 +74,7 @@ where $h$ is the order of the group and $g_c$ the number of operations in class 
 | `inversion()` | $i$ |
 | `Cn(n, axis="z", k=1)` | rotation $C_n^k$ (angle $2\pi k/n$) |
 | `sigma(plane="xy")` | reflection through a plane |
-| `Sn(n, axis="z", k=1)` | improper rotation $S_n^k = \sigma_h C_n^k$ |
+| `Sn(n, axis="z", k=1)` | improper rotation $S_n^k = \sigma_⟂ C_n^k$ |
 | `inv(M)` | inverse of an operation ($= M^T$) |
 | `identify(M)` | name of an operation given as a matrix |
 | `show_matrix(M)` | LaTeX display of a matrix, with exact entries ($\frac{1}{2}$, $\frac{\sqrt{3}}{2}$...) when possible |
@@ -83,7 +83,7 @@ where $h$ is the order of the group and $g_c$ the number of operations in class 
 * `plane`: `"xy"`, `"xz"`, `"yz"` or, for any other plane, its normal vector, e.g. `(1, -1, 0)` for the diagonal plane containing $z$ and the bisector of $x$ and $y$ ($\sigma_d$ of CH<sub>4</sub>, D<sub>4h</sub>...)
 
 ```python
-from pyphyschemtools.symmetry import Cn, sigma, Sn, inv, identify, show_matrix
+from pyphyschemtools import Cn, sigma, Sn, inv, identify, show_matrix
 
 C3 = Cn(3)
 identify(C3 @ C3)                    # 'C3²(z)'
@@ -132,7 +132,7 @@ Names given by `identify`:
 **Reduction without a molecule.** A representation given by its characters (one per class, in the order of the columns of the character table) can be reduced, and the IR / Raman activity of its components obtained, without any geometry:
 
 ```python
-from pyphyschemtools.symmetry import reduce_representation, ir_raman_activity
+from pyphyschemtools import reduce_representation, ir_raman_activity
 
 reduce_representation("C3v", [4, 1, 2])          # Γ = 2A1 + E
 ir_raman_activity("Td", [9, 0, 1, -1, 3])        # IR active: 2T2 | Raman active: A1 + E + 2T2
@@ -147,7 +147,7 @@ If the coefficients $n_i$ are not integers, the characters do not correspond to 
 <a id="molsym"></a>
 ## 4. The `MolSym` class
 
-### 4.1 Building a molecule
+### 4.1 Building a `MolSym` molecule
 
 A `MolSym` molecule is built from its **3D structure** (position of each atom). `MolSym` does not read structures itself: it delegates this task to `molView` (Chem3D module), and gets the atoms and their coordinates from it.
 
@@ -160,12 +160,21 @@ A `MolSym` molecule is built from its **3D structure** (position of each atom). 
 
 ```python
 from pyphyschemtools import get_ppct_data
-from pyphyschemtools.symmetry import MolSym
-from pyphyschemtools.Chem3D import molView
+from pyphyschemtools import MolSym
+from pyphyschemtools import molView
 
 water = MolSym.from_molView(molView("O", source="smiles", display_now=False))
 sf6 = MolSym.from_molView(molView(get_ppct_data("Symmetry/SF6_model.xyz"), source="file", display_now=False))
-print(water.group, sf6.group)                     # C2v Oh
+print(water.group, sf6.group)                     # C2v & Oh
+```
+
+It is also possible to type the coordinates by hand. It may be useful for small molecules, for educational reasons:
+
+```python
+from pyphyschemtools import MolSym
+water_xz = MolSym(["O", "H", "H"],
+                  [[0, 0, 0.117], [0.757, 0, -0.469], [-0.757, 0, -0.469]],
+                  "C2v")
 ```
 
 The SMILES → 3D step needs a geometry optimization (force fields MMFF94 or UFF of RDKit), which fails for hypervalent compounds (SF<sub>6</sub>, PF<sub>5</sub>...) and organometallic compounds (ferrocene...): use an xyz file. A SMILES does not describe conformations either (e.g. the orientation of the OH groups of B(OH)<sub>3</sub>). Idealized models are provided in `data_examples/Symmetry/`: SF<sub>6</sub>, PF<sub>5</sub>, SF<sub>5</sub>Cl, cis/trans-SF<sub>4</sub>Cl<sub>2</sub>, mer/fac-SF<sub>3</sub>Cl<sub>3</sub>, B(OH)<sub>3</sub>, Fe(CO)<sub>5</sub>, eclipsed and staggered ferrocene, cerocene, ethylene, benzene.
@@ -244,7 +253,7 @@ In particular, an atom that moves contributes 0, and an atom that stays in place
 
 | Basis | Method | Contribution of a fixed atom |
 |---|---|---|
-| atoms (one s function per atom) | `gamma_atoms()` | $1$ |
+| atoms (one s function per atom) | `gamma_orbitals("s")` | $1$ |
 | atomic orbitals of angular momentum $l$ | `gamma_orbitals(basis)` | $\chi_l(R)$ |
 | cartesian displacements | `gamma_3N()` | $\chi_{xyz}(R) = \mathrm{tr}\,R$ |
 
@@ -259,7 +268,7 @@ The representation is then reduced into irreducible representations with `reduce
 <a id="atomic-orbitals"></a>
 ### 5.2 Atomic orbitals
 
-`gamma_orbitals(basis)` gives, for each set of equivalent atoms and each shell, the characters and the symmetries of the symmetry-adapted linear combinations (SALCs), i.e. the building blocks of a molecular orbital diagram. Without argument, the basis is made of the valence orbitals of all the atoms:
+`gamma_orbitals(basis)` gives, for each set of equivalent atoms and each shell, the characters and the symmetries of the symmetry-adapted linear combinations (SALCs), i.e. the building blocks of a molecular orbital diagram. Without argument, **the basis set is made of the valence orbitals of all the atoms**:
 
 ```python
 water.gamma_orbitals()                  # O 2s: A1; O 2p: A1 + B1 + B2; H 1s: A1 + B2
@@ -276,7 +285,7 @@ benzene.gamma_orbitals({"C": "pz"})     # π system: A2u + B2g + E1g + E2u
 | `s` | one s orbital |
 | `p` | $p_x$, $p_y$, $p_z$ |
 | `d` | $d_{z^2}$, $d_{xz}$, $d_{yz}$, $d_{x^2-y^2}$, $d_{xy}$ |
-| `f` | $f_{z^3}$, $f_{xz^2}$, $f_{yz^2}$, $f_{z(x^2-y^2)}$, $f_{xyz}$, $f_{x(x^2-3y^2)}$, $f_{y(3x^2-y^2)}$ (real cubic set) |
+| `f` | $f_{z^3}$, $f_{xz^2}$, $f_{yz^2}$, $f_{z(x^2-y^2)}$, $f_{xyz}$, $f_{x(x^2-3y^2)}$, $f_{y(3x^2-y^2)}$ |
 | `px`, `py`, `pz` | a single p orbital, e.g. the p orbital perpendicular to a planar molecule (π basis) |
 | `pxy`, `pxz`, `pyz` | two p orbitals, e.g. the p orbitals lying in the molecular plane (σ basis); `"px py"` is the same as `"pxy"` |
 
@@ -296,11 +305,11 @@ The shells are given:
 </div>
 
 <a id="molecular-orbitals"></a>
-### 5.3 Molecular orbitals
+### 5.3 Simple molecular orbitals
 
 `orbital_symmetry(C, atoms, shell)` gives the irreducible representation of a molecular orbital, and `orbital_symmetries(coeffs, energies, atoms, shell)` labels all the MOs of a set, the degenerate MOs being grouped.
 
-The MOs must be expanded on **one atomic orbital per atom, all of the same type** (`shell` = `"s"`, `"px"`, `"py"` or `"pz"`). They may come from any calculation: Hückel π MOs on the pz orbitals, combinations of the 1s orbitals of hydrogen atoms, or the corresponding coefficients of an ab initio / DFT calculation. MOs that mix several orbitals on the same atom (s, p, d...) are not handled.
+The MOs must be expanded on **one atomic orbital per atom, all of the same type** (`shell` = `"s"`, `"px"`, `"py"` or `"pz"`). They may come from any calculation: Hückel π MOs on the pz orbitals, combinations of the 1s orbitals of hydrogen atoms, or the corresponding coefficients of an ab initio / DFT calculation. **But MOs that mix several orbitals on the same atom (s, p, d...) are not handled**.
 
 | Argument | Format |
 |---|---|

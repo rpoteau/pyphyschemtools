@@ -16,7 +16,7 @@ diagrams and line spectra.
 ## Quick Start
 
 ```python
-from pyphyschemtools.Hydrogen import (
+from pyphyschemtools import (
     rydberg_Z, En_hydrogenic, Ei_hydrogenic,
     spectral_series, plot_energy_levels, plot_line_spectrum
 )
@@ -36,6 +36,15 @@ plot_energy_levels(n2_max=6, transition_type="absorption")
 # Line spectrum on a log wavelength axis
 plot_line_spectrum(n2_max=12)
 ```
+
+<u>ou bien</u>
+
+```python
+import pyphyschemtools.hydrogen as H
+H.Ei_hydrogenic(Z=1)
+H.plot_line_spectrum(n2_max=12)
+```
+
 
 ## Reduced-mass correction
 

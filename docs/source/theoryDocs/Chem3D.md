@@ -30,7 +30,7 @@ Visualization styles: `'bs'` (ball-and-stick, default), `'cpk'`
 ## Quick start
 
 ```python
-from pyphyschemtools.Chem3D import molView
+from pyphyschemtools import molView
 
 # From a local file
 molView("molecule.xyz", source="file")

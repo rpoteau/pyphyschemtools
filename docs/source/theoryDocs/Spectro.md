@@ -13,7 +13,7 @@ The `QuantitativeAnalysis` class is a core component of the `pyphyschemtools` li
 The class can be initialized manually with arrays or loaded directly from spreadsheets. It features built-in support for both `.xlsx` (Excel) and `.ods` (LibreOffice) formats using `pathlib` for robust path management.
 
 ```python
-from pyphyschemtools.spectro import QuantitativeAnalysis
+from pyphyschemtools import QuantitativeAnalysis
 
 # Loading data from a LibreOffice Calc file
 analysis = QuantitativeAnalysis.from_excel(
@@ -24,7 +24,7 @@ analysis = QuantitativeAnalysis.from_excel(
 If your data is already in Python variables, you can instantiate the class directly without using a file. This is ideal for quick tests or manual data entry.
 
 ```python
-from pyphyschemtools.spectro import QuantitativeAnalysis
+from pyphyschemtools import QuantitativeAnalysis
 
 # Experimental data as lists
 concentrations = [1.0, 2.0, 3.0, 4.0, 5.0]

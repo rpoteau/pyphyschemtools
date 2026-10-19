@@ -12,7 +12,36 @@
 
 # Changelog pyphyschemtools
 
-## [0.10.1] - "Documentation, PeriodicTable"
+## [0.11.0] - 2026-10-19 "kinetics.py: Y notation, binf identifiability, KORD comparison tools"
+
+### Added
+- **`KORD` in `kinetics.py`**:
+    - `copy()`: returns an independent deep copy of a `KORD` instance, so the same loaded data can be fitted twice under different conditions (e.g. `fix_Y0`) without one fit overwriting the other's cache.
+    - New module-level `superpose_plots(studies, order=1, show_experimental=True, labels=None, fix_Y0=False, fix_Yinf=False, save_img=None)` function (not a `KORD` method) to overlay the **fitted** curve of several `KORD` studies for the same order on one plot — e.g. the same data fitted freely vs. with `fix_Y0`/`fix_Yinf` — auto-labeling each curve with which parameters were held fixed.
+    - `simulate_plot()`: new `order` parameter (`None` = all three orders as before, or an int to plot just one) and `show_experimental=True` by default, overlaying `self.t_exp`/`self.Y_exp` on the guess curve(s).
+    - Typo guard: `kbasic` and `KORD` now override `__setattr__` to reject the creation of any new attribute once the instance is built, raising `AttributeError` (listing the existing attributes) instead of silently creating a stray, misspelled attribute that fit()/plots would then read with no warning.
+
+### Changed
+- **`kinetics.py`**: full rename from the `G` notation to `Y` (clearer, and consistent with the usual ML notation for a fitted/experimental quantity), including a "hat" on the fitted values, `Ŷ_THEO`, as in ML's ŷ for predictions. **Breaking change, no backward-compatible aliases.**
+- **`KORD`**:
+    - `plot_all_fits()`: an order already cached in `self.results` under different `fix_Y0`/`fix_Yinf` settings than requested is no longer silently reused as-is for the comparison plot; a small aligned warning table is printed instead, and the cache is never overwritten without the caller's explicit `fit()` call.
+    - `fit()`: GUESS/OPTIM console printing now bolds the parameters actually being optimized (free) and prints the ones held fixed (`fix_Y0`/`fix_Yinf`, and `binf`, see Fixed below) in normal weight.
+    - Renamed `Y_0_guess`/`Y_inf_guess`/`b_inf_guess` to `Y0_guess`/`Yinf_guess`/`binf_guess`, for consistency with the no-underscore style already used by `fix_Y0`/`fix_Yinf` and by the `binf` key in `results[order]`.
+- Renamed **RMSD** to **RMSE** throughout `kinetics.py` (`kbasic` used RMSD, `KORD` already used RMSE for the exact same quantity); RMSE is now used consistently everywhere, matching scikit-learn's `root_mean_squared_error`.
+
+### Fixed
+- **`KORD.fit()`**: `binf` (the final product concentration) is no longer a free fit parameter for any order — it is now always derived from mass balance, `binf = a0*beta/alpha`, exactly as Order 1 already did. For Orders 0 and 2, leaving `binf` free alongside `k` introduced a non-identifiable, phantom degree of freedom: the model's shape depends on `k` and `binf` only through a single combined ratio, so infinitely many `(k, binf)` pairs gave the exact same curve and the exact same RMSE, and `curve_fit` converged to an arbitrary point on that family depending on the starting guess (`binf_guess`) rather than to a physically meaningful value. Deriving `binf` removes the degeneracy; the free-parameter count `p` used in AIC/BIC is now consistently 3 for every order (was 4 for Orders 0/2), removing a bias against those orders in BIC-based model selection.
+- **`KORD.fit()`**: the returned `results[order]` dict no longer includes the full array of theoretical values (previously under `'G_theo'`/`'Y_theo'`), which was never read anywhere else in the module and only cluttered the printed/returned dictionary.
+
+### Documentation
+- **`Kinetics.md`**:
+    - Reorganized Quick Start (new *Basic use*/*Specific fit* subsections) and new *Advanced use* section (comparing several fits with `superpose_plots`, `from_spreadsheet` vs. `load_from_spreadsheet`, reading a different sheet/experiment).
+    - Section 1 rewritten ("Finding a Mathematical Model That Fits the Data"): general curve-fitting framing — the optimal parameters minimize the RMSE between $Y_\mathrm{EXP}$ and $\hat{Y}_\mathrm{THEO}$, which tends toward 0 only if the chosen model is the right one.
+    - AIC formula documented alongside BIC's in Model Selection.
+    - Added a note on why there is no `fix_binf` switch (see Fixed above).
+    - Added a note that RMSD and RMSE are the same quantity, just the name preferred by different communities (crystallography/MD vs. statistics/ML).
+
+## [0.10.1] - 2026-10-18 "Documentation, PeriodicTable"
 
 ### Added
 - `PeriodicTable.py`

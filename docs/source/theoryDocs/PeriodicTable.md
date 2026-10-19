@@ -39,7 +39,7 @@ pt = PeriodicTable()
 pt.prop('O')
 pt.isotopes('Cl')
 pt.mononucleides()
-pt.afficher()
+pt.display()            # interactive periodic table (bokeh); afficher() also works
 ```
 
 <u>ou bien</u>
@@ -101,12 +101,14 @@ down from several seconds to well under a tenth of a second.
 
 ## Interactive periodic table
 
-`afficher(self)` opens an interactive `bokeh` periodic table in the current
-Jupyter notebook: each tile shows the symbol, atomic number, name and molar
-mass, colored by family, with a hover tooltip giving name, family, atomic
-number, molar mass, atomic radius, first ionization energy, electron
-affinity, Pauling electronegativity and electron configuration — in French
-for `TableauPeriodique`, in English for `PeriodicTable`.
+`afficher(self)` (on `TableauPeriodique`) / `display(self)` (on
+`PeriodicTable`, with `afficher` kept as an alias) opens an interactive
+`bokeh` periodic table in the current Jupyter notebook: each tile shows the
+symbol, atomic number, name and molar mass, colored by family, with a hover
+tooltip giving name, family, atomic number, molar mass, atomic radius, first
+ionization energy, electron affinity, Pauling electronegativity and electron
+configuration — in French for `TableauPeriodique`, in English for
+`PeriodicTable`.
 
 ## API reference
 

@@ -709,11 +709,15 @@ class PeriodicTable(TableauPeriodique):
 
         return mono
 
-    def afficher(self):
+    def display(self):
         """
         Generates and displays the interactive periodic table in a Jupyter notebook.
 
         Hover over a tile to see the element's properties.
+
+        English-named counterpart of :meth:`TableauPeriodique.afficher`. Also
+        reachable as ``afficher()`` (kept as an alias below) so that code
+        written against either class can call the same method name.
         """
         from bokeh.plotting import show, output_notebook
         from mendeleev.vis import periodic_table_bokeh
@@ -871,3 +875,7 @@ class PeriodicTable(TableauPeriodique):
 
         fig = periodic_table_bokeh(self.elements, colorby="color")
         show(fig)
+
+    # alias so that generic/polymorphic code can call .afficher() regardless
+    # of which of the two classes (TableauPeriodique or PeriodicTable) it holds
+    afficher = display

@@ -8,44 +8,42 @@ from sklearn.metrics import r2_score as r2
 from .visualID_Eng import fg, hl, bg, color
 import os
 import re
+import copy as _copy
 
 # =====================================================================
-#  kbasic : recherche de la constante de vitesse k par minimisation du RMSD
-#  Version pédagogique, simple et autonome.
-#
-#  Une classe avec trois operations, dans l'ordre :
-#     1) kb.read(fichier)  : lire le fichier Excel (temps, G) + recapitulatif
-#     2) kb.fit(ordre)     : faire le fit (trouver le meilleur k)
-#     3) kb.plot()         : tracer le resultat (comparer modele et donnees)
-#
-#  Idee : on a des points expérimentaux (temps, grandeur mesuree G) et un
-#  modele théorique qui depend de k. On cherche le k qui MINIMISE l'ecart
-#  entre modèle et données. Cet ecart est le RMSD.
-# =====================================================================
-
-# =====================================================================
-#  kbasic : recherche de la constante de vitesse k par minimisation du RMSD
-#  Version pédagogique, simple et autonome.
+#  FR — kbasic : recherche de la constante de vitesse k par minimisation
+#  du RMSD. Version pédagogique, simple et autonome.
 #
 #  Une classe avec trois opérations, dans l'ordre :
-#     1) kb.read(fichier)  : lire le fichier Excel (temps, G) + récapitulatif
+#     1) kb.read(fichier)  : lire le fichier Excel (temps, Y) + récapitulatif
 #     2) kb.fit(ordre)     : faire le fit (trouver le meilleur k)
 #     3) kb.plot()         : tracer le résultat (comparer modèle et données)
 #
-#  Idée : on a des points expérimentaux (temps, grandeur mesurée G) et un
+#  Idée : on a des points expérimentaux (temps, grandeur mesurée Y) et un
 #  modèle théorique qui dépend de k. On cherche le k qui MINIMISE l'écart
 #  entre modèle et données. Cet écart est le RMSD.
+#
+#  EN — kbasic: pedagogical, self-contained search for the rate constant
+#  k by minimizing the RMSD.
+#
+#  A class with three operations, in order:
+#     1) kb.read(file)   : read the Excel file (time, Y) + summary table
+#     2) kb.fit(order)   : do the fit (find the best k)
+#     3) kb.plot()       : plot the result (compare model and data)
+#
+#  Idea: we have experimental points (time, measured quantity Y) and a
+#  theoretical model that depends on k. We look for the k that MINIMIZES
+#  the gap between model and data. That gap is the RMSD.
 # =====================================================================
 
-import numpy as np                      # calcul numérique (tableaux, exp, etc.)
-import pandas as pd                     # lecture Excel et affichage en tableau
-import matplotlib.pyplot as plt         # tracé des graphiques
-from scipy.optimize import minimize     # outil qui cherche le minimum d'une fonction
+# numpy, pandas and matplotlib.pyplot are already imported at the top of this
+# file (used by KORD too); the one new import kbasic needs is minimize:
+from scipy.optimize import minimize     # FR: outil qui cherche le minimum d'une fonction / EN: tool that finds the minimum of a function
 
 
 class kbasic:
     """
-    Recherche pédagogique de la constante de vitesse k.
+    FR — Recherche pédagogique de la constante de vitesse k.
 
     Utilisation typique ::
 
@@ -54,43 +52,86 @@ class kbasic:
         kb.fit(ordre=1)           # 2) chercher le meilleur k
         kb.plot()                 # 3) tracer le résultat
 
-    La grandeur mesurée G décroît avec le temps depuis sa valeur initiale
-    G0. La forme de G(t) dépend de l'ordre de la réaction :
+    La grandeur mesurée Y décroît avec le temps depuis sa valeur initiale
+    Y0. La forme de Y(t) dépend de l'ordre de la réaction :
 
     - ordre 0 : décroissance LINÉAIRE
     - ordre 1 : décroissance EXPONENTIELLE (le cas le plus courant)
     - ordre 2 : décroissance HYPERBOLIQUE
+
+    EN — Pedagogical search for the rate constant k.
+
+    Typical usage ::
+
+        kb = kbasic()
+        kb.read("measurements.xlsx")  # 1) read the data
+        kb.fit(order=1)               # 2) look for the best k
+        kb.plot()                     # 3) plot the result
+
+    The measured quantity Y decreases with time from its initial value
+    Y0. The shape of Y(t) depends on the reaction order:
+
+    - order 0: LINEAR decay
+    - order 1: EXPONENTIAL decay (the most common case)
+    - order 2: HYPERBOLIC decay
     """
 
     def __init__(self):
         # Les données expérimentales (remplies par read).
         self.t_exp = None      # temps mesurés
-        self.G_exp = None      # grandeurs mesurées
+        self.Y_exp = None      # grandeurs mesurées
         # Les en-têtes lus dans le fichier (remplis par read), pour les axes.
         self.label_t = "Temps" # nom de l'axe des temps (par défaut)
-        self.label_G = "G"     # nom de l'axe de la grandeur (par défaut)
+        self.label_Y = "Y"     # nom de l'axe de la grandeur (par défaut)
         # Les résultats du fit (remplis par fit).
-        self.G0 = None         # valeur de G à t=0
+        self.Y0 = None         # valeur de Y à t=0
         self.ordre = None      # ordre choisi pour le fit
         self.k_opt = None      # meilleure valeur de k trouvée
         self.rmsd_min = None   # RMSD au minimum
+        self.t_half = None     # temps de demi-réaction t_1/2
+        self._initialized = True   # voir __setattr__ ci-dessous
+
+    def __setattr__(self, name, value):
+        """
+        FR — Protection contre les fautes de frappe sur un nom d'attribut
+        (p. ex. `kb.Y_initial = ...` au lieu de `kb.Y0 = ...`) : une fois
+        l'objet construit, on ne peut plus CRÉER un nouvel attribut — seuls
+        ceux déjà définis dans __init__ peuvent être modifiés. Sans ça,
+        Python créerait silencieusement l'attribut mal orthographié, et le
+        reste du code continuerait d'utiliser l'ancienne valeur sans jamais
+        signaler l'erreur.
+
+        EN — Guards against attribute-name typos (e.g. `kb.Y_initial = ...`
+        instead of `kb.Y0 = ...`): once the object is built, no NEW
+        attribute can be created — only ones already defined in __init__
+        can be changed. Without this, Python would silently create the
+        misspelled attribute, and the rest of the code would keep using the
+        old value with no error at all.
+        """
+        if getattr(self, '_initialized', False) and name not in self.__dict__:
+            existing = ', '.join(sorted(k for k in self.__dict__ if not k.startswith('_')))
+            raise AttributeError(
+                f"kbasic has no attribute '{name}' (possible typo?). "
+                f"Existing attributes: {existing}"
+            )
+        object.__setattr__(self, name, value)
 
     # -----------------------------------------------------------------
     #  Les trois modèles théoriques.
-    #  Chacun ne dépend que du temps t, de la constante k et de G0.
+    #  Chacun ne dépend que du temps t, de la constante k et de Y0.
     # -----------------------------------------------------------------
-    def _modele(self, t, k, G0, ordre):
-        """Renvoie G(t) prédit par le modèle de l'ordre demandé."""
+    def _modele(self, t, k, Y0, ordre):
+        """Renvoie Y(t) prédit par le modèle de l'ordre demandé."""
         if ordre == 0:
             # Ordre 0 : droite qui descend, bornée à zéro une fois le
             # réactif épuisé (np.maximum empêche de passer sous zéro).
-            return np.maximum(G0 - k * t, 0)
+            return np.maximum(Y0 - k * t, 0)
         elif ordre == 1:
-            # Ordre 1 : exponentielle. À t=0, G=G0 ; à t grand, G->0.
-            return G0 * np.exp(-k * t)
+            # Ordre 1 : exponentielle. À t=0, Y=Y0 ; à t grand, Y->0.
+            return Y0 * np.exp(-k * t)
         elif ordre == 2:
-            # Ordre 2 : hyperbole. À t=0, G=G0.
-            return G0 / (1 + k * t)
+            # Ordre 2 : hyperbole. À t=0, Y=Y0.
+            return Y0 / (1 + k * t)
         else:
             raise ValueError("ordre doit valoir 0, 1 ou 2")
 
@@ -99,7 +140,7 @@ class kbasic:
     #  RMSD = racine de la moyenne des carrés des écarts.
     #  Plus il est petit, mieux le modèle colle aux données.
     # -----------------------------------------------------------------
-    def _rmsd(self, k, ordre, G0):
+    def _rmsd(self, k, ordre, Y0):
         """Calcule le RMSD pour une valeur de k donnée."""
         # ATTENTION : ce n'est pas nous qui appelons cette fonction, c'est
         # minimize (voir la méthode fit). Or minimize travaille toujours avec
@@ -112,13 +153,13 @@ class kbasic:
         # le test rend la fonction utilisable aussi avec un simple nombre.
         if np.ndim(k) > 0:
             k = k[0]
-        G_modele = self._modele(self.t_exp, k, G0, ordre)
-        return np.sqrt(np.mean((self.G_exp - G_modele) ** 2))
+        Y_modele = self._modele(self.t_exp, k, Y0, ordre)
+        return np.sqrt(np.mean((self.Y_exp - Y_modele) ** 2))
 
     # =================================================================
     #  1) LIRE LES DONNÉES
     #
-    #  Fichier Excel à deux colonnes : temps à gauche, G à droite.
+    #  Fichier Excel à deux colonnes : temps à gauche, Y à droite.
     #  La première ligne PEUT être un en-tête (texte) ou déjà des
     #  données (nombres). On regarde la première cellule :
     #     - texte  -> c'est un en-tête, on saute la 1ère ligne
@@ -126,7 +167,7 @@ class kbasic:
     # =================================================================
     def read(self, fichier=None, colab=False):
         """
-        Lit un fichier Excel à deux colonnes (temps, G) et affiche un
+        FR — Lit un fichier Excel à deux colonnes (temps, Y) et affiche un
         récapitulatif sous forme de DataFrame pandas.
 
         Détecte automatiquement si la première ligne est un en-tête. Si oui,
@@ -139,6 +180,21 @@ class kbasic:
                       Inutile si colab=True (on choisit le fichier à l'upload).
             colab   : si True, ouvre le bouton d'upload de Google Colab
                       et lit le fichier choisi. Défaut False.
+
+        EN — Reads a two-column Excel file (time, Y) and displays a
+        summary as a pandas DataFrame.
+
+        Automatically detects whether the first row is a header. If so,
+        the column names are used as axis labels for the plot.
+
+        Returns the DataFrame of the data read.
+
+        Args:
+            fichier: path (or URL) of the Excel file to read.
+                     Unused if colab=True (the file is picked via the upload
+                     widget).
+            colab: if True, opens the Google Colab upload button and reads
+                   the chosen file. Default False.
         """
         # Mode Google Colab : on ouvre le sélecteur de fichier, l'utilisateur
         # choisit son .xlsx, et on récupère son nom pour le lire ensuite.
@@ -160,20 +216,20 @@ class kbasic:
             # les utiliser comme labels d'axes dans plot(), puis les vraies
             # données commencent à la ligne 1.
             self.label_t = str(brut.iloc[0, 0])
-            self.label_G = str(brut.iloc[0, 1])
+            self.label_Y = str(brut.iloc[0, 1])
             donnees = brut.iloc[1:]
         else:
             # Pas d'en-tête : tout le tableau est déjà des données, et on
-            # garde les labels par défaut ("Temps" et "G").
+            # garde les labels par défaut ("Temps" et "Y").
             donnees = brut
 
-        # Colonne 0 = temps, colonne 1 = G. On force en nombres (float).
+        # Colonne 0 = temps, colonne 1 = Y. On force en nombres (float).
         self.t_exp = donnees.iloc[:, 0].astype(float).values
-        self.G_exp = donnees.iloc[:, 1].astype(float).values
+        self.Y_exp = donnees.iloc[:, 1].astype(float).values
 
         # Récapitulatif propre sous forme de DataFrame, qu'on affiche.
         # On y réutilise les en-têtes lus (ou les labels par défaut).
-        recap = pd.DataFrame({self.label_t: self.t_exp, self.label_G: self.G_exp})
+        recap = pd.DataFrame({self.label_t: self.t_exp, self.label_Y: self.Y_exp})
         print(f"{len(self.t_exp)} points lus.")
         try:
             # display() rend un joli tableau dans un notebook Jupyter.
@@ -185,21 +241,110 @@ class kbasic:
 
         return recap
 
+    # -----------------------------------------------------------------
+    #  Estimation d'un point de départ raisonnable pour k, à partir des
+    #  données elles-mêmes (plutôt qu'une constante arbitraire comme 0.1,
+    #  qui peut être très loin du bon ordre de grandeur et faire échouer
+    #  ou ralentir la convergence de minimize).
+    # -----------------------------------------------------------------
+    def _k_depart_auto(self, ordre, Y0):
+        """
+        FR — Estime un k de départ en inversant analytiquement le modèle
+        de l'ordre choisi, à partir d'un seul point expérimental (ni le
+        tout premier, ni le tout dernier) pris comme référence :
+
+        - ordre 0 : Y = Y0 - k t       =>  k = (Y0 - Y_n) / t_n
+        - ordre 1 : Y = Y0 exp(-k t)   =>  k = -ln(Y_n / Y0) / t_n
+        - ordre 2 : Y = Y0 / (1 + k t) =>  k = (Y0 / Y_n - 1) / t_n
+
+        Si l'estimation échoue ou donne un k négatif ou nul (données trop
+        bruitées, point de référence mal choisi...), on revient à 0.1.
+
+        EN — Estimates a starting k by analytically inverting the chosen
+        order's model at a single reference data point (neither the very
+        first nor the very last). Falls back to 0.1 if the estimate fails
+        or comes out non-positive.
+        """
+        # Point de référence : ~10% des données, jamais le premier point
+        # (t=0 ne donne aucune information sur k).
+        n = max(1, len(self.t_exp) // 10)
+        t_n, Y_n = self.t_exp[n], self.Y_exp[n]
+
+        if t_n == 0:
+            return 0.1
+
+        try:
+            if ordre == 0:
+                k0 = (Y0 - Y_n) / t_n
+            elif ordre == 1:
+                if Y_n <= 0:
+                    return 0.1
+                k0 = -np.log(Y_n / Y0) / t_n
+            elif ordre == 2:
+                if Y_n == 0:
+                    return 0.1
+                k0 = (Y0 / Y_n - 1) / t_n
+            else:
+                return 0.1
+        except (ValueError, ZeroDivisionError):
+            return 0.1
+
+        return k0 if k0 > 0 else 0.1
+
     # =================================================================
     #  2) FAIRE LE FIT : chercher le meilleur k (minimiser le RMSD)
     # =================================================================
-    def fit(self, ordre=1, G0=None, k_depart=0.1):
+    def fit(self, ordre=1, Y0=None, k_depart=None):
         """
-        Trouve la valeur de k qui minimise le RMSD pour l'ordre choisi.
+        FR — Trouve la valeur de k qui minimise le RMSD pour l'ordre choisi.
 
-        Si G0 n'est pas donné, on le prend égal à la première valeur
+        Si Y0 n'est pas donné, on le prend égal à la première valeur
         mesurée. Sinon, on utilise la valeur fournie par l'utilisateur.
 
+        Si k_depart n'est pas donné (défaut), il est estimé automatiquement
+        à partir des données par _k_depart_auto() (voir cette méthode) au
+        lieu d'une constante arbitraire — utile si k est très différent de
+        0.1 en ordre de grandeur, ce qui pouvait auparavant ralentir ou
+        faire échouer la convergence. Vous pouvez toujours imposer votre
+        propre valeur de départ en passant k_depart explicitement.
+
+        Calcule aussi le temps de demi-réaction t_1/2 (stocké dans
+        self.t_half et affiché), selon la formule propre à l'ordre choisi
+        (voir section 3.4 "Theory" de Kinetics.md) :
+          - ordre 0 : t_1/2 = Y0 / (2*k)
+          - ordre 1 : t_1/2 = ln(2) / k
+          - ordre 2 : t_1/2 = 1 / k
+
         Retourne : (k_optimal, rmsd_au_minimum)
+
+        EN — Finds the value of k that minimizes the RMSD for the chosen
+        order.
+
+        If Y0 is not given, it is taken equal to the first measured value.
+        Otherwise, the user-provided value is used.
+
+        If k_depart is not given (default), it is estimated automatically
+        from the data by _k_depart_auto() instead of an arbitrary constant —
+        useful when k is far from 0.1 in order of magnitude, which could
+        previously slow down or fail convergence. You can still force your
+        own starting value by passing k_depart explicitly.
+
+        Also computes the half-life t_1/2 (stored in self.t_half and
+        printed), using the order-specific formula (see section 3.4
+        "Theory" in Kinetics.md):
+          - order 0: t_1/2 = Y0 / (2*k)
+          - order 1: t_1/2 = ln(2) / k
+          - order 2: t_1/2 = 1 / k
+
+        Returns: (k_optimal, rmsd_at_minimum)
         """
-        # Valeur par défaut de G0 : le premier point mesuré.
-        if G0 is None:
-            G0 = self.G_exp[0]
+        # Valeur par défaut de Y0 : le premier point mesuré.
+        if Y0 is None:
+            Y0 = self.Y_exp[0]
+
+        # Valeur de départ de k : estimée à partir des données si non fournie.
+        if k_depart is None:
+            k_depart = self._k_depart_auto(ordre, Y0)
 
         # minimize cherche le k qui rend le RMSD le plus petit possible.
         #   - self._rmsd    : la fonction à minimiser
@@ -216,18 +361,28 @@ class kbasic:
         resultat = minimize(
             self._rmsd,
             x0=[k_depart],
-            args=(ordre, G0),
+            args=(ordre, Y0),
             bounds=[(0, None)],
         )
 
         # On mémorise tout dans l'objet, pour que plot() puisse s'en servir.
         self.ordre = ordre
-        self.G0 = G0
+        self.Y0 = Y0
         self.k_opt = resultat.x[0]   # meilleure valeur de k
         self.rmsd_min = resultat.fun # RMSD correspondant (le plus petit)
 
+        # Temps de demi-réaction t_1/2, calculé à partir de k_opt et de la
+        # formule propre à chaque ordre (voir section 3.4 "Theory" de Kinetics.md).
+        if ordre == 0:
+            self.t_half = self.Y0 / (2 * self.k_opt)
+        elif ordre == 1:
+            self.t_half = np.log(2) / self.k_opt
+        elif ordre == 2:
+            self.t_half = 1 / self.k_opt
+
         print(f"Ordre {ordre} : k optimal = {self.k_opt:.4e}"
-              f"  (RMSD = {self.rmsd_min:.4e})")
+              f"  (RMSD = {self.rmsd_min:.4e})"
+              f"  (t1/2 = {self.t_half:.4e})")
         return self.k_opt, self.rmsd_min
 
     # =================================================================
@@ -239,7 +394,8 @@ class kbasic:
     #                 la vallée dont minimize a trouvé le fond.
     # =================================================================
     def plot(self):
-        """Trace la comparaison données / modèle et le paysage du RMSD."""
+        """FR — Trace la comparaison données / modèle et le paysage du RMSD.
+        EN — Plots the data/model comparison and the RMSD landscape."""
         # On a besoin du résultat du fit. Si fit() n'a pas encore été appelé,
         # k_opt vaut None : on prévient l'utilisateur au lieu de planter.
         if self.k_opt is None:
@@ -250,16 +406,16 @@ class kbasic:
         # ---- Graphique de gauche : données + modèle ----
         # Grille de temps fine et régulière pour une courbe bien lisse.
         t_lisse = np.linspace(self.t_exp.min(), self.t_exp.max(), 400)
-        G_lisse = self._modele(t_lisse, self.k_opt, self.G0, self.ordre)
+        Y_lisse = self._modele(t_lisse, self.k_opt, self.Y0, self.ordre)
 
-        gauche.scatter(self.t_exp, self.G_exp, color="black", marker="x",
+        gauche.scatter(self.t_exp, self.Y_exp, color="black", marker="x",
                        label="Données expérimentales")
-        gauche.plot(t_lisse, G_lisse, color="red",
+        gauche.plot(t_lisse, Y_lisse, color="red",
                     label=f"Modèle ordre {self.ordre} (k = {self.k_opt:.4e})")
         # On utilise les en-têtes lus dans le fichier comme labels d'axes
-        # (ou les valeurs par défaut "Temps" et "G" s'il n'y avait pas d'en-tête).
+        # (ou les valeurs par défaut "Temps" et "Y" s'il n'y avait pas d'en-tête).
         gauche.set_xlabel(self.label_t)
-        gauche.set_ylabel(self.label_G)
+        gauche.set_ylabel(self.label_Y)
         gauche.legend()
         gauche.grid(True)
         gauche.set_title('Données et modèle ajusté ("fitté")')
@@ -268,7 +424,7 @@ class kbasic:
         # On essaie plein de valeurs de k autour de l'optimum et on calcule
         # le RMSD pour chacune, afin de "voir" la vallée.
         k_essais = np.linspace(max(self.k_opt * 0.1, 1e-9), self.k_opt * 3, 300)
-        rmsd_essais = [self._rmsd(k, self.ordre, self.G0) for k in k_essais]
+        rmsd_essais = [self._rmsd(k, self.ordre, self.Y0) for k in k_essais]
 
         droite.plot(k_essais, rmsd_essais, color="blue", label="RMSD(k)")
         # On marque le minimum trouvé par minimize d'un gros point rouge.
@@ -291,36 +447,36 @@ class KORD:
     
     Args:
         - t_exp (array-like): Time values.
-        - G_exp (array-like): Measured physical quantity (Absorbance, Conductivity, etc.).
+        - Y_exp (array-like): Measured physical quantity (Absorbance, Conductivity, etc.).
 
     Fixed Parameters:
         - alpha (float): Stoichiometric coefficient for A reactant (smallest positive integer). Default is 1.0.
         - beta (float): Stoichiometric coefficient for B product (smallest positive integer). Default is 1.0.
-        - a0 (float): Initial concentration. Note: G_theo is independent of a0 for Order 1. Default is 1.0.
+        - a0 (float): Initial concentration. Note: Y_theo is independent of a0 for Order 1. Default is 1.0.
 
     Adjustable Variables (Initial Guesses):
         - k_guess (float, optional): Initial estimate for the rate constant. Default is 0.01.
-        - G_0_guess (float, optional): Initial estimate for the initial measured value (G at t=0). if None, it will be initialized as G_exp[0]
-        - G_inf_guess (float, optional): Initial estimate for the final measured value (G at infinity). if None, it will be initialized as G_exp[-1]
-        - b_inf_guess (float, optional): Initial estimate for the final concentration of B ([B] at infinity). if None, it will be initialized as [A](t=0), i.e. a0
+        - Y0_guess (float, optional): Initial estimate for the initial measured value (Y at t=0). if None, it will be initialized as Y_exp[0]
+        - Yinf_guess (float, optional): Initial estimate for the final measured value (Y at infinity). if None, it will be initialized as Y_exp[-1]
+        - binf_guess (float, optional): Initial estimate for the final concentration of B ([B] at infinity). if None, it will be initialized as [A](t=0), i.e. a0
         
     Other Args:
         - t_simul_max (float): the maximum time duration for theoretical simulations.
           It defines the range of the time vector [0, t_simul_max}] used to simulate and plot kinetic curves with simulate_plot
         - verbose (bool): If True defaulk), enables detailed optimization logs (recommended).
-        - headers (tuple of strings): headers of the t_exp and G_exp arrays read in the excel file
+        - headers (tuple of strings): headers of the t_exp and Y_exp arrays read in the excel file
 
     """
     
-    def __init__(self, t_exp=None, G_exp=None, headers=("Time / s", "G"), a0=1.0, alpha=1.0, beta=1.0, k_guess=None,
-                 G_0_guess = None, G_inf_guess = None, b_inf_guess=None, t_simul_max = 15, verbose=True):
+    def __init__(self, t_exp=None, Y_exp=None, headers=("Time / s", "Y"), a0=1.0, alpha=1.0, beta=1.0, k_guess=None,
+                 Y0_guess = None, Yinf_guess = None, binf_guess=None, t_simul_max = 15, verbose=True):
 
         # Force conversion to float arrays to prevent 'object' dtype issues.
         # This ensures [0, 0.5, ...] (objects) become [0.0, 0.5, ...] (floats),
         # allowing NumPy mathematical functions (like np.exp) to operate correctly.
         # It is optional if a user wants to simulate a spectrum
         self.t_exp = np.array(t_exp, dtype=float) if t_exp is not None else None
-        self.G_exp = np.array(G_exp, dtype=float) if G_exp is not None else None
+        self.Y_exp = np.array(Y_exp, dtype=float) if Y_exp is not None else None
         self.headers = headers
         # Ensure fixed parameters are treated as native floats.
         # This prevents errors during optimization if values are passed as strings or tuples.
@@ -331,21 +487,21 @@ class KORD:
         self.t_simul_max = t_simul_max
 
         # Logic for Guesses: Priority to provided values, then data, then defaults
-        if G_0_guess is not None:
-            self.G_0_guess = G_0_guess
-        elif self.G_exp is not None:
-            self.G_0_guess = self.G_exp[0]
+        if Y0_guess is not None:
+            self.Y0_guess = Y0_guess
+        elif self.Y_exp is not None:
+            self.Y0_guess = self.Y_exp[0]
         else:
-            self.G_0_guess = 0.0 # Default fallback if no data and no guess (this is for a simulation plot)
+            self.Y0_guess = 0.0 # Default fallback if no data and no guess (this is for a simulation plot)
 
-        if G_inf_guess is not None:
-            self.G_inf_guess = G_inf_guess
-        elif self.G_exp is not None:
-            self.G_inf_guess = self.G_exp[-1]
+        if Yinf_guess is not None:
+            self.Yinf_guess = Yinf_guess
+        elif self.Y_exp is not None:
+            self.Yinf_guess = self.Y_exp[-1]
         else:
-            self.G_inf_guess = 1.0 # Default fallback (this is for a simulation plot)
+            self.Yinf_guess = 1.0 # Default fallback (this is for a simulation plot)
             
-        self.b_inf_guess = b_inf_guess if b_inf_guess is not None else self.a0*self.beta/self.alpha
+        self.binf_guess = binf_guess if binf_guess is not None else self.a0*self.beta/self.alpha
 
         self.k_guess = k_guess
         
@@ -357,22 +513,94 @@ class KORD:
         self.reset = "\033[0m"
         # t_fin = self.a0 / (self.alpha * self.k_guess)
         # print(f"{t_fin=}")
+        self._initialized = True   # voir __setattr__ ci-dessous
+
+    def __setattr__(self, name, value):
+        """
+        FR — Protection contre les fautes de frappe sur un nom d'attribut
+        (p. ex. `study.Yinfguess = ...` au lieu de `study.Yinf_guess = ...`) :
+        une fois l'objet construit, on ne peut plus CRÉER un nouvel
+        attribut — seuls ceux déjà définis dans __init__ peuvent être
+        modifiés. Sans cette protection, Python créerait silencieusement
+        l'attribut mal orthographié ; fit() continuerait de lire l'ancienne
+        valeur de Yinf_guess sans jamais signaler l'erreur.
+
+        EN — Guards against attribute-name typos (e.g.
+        `study.Yinfguess = ...` instead of `study.Yinf_guess = ...`): once
+        the object is built, no NEW attribute can be created — only ones
+        already defined in __init__ can be changed. Without this, Python
+        would silently create the misspelled attribute, and fit() would
+        keep reading the old value of Yinf_guess with no error at all.
+        """
+        if getattr(self, '_initialized', False) and name not in self.__dict__:
+            existing = ', '.join(sorted(k for k in self.__dict__ if not k.startswith('_')))
+            raise AttributeError(
+                f"KORD has no attribute '{name}' (possible typo?). "
+                f"Existing attributes: {existing}"
+            )
+        object.__setattr__(self, name, value)
+
+    def copy(self):
+        """
+        FR — Retourne une copie indépendante de cette étude KORD : les
+        données, les guesses et les résultats déjà en cache (self.results)
+        sont dupliqués, pas partagés. Un fit() ultérieur sur la copie (ou
+        sur l'original) ne modifie pas l'autre.
+
+        Utile pour comparer, par exemple, un ajustement avec Y0 figé et un
+        ajustement libre sur les mêmes données, sans que l'un écrase le
+        cache de l'autre (voir superpose_plots()) :
+
+        >>> study_free = KORD.from_spreadsheet(file, exp_number=1)
+        >>> study_fixed = study_free.copy()
+        >>> study_fixed.fit(order=1, fix_Y0=True)
+        >>> superpose_plots([study_free, study_fixed], order=1)
+
+        EN — Returns an independent copy of this KORD study: the data, the
+        guesses, and any results already cached (self.results) are
+        duplicated, not shared. A later fit() on the copy (or on the
+        original) does not affect the other.
+
+        Useful to compare, e.g., a fit with Y0 frozen against a free fit of
+        the same data, without either one overwriting the other's cache
+        (see superpose_plots()):
+
+        >>> study_free = KORD.from_spreadsheet(file, exp_number=1)
+        >>> study_fixed = study_free.copy()
+        >>> study_fixed.fit(order=1, fix_Y0=True)
+        >>> superpose_plots([study_free, study_fixed], order=1)
+        """
+        return _copy.deepcopy(self)
 
     @staticmethod
-    def load_from_excel(file_path, exp_number, sheet_name=0, show_data=True):
+    def load_from_spreadsheet(file_path=None, exp_number=1, sheet_name=0, show_data=True, colab=False):
         """
-        Static method to extract data from an Excel file.
-        Selects the pair of columns (t, G) corresponding to the experiment number.
+        Static method to extract data from a spreadsheet file (.xlsx, .xls, .ods, ...
+        anything pandas.read_excel can open — a local path, or any path/URL
+        pandas.read_excel accepts).
+        Selects the pair of columns (t, Y) corresponding to the experiment number.
         Also loads parameters (a0, alpha, beta)
-        
+
         Format:
-            - Row 1: Headers for t and G
-            - Row 2: [A]0 value (in the G column)
-            - Row 3: alpha value (in the G column)
-            - Row 4: beta value (in the G column)
-            - Row 5+: [t, G] data points
-        
+            - Row 1: Headers for t and Y
+            - Row 2: [A]0 value (in the Y column)
+            - Row 3: alpha value (in the Y column)
+            - Row 4: beta value (in the Y column)
+            - Row 5+: [t, Y] data points
+
+        Args:
+            file_path: path (or URL) of the spreadsheet to read. Not needed if
+                colab=True (the file is picked via the Colab upload widget).
+            colab: if True, opens the Google Colab upload button and reads the
+                chosen file instead of file_path. Default False.
         """
+        # 0. Google Colab mode: open the file picker, read the uploaded file's name.
+        if colab:
+            from google.colab import files   # only available on Colab
+            uploaded = files.upload()
+            file_path = list(uploaded.keys())[0]
+            print(f"File received: {file_path}")
+
         # 1. Check if file exists
         if not os.path.exists(file_path):
             print(f"❌ Error: The file '{file_path}' was not found.")
@@ -381,43 +609,97 @@ class KORD:
         try:
             df = pd.read_excel(file_path, sheet_name=sheet_name)
         except Exception as e:
-            print(f"❌ Error while reading the Excel file: {e}")
+            print(f"❌ Error while reading the spreadsheet: {e}")
             return None
 
-        idx_t, idx_G = 2*(exp_number-1), 2*(exp_number-1)+1
+        idx_t, idx_Y = 2*(exp_number-1), 2*(exp_number-1)+1
 
-        # --- Parameter Extraction (Now looking in the G column: idx_G) ---
+        # --- Parameter Extraction (Now looking in the Y column: idx_Y) ---
         def parse_param(val):
             if isinstance(val, str):
                 match = re.search(r"(\d+\.?\d*)", val)
                 return float(match.group(1)) if match else 1.0
             return float(val) if pd.notnull(val) else 1.0
-            
+
         total_cols = len(df.columns)
         num_experiments = total_cols // 2
         print(f"Experiments detected: {num_experiments}")
-        
+
         # Parameters are expected in rows 2, 3, and 4 of Excel (indices 0, 1, 2)
-        a0    = parse_param(df.iloc[0, idx_G])
-        alpha = parse_param(df.iloc[1, idx_G])
-        beta  = parse_param(df.iloc[2, idx_G])
+        a0    = parse_param(df.iloc[0, idx_Y])
+        alpha = parse_param(df.iloc[1, idx_Y])
+        beta  = parse_param(df.iloc[2, idx_Y])
+
+        # --- Format sanity check: rows 2-4 of the t column should be empty or
+        # text labels (see Format above) — a genuine number there usually means
+        # the data doesn't follow the expected layout (e.g. real t,Y data was
+        # put starting at row 2 instead of row 5).
+        t_col_rows_2_4 = df.iloc[0:3, idx_t]
+        suspicious = t_col_rows_2_4.apply(lambda v: pd.notnull(v) and not isinstance(v, str))
+        if suspicious.any():
+            print(f"⚠️  Warning: rows 2-4 of column '{df.columns[idx_t]}' (the t column) "
+                  f"contain numeric value(s): {list(t_col_rows_2_4[suspicious])}. Expected "
+                  f"format is row 1 = headers, rows 2-4 = [A]0/alpha/beta (in the Y column "
+                  f"only — the t column should be blank or a text label there), row 5+ = "
+                  f"data. It does not seem to be the case here; check your data.")
 
         # --- Data Extraction (From index 3 onwards) ---
-        data = df.iloc[3:, [idx_t, idx_G]].dropna()
+        data = df.iloc[3:, [idx_t, idx_Y]].dropna()
         
         label_t = KORD._clean_pandas_suffix(df.columns[idx_t])
-        label_G = KORD._clean_pandas_suffix(df.columns[idx_G])
-        data.columns = [label_t, label_G]
+        label_Y = KORD._clean_pandas_suffix(df.columns[idx_Y])
+        data.columns = [label_t, label_Y]
 
-        print(f"✅ Loaded: {label_G} (Exp {exp_number})")
-        print(f"   [Parameters from {label_G}] a0: {a0:.4e} mol.L-1 | alpha: {alpha} | beta: {beta}\n")
+        print(f"✅ Loaded: {label_Y} (Exp {exp_number})")
+        print(f"   [Parameters from {label_Y}] a0: {a0:.4e} mol.L-1 | alpha: {alpha} | beta: {beta}\n")
         
         if show_data:
             from IPython.display import display
             display(data)
         
-        return data.iloc[:, 0].values, data.iloc[:, 1].values, (label_t, label_G), (a0, alpha, beta)
-        
+        return data.iloc[:, 0].values, data.iloc[:, 1].values, (label_t, label_Y), (a0, alpha, beta)
+
+    @staticmethod
+    def load_from_excel(file_path=None, exp_number=1, sheet_name=0, show_data=True, colab=False):
+        """
+        Deprecated alias for :meth:`load_from_spreadsheet` (kept so existing
+        scripts/notebooks that call ``load_from_excel`` keep working — the
+        method always read any spreadsheet format pandas.read_excel supports,
+        including .ods, so the old name was misleading). Prefer
+        ``load_from_spreadsheet`` in new code.
+        """
+        print("⚠️  KORD.load_from_excel is deprecated, use KORD.load_from_spreadsheet instead "
+              "(same behaviour — it never was Excel-only).")
+        return KORD.load_from_spreadsheet(file_path, exp_number, sheet_name=sheet_name,
+                                           show_data=show_data, colab=colab)
+
+    @classmethod
+    def from_spreadsheet(cls, file_path=None, exp_number=1, sheet_name=0, show_data=True,
+                          colab=False, **kwargs):
+        """
+        Convenience constructor: reads one experiment from a spreadsheet with
+        load_from_spreadsheet(), then builds and returns a KORD instance from it,
+        in a single call.
+
+        Equivalent to::
+
+            t, Y, headers, (a0, alpha, beta) = KORD.load_from_spreadsheet(
+                file_path, exp_number, sheet_name, show_data, colab)
+            study = KORD(t, Y, headers, a0=a0, alpha=alpha, beta=beta, **kwargs)
+
+        Any extra keyword argument (k_guess, Y0_guess, Yinf_guess,
+        binf_guess, t_simul_max, verbose, ...) is forwarded to KORD.__init__.
+        colab=True opens the Google Colab upload widget instead of reading
+        file_path (same as in load_from_spreadsheet / kbasic.read).
+
+        Use load_from_spreadsheet() directly instead when you need to
+        inspect or modify the loaded data/parameters before creating the
+        KORD instance.
+        """
+        t, Y, headers, (a0, alpha, beta) = cls.load_from_spreadsheet(
+            file_path, exp_number, sheet_name=sheet_name, show_data=show_data, colab=colab)
+        return cls(t, Y, headers, a0=a0, alpha=alpha, beta=beta, **kwargs)
+
     @staticmethod
     def _clean_pandas_suffix(name):
         """
@@ -427,42 +709,61 @@ class KORD:
         """
         return re.sub(r'\.\d+$', '', str(name))
         
-    def simulate_plot(self, save_img=None):
+    def simulate_plot(self, order=None, show_experimental=True, save_img=None):
         """
-        Plots the initial guesses for all three kinetic orders (0, 1, 2),
-        for example to visualize the starting point of a fit.
+        Plots the initial guesses for one or all three kinetic orders (0, 1,
+        2), for example to visualize the starting point of a fit before
+        calling fit().
+
+        Args:
+            order (int or None, optional): which order's guess to plot. None
+                (the default) plots all three (0, 1, 2), as before. Pass 0,
+                1 or 2 to show only that one order's guess curve.
+            show_experimental (bool, optional): if True (the default),
+                overlays the measured data (self.t_exp, self.Y_exp) as
+                scatter points, so the guess can be checked visually against
+                the actual data instead of only against the other guesses.
+                Set to False to recover the old guesses-only behaviour.
 
         If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
         Vectorial svg is recommended
         """
         plt.figure(figsize=(10, 6))
-        
+
         # 2. Generate smooth time vector for simulation
         t_sim = np.linspace(0, self.t_simul_max, 500)
-        
-        # 3. Define the models to loop through
-        models = {0: self.G0_theo, 1: self.G1_theo, 2: self.G2_theo}
-        
-        for order, func in models.items():
-            # Use the color defined in your __init__
-            color = self.order_colors[order]
-            
-            # Simulate using the guess values from __init__
-            if order != 1:
-                G_sim = func(t_sim, 
-                             k=self.k_guess, 
-                             G0=self.G_0_guess, 
-                             Ginf=self.G_inf_guess, 
-                             binf=self.b_inf_guess)
-            else:
-                G_sim = func(t_sim, 
-                             k=self.k_guess, 
-                             G0=self.G_0_guess, 
-                             Ginf=self.G_inf_guess)
 
-            
-            plt.plot(t_sim, G_sim, 
-                     label=f"Guess Order {order}", 
+        # 3. Define the models to loop through
+        models = {0: self.Y0_theo, 1: self.Y1_theo, 2: self.Y2_theo}
+        orders_to_plot = [0, 1, 2] if order is None else [order]
+
+        # Overlay the experimental data first, so the guess curve(s) are
+        # drawn on top of it.
+        if show_experimental and self.t_exp is not None:
+            plt.scatter(self.t_exp, self.Y_exp, label="Experimental",
+                         color='black', marker="x", s=35, alpha=0.7, zorder=5)
+
+        for o in orders_to_plot:
+            func = models[o]
+            # Use the color defined in your __init__
+            color = self.order_colors[o]
+
+            # Simulate using the guess values from __init__
+            if o != 1:
+                Y_sim = func(t_sim,
+                             k=self.k_guess,
+                             Y0=self.Y0_guess,
+                             Yinf=self.Yinf_guess,
+                             binf=self.binf_guess)
+            else:
+                Y_sim = func(t_sim,
+                             k=self.k_guess,
+                             Y0=self.Y0_guess,
+                             Yinf=self.Yinf_guess)
+
+
+            plt.plot(t_sim, Y_sim,
+                     label=f"Guess Order {o}",
                      color=color, lw=2.5, linestyle='-')
 
         # Formatting
@@ -473,9 +774,9 @@ class KORD:
         # Add a text box with the guess values for clarity
         guess_text = (f"Guesses:\n"
                       f"k: {self.k_guess:.2e}\n"
-                      f"G0: {self.G_0_guess:.4f}\n"
-                      f"Ginf: {self.G_inf_guess:.4f}\n"
-                      f"binf: {self.b_inf_guess:.2e}")
+                      f"Y0: {self.Y0_guess:.4f}\n"
+                      f"Yinf: {self.Yinf_guess:.4f}\n"
+                      f"binf: {self.binf_guess:.2e}")
         
         plt.gca().text(0.05, 0.95, guess_text, transform=plt.gca().transAxes, 
                        verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.5))
@@ -506,21 +807,21 @@ class KORD:
             
         plt.show()        
         
-    def G0_theo(self, t, k, G0, Ginf, binf):
+    def Y0_theo(self, t, k, Y0, Yinf, binf):
         """
         Model for Order 0 kinetics
         """
-        return np.where(t <= binf/(self.beta*k), G0 + self.beta * k*t * (Ginf-G0) / binf, Ginf)
+        return np.where(t <= binf/(self.beta*k), Y0 + self.beta * k*t * (Yinf-Y0) / binf, Yinf)
         
-    def G1_theo(self, t, k, G0, Ginf):
+    def Y1_theo(self, t, k, Y0, Yinf):
         """Model for Order 1 kinetics"""
-        return Ginf + np.exp(-self.alpha * k * t) * (G0 - Ginf)
+        return Yinf + np.exp(-self.alpha * k * t) * (Y0 - Yinf)
 
-    def G2_theo(self, t, k, G0, Ginf, binf):
+    def Y2_theo(self, t, k, Y0, Yinf, binf):
         """Model for Order 2 kinetics"""
-        # return np.where(t !=0, G0 + (Ginf - G0)/(1 + self.beta/(binf*self.alpha**2*k*t)), G0)
+        # return np.where(t !=0, Y0 + (Yinf - Y0)/(1 + self.beta/(binf*self.alpha**2*k*t)), Y0)
         tterm = binf*self.alpha**2*k*t
-        return G0 + (Ginf-G0)*tterm/(tterm+self.beta)
+        return Y0 + (Yinf-Y0)*tterm/(tterm+self.beta)
 
     def concentrations(self,order,t,binf,k):
         """
@@ -587,49 +888,77 @@ class KORD:
         elif (order == 2):
             return 1/(self.alpha*k*a0)
     
-    def fit(self, k_guess, G_0_guess, G_inf_guess, A_0_guess, order=1):
+    def fit(self, order=1, fix_Y0=False, fix_Yinf=False):
         """
         Fits the selected kinetic model (Order 0, 1, or 2) to the experimental data.
 
-        This method uses non-linear least squares (scipy.optimize.curve_fit) to 
-        simultaneously optimize the rate constant (k), the initial and final 
-        physical property values (G0, Ginf), and the final product concentration (binf).
-        Physical constraints are applied via parameter bounds to ensure k and binf 
-        remain positive.
+        This method uses non-linear least squares (scipy.optimize.curve_fit) to
+        optimize the rate constant (k), and - unless fixed, see below - the initial
+        and final physical property values (Y0, Yinf). The final product
+        concentration (binf) is never a free fit parameter: it is always derived
+        from mass balance as binf = a0*beta/alpha (see the Notes below for why).
+        Physical constraints are applied via parameter bounds to ensure k remains
+        positive.
 
-        It includes automated 'Smart Guessing' for k, based on initial rates and computes 
+        It includes automated 'Smart Guessing' for k, based on initial rates and computes
         information criteria (AIC/BIC) for model selection.
 
+        The starting guesses (k_guess, Y0_guess, Yinf_guess) are NOT
+        passed here: they are read from the attributes set when the KORD instance
+        was created (self.k_guess, self.Y0_guess, self.Yinf_guess).
+        To change a guess, set it on the instance (or pass it to KORD(...) /
+        KORD.from_spreadsheet(...) in the first place) before calling fit(), e.g.
+        ``study.Y0_guess = 1.40`` then ``study.fit(order=1, fix_Y0=True)``.
+
         Args:
-            k_guess (float): Initial estimate for the rate constant (k).
-            G_0_guess (float): Initial estimate for the physical property at t=0.
-            G_inf_guess (float): Initial estimate for the physical property at t=infinity.
-            b_inf_guess (float): Initial estimate for the final product concentration [B].
             order (int, optional): Kinetic order of the reaction (0, 1, or 2). Defaults to 1.
+            fix_Y0 (bool, optional): If True, Y0 is held fixed at Y0_guess (normally the
+                first measured value) instead of being optimized. Use this when you trust
+                the measured starting point and want to stop the fit from drifting it away
+                to improve the apparent fit. Defaults to False (Y0 is optimized, as before).
+            fix_Yinf (bool, optional): If True, Yinf is held fixed at Yinf_guess instead of
+                being optimized. Use this when the final value is known on physical/chemical
+                grounds (e.g. a non-absorbing product, Yinf = 0) and you don't want the
+                optimizer to report a spurious non-zero plateau. Defaults to False (Yinf is
+                optimized, as before).
 
         Returns:
-            dict: A dictionary containing the optimized parameters ('k', 'G0', 'Ginf', 'binf') 
-                  and statistical metrics ('RMSE', 'R2', 't_half'). Returns None if 
+            dict: A dictionary containing the optimized parameters ('k', 'Y0',
+                  'Yinf'), the derived final product concentration ('binf'), and
+                  statistical metrics ('RMSE', 'R2', 't_half'). Returns None if
                   optimization fails to converge.
 
         Notes:
-            - For Order 1, the timing is independent of binf, and alpha is coupled with k; hence binf is kept fixed during optimization.
-            - For Orders 0 and 2, binf and stoichiometry (alpha, beta) explicitly define the reaction's capacity and end-point timing,
-              ensuring physical consistency between the plateau and the slope.
+            - binf is never fitted: it is always derived as binf = a0*beta/alpha,
+              for every order, the same formula Order 1 already relied on. This
+              is not an approximation to simplify the model — it is required for
+              k and binf to be individually meaningful. For Orders 0 and 2, if k
+              AND binf were both left free, the model's shape would depend on
+              them only through one combined ratio (beta*k/binf for order 0,
+              beta/(binf*alpha**2*k) for order 2): infinitely many (k, binf)
+              pairs then give an identical curve and an identical RMSE, so
+              curve_fit would converge to an arbitrary point on that family
+              (whichever one is closest to binf_guess) rather than to a unique,
+              physically meaningful answer. Deriving binf from mass balance
+              removes that degeneracy.
+            - fix_Y0 / fix_Yinf let you turn off the optimization of Y0 and/or Yinf
+              independently of each other, for any order. AIC/BIC account for the
+              resulting (smaller) number of free parameters, so model comparison
+              across orders remains fair even when parameters are fixed.
         """
-        models = {0: self.G0_theo, 1: self.G1_theo, 2: self.G2_theo}
+        models = {0: self.Y0_theo, 1: self.Y1_theo, 2: self.Y2_theo}
         func = models[order]
 
         # smart guess for k
-        n = max(2, len(self.t_exp) // 10) 
-        delta_G = abs(self.G_exp[n] - self.G_exp[0])
+        n = max(2, len(self.t_exp) // 10)
+        delta_G = abs(self.Y_exp[n] - self.Y_exp[0])
         delta_t = self.t_exp[n] - self.t_exp[0]
         initial_slope = delta_G / delta_t if delta_t > 0 else 1e-5
 
         # 2. Apply the smart guess logic
-        delta_G_total = abs(self.G_inf_guess - self.G_0_guess)
+        delta_G_total = abs(self.Yinf_guess - self.Y0_guess)
         if delta_G_total == 0: delta_G_total = 1.0
-        
+
         norm_rate = initial_slope / delta_G_total
 
         if order == 0:
@@ -638,85 +967,148 @@ class KORD:
             k_start = norm_rate / self.alpha
         elif order == 2:
             k_start = norm_rate / (self.alpha * self.a0)
-            
+
         k_start = max(k_start, 1e-15) # Safety floor
 
         # Use the smart guess if k_guess wasn't explicitly provided by user
         final_k_guess = self.k_guess if self.k_guess is not None else k_start
-        
-        # Initial guess vector [k, G0, Ginf, a0]
-        if order != 1:
-            p0 = [final_k_guess, self.G_0_guess, self.G_inf_guess, self.b_inf_guess]
-        else:
-            p0 = [final_k_guess, self.G_0_guess, self.G_inf_guess]
-        
+
+        # --- Build the list of parameters, splitting it into the ones that
+        # curve_fit is allowed to optimize ("free") and the ones held constant
+        # ("fixed": Y0 and/or Yinf, on request). k is always free. binf is
+        # NEVER a free fit parameter, for any order: mass balance already
+        # fixes it at a0*beta/alpha (same formula used for order 1), so
+        # letting it float too (as orders 0/2 used to) only adds a phantom,
+        # non-identifiable degree of freedom — for a given k, the fit curve
+        # depends on binf only through one combined ratio, so curve_fit can
+        # trade k against binf along a whole family of equally-good pairs
+        # without changing RMSE at all. Deriving binf everywhere removes
+        # that degeneracy and keeps p (used in AIC/BIC) an honest count of
+        # 3 free parameters for every order.
+        binf_fixed = self.a0 * self.beta / self.alpha
+
+        param_specs = [
+            ('k',    final_k_guess,    False,    (0, np.inf)),
+            ('Y0',   self.Y0_guess,    fix_Y0,   (-np.inf, np.inf)),
+            ('Yinf', self.Yinf_guess,  fix_Yinf, (-np.inf, np.inf)),
+        ]
+
+        fixed_values = {name: guess for name, guess, fixed, _ in param_specs if fixed}
+        free_specs = [(name, guess, bounds) for name, guess, fixed, bounds in param_specs if not fixed]
+        free_names = [name for name, _, _ in free_specs]
+        p0 = [guess for _, guess, _ in free_specs]
+        lower_bounds = [b[0] for _, _, b in free_specs]
+        upper_bounds = [b[1] for _, _, b in free_specs]
+
+        def wrapped(t, *free_params):
+            kwargs = dict(zip(free_names, free_params))
+            kwargs.update(fixed_values)
+            if order != 1:
+                return func(t, k=kwargs['k'], Y0=kwargs['Y0'], Yinf=kwargs['Yinf'], binf=binf_fixed)
+            return func(t, k=kwargs['k'], Y0=kwargs['Y0'], Yinf=kwargs['Yinf'])
+
         if self.verbose:
             c = self.ansi_colors[order]
             print(f"{c}{hl.BOLD}--- Order {order} ---{self.reset}")
-            if order != 1:
-                print(f"  GUESS: k: {p0[0]:.2e} | G0: {p0[1]:.4f} | Ginf: {p0[2]:.4f} | binf: {p0[3]:.3e}")
-            else:
-                print(f"  GUESS: k: {p0[0]:.2e} | G0: {p0[1]:.4f} | Ginf: {p0[2]:.4f}")
-            
-        try:
-            # k, G0, Ginf, binf
-            if order != 1:
-                lower_bounds = [0, -np.inf, -np.inf, 0]
-                upper_bounds = [np.inf, np.inf, np.inf, np.inf]
-            else:
-                lower_bounds = [0, -np.inf, -np.inf]
-                upper_bounds = [np.inf, np.inf, np.inf]
-            popt, _ = curve_fit(func, self.t_exp, self.G_exp, p0=p0, bounds=(lower_bounds, upper_bounds))
-            if order != 1:
-                k_opt, G0_opt, Ginf_opt, binf_opt = popt
-            else:
-                k_opt, G0_opt, Ginf_opt = popt
-                binf_opt = self.a0*self.beta/self.alpha
-                
-            G_theo = func(self.t_exp, *popt)
+            tags = {'Y0': ' (fixed)' if fix_Y0 else '', 'Yinf': ' (fixed)' if fix_Yinf else ''}
 
-            RMSE = rmse(self.G_exp, G_theo)
-            R2 = r2(self.G_exp, G_theo)
-            
+            # Bold the parameters that are actually optimized (free); leave
+            # the ones held fixed (fix_Y0/fix_Yinf) in normal weight, so a
+            # glance at GUESS/OPTIM shows which numbers are allowed to move.
+            def _field(label, value, spec, frozen):
+                text = f"{label}: {value:{spec}}{tags.get(label, '')}"
+                return text if frozen else f"{hl.BOLD}{text}{self.reset}"
+
+            if order != 1:
+                print(f"  GUESS: {_field('k', final_k_guess, '.2e', False)} | "
+                      f"{_field('Y0', self.Y0_guess, '.4f', fix_Y0)} | "
+                      f"{_field('Yinf', self.Yinf_guess, '.4f', fix_Yinf)} | "
+                      f"{_field('binf', binf_fixed, '.3e', True)}")
+            else:
+                print(f"  GUESS: {_field('k', final_k_guess, '.2e', False)} | "
+                      f"{_field('Y0', self.Y0_guess, '.4f', fix_Y0)} | "
+                      f"{_field('Yinf', self.Yinf_guess, '.4f', fix_Yinf)}")
+
+        try:
+            if free_specs:
+                popt_free, _ = curve_fit(wrapped, self.t_exp, self.Y_exp, p0=p0,
+                                          bounds=(lower_bounds, upper_bounds))
+            else:
+                popt_free = np.array([])
+
+            full = dict(zip(free_names, popt_free))
+            full.update(fixed_values)
+
+            k_opt, Y0_opt, Yinf_opt = full['k'], full['Y0'], full['Yinf']
+            binf_opt = binf_fixed
+
+            if order != 1:
+                Y_theo = func(self.t_exp, k=k_opt, Y0=Y0_opt, Yinf=Yinf_opt, binf=binf_opt)
+            else:
+                Y_theo = func(self.t_exp, k=k_opt, Y0=Y0_opt, Yinf=Yinf_opt)
+
+            RMSE = rmse(self.Y_exp, Y_theo)
+            R2 = r2(self.Y_exp, Y_theo)
+
             # t1/2 calculation
             t_half = self.halflife(order, binf_opt, k_opt)
 
             # AIC & BIC calculations
-            # n: number of data points, p: number of parameters
-            n = len(self.G_exp)
-            p = len(popt)
-            
+            # n: number of data points, p: number of FREE (actually optimized) parameters
+            n = len(self.Y_exp)
+            p = len(popt_free)
+
             # Using the simplified formula for AIC/BIC (assuming Gaussian errors)
             # RSS (Residual Sum of Squares) = RMSE^2 * n
             aic = n * np.log(RMSE**2) + 2 * p
             bic = n * np.log(RMSE**2) + p * np.log(n)
-            
+
             if self.verbose:
-                # Aligned exactly with the GUESS print for easy comparison
+                # Aligned exactly with the GUESS print for easy comparison;
+                # same bold-if-free convention as GUESS above.
                 if order != 1:
-                    print(f"  OPTIM: k: {k_opt:.2e} | G0: {G0_opt:.4f} | Ginf: {Ginf_opt:.4f} | binf: {binf_opt:.3e}")
+                    print(f"  OPTIM: {_field('k', k_opt, '.2e', False)} | "
+                          f"{_field('Y0', Y0_opt, '.4f', fix_Y0)} | "
+                          f"{_field('Yinf', Yinf_opt, '.4f', fix_Yinf)} | "
+                          f"{_field('binf', binf_opt, '.3e', True)}")
                 else:
-                    print(f"  OPTIM: k: {k_opt:.2e} | G0: {G0_opt:.4f} | Ginf: {Ginf_opt:.4f}")
+                    print(f"  OPTIM: {_field('k', k_opt, '.2e', False)} | "
+                          f"{_field('Y0', Y0_opt, '.4f', fix_Y0)} | "
+                          f"{_field('Yinf', Yinf_opt, '.4f', fix_Yinf)}")
                 print(f"  ✅ RMSE: {RMSE:.2e}")
                 print(f"       R2: {R2:.2f}")
                 print(f"      AIC: {aic:.2f} (lower is better)")
                 print(f"      BIC: {bic:.2f} (more strict on complexity)")
-            
+
             self.results[order] = {
-                'k': k_opt, 'G0': G0_opt, 'Ginf': Ginf_opt, 'binf': binf_opt,
+                'k': k_opt, 'Y0': Y0_opt, 'Yinf': Yinf_opt, 'binf': binf_opt,
                 'RMSE': RMSE, 'R2': R2, 'AIC': aic, 'BIC': bic,
-                't_half': t_half, 'G_theo': G_theo
+                't_half': t_half,
+                'fix_Y0': fix_Y0, 'fix_Yinf': fix_Yinf,
             }
             return self.results[order]
         except Exception as e:
             print(f"Could not fit order {order}: {e}")
             return None
 
-    def plot_all_fits(self, save_img=None):
+    def plot_all_fits(self, save_img=None, fix_Y0=False, fix_Yinf=False):
         """
         Plots experimental data and all three kinetic models for visual comparison.
         If save_img is provided, saves the plot (png, svg, jpg, pdf according to the extension).
-        Vectorial svg is recommended
+        Vectorial svg is recommended.
+
+        fix_Y0 / fix_Yinf are forwarded to fit() for any order not already present
+        in self.results, so you can get all three comparison plots fitted with Y0
+        and/or Yinf held fixed (see fit()'s docstring).
+
+        An order already present in self.results (from an earlier fit() call)
+        is NOT re-fitted here, even if fix_Y0/fix_Yinf passed to this plot
+        differ from the ones that produced the cached fit — your earlier,
+        explicit choice is respected rather than silently overwritten. If
+        that creates a mismatch (some orders fitted under different
+        fix_Y0/fix_Yinf settings than the others), a warning table is
+        printed, since comparing orders fitted under different constraints
+        can be misleading.
         """
         mosaic = [['fit','o0'],
                   ['fit','o1'],
@@ -724,25 +1116,52 @@ class KORD:
         cgraph = ['o0', 'o1', 'o2']
         background_graph = ['#dbeeff', '#ffe4e4', '#d2ffdb']
         Fig, Graph = plt.subplot_mosaic(mosaic, figsize=(14,10), gridspec_kw=dict(width_ratios = [1.4, 1]))
-        
+
+        # --- Check, before fitting/plotting anything, whether every order
+        # will end up under the same fix_Y0/fix_Yinf conditions. An order
+        # already cached in self.results keeps whatever conditions it was
+        # originally fitted with (it is not re-fitted below); only orders
+        # missing from self.results get fitted now, with the fix_Y0/fix_Yinf
+        # passed to this call.
+        conditions = []
+        for order in [0, 1, 2]:
+            if order in self.results:
+                conditions.append((order, self.results[order]['fix_Y0'],
+                                    self.results[order]['fix_Yinf'], 'cached'))
+            else:
+                conditions.append((order, fix_Y0, fix_Yinf, 'fitted now'))
+
+        mismatched = [c for c in conditions
+                      if c[3] == 'cached' and (c[1] != fix_Y0 or c[2] != fix_Yinf)]
+        if mismatched:
+            print(f"⚠️  Warning: not every order is fitted under the same fix_Y0/fix_Yinf "
+                  f"conditions (requested here: fix_Y0={fix_Y0}, fix_Yinf={fix_Yinf}) — "
+                  f"cached fit(s) were kept as-is, not re-fitted. Comparing orders on "
+                  f"this plot may be misleading:\n")
+            print(f"  {'Order':<7}{'fix_Y0':<9}{'fix_Yinf':<10}{'Source'}")
+            print(f"  {'-----':<7}{'------':<9}{'--------':<10}{'------'}")
+            for order, g0, ginf, src in conditions:
+                print(f"  {order:<7}{str(g0):<9}{str(ginf):<10}{src}")
+            print()
+
         ## Fit ###############
-        Graph['fit'].scatter(self.t_exp, self.G_exp, label=f"Experimental ($a_0$ = {self.a0:.2e})", color='black', marker="x", s=35, alpha=0.7)
+        Graph['fit'].scatter(self.t_exp, self.Y_exp, label=f"Experimental ($a_0$ = {self.a0:.2e})", color='black', marker="x", s=35, alpha=0.7)
 
         t_smooth = np.linspace(self.t_exp.min(), self.t_exp.max(), 500)
-        models = {0: self.G0_theo, 1: self.G1_theo, 2: self.G2_theo}
+        models = {0: self.Y0_theo, 1: self.Y1_theo, 2: self.Y2_theo}
 
         for order in [0, 1, 2]:
             if order not in self.results:
-                self.fit(self.k_guess, self.G_0_guess, self.G_inf_guess, self.b_inf_guess, order)
-            
+                self.fit(order, fix_Y0=fix_Y0, fix_Yinf=fix_Yinf)
+
             res = self.results[order]
 
             if order != 1:
-                G_smooth = models[order](t_smooth, res['k'], res['G0'], res['Ginf'], res['binf'])
+                Y_smooth = models[order](t_smooth, res['k'], res['Y0'], res['Yinf'], res['binf'])
             else:
-                G_smooth = models[order](t_smooth, res['k'], res['G0'], res['Ginf'])
+                Y_smooth = models[order](t_smooth, res['k'], res['Y0'], res['Yinf'])
             
-            Graph['fit'].plot(t_smooth, G_smooth, 
+            Graph['fit'].plot(t_smooth, Y_smooth, 
                      label=f"Order {order}. $k_\mathrm{{app}}$ = {res['k']:.4e} (RMSE: {res['RMSE']:.2e})", 
                      color=self.order_colors[order], lw=2)
             a, b = self.concentrations(order,t_smooth,res['binf'],res['k'])
@@ -766,8 +1185,8 @@ class KORD:
         best_res = self.results[best_order]
         best_color = self.order_colors[best_order]
         
-        Graph['fit'].axhline(best_res['G0'], color=best_color, linestyle='--', alpha=0.6)
-        Graph['fit'].axhline(best_res['Ginf'], color=best_color, linestyle='--', alpha=0.6)
+        Graph['fit'].axhline(best_res['Y0'], color=best_color, linestyle='--', alpha=0.6)
+        Graph['fit'].axhline(best_res['Yinf'], color=best_color, linestyle='--', alpha=0.6)
         Graph['fit'].yaxis.grid(
             True, 
             which='major', 
@@ -776,18 +1195,18 @@ class KORD:
             color='gray',     # Couleur discrète
             alpha=0.5         # Transparence pour ne pas surcharger
         )
-        # Désactiver la grille verticale (optionnel, pour garder le focus sur G)
+        # Désactiver la grille verticale (optionnel, pour garder le focus sur Y)
         Graph['fit'].xaxis.grid(False)
         
         # Add the second axis for the fitted values
         ax2 = Graph['fit'].twinx()
         ax2.set_ylim(Graph['fit'].get_ylim()) # Keep scales aligned
-        ax2.set_yticks([best_res['G0'], best_res['Ginf']])
-        ax2.set_yticklabels([f"G0_fit={best_res['G0']:.3f}", f"Ginf_fit={best_res['Ginf']:.3f}"])
+        ax2.set_yticks([best_res['Y0'], best_res['Yinf']])
+        ax2.set_yticklabels([f"Y0_fit={best_res['Y0']:.3f}", f"Yinf_fit={best_res['Yinf']:.3f}"])
         ax2.tick_params(axis='y', labelcolor=best_color)
         
         Graph['fit'].set_xlabel("Time",size=12,fontweight='bold',color='b')
-        Graph['fit'].set_ylabel("G property",size=12,fontweight='bold',color='b')
+        Graph['fit'].set_ylabel("Y property",size=12,fontweight='bold',color='b')
         Graph['fit'].set_title(f"KORD Kinetic Models Comparison (0, 1, 2). Label exp = {self.headers[1]}")
         
         plt.setp(Graph['fit'].get_xticklabels(), fontsize=12, fontweight='bold')
@@ -822,8 +1241,7 @@ class KORD:
     def get_best_order(self, verbose=True):
         """Determines and prints the best model based on the lowest RMSE."""
         for i in [0, 1, 2]:
-            if i not in self.results: self.fit(self.k_guess, self.G_0_guess,
-                                               self.G_inf_guess, self.a0, i)
+            if i not in self.results: self.fit(i)
             
         best_order = min(self.results, key=lambda x: self.results[x]['RMSE'])
         res = self.results[best_order]
@@ -847,9 +1265,9 @@ class KORD:
             print(f"RMSE: {res['RMSE']:.3f}")
             print(f"  R2: {res['R2']:.3f}")
             print()
-            print(f"G_exp(t=0): {self.G_exp[0]:.3e}")
-            print(f"G_fit(t=0): {res['G0']:.3e}")
-            print(f"G_fit(t=inf): {res['Ginf']:.3e}")
+            print(f"Y_exp(t=0): {self.Y_exp[0]:.3e}")
+            print(f"Y_fit(t=0): {res['Y0']:.3e}")
+            print(f"Y_fit(t=inf): {res['Yinf']:.3e}")
             print()
             print(f"k_fit: {res['k']:.3e}")
             print(f"t1/2: {res['t_half']:.3f}")
@@ -877,6 +1295,127 @@ class KORD:
                 print(f"Model Selection Confidence: {verdict}")
                 print(f"ΔBIC (Best [order {best}] vs 2nd Best [order {second}]): {delta_bic:.2f}")
                 print(f"--------------------------------{self.reset}")
-                return 
+                return
         else:
             return best_order
+
+
+# =====================================================================
+#  Comparing several KORD studies on the same graph
+# =====================================================================
+def superpose_plots(studies, order=1, show_experimental=True, labels=None,
+                     fix_Y0=False, fix_Yinf=False, save_img=None):
+    """
+    FR — Superpose, sur un même graphe, la courbe **ajustée** (fit, pas
+    guess) d'un seul ordre pour plusieurs instances KORD — typiquement la
+    même expérience fittée dans des conditions différentes (p.ex. une étude
+    avec Y0 figé, une autre où Y0 reste libre), pour voir directement
+    l'effet de ce choix sur la courbe ajustée.
+
+    Pour chaque étude, si `order` n'est pas déjà présent dans
+    study.results, l'ajustement est fait maintenant avec fix_Y0/fix_Yinf
+    (mêmes réglages que plot_all_fits()). Si `order` est déjà en cache
+    (study.results) avec des réglages fix_Y0/fix_Yinf différents de ceux
+    demandés ici, le cache n'est PAS écrasé — exactement le comportement de
+    plot_all_fits() — mais un avertissement est affiché pour cette étude.
+    La légende indique automatiquement, pour chaque étude, si Y0 et/ou Yinf
+    ont été figés dans l'ajustement effectivement tracé.
+
+    Args :
+        studies (list[KORD]) : les instances KORD à comparer (peuvent être
+            des fits de la même donnée, sous des réglages différents).
+        order (int, optionnel) : l'ordre à tracer pour toutes les études
+            (0, 1 ou 2). Par défaut 1.
+        show_experimental (bool, optionnel) : si True (par défaut), superpose
+            aussi les données mesurées de chaque étude.
+        labels (list[str] ou None, optionnel) : légendes de base pour chaque
+            étude ; par défaut "Study 1", "Study 2", ... (le statut
+            fix_Y0/fix_Yinf est ajouté automatiquement).
+        fix_Y0, fix_Yinf (bool, optionnel) : transmis à fit() pour toute
+            étude dont `order` n'est pas déjà dans son .results.
+        save_img : comme pour simulate_plot()/plot_all_fits().
+
+    EN — Overlays, on a single graph, the **fitted** (not guess) curve of
+    one chosen order for several KORD instances — typically the same
+    experiment fitted under different conditions (e.g. one study with Y0
+    frozen, another with Y0 left free), to see directly how that choice
+    changes the fitted curve.
+
+    For each study, if `order` is not already present in study.results, it
+    is fitted now with fix_Y0/fix_Yinf (same settings as plot_all_fits()).
+    If `order` is already cached in study.results under different
+    fix_Y0/fix_Yinf settings than requested here, the cache is NOT
+    overwritten — exactly like plot_all_fits() — but a warning is printed
+    for that study. The legend automatically shows, for each study, whether
+    Y0 and/or Yinf were held fixed in the fit actually plotted.
+
+    Args:
+        studies (list[KORD]): the KORD instances to compare (can be fits of
+            the very same data, under different settings).
+        order (int, optional): the order to plot for every study. Default 1.
+        show_experimental (bool, optional): if True (the default), also
+            overlay each study's measured data.
+        labels (list[str] or None, optional): base legend labels; default
+            "Study 1", "Study 2", ... (the fix_Y0/fix_Yinf status is added
+            automatically).
+        fix_Y0, fix_Yinf (bool, optional): forwarded to fit() for any study
+            whose `order` isn't already in its .results.
+        save_img: as in simulate_plot()/plot_all_fits().
+    """
+    plt.figure(figsize=(10, 6))
+    models = {0: 'Y0_theo', 1: 'Y1_theo', 2: 'Y2_theo'}
+
+    for i, study in enumerate(studies):
+        base_label = labels[i] if labels else f"Study {i + 1}"
+
+        if order in study.results:
+            cached_fix_Y0 = study.results[order]['fix_Y0']
+            cached_fix_Yinf = study.results[order]['fix_Yinf']
+            if cached_fix_Y0 != fix_Y0 or cached_fix_Yinf != fix_Yinf:
+                print(f"⚠️  {base_label}: using the cached order-{order} fit "
+                      f"(fix_Y0={cached_fix_Y0}, fix_Yinf={cached_fix_Yinf}), "
+                      f"not the fix_Y0={fix_Y0}, fix_Yinf={fix_Yinf} requested here.")
+        else:
+            study.fit(order, fix_Y0=fix_Y0, fix_Yinf=fix_Yinf)
+
+        res = study.results[order]
+        func = getattr(study, models[order])
+        t_sim = np.linspace(study.t_exp.min(), study.t_exp.max(), 500)
+
+        if order != 1:
+            Y_sim = func(t_sim, k=res['k'], Y0=res['Y0'], Yinf=res['Yinf'], binf=res['binf'])
+        else:
+            Y_sim = func(t_sim, k=res['k'], Y0=res['Y0'], Yinf=res['Yinf'])
+
+        tags = [tag for tag, fixed in (("Y0 fixed", res['fix_Y0']),
+                                        ("Yinf fixed", res['fix_Yinf'])) if fixed]
+        tag_str = f" ({', '.join(tags)})" if tags else " (free fit)"
+
+        label = f"{base_label}{tag_str} — Order {order}"
+        line, = plt.plot(t_sim, Y_sim, lw=2.5, label=label)
+
+        if show_experimental and study.t_exp is not None:
+            plt.scatter(study.t_exp, study.Y_exp, marker="x", s=35, alpha=0.7,
+                        color=line.get_color(), label=f"{base_label} — Experimental")
+
+    plt.xlabel("Time")
+    plt.ylabel("Y property")
+    plt.title(f"Order {order} — fitted curves compared across studies")
+    plt.legend()
+    plt.grid(True, linestyle=':', alpha=0.6)
+
+    if save_img:
+        if os.path.exists(save_img):
+            print(f"{color.RED}{hl.BOLD}⚠️ File '{save_img}' already exists. Overwrite? (y/n): {color.OFF}", end="")
+            response = input().lower().strip()
+            if response != 'y':
+                print("💾 Save cancelled. Plot not saved.")
+                plt.show()
+                return
+        directory = os.path.dirname(save_img)
+        if directory and not os.path.exists(directory):
+            os.makedirs(directory)
+        plt.savefig(save_img, dpi=300, bbox_inches='tight')
+        print(f"💾 Plot saved as: {hl.BOLD}{save_img}{hl.bold}")
+
+    plt.show()

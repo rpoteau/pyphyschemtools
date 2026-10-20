@@ -12,6 +12,55 @@
 
 # Changelog pyphyschemtools
 
+# [0.12.1] - 2026-10-20 "AO"
+
+### Changed
+
+- `AO.md`: expanded the "Physical background" section (Hamiltonian, separation of variables, radial/angular equations, real vs. complex spherical harmonics) and added a link to the SymPy physics documentation.
+
+- in **`AO.py`**, `plot_radial` can also overlay, for each orbital, the mean radius and its
+dispersion, computed numerically from the already-normalized probability
+density $P_{n\ell}(r) = r^2 R_{n\ell}(r)^2$:
+
+    $$\langle r\rangle = \int_0^\infty r\,P_{n\ell}(r)\,dr, \qquad
+    \sigma_r = \sqrt{\langle r^2\rangle - \langle r\rangle^2}$$
+    
+    Pass `density=True, show_mean_r=True` to `plot_radial` to draw, for each
+    curve, a dashed vertical line at $\langle r\rangle$ and an error bar
+    spanning $\langle r\rangle \pm \sigma_r$.
+
+### Added
+
+- `plot_radial()` (**`AO.py`**): new `show_mean_r` parameter (requires
+  `density=True`) overlaying, for each orbital, a dashed vertical line at
+  the mean radius $\langle r\rangle$ and an error bar spanning
+  $\langle r\rangle \pm \sigma_r$, computed numerically from the plotted
+  radial probability density $P_{n\ell}(r) = r^2 R_{n\ell}(r)^2$.
+
+- example of `plot_radial(show_mean_r=True)` in **`Examples_pyPCT.ipynb`**
+
+## [0.12.0] - 2026-10-19 "kinetics.py: ReactionNetwork, general reaction networks"
+
+### Added
+- **New `ReactionNetwork` class in `kinetics.py`**: a general chemical kinetics engine for an arbitrary network of (ir)reversible elementary mass-action reactions, declared as plain-text equations (`"A + 2 B -> C"`, `"A <=> B"`), numerically integrated with `scipy.integrate.solve_ivp` and, when fitting, wrapped in `scipy.optimize.curve_fit` exactly as `KORD.fit()` does. Unlike `kbasic`/`KORD` (closed-form integrated rate laws for a single A → B transformation of order 0, 1 or 2), it places no restriction on the number of species or reactions, covering parallel, consecutive and reversible reactions (and any combination) as one unified tool. Full API:
+    - `add_reaction(equation, k_guess=..., kf_guess=..., kr_guess=..., order=..., order_back=...)`: parses the equation (species registered automatically, in order of first appearance); `order`/`order_back` decouple the kinetic order of the rate law from the written stoichiometry, species by species, for either direction of a reversible reaction.
+    - Species names are **normalized** on parsing: accents are stripped, and a purely alphabetic name is capitalized (`"ethylene"`/`"ETHYLENE"`/`"éthylène"` all become `"Ethylene"`), while a name containing a digit is treated as a chemical formula and only its first character is forced to uppercase (`"O3"`, `"CO2"`, `"H2O"` keep their case) — so the same compound is always recognized as the same species regardless of how it was typed across different `add_reaction()` calls.
+    - `set_initial_conditions({...})`, `simulate(t, k_values=None)` (pure simulation from given or guessed/fitted rate constants, no fit needed), `fit(t_exp, Y_exp, weights=..., observed_species=...)` (same returned-dict shape as `KORD.fit()`: `'k'`, `'RMSE'`, `'R2'`, `'AIC'`, `'BIC'`, `'weights'`), `summary()`.
+    - `overall_equation()`: sums the stoichiometry of every declared reaction and cancels out whatever appears on both sides (typically the intermediate(s)), to recover the overall balanced equation a multi-step mechanism implies — an important sanity check on a mechanism.
+    - `qssa_check(species, t)`: numerically tests the quasi-steady-state approximation (QSSA) for a given species, by comparing its net rate of change to its gross (production + consumption) rate at each requested time.
+    - `plot(species=None, t_exp=None, Y_exp=None, t_max=None, log_scale=False, time_unit=None, save_img=None)`: `species=[...]` zooms in on a subset (raises a clear error on an unknown name); `log_scale=True` for a log y-axis; `time_unit="s"`/`"min"`/... labels the x-axis "Time / s" (cosmetic only — `ReactionNetwork` itself is unit-agnostic, see the new Kinetics.md 5.4); `save_img=...` saves the figure (asks before overwriting).
+    - `plot_qssa(species, t, threshold=0.1, time_unit=None, save_img=None)`: two-panel diagnostic plot for the QSSA check (concentrations on top, QSSA ratio on the bottom, with the region under `threshold` shaded).
+    - `copy()`: independent deep copy of the whole network (reactions, initial conditions, any fitted result), e.g. to fit the same declared network twice under different conditions without declaring every reaction twice or one `fit()` overwriting another's cached result — same rationale as `KORD.copy()`.
+    - Same `__setattr__` typo guard as `kbasic`/`KORD`.
+    - Validated against known analytical solutions (parallel-reaction branching ratio, consecutive-reaction Bateman equations, reversible-reaction equilibrium ratio) to ~1e-9 precision, plus a synthetic noisy-data fit-recovery test.
+- New `colab_utils.py` module with a shared `colab_upload(single=True, verbose=True)` function (opens Google Colab's upload button, returns the uploaded file's path, ready for `pd.read_excel()`/`pd.read_csv()`), factoring out the code until now duplicated behind every `colab=True` parameter (`kbasic.read()`, `KORD.load_from_spreadsheet()`); exposed at the package root (`from pyphyschemtools import colab_upload`) via `__init__.py`'s lazy loader.
+
+### Documentation
+- **`Kinetics.md`**: new Section 5 "`ReactionNetwork`: general reaction networks" (5.1 Purpose and scope, 5.2 Quick Start, 5.3 Reaction syntax, 5.4 Units of rate constants, 5.5 Parallel/consecutive/reversible reactions, 5.6 Fitting rate constants, 5.7 Checking the overall equation, 5.8 Quasi-steady-state check, 5.9 Worked example: stratospheric ozone decomposition, 5.10 Worked example: consecutive reactions with a fit). The module intro now lists three classes (`kbasic`, `KORD`, `ReactionNetwork`) and one standalone function.
+    - 5.4 documents that a rate constant's unit is fixed by the reaction's overall kinetic order ($[k]=\text{concentration}^{1-n}\cdot\text{time}^{-1}$), and that `time_unit=` on `plot()`/`plot_qssa()` is a cosmetic axis label only, not a unit conversion.
+    - 5.8 clarifies that the QSSA ratio's numerator **is** $|d[\text{species}]/dt|$ (the first derivative), normalized by the gross (non-cancelling) flux through that species.
+    - 5.9's ozone example notes that giving $\mathrm{O_2}$ a nonzero initial concentration (as it would have in a real stratospheric mixture) is what lets the fast pre-equilibrium actually equilibrate quickly; starting it at 0 instead gives the reverse step nothing to react against and the QSSA induction period becomes much longer.
+
 ## [0.11.0]-[0.11.1] - 2026-10-19 "kinetics.py: Y notation, binf identifiability, KORD comparison tools"
 
 ### Added

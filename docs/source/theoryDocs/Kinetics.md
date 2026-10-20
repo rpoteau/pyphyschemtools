@@ -2,7 +2,7 @@
 
 **`kinetics.py` module**
 
-This module contains two classes and one standalone function:
+This module contains three classes and one standalone function:
 
 * **`kbasic`** — a minimal, self-contained, pedagogical tool: fit a single rate
   constant $k$ for one chosen reaction order. See [3. `kbasic`](kbasic).
@@ -10,8 +10,15 @@ This module contains two classes and one standalone function:
   $k$, $Y_0$, $Y_\infty$ (and $b_\infty$) for reaction orders 0, 1 and 2, and
   decide which order the data actually support. See
   [4. `KORD`](kord).
+* **`ReactionNetwork`** — the general tool: build an arbitrary network of
+  (ir)reversible elementary reactions, simulate every species' concentration
+  by numerically integrating the mass-action ODE system, and fit the rate
+  constant(s) against experimental data. Not limited to a single A -> B
+  transformation like `kbasic`/`KORD` — covers parallel reactions, consecutive
+  reactions, reversible reactions, and any network built out of those. See
+  [5. `ReactionNetwork`](reaction-network).
 * **`superpose_plots()`** — the module's only standalone function (not a
-  method of either class): overlays the fitted curves of several `KORD`
+  method of any class): overlays the fitted curves of several `KORD`
   studies on one plot, e.g. to compare the same data fitted freely vs. with
   `fix_Y0`/`fix_Yinf`. See [4.4.1 Comparing several fits](kord-advanced-compare).
 
@@ -37,6 +44,18 @@ This module contains two classes and one standalone function:
     * [4.4.1 Comparing several fits](kord-advanced-compare)
     * [4.4.2 `from_spreadsheet` vs `load_from_spreadsheet`](kord-advanced-loading)
     * [4.4.3 Reading a different sheet / experiment](kord-advanced-sheet)
+* [5. `ReactionNetwork`: general reaction networks](reaction-network)
+  * [5.1 Purpose and scope](reaction-network-purpose)
+  * [5.2 Quick Start](reaction-network-quickstart)
+  * [5.3 Reaction syntax](reaction-network-syntax)
+  * [5.4 Units of rate constants](reaction-network-units)
+  * [5.5 Parallel, consecutive and reversible reactions](reaction-network-examples)
+  * [5.6 Fitting rate constants](reaction-network-fit)
+  * [5.7 Checking the overall equation (bilan)](reaction-network-overall)
+  * [5.8 Quasi-steady-state check (QSSA)](reaction-network-qssa)
+  * [5.9 Worked example 1: stratospheric ozone decomposition (QSSA)](reaction-network-ozone)
+  * [5.10 Worked example 2: consecutive reactions with a fit](reaction-network-fit-example)
+  * [5.11 Worked example 3: generating a synthetic kinetics dataset](reaction-network-synth-data)
 
 ---
 
@@ -373,6 +392,7 @@ a fragmentation).
 
 </div>
 
+(experimental-measurements)=
 #### 4.2.1 Experimental Measurements ($Y_\mathrm{EXP}$)
 
 In chemical kinetics, we track the evolution of molar concentrations over time: $C_{i}(t)$. Experimentally, we measure a physical quantity proportional to these concentrations: $Y_\mathrm{EXP}(t)$.
@@ -725,6 +745,496 @@ for the next pair, etc. — see the data format in
   # or, by sheet name:
   study = KORD.from_spreadsheet(file, exp_number=1, sheet_name="Feuille2")
   ```
+
+---
+
+(reaction-network)=
+## 5. `ReactionNetwork`: general reaction networks
+
+(reaction-network-purpose)=
+### 5.1 Purpose and scope
+
+`kbasic` and `KORD` both rely on **closed-form integrated rate laws**, valid
+only for a single reactant transforming into a single product
+($\alpha A \rightarrow \beta B$), of order 0, 1 or 2 (see
+[2. Integrated rate laws](rate-laws)). That covers a lot of real experiments,
+but not every mechanism a student or a researcher might need to fit:
+
+* **Parallel (competitive) reactions**: $A \rightarrow B$ and $A \rightarrow C$
+  at the same time, with their own rate constants $k_1$, $k_2$.
+* **Consecutive reactions**: $A \rightarrow B \rightarrow C$, where $B$ is an
+  intermediate that builds up, then decays — its concentration goes through a
+  maximum (the classic setting for introducing the quasi-steady-state
+  approximation, QSSA).
+* **Reversible reactions**: $A \rightleftharpoons B$, which relax toward an
+  equilibrium set by the ratio of the forward and backward rate constants,
+  not all the way to $A=0$.
+* Any **network** combining several of the above.
+
+None of these have a simple closed-form solution in general.
+`ReactionNetwork` drops the closed-form restriction entirely: it builds the
+system of ODEs for an arbitrary set of elementary reactions straight from
+**mass-action kinetics** (a reaction's rate is $k$ times the product of its
+reactants' concentrations, each raised to its own stoichiometric
+coefficient), integrates it numerically with
+[`scipy.integrate.solve_ivp`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html),
+and fits the rate constant(s) against experimental data the same way `KORD`
+does — a measured signal as a linear combination of concentrations,
+$Y_\mathrm{EXP}(t) = \sum_i \eta_i\, C_i(t)$ (see
+[4.2.1 Experimental Measurements](experimental-measurements)).
+
+This is a genuine generalization: `kbasic`/`KORD`'s orders 0/1/2 are just the
+special case of a single $A \rightarrow B$ reaction, and the quasi-steady-state
+approximation can now be checked **numerically** against the exact solution
+of a consecutive network, instead of only illustrated on a closed-form
+special case.
+
+Mass action is the standard assumption for an *elementary* step; it is not
+automatically valid for an overall, multi-step reaction written as a single
+line (the same caveat `KORD`'s 4.2 Principle raises for pseudo-order
+kinetics) — build the actual elementary steps of the mechanism, not a
+shortcut lumped equation, if you want physically meaningful rate constants.
+
+(reaction-network-quickstart)=
+### 5.2 Quick Start
+
+Three steps, in order: declare the reactions, set the initial concentrations,
+then either `fit()` against data or `simulate()`/`plot()` directly.
+
+```python
+from pyphyschemtools import ReactionNetwork
+
+net = ReactionNetwork()
+net.add_reaction("A -> B", k_guess=0.5)
+net.add_reaction("B -> C", k_guess=0.1)
+net.set_initial_conditions({"A": 1.0, "B": 0.0, "C": 0.0})
+
+# If only B is measured (e.g. it's the one colored/absorbing species):
+net.fit(t_exp, Y_exp, observed_species="B")
+net.plot(t_exp, Y_exp, time_unit="s")   # all three species + the experimental overlay
+net.summary()                          # fitted k1, k2 for each reaction
+```
+
+`plot()` draws every species by default; pass `species=[...]` to zoom in on a
+subset — handy for a reactive intermediate whose concentration is orders of
+magnitude below the reactant/product, especially combined with
+`log_scale=True`:
+
+```python
+net.plot(species=["A", "B"], log_scale=True, t_max=20, time_unit="s")
+```
+
+Each name is checked against the network's actual species first, so a typo
+(or a species that was never declared via `add_reaction()`) raises a clear
+error listing the known ones, instead of silently plotting nothing for it.
+
+**No fit needed at all** if you already know the rate constants and just want
+to see how the concentrations evolve: `simulate(t)` integrates the ODE system
+with the guesses given to `add_reaction()` — or the fitted values, once
+`fit()` has been called — and returns a `{species: concentration array}`
+dict:
+
+```python
+import numpy as np
+t = np.linspace(0, 20, 200)
+C = net.simulate(t)            # {"A": array(...), "B": array(...), "C": array(...)}
+```
+
+`copy()` returns an independent deep copy of the whole network (reactions,
+initial conditions, any fitted result), e.g. to fit the same network twice
+under different conditions — different `weights`, a different subset of the
+data — without having to declare every reaction a second time, and without
+one `fit()` call overwriting the other's `results`.
+
+`plot()`/`plot_qssa()` save the figure to disk, in addition to showing it,
+with `save_img="path/to/figure.png"` (any extension matplotlib's `savefig`
+understands — png, pdf, svg...); both ask before overwriting a file that
+already exists. Pass `time_unit="s"` (or `"min"`, `"h"`, `"yr"`...) to label
+the x-axis "Time / s" — see [5.3 Units](reaction-network-units) for why this
+is just a label and not an actual unit conversion.
+
+(reaction-network-syntax)=
+### 5.3 Reaction syntax
+
+`add_reaction(equation, k_guess=..., kf_guess=..., kr_guess=..., order=...,
+order_back=...)` parses a plain chemical-equation string:
+
+* Species are **single-word** names — letters/digits/underscore, Unicode
+  accents included (`A`, `B2`, `H2O`, `ethylene`, `éthylène`...). A species
+  name cannot contain a space, so a multi-word compound needs a short alias
+  first, exactly as on paper: `A = ethylene, B = cyclobutane`, then
+  `net.add_reaction("2 A -> B", ...)`.
+* Every name is **normalized** on parsing, so the same compound is always
+  recognized as the same species no matter how it's typed across different
+  `add_reaction()` calls: accents are stripped, and a purely alphabetic name
+  is stored with only its first letter capitalized — `"ethylene"`,
+  `"Ethylene"`, `"ETHYLENE"` and `"éthylène"` all become the single species
+  `"Ethylene"`. A name containing a digit is treated as a chemical formula
+  rather than a spelled-out word, so only its first character is forced to
+  uppercase and the rest is left exactly as typed — `"O3"`, `"CO2"`, `"H2O"`
+  keep their case. This means `"2 ethylene -> cyclobutane"` and
+  `"Cyclobutane -> 2 ETHYLENE"` are recognized as the forward/backward of the
+  very same reaction between the very same two species, not four different
+  ones.
+* Terms are separated by `+`, with an optional leading integer stoichiometric
+  coefficient: `"A + 2 B -> C"`, or `"2 ethylene -> cyclobutane"` directly if
+  you'd rather not alias.
+* `->` for an **irreversible** reaction (give `k_guess`); `<=>` for a
+  **reversible** one (give `kf_guess`/`kr_guess` — each defaults to 1.0 if
+  omitted, and `kf_guess` also accepts the value passed as `k_guess`, for
+  convenience). Reversible reactions are fully supported, with any kinetic
+  order (see below) on either side.
+* Any species not seen in an earlier call is added to the network
+  automatically, in order of first appearance — no separate species
+  declaration needed.
+* All rate constants are constrained to be $\geq 0$ (physical consistency,
+  exactly like $k$/$b_\infty$ in `KORD.fit()`).
+* **Kinetic order vs. stoichiometry**: by default, the rate law is
+  elementary mass action — the exponent on each reactant (product, for the
+  backward direction) equals its stoichiometric coefficient. Pass
+  `order={"A": 1.5}` (forward) and/or `order_back={"B": 2}` (backward,
+  reversible only) to override this species by species, when the actual
+  kinetic order differs from the written stoichiometry (the same caveat
+  [4.2 Principle](principle) raises for `KORD`'s pseudo-order case) — e.g. a
+  reversible reaction that is first order forward but second order
+  backward: `net.add_reaction("A <=> 2 B", kf_guess=0.5, kr_guess=0.2,
+  order_back={"B": 2})` (this one actually matches the stoichiometry, so
+  `order_back` isn't even needed here — it's for when it *doesn't* match).
+
+(reaction-network-units)=
+### 5.4 Units of rate constants
+
+`ReactionNetwork` is entirely **unit-agnostic**: `t`, `C0` and every rate
+constant are just numbers — there is no internal unit system, no
+conversion, and nothing to configure. You choose the units once (e.g.
+mol·L⁻¹ for concentration and s for time) and keep every input in that same
+system; the output comes out consistently in it too.
+
+Given that, the *unit* a rate constant carries is fixed by the reaction's
+overall kinetic order $n$ (the sum of the forward exponents — the
+stoichiometric coefficients by default, or the `order` dict when it's been
+overridden), from the requirement that the rate itself always has units of
+concentration/time:
+
+$$[k] = \text{(concentration)}^{1-n}\cdot\text{(time)}^{-1}$$
+
+* order 1 (e.g. `"A -> B"`): $[k]=\text{time}^{-1}$ (e.g. s⁻¹) — same as
+  `kbasic`'s order-1 case.
+* order 2 (e.g. `"A + B -> C"` or `"2 A -> B"`): $[k]=\text{concentration}^{-1}\cdot\text{time}^{-1}$
+  (e.g. L·mol⁻¹·s⁻¹).
+* order 0: $[k]=\text{concentration}\cdot\text{time}^{-1}$.
+
+A reversible reaction's $k_f$ and $k_r$ don't have to share the same unit —
+each follows this rule from its own side's order, e.g. `"A <=> 2 B"` has
+$k_f$ in time⁻¹ (order 1 forward) but $k_r$ in concentration⁻¹·time⁻¹ (order
+2 backward, unless overridden via `order_back`).
+
+Since the module itself carries no unit label, `plot()`/`plot_qssa()` accept
+`time_unit="s"` (or `"min"`, `"h"`, `"yr"`...) purely to annotate the x-axis
+as "Time / s" — this labels the figure only, it does not check or convert
+anything, so it's on you to make sure `time_unit` actually matches the time
+unit `t`/`t_exp` and the rate constants were expressed in.
+
+(reaction-network-examples)=
+### 5.5 Parallel, consecutive and reversible reactions
+
+**Parallel reactions** ($A\rightarrow B$, $A\rightarrow C$, with $k_1$, $k_2$):
+the classic result is that the **branching ratio** $[B]/[C]$ equals $k_1/k_2$
+at every instant (not just at completion), since both channels drain $A$ at
+rates proportional to their own $k$:
+
+```python
+net = ReactionNetwork()
+net.add_reaction("A -> B", k_guess=0.5)
+net.add_reaction("A -> C", k_guess=0.2)
+net.set_initial_conditions({"A": 2.0, "B": 0.0, "C": 0.0})
+```
+
+**Consecutive reactions** ($A\rightarrow B\rightarrow C$): $[B]$ rises then
+falls, peaking at $t_\mathrm{max}=\dfrac{\ln(k_2/k_1)}{k_2-k_1}$ (the Bateman
+equations give the exact closed form for this particular two-step case —
+`ReactionNetwork`'s numerical solution matches it to $\sim 10^{-9}$). This is
+the standard setting to introduce the **quasi-steady-state approximation**
+(QSSA): when $k_2\gg k_1$, $B$ is consumed almost as fast as it forms, so
+$d[B]/dt\approx 0$ is a good approximation after a short induction period —
+checkable directly here by comparing `net.simulate(t)['B']` for $k_2\gg k_1$
+against the QSSA prediction $[B]_\mathrm{QSSA}\approx \frac{k_1}{k_2}[A](t)$.
+
+```python
+net = ReactionNetwork()
+net.add_reaction("A -> B", k_guess=0.6)
+net.add_reaction("B -> C", k_guess=0.15)
+net.set_initial_conditions({"A": 1.5, "B": 0.0, "C": 0.0})
+```
+
+**Reversible reactions** ($A\rightleftharpoons B$): the system relaxes toward
+an equilibrium with $[B]_\mathrm{eq}/[A]_\mathrm{eq}=k_f/k_r$ (not to
+$[A]=0$) — `ReactionNetwork` includes the backward rate in $A$'s and $B$'s
+ODEs automatically as soon as a reaction is declared with `<=>`:
+
+```python
+net = ReactionNetwork()
+net.add_reaction("A <=> B", kf_guess=0.8, kr_guess=0.3)
+net.set_initial_conditions({"A": 1.0, "B": 0.0})
+```
+
+(reaction-network-fit)=
+### 5.6 Fitting rate constants
+
+`fit(t_exp, Y_exp, weights=...)` or the `observed_species="X"` shortcut
+(equivalent to `weights={"X": 1.0}`) fits every reaction's rate constant(s)
+by nonlinear least squares, wrapping the ODE integration inside
+`scipy.optimize.curve_fit` exactly as `KORD.fit()` wraps its closed-form
+model. `weights={...}` is for a signal mixing several species, e.g. a UV-Vis
+absorbance both $A$ and $B$ contribute to: `weights={"A": eta_A, "B": eta_B}`.
+
+The returned dict (also stored in `net.results`) has the same shape as
+`KORD.fit()`'s: `{'k': {param_name: value, ...}, 'RMSE', 'R2', 'AIC', 'BIC',
+'weights'}` — `'k'` has one entry per irreversible reaction (`k1`, `k2`, ...,
+numbered by the order reactions were added), two per reversible reaction:
+`k{i}` for the forward constant and `k-{i}` for the reverse one — the
+classic $k_1$/$k_{-1}$ notation for the two directions of the *same* step
+`i` (e.g. a reversible reaction added first gives `k1`/`k-1`; the next
+reaction added, even if irreversible, continues at `k2`). The
+fitted values are also stored in `net.k_fit`, so a later `simulate()` or
+`plot()` call with no `k_values` argument uses them automatically, and
+`summary()` prints each reaction with its fitted (or, before any `fit()`
+call, guessed) rate constant(s).
+
+(reaction-network-overall)=
+### 5.7 Checking the overall equation (bilan)
+
+For a multi-step mechanism, `overall_equation()` sums the stoichiometry of
+every declared reaction (forward direction as written, each counted once)
+and cancels out whatever appears on both sides — typically the
+intermediate(s) — to get the net equation the whole sequence implies:
+
+```python
+net = ReactionNetwork()
+net.add_reaction("A -> I", k_guess=0.5)   # I: reactive intermediate
+net.add_reaction("I -> P", k_guess=0.1)
+print(net.overall_equation())             # "A -> P"  (I cancels out)
+```
+
+This is an important sanity check on a mechanism: the overall equation it
+implies should match the balanced equation you started from. If it doesn't,
+either a step is missing/wrong, or a stoichiometric coefficient is off —
+exactly the kind of mistake this check catches before any fitting happens.
+Note that a reversible reaction contributes its forward stoichiometry only
+(this is about the mechanism's bookkeeping across the whole sequence, not
+about net flux at a given time, which depends on the actual rate constants
+and concentrations — see [5.7 Quasi-steady-state check](reaction-network-qssa)
+for that).
+
+(reaction-network-qssa)=
+### 5.8 Quasi-steady-state check (QSSA)
+
+For a reactive intermediate (e.g. $B$ in $A\rightarrow B\rightarrow C$), the
+quasi-steady-state approximation (QSSA) assumes $d[B]/dt\approx 0$ once $B$
+is being consumed about as fast as it forms — valid when $k_2\gg k_1$, but
+not obviously so otherwise. `qssa_check(species, t)` answers this
+numerically, without needing a closed-form solution: at each time in `t`, it
+compares the *net* rate of change of `species` to its *gross* rate — the sum
+of the absolute value of every reaction's individual contribution to it
+(production and consumption both counted positive, so they can't cancel each
+other the way they do in the net rate):
+
+$$\text{QSSA ratio}(t) = \frac{|d[\text{species}]/dt|}{\sum_j |\text{contribution}_j(t)|}$$
+
+The numerator **is** the first derivative of the concentration (in absolute
+value) — exactly $d[\text{species}]/dt$, the same net rate `simulate()`
+integrates. What makes it a *ratio* rather than just the derivative is the
+denominator: the gross rate, i.e. how much is flowing through `species` in
+total (production and consumption summed as positive numbers, so a large
+forward flux and a large backward flux don't cancel there the way they do
+in the numerator). So the ratio asks "how small is the net change *compared
+to the traffic actually going through this species*?" — a small $|d[B]/dt|$
+on its own doesn't mean much if nothing is happening at all, but a small
+$|d[B]/dt|$ next to a large gross flux is the real signature of a
+species sitting at quasi-steady state.
+
+A ratio near 0 means production and consumption are nearly balanced — the
+QSSA holds; a ratio near 1 means `species` is still mostly accumulating or
+depleting on its own.
+
+```python
+net = ReactionNetwork()
+net.add_reaction("A -> B", k_guess=0.05)
+net.add_reaction("B -> C", k_guess=5.0)     # k2 >> k1
+net.set_initial_conditions({"A": 1.0, "B": 0.0, "C": 0.0})
+
+t = np.linspace(0.01, 20, 40)
+ratio = net.qssa_check("B", t)   # << 1 here (after a short induction period):
+                                 # the QSSA is a good approximation for B
+```
+
+With `k_guess=0.5` for both steps instead (so $k_2\sim k_1$), the same check
+gives a ratio climbing well above 0.5 — the QSSA clearly does **not** hold,
+exactly as expected since $B$ never gets consumed fast enough to stay near
+steady state.
+
+(reaction-network-ozone)=
+### 5.9 Worked example 1: stratospheric ozone decomposition (QSSA)
+
+A textbook mechanism that ties every feature above together: the classical
+two-step scheme for ozone decomposition,
+
+$$\mathrm{O_3}\rightleftharpoons \mathrm{O_2}+\mathrm{O}\qquad(k_{f1},\,k_{r1},\text{ fast})$$
+$$\mathrm{O}+\mathrm{O_3}\rightarrow 2\,\mathrm{O_2}\qquad(k_2,\text{ slow})$$
+
+with atomic oxygen $\mathrm{O}$ as a short-lived intermediate. $\mathrm{O_2}$
+is given a sizeable initial concentration here (as it would have in a real
+stratospheric mixture) — it has to, for the reverse of the first step to
+have anything to act on from the very start; starting it at exactly 0 instead
+leaves the backward rate $k_{r1}[\mathrm{O_2}][\mathrm{O}]$ pinned near 0
+until $\mathrm{O_2}$ builds up on its own, so the pre-equilibrium needs an
+induction period far longer than the one shown below:
+
+```python
+net = ReactionNetwork()
+net.add_reaction("O3 <=> O2 + O", kf_guess=1.0, kr_guess=100.0)
+net.add_reaction("O + O3 -> 2 O2", k_guess=50.0)
+net.set_initial_conditions({"O3": 1.0, "O2": 1.0, "O": 0.0})
+
+print(net.overall_equation())   # "2 O3 -> 3 O2"  (O cancels: it's the
+                                 #  intermediate, consistent with the
+                                 #  textbook balanced equation)
+```
+
+Checking that $\mathrm{O}$ is indeed a good QSSA candidate here — the whole
+point of calling the first step "fast" and the second "slow" — is exactly
+what `qssa_check()`/`plot_qssa()` are for:
+
+```python
+import numpy as np
+t = np.linspace(1e-5, 8, 300)
+
+ratio = net.qssa_check("O", t)
+# ratio ~ 1 only for a brief induction period (t << 0.03), then drops
+# below 1% and stays there for the rest of the decomposition: the QSSA
+# for atomic oxygen is excellent once that short transient is over.
+
+net.plot_qssa("O", t, threshold=0.05, time_unit="s")   # two-panel diagnostic plot
+net.plot(species=["O3", "O"], log_scale=True, t_max=8, time_unit="s")  # zoom on
+                                                                         # the trace intermediate
+```
+
+This is also a good illustration of why the induction period matters when
+choosing initial conditions for a QSSA demonstration: with $k_{f1}$, $k_{r1}$
+both very large and $\mathrm{O_2}(0)=0$ instead, `qssa_check()` would
+correctly report the approximation failing for a much longer stretch, not
+because the mechanism is wrong but because the reverse step has nothing to
+react with yet — a reminder that the QSSA is a statement about *rates*
+staying balanced, not simply about $k_{r1}\gg k_{f1}$.
+
+(reaction-network-fit-example)=
+### 5.10 Worked example 2: consecutive reactions with a fit
+
+A second worked example, this time exercising `fit()` rather than
+`qssa_check()`: the classic two-step consecutive mechanism
+$A\rightarrow I\rightarrow P$, where only the intermediate $I$ is
+experimentally observed (e.g. a UV-Vis absorbing species, as in
+[4.2 Experimental Measurements](experimental-measurements) for `KORD`) —
+the exact setting `observed_species=` is for.
+
+`ReactionNetwork` has no built-in `read()`/`load_from_excel()` of its own
+(unlike `kbasic`/`KORD`) — not because it can't be done, but because
+`fit()`/`simulate()` just need two plain arrays `t_exp`, `Y_exp`, so reading
+whatever file they come from is a two-line `pandas` call, with no dedicated
+method needed: `pandas.read_excel()` reads `.xlsx` as well as `.ods`
+(LibreOffice Calc's native format — needs the `odfpy` package) the same
+way, so here the data (one $A\rightarrow I\rightarrow P$ "experiment",
+with $[I]$ tracked over time) is loaded straight from a two-column
+spreadsheet, `consecutive_fit_data.ods`, exactly as a real lab measurement
+would be:
+
+```python
+import pandas as pd
+
+df = pd.read_excel("consecutive_fit_data.ods", engine="odf")
+t_exp = df["Time / min"].values
+Y_exp = df["Y"].values           # the intermediate [I], as actually observed
+
+net = ReactionNetwork()
+net.add_reaction("A -> I", k_guess=1.0)   # deliberately uninformed guesses
+net.add_reaction("I -> P", k_guess=1.0)
+net.set_initial_conditions({"A": 1.0, "I": 0.0, "P": 0.0})
+
+results = net.fit(t_exp, Y_exp, observed_species="I")
+net.plot(t_exp, Y_exp, time_unit="min", save_img="./fig_examples/Kinetics/consecutive_fit.png")
+net.summary()
+```
+
+The rate constants used to actually generate `consecutive_fit_data.ods`
+are not needed to run this fit — that's the point: `fit()` recovers them
+from the data alone, starting from guesses that give it no head start.
+[5.11 Worked example 3](reaction-network-synth-data) shows exactly how
+that file was produced, for anyone who wants to check the fit against the
+true values or generate a similar file for a different mechanism.
+
+Unlike the ozone example, there's no reversible step and no QSSA claim
+here — it's a plain nonlinear least-squares fit of two rate constants
+against one observed species, the same workflow as `net.fit(t_exp, Y_exp,
+observed_species="B")` in [5.2 Quick Start](reaction-network-quickstart).
+
+**A genuine identifiability trap, not a code bug**: fitting the exact same
+data with `observed_species="P"` instead of `"I"` converges just as well
+(comparable RMSE) but can recover $k_1\approx 0.15$, $k_2\approx 0.54$ —
+the two rate constants **swapped**. This isn't `curve_fit` failing: the
+Bateman closed form for the final product,
+
+$$[P](t) = a_0\left(1+\frac{k_2e^{-k_1t}-k_1e^{-k_2t}}{k_1-k_2}\right),$$
+
+is exactly symmetric under exchanging $k_1\leftrightarrow k_2$ (swap them
+and $[P](t)$ is unchanged, for every $t$) — the final product's time
+profile carries no information about *which* of the two steps is the fast
+one, only about the unordered pair $\{k_1, k_2\}$. `curve_fit` is free to
+land on either equally-good solution depending on the starting guesses.
+It's the intermediate $[I](t)$ — which rises then falls, asymmetrically in
+$k_1$ and $k_2$ — that breaks this symmetry and pins down the correct
+assignment; whenever only the final product can realistically be followed,
+this is a hard identifiability limit of the data itself, not something a
+different `k_guess` or a tighter fit can get around.
+
+(reaction-network-synth-data)=
+### 5.11 Worked example 3: generating a synthetic kinetics dataset
+
+This is how `consecutive_fit_data.ods`, read blind in
+[5.10 Worked example 2](reaction-network-fit-example), was actually
+produced: a network with known, "true" rate constants simulates
+noise-free concentrations, Gaussian noise is added to $[I]$ only (mimicking
+real measurement noise on the one species actually followed), and the
+result is written out to a two-column spreadsheet — the same logic used
+elsewhere in this module to validate `KORD.fit()` against synthetic data,
+just saved to a file instead of being fit immediately in the same script.
+
+```python
+import numpy as np
+import pandas as pd
+
+np.random.seed(0)   # reproducible noise
+
+true_net = ReactionNetwork(verbose=False)
+true_net.add_reaction("A -> I", k_guess=0.5)     # true k1 = 0.5 min^-1
+true_net.add_reaction("I -> P", k_guess=0.15)    # true k2 = 0.15 min^-1
+true_net.set_initial_conditions({"A": 1.0, "I": 0.0, "P": 0.0})
+
+t_exp = np.linspace(0.5, 25, 18)
+Y_exp = true_net.simulate(t_exp)["I"] + np.random.normal(0, 0.01, size=t_exp.shape)
+
+df = pd.DataFrame({"Time / min": t_exp, "Y": Y_exp})
+df.to_excel("consecutive_fit_data.ods", index=False, engine="odf")
+```
+
+**A note on naming, for a reversible reaction**: `add_reaction()` already
+names a reversible step's rate constants the standard textbook way, $k_1$
+forward and $k_{-1}$ backward (not $k_{f1}$/$k_{r1}$) — e.g.
+`net.add_reaction("A <=> B", kf_guess=0.8, kr_guess=0.3)` reports as
+`k1=0.8, k-1=0.3` in `summary()` and in `results['k']`, and a second
+reversible reaction added afterwards would be `k2`/`k-2`, and so on,
+numbered in the order the reactions were declared (irreversible and
+reversible steps share the same counter, so `"A -> B"` then `"B <=> C"`
+gives `k1`, then `k2`/`k-2`).
 
 
 ## API reference

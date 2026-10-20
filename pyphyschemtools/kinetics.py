@@ -3,16 +3,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 from scipy.optimize import curve_fit
+from scipy.integrate import solve_ivp
 from sklearn.metrics import root_mean_squared_error as rmse
 from sklearn.metrics import r2_score as r2
 from .visualID_Eng import fg, hl, bg, color
+from .colab_utils import colab_upload
 import os
 import re
+import unicodedata
 import copy as _copy
 
 # =====================================================================
 #  FR — kbasic : recherche de la constante de vitesse k par minimisation
-#  du RMSD. Version pédagogique, simple et autonome.
+#  du RMSE. Version pédagogique, simple et autonome.
 #
 #  Une classe avec trois opérations, dans l'ordre :
 #     1) kb.read(fichier)  : lire le fichier Excel (temps, Y) + récapitulatif
@@ -21,10 +24,10 @@ import copy as _copy
 #
 #  Idée : on a des points expérimentaux (temps, grandeur mesurée Y) et un
 #  modèle théorique qui dépend de k. On cherche le k qui MINIMISE l'écart
-#  entre modèle et données. Cet écart est le RMSD.
+#  entre modèle et données. Cet écart est le RMSE.
 #
 #  EN — kbasic: pedagogical, self-contained search for the rate constant
-#  k by minimizing the RMSD.
+#  k by minimizing the RMSE.
 #
 #  A class with three operations, in order:
 #     1) kb.read(file)   : read the Excel file (time, Y) + summary table
@@ -33,7 +36,7 @@ import copy as _copy
 #
 #  Idea: we have experimental points (time, measured quantity Y) and a
 #  theoretical model that depends on k. We look for the k that MINIMIZES
-#  the gap between model and data. That gap is the RMSD.
+#  the gap between model and data. That gap is the RMSE.
 # =====================================================================
 
 # numpy, pandas and matplotlib.pyplot are already imported at the top of this
@@ -87,7 +90,7 @@ class kbasic:
         self.Y0 = None         # valeur de Y à t=0
         self.ordre = None      # ordre choisi pour le fit
         self.k_opt = None      # meilleure valeur de k trouvée
-        self.rmsd_min = None   # RMSD au minimum
+        self.rmse_min = None   # RMSE au minimum
         self.t_half = None     # temps de demi-réaction t_1/2
         self._initialized = True   # voir __setattr__ ci-dessous
 
@@ -136,16 +139,16 @@ class kbasic:
             raise ValueError("ordre doit valoir 0, 1 ou 2")
 
     # -----------------------------------------------------------------
-    #  Le RMSD : la mesure de l'écart entre données et modèle.
-    #  RMSD = racine de la moyenne des carrés des écarts.
+    #  Le RMSE : la mesure de l'écart entre données et modèle.
+    #  RMSE = racine de la moyenne des carrés des écarts.
     #  Plus il est petit, mieux le modèle colle aux données.
     # -----------------------------------------------------------------
-    def _rmsd(self, k, ordre, Y0):
-        """Calcule le RMSD pour une valeur de k donnée."""
+    def _rmse(self, k, ordre, Y0):
+        """Calcule le RMSE pour une valeur de k donnée."""
         # ATTENTION : ce n'est pas nous qui appelons cette fonction, c'est
         # minimize (voir la méthode fit). Or minimize travaille toujours avec
         # un TABLEAU de paramètres, jamais avec un simple nombre. Comme on lui
-        # donne x0=[k_depart] (une liste), il rappelle _rmsd en passant k sous
+        # donne x0=[k_depart] (une liste), il rappelle _rmse en passant k sous
         # forme de tableau à un élément, par exemple [0.1] puis [0.093]...
         # La VALEUR change à chaque itération, mais la forme reste [un_element].
         # On extrait donc ce nombre unique avec k[0] pour pouvoir l'utiliser
@@ -199,12 +202,7 @@ class kbasic:
         # Mode Google Colab : on ouvre le sélecteur de fichier, l'utilisateur
         # choisit son .xlsx, et on récupère son nom pour le lire ensuite.
         if colab:
-            from google.colab import files   # disponible uniquement sur Colab
-            uploaded = files.upload()         # bouton "Parcourir"
-            # files.upload() renvoie un dictionnaire {nom_fichier: contenu}.
-            # On prend le nom du premier (et normalement seul) fichier choisi.
-            fichier = list(uploaded.keys())[0]
-            print(f"Fichier reçu : {fichier}")
+            fichier = colab_upload()   # bouton "Parcourir" Colab, voir colab_utils.py
 
         # On lit d'abord SANS supposer d'en-tête (header=None), pour
         # examiner nous-mêmes la première cellule.
@@ -292,11 +290,11 @@ class kbasic:
         return k0 if k0 > 0 else 0.1
 
     # =================================================================
-    #  2) FAIRE LE FIT : chercher le meilleur k (minimiser le RMSD)
+    #  2) FAIRE LE FIT : chercher le meilleur k (minimiser le RMSE)
     # =================================================================
     def fit(self, ordre=1, Y0=None, k_depart=None):
         """
-        FR — Trouve la valeur de k qui minimise le RMSD pour l'ordre choisi.
+        FR — Trouve la valeur de k qui minimise le RMSE pour l'ordre choisi.
 
         Si Y0 n'est pas donné, on le prend égal à la première valeur
         mesurée. Sinon, on utilise la valeur fournie par l'utilisateur.
@@ -315,9 +313,9 @@ class kbasic:
           - ordre 1 : t_1/2 = ln(2) / k
           - ordre 2 : t_1/2 = 1 / k
 
-        Retourne : (k_optimal, rmsd_au_minimum)
+        Retourne : (k_optimal, rmse_au_minimum)
 
-        EN — Finds the value of k that minimizes the RMSD for the chosen
+        EN — Finds the value of k that minimizes the RMSE for the chosen
         order.
 
         If Y0 is not given, it is taken equal to the first measured value.
@@ -336,7 +334,7 @@ class kbasic:
           - order 1: t_1/2 = ln(2) / k
           - order 2: t_1/2 = 1 / k
 
-        Returns: (k_optimal, rmsd_at_minimum)
+        Returns: (k_optimal, rmse_at_minimum)
         """
         # Valeur par défaut de Y0 : le premier point mesuré.
         if Y0 is None:
@@ -346,20 +344,20 @@ class kbasic:
         if k_depart is None:
             k_depart = self._k_depart_auto(ordre, Y0)
 
-        # minimize cherche le k qui rend le RMSD le plus petit possible.
-        #   - self._rmsd    : la fonction à minimiser
+        # minimize cherche le k qui rend le RMSE le plus petit possible.
+        #   - self._rmse    : la fonction à minimiser
         #   - x0=[k_depart] : valeur de départ de la recherche
-        #   - args=(...)    : les autres arguments fixes passés à _rmsd
+        #   - args=(...)    : les autres arguments fixes passés à _rmse
         #   - bounds        : on impose k >= 0 (une vitesse n'est pas négative)
         #
         # Pourquoi x0=[k_depart] avec des crochets, et pas juste k_depart ?
         # minimize est conçu pour optimiser plusieurs paramètres à la fois ; il
         # attend donc TOUJOURS une LISTE de valeurs de départ, même quand il n'y
         # a qu'un seul paramètre (ici k). On écrit donc [k_depart], c.-à-d.
-        # [0.1], et non 0.1. C'est aussi pour cela que _rmsd reçoit k sous forme
-        # de tableau et fait k = k[0] (voir le commentaire dans _rmsd).
+        # [0.1], et non 0.1. C'est aussi pour cela que _rmse reçoit k sous forme
+        # de tableau et fait k = k[0] (voir le commentaire dans _rmse).
         resultat = minimize(
-            self._rmsd,
+            self._rmse,
             x0=[k_depart],
             args=(ordre, Y0),
             bounds=[(0, None)],
@@ -369,7 +367,7 @@ class kbasic:
         self.ordre = ordre
         self.Y0 = Y0
         self.k_opt = resultat.x[0]   # meilleure valeur de k
-        self.rmsd_min = resultat.fun # RMSD correspondant (le plus petit)
+        self.rmse_min = resultat.fun # RMSE correspondant (le plus petit)
 
         # Temps de demi-réaction t_1/2, calculé à partir de k_opt et de la
         # formule propre à chaque ordre (voir section 3.4 "Theory" de Kinetics.md).
@@ -381,21 +379,21 @@ class kbasic:
             self.t_half = 1 / self.k_opt
 
         print(f"Ordre {ordre} : k optimal = {self.k_opt:.4e}"
-              f"  (RMSD = {self.rmsd_min:.4e})"
+              f"  (RMSE = {self.rmse_min:.4e})"
               f"  (t1/2 = {self.t_half:.4e})")
-        return self.k_opt, self.rmsd_min
+        return self.k_opt, self.rmse_min
 
     # =================================================================
     #  3) TRACER LE RÉSULTAT : comparer données et modèle ajusté
     #
     #  Deux graphiques côte à côte :
     #    - à gauche : les données et la courbe du modèle ajusté
-    #    - à droite : le "paysage" du RMSD en fonction de k, qui montre
+    #    - à droite : le "paysage" du RMSE en fonction de k, qui montre
     #                 la vallée dont minimize a trouvé le fond.
     # =================================================================
     def plot(self):
-        """FR — Trace la comparaison données / modèle et le paysage du RMSD.
-        EN — Plots the data/model comparison and the RMSD landscape."""
+        """FR — Trace la comparaison données / modèle et le paysage du RMSE.
+        EN — Plots the data/model comparison and the RMSE landscape."""
         # On a besoin du résultat du fit. Si fit() n'a pas encore été appelé,
         # k_opt vaut None : on prévient l'utilisateur au lieu de planter.
         if self.k_opt is None:
@@ -420,22 +418,22 @@ class kbasic:
         gauche.grid(True)
         gauche.set_title('Données et modèle ajusté ("fitté")')
 
-        # ---- Graphique de droite : le paysage du RMSD ----
+        # ---- Graphique de droite : le paysage du RMSE ----
         # On essaie plein de valeurs de k autour de l'optimum et on calcule
-        # le RMSD pour chacune, afin de "voir" la vallée.
+        # le RMSE pour chacune, afin de "voir" la vallée.
         k_essais = np.linspace(max(self.k_opt * 0.1, 1e-9), self.k_opt * 3, 300)
-        rmsd_essais = [self._rmsd(k, self.ordre, self.Y0) for k in k_essais]
+        rmse_essais = [self._rmse(k, self.ordre, self.Y0) for k in k_essais]
 
-        droite.plot(k_essais, rmsd_essais, color="blue", label="RMSD(k)")
+        droite.plot(k_essais, rmse_essais, color="blue", label="RMSE(k)")
         # On marque le minimum trouvé par minimize d'un gros point rouge.
-        droite.scatter([self.k_opt], [self.rmsd_min], color="red", zorder=5,
+        droite.scatter([self.k_opt], [self.rmse_min], color="red", zorder=5,
                        label=f"minimum (k = {self.k_opt:.4e})")
         droite.axvline(self.k_opt, color="red", linestyle="--", alpha=0.5)
         droite.set_xlabel("k")
-        droite.set_ylabel("RMSD")
+        droite.set_ylabel("RMSE")
         droite.legend()
         droite.grid(True)
-        droite.set_title("Le paysage du RMSD : minimize en cherche le 'fond'")
+        droite.set_title("Le paysage du RMSE : minimize en cherche le 'fond'")
 
         figure.tight_layout()
         plt.show()
@@ -596,10 +594,7 @@ class KORD:
         """
         # 0. Google Colab mode: open the file picker, read the uploaded file's name.
         if colab:
-            from google.colab import files   # only available on Colab
-            uploaded = files.upload()
-            file_path = list(uploaded.keys())[0]
-            print(f"File received: {file_path}")
+            file_path = colab_upload()   # Colab upload button, see colab_utils.py
 
         # 1. Check if file exists
         if not os.path.exists(file_path):
@@ -1419,3 +1414,740 @@ def superpose_plots(studies, order=1, show_experimental=True, labels=None,
         print(f"💾 Plot saved as: {hl.BOLD}{save_img}{hl.bold}")
 
     plt.show()
+
+
+# =====================================================================
+#  ReactionNetwork: general, numerically-integrated chemical kinetics.
+#
+#  kbasic and KORD both rely on closed-form integrated rate laws, valid
+#  only for a single reactant -> single product transformation of order
+#  0, 1 or 2. ReactionNetwork drops that restriction: it builds the
+#  system of ODEs for an *arbitrary* set of (ir)reversible elementary
+#  reactions straight from mass-action kinetics, integrates it
+#  numerically (scipy.integrate.solve_ivp), and fits rate constants
+#  against experimental data the same way KORD does -- a measured
+#  signal Y_EXP(t) as a linear combination of concentrations,
+#  Y_EXP(t) = sum_i eta_i * C_i(t) (see Kinetics.md, 4.2.1).
+#
+#  This subsumes parallel reactions (A->B, A->C), consecutive reactions
+#  (A->B->C, the Bateman equations), reversible reactions (A<=>B), and
+#  anything built out of those as a network -- and lets the quasi-steady-
+#  state approximation be checked numerically against the exact solution
+#  instead of only illustrated on a closed-form special case.
+# =====================================================================
+
+def _normalize_species_name(name):
+    """Canonicalizes a parsed species name so that the same compound is
+    recognized as the same species no matter how it was typed across
+    different `add_reaction()` calls: accents are stripped (NFKD
+    decomposition, dropping the combining marks -- "e'" -> "e", etc.,
+    covering e/a/o/i/u with any accent) and, for a purely-alphabetic
+    name, only the first letter is kept uppercase and the rest is
+    lowercased ("ETHYLENE", "ethylene", "Ethylene" all become
+    "Ethylene"). A name containing digits is treated as a chemical
+    formula rather than a spelled-out word (e.g. "O3", "CO2", "H2O"):
+    only its first character is forced to uppercase, the rest is left
+    exactly as typed, so formula case is never mangled."""
+    decomposed = unicodedata.normalize('NFKD', name)
+    stripped = ''.join(c for c in decomposed if not unicodedata.combining(c))
+    if not stripped:
+        return stripped
+    if stripped.isalpha():
+        return stripped.capitalize()
+    return stripped[0].upper() + stripped[1:]
+
+
+def _parse_reaction_side(side, equation):
+    """Parses one side of a reaction equation (left or right of the
+    arrow) into a {species: stoichiometric_coefficient} dict.
+    Terms are separated by '+'; each term is an optional integer
+    coefficient followed by a species name, e.g. "2 B", "H2O", or a
+    single-word Unicode name such as "ethylene" (accents included,
+    e.g. "cyclobutane"). A species name cannot contain a space -- alias
+    a multi-word compound to a short symbol first (A = ethylene, B =
+    butadiene, then "2 A -> B"), exactly as on paper with A, B, C...
+
+    Every name is run through `_normalize_species_name()`, so "2
+    ethylene -> cyclobutane" and "2 Ethylene -> Cyclobutane" (or even
+    "2 ETHYLENE -> CYCLOBUTANE") are recognized as the exact same
+    reaction, and species are always stored/displayed as "Ethylene",
+    "Cyclobutane", etc.
+    """
+    terms = {}
+    for term in side.split("+"):
+        term = term.strip()
+        if not term:
+            continue
+        # First character: anything but a digit or whitespace (so a
+        # leading coefficient is unambiguous); rest: any Unicode "word"
+        # character (\w matches accented letters too for str patterns).
+        m = re.match(r'^(\d+)?\s*([^\d\s]\w*)$', term, flags=re.UNICODE)
+        if not m:
+            raise ValueError(
+                f"Could not parse term '{term}' in reaction '{equation}'. "
+                f"Expected e.g. 'A', '2 B', 'H2O', 'ethylene' (a single "
+                f"word -- no space -- optionally preceded by an integer "
+                f"coefficient). For a multi-word compound, alias it to a "
+                f"symbol first, e.g. A = ethylene, then write '2 A -> B'."
+            )
+        coeff = int(m.group(1)) if m.group(1) else 1
+        species = _normalize_species_name(m.group(2))
+        terms[species] = terms.get(species, 0) + coeff
+    if not terms:
+        raise ValueError(f"Empty side in reaction '{equation}'.")
+    return terms
+
+
+def _parse_reaction(equation):
+    """Parses a reaction equation such as "A + 2 B -> C" (irreversible)
+    or "A <=> B" (reversible) into (reactants, products, reversible)."""
+    if "<=>" in equation:
+        left, right = equation.split("<=>")
+        reversible = True
+    elif "->" in equation:
+        left, right = equation.split("->")
+        reversible = False
+    else:
+        raise ValueError(
+            f"Reaction '{equation}' has no arrow: use '->' (irreversible) "
+            f"or '<=>' (reversible)."
+        )
+    reactants = _parse_reaction_side(left, equation)
+    products = _parse_reaction_side(right, equation)
+    return reactants, products, reversible
+
+
+class ReactionNetwork:
+    """
+    A general chemical kinetics tool: build an arbitrary network of
+    (ir)reversible elementary reactions, simulate the concentration of
+    every species over time by numerically integrating the mass-action
+    ODE system, and fit the rate constant(s) of each reaction against
+    experimental data.
+
+    Unlike `kbasic`/`KORD` (closed-form integrated rate laws for a
+    single A -> B transformation of order 0, 1 or 2), ReactionNetwork
+    has no restriction on the number of species or reactions: parallel
+    reactions (A->B, A->C), consecutive reactions (A->B->C), reversible
+    reactions (A<=>B), and any combination of those, are all just a
+    network of elementary steps.
+
+    Workflow (three steps, in order):
+        1) net.add_reaction("A -> B", k_guess=...)   # one call per step
+        2) net.set_initial_conditions({"A": a0, ...})
+        3) net.fit(t_exp, Y_exp, weights={...})      # or net.simulate(t)
+
+    Example (consecutive reactions, A -> B -> C)::
+
+        net = ReactionNetwork()
+        net.add_reaction("A -> B", k_guess=0.5)
+        net.add_reaction("B -> C", k_guess=0.1)
+        net.set_initial_conditions({"A": 1.0, "B": 0.0, "C": 0.0})
+
+        # If only B is measured (e.g. it's the colored/absorbing species):
+        net.fit(t_exp, Y_exp, observed_species="B")
+        net.plot(t_exp, Y_exp)
+
+    Example (reversible reaction, A <=> B)::
+
+        net = ReactionNetwork()
+        net.add_reaction("A <=> B", kf_guess=1.0, kr_guess=0.2)
+        net.set_initial_conditions({"A": 1.0, "B": 0.0})
+        net.fit(t_exp, Y_exp, observed_species="B")
+
+    Notes:
+        - Rate law: mass action by default -- a reaction's forward (and,
+          if reversible, backward) rate is k times the product of its
+          reactants' (products') concentrations, each raised to its own
+          stoichiometric coefficient. This is the standard assumption
+          for an *elementary* step; it is not automatically valid for an
+          overall multi-step reaction written as a single line (see
+          Kinetics.md 4.2's discussion of pseudo-order and the QSSA).
+        - `fit()` requires `set_initial_conditions()` to have been called
+          first, and either `weights={...}` (general linear combination
+          of concentrations) or the `observed_species="X"` shortcut
+          (equivalent to `weights={"X": 1.0}`).
+        - All rate constants are constrained to be >= 0 (physical
+          consistency), exactly like k/binf in KORD.fit().
+    """
+
+    def __init__(self, verbose=True):
+        self.species = []
+        self.reactions = []
+        self.C0 = None
+        self.k_fit = None
+        self.results = None
+        self.verbose = verbose
+        self._idx_of = {}
+        self._initialized = True   # see __setattr__ below
+
+    def __setattr__(self, name, value):
+        """Same typo guard as kbasic/KORD: once built, no new attribute
+        can be created, only existing ones can be changed -- catches a
+        misspelled attribute instead of silently creating it."""
+        if getattr(self, '_initialized', False) and name not in self.__dict__:
+            existing = ', '.join(sorted(k for k in self.__dict__ if not k.startswith('_')))
+            raise AttributeError(
+                f"ReactionNetwork has no attribute '{name}' (possible typo?). "
+                f"Existing attributes: {existing}"
+            )
+        object.__setattr__(self, name, value)
+
+    def copy(self):
+        """
+        Returns an independent deep copy of this ReactionNetwork, so the
+        same reaction list/initial conditions can be fitted more than
+        once (different starting guesses, different `weights`, a
+        different subset of the data...) without one `fit()` call
+        overwriting another's result -- the same rationale as
+        `KORD.copy()`. Mainly a convenience once a network has several
+        reactions, so they don't have to be declared twice::
+
+            net_B_only = ReactionNetwork()
+            net_B_only.add_reaction("A -> B", k_guess=0.5)
+            net_B_only.add_reaction("B -> C", k_guess=0.1)
+            net_B_only.set_initial_conditions({"A": 1.0, "B": 0.0, "C": 0.0})
+
+            net_mixed = net_B_only.copy()           # same reactions/initial conditions
+            net_B_only.fit(t_exp, Y_exp, observed_species="B")
+            net_mixed.fit(t_exp, Y_exp, weights={"B": 0.8, "C": 0.2})
+            # net_B_only.results and net_mixed.results can now be compared
+        """
+        return _copy.deepcopy(self)
+
+    def add_reaction(self, equation, k_guess=None, kf_guess=None, kr_guess=None,
+                      order=None, order_back=None):
+        """
+        Adds one elementary reaction to the network, e.g.
+        ``net.add_reaction("A + 2 B -> C", k_guess=0.5)`` or
+        ``net.add_reaction("A <=> B", kf_guess=1.0, kr_guess=0.2)``.
+
+        Args:
+            equation (str): reaction equation. Species are single-word
+                names (letters/digits/underscore, Unicode accents
+                allowed, e.g. "A", "H2O", "ethylene"); terms are
+                separated by '+', with an optional leading integer
+                stoichiometric coefficient (e.g. "2 B"). Use '->' for an
+                irreversible reaction, '<=>' for a reversible one.
+            k_guess (float, optional): starting guess for the (single)
+                rate constant of an irreversible reaction. Defaults to
+                1.0 if not given.
+            kf_guess, kr_guess (float, optional): starting guesses for
+                the forward/backward rate constants of a reversible
+                reaction. Each defaults to 1.0 if not given (kf_guess
+                also accepts the value passed as k_guess, for
+                convenience).
+            order (dict, optional): forward rate law exponents, as
+                {species: exponent}, overriding the default assumption
+                that the kinetic order in each reactant equals its
+                stoichiometric coefficient. Only needed when the
+                mechanism isn't a textbook elementary step (e.g. a
+                measured/pseudo order that differs from the written
+                stoichiometry) -- see Kinetics.md 4.2's discussion of
+                pseudo-order kinetics for the same caveat on `kbasic`/
+                `KORD`. Keys must be a subset of this reaction's
+                reactants.
+            order_back (dict, optional): same as `order`, but for the
+                backward rate of a reversible reaction; keys must be a
+                subset of this reaction's products. Ignored for an
+                irreversible reaction.
+
+        Any species not seen in a previous call is added to the network
+        automatically, in order of first appearance.
+        """
+        reactants, products, reversible = _parse_reaction(equation)
+
+        if order is not None and not set(order) <= set(reactants):
+            raise ValueError(
+                f"order={order} refers to species not among this reaction's "
+                f"reactants {list(reactants)} (equation: '{equation}')."
+            )
+        if order_back is not None:
+            if not reversible:
+                raise ValueError("order_back only applies to a reversible ('<=>') reaction.")
+            if not set(order_back) <= set(products):
+                raise ValueError(
+                    f"order_back={order_back} refers to species not among this "
+                    f"reaction's products {list(products)} (equation: '{equation}')."
+                )
+
+        for sp in list(reactants) + list(products):
+            if sp not in self.species:
+                self.species.append(sp)
+        self._idx_of = {sp: i for i, sp in enumerate(self.species)}
+
+        # Default kinetic order = stoichiometric coefficient (elementary
+        # mass action); an explicit `order`/`order_back` overrides it,
+        # species by species.
+        fwd_order = dict(reactants)
+        fwd_order.update(order or {})
+        back_order = dict(products)
+        back_order.update(order_back or {})
+
+        idx = len(self.reactions) + 1
+        if reversible:
+            kf_guess = kf_guess if kf_guess is not None else (k_guess if k_guess is not None else 1.0)
+            kr_guess = kr_guess if kr_guess is not None else 1.0
+            reaction = {
+                'equation': equation, 'reactants': reactants, 'products': products,
+                'reversible': True, 'order': fwd_order, 'order_back': back_order,
+                'kf_name': f"k{idx}", 'kr_name': f"k-{idx}",
+                'kf_guess': kf_guess, 'kr_guess': kr_guess,
+            }
+            if self.verbose:
+                print(f"  Reaction {idx} (reversible): {equation}  "
+                      f"[kf_guess={kf_guess:.3g}, kr_guess={kr_guess:.3g}]")
+        else:
+            k_guess = k_guess if k_guess is not None else 1.0
+            reaction = {
+                'equation': equation, 'reactants': reactants, 'products': products,
+                'reversible': False, 'order': fwd_order,
+                'k_name': f"k{idx}", 'k_guess': k_guess,
+            }
+            if self.verbose:
+                print(f"  Reaction {idx}: {equation}  [k_guess={k_guess:.3g}]")
+
+        self.reactions.append(reaction)
+
+    def overall_equation(self):
+        """
+        Sums the stoichiometry of every declared reaction (each counted
+        once, forward direction as written) and cancels out whatever
+        appears on both sides -- typically the reaction intermediates --
+        to get the overall/net equation of the mechanism. Returns a
+        string such as "A -> C" for the mechanism "A -> B", "B -> C"
+        (B is an intermediate and cancels).
+
+        This is a useful sanity check on a multi-step mechanism: the
+        overall equation it implies should match the one you started
+        from (e.g. the balanced equation given in the problem).
+
+        Note: a reversible reaction contributes its forward stoichiometry
+        only -- this is about the mechanism's bookkeeping (which atoms go
+        where across the whole sequence), not about net flux at a given
+        time, which depends on the actual rate constants and
+        concentrations (see `qssa_check()` for that).
+        """
+        net = {sp: 0 for sp in self.species}
+        for r in self.reactions:
+            for sp, c in r['reactants'].items():
+                net[sp] -= c
+            for sp, c in r['products'].items():
+                net[sp] += c
+
+        def fmt(sp, c):
+            return sp if c == 1 else f"{c} {sp}"
+
+        left = [fmt(sp, -net[sp]) for sp in self.species if net[sp] < 0]
+        right = [fmt(sp, net[sp]) for sp in self.species if net[sp] > 0]
+        if not left or not right:
+            return ("(every species cancels out -- the declared steps sum "
+                     "to no net change at all)")
+        return f"{' + '.join(left)} -> {' + '.join(right)}"
+
+    def set_initial_conditions(self, conditions):
+        """
+        Sets each species' concentration at t=0, e.g.
+        ``net.set_initial_conditions({"A": 1.0, "B": 0.0})``.
+
+        Any species already in the network but missing from
+        ``conditions`` defaults to 0.0 (with a warning if ``verbose``).
+        """
+        missing = [sp for sp in self.species if sp not in conditions]
+        if missing and self.verbose:
+            print(f"⚠️  No initial concentration given for {missing}; "
+                  f"defaulting to 0.0.")
+        self.C0 = np.array([conditions.get(sp, 0.0) for sp in self.species], dtype=float)
+
+    def _param_specs(self):
+        """Ordered list of (parameter_name, starting_guess) across every
+        reaction -- one entry for an irreversible reaction's k, two
+        (kf, kr) for a reversible one."""
+        specs = []
+        for r in self.reactions:
+            if r['reversible']:
+                specs.append((r['kf_name'], r['kf_guess']))
+                specs.append((r['kr_name'], r['kr_guess']))
+            else:
+                specs.append((r['k_name'], r['k_guess']))
+        return specs
+
+    def _rhs(self, t, C, k_map):
+        """Right-hand side of the mass-action ODE system, dC/dt, given
+        the current concentration vector C and a {param_name: value}
+        mapping of rate constants.
+
+        The stoichiometric coefficients (reactants/products) always
+        drive the mass-balance update of dC; the kinetic order used in
+        the rate law itself comes from each reaction's 'order'/
+        'order_back' dict, which defaults to those same stoichiometric
+        coefficients (elementary mass action) but can be overridden
+        per-species via add_reaction(order=..., order_back=...)."""
+        dC = np.zeros(len(self.species))
+        for r in self.reactions:
+            rate_f = k_map[r['kf_name'] if r['reversible'] else r['k_name']]
+            for sp, exp in r['order'].items():
+                rate_f *= C[self._idx_of[sp]] ** exp
+            rate_net = rate_f
+            if r['reversible']:
+                rate_b = k_map[r['kr_name']]
+                for sp, exp in r['order_back'].items():
+                    rate_b *= C[self._idx_of[sp]] ** exp
+                rate_net = rate_f - rate_b
+            for sp, coeff in r['reactants'].items():
+                dC[self._idx_of[sp]] -= coeff * rate_net
+            for sp, coeff in r['products'].items():
+                dC[self._idx_of[sp]] += coeff * rate_net
+        return dC
+
+    def _gross_rhs(self, t, C, k_map):
+        """Like _rhs, but also returns, for each species, the sum of the
+        *absolute* contribution of every reaction touching it (gross
+        flux, counting production and consumption as positive) --
+        used by qssa_check() to judge whether net change is small
+        compared to how much is actually flowing through a species."""
+        dC = np.zeros(len(self.species))
+        gross = np.zeros(len(self.species))
+        for r in self.reactions:
+            rate_f = k_map[r['kf_name'] if r['reversible'] else r['k_name']]
+            for sp, exp in r['order'].items():
+                rate_f *= C[self._idx_of[sp]] ** exp
+            rate_net = rate_f
+            if r['reversible']:
+                rate_b = k_map[r['kr_name']]
+                for sp, exp in r['order_back'].items():
+                    rate_b *= C[self._idx_of[sp]] ** exp
+                rate_net = rate_f - rate_b
+            for sp, coeff in r['reactants'].items():
+                dC[self._idx_of[sp]] -= coeff * rate_net
+                gross[self._idx_of[sp]] += abs(coeff * rate_net)
+            for sp, coeff in r['products'].items():
+                dC[self._idx_of[sp]] += coeff * rate_net
+                gross[self._idx_of[sp]] += abs(coeff * rate_net)
+        return dC, gross
+
+    def simulate(self, t, k_values=None):
+        """
+        Integrates the ODE system and returns each species' concentration
+        at the requested time points.
+
+        Args:
+            t: array-like of time points (need not be sorted).
+            k_values: rate constants to use -- a {param_name: value} dict,
+                a flat list/array in the same order as the reactions were
+                added (k or kf,kr per reaction), or None (default) to use
+                the fitted values from `fit()` if available, otherwise the
+                guesses passed to `add_reaction()`.
+
+        Returns:
+            dict: {species_name: numpy array of concentrations at `t`}.
+        """
+        if self.C0 is None:
+            raise RuntimeError("Call set_initial_conditions() before simulate().")
+        specs = self._param_specs()
+        if k_values is None:
+            k_map = {name: (self.k_fit[name] if self.k_fit is not None else guess)
+                      for name, guess in specs}
+        elif isinstance(k_values, dict):
+            k_map = k_values
+        else:
+            k_map = {name: val for (name, _), val in zip(specs, k_values)}
+
+        t = np.asarray(t, dtype=float)
+        order = np.argsort(t)
+        t_sorted = t[order]
+        t0 = min(0.0, t_sorted[0])
+        sol = solve_ivp(lambda tt, C: self._rhs(tt, C, k_map),
+                         (t0, t_sorted[-1]), self.C0, t_eval=t_sorted,
+                         method="LSODA", rtol=1e-8, atol=1e-12)
+        if not sol.success:
+            raise RuntimeError(f"ODE integration failed: {sol.message}")
+
+        inv_order = np.argsort(order)
+        return {sp: sol.y[i][inv_order] for i, sp in enumerate(self.species)}
+
+    def qssa_check(self, species, t, k_values=None):
+        """
+        Checks, numerically, how good the quasi-steady-state
+        approximation (QSSA/QSSA) is for ``species`` at each time in
+        ``t`` -- the classic question for an intermediate in a
+        consecutive mechanism (e.g. B in A -> B -> C): is d[B]/dt really
+        negligible compared to how fast B is being produced and
+        consumed, or only "small enough" after some induction period?
+
+        Integrates the exact ODE system (same as `simulate()`), then at
+        every requested time compares the *net* rate of change of
+        ``species`` to its *gross* rate -- the sum of the absolute value
+        of every reaction's individual contribution to it (production
+        and consumption both counted as positive, so they cannot cancel
+        out the way they do in the net rate):
+
+        $$\\text{QSSA ratio}(t) = \\frac{|d[\\text{species}]/dt|}{\\sum_j |\\text{contribution}_j(t)|}$$
+
+        A ratio close to 0 means production and consumption are nearly
+        balanced (net change negligible compared to the flux passing
+        through) -- the QSSA holds; a ratio close to 1 means the species
+        is still mostly accumulating or mostly depleting on its own, not
+        yet (or no longer) in a quasi-steady state.
+
+        Args:
+            species (str): the species to check (typically a reactive
+                intermediate).
+            t: array-like of time points to evaluate the ratio at.
+            k_values: same as `simulate()` -- rate constants to use, or
+                None to use the fitted/guessed values.
+
+        Returns:
+            numpy array: the QSSA ratio at each time in ``t`` (same
+            order as given, not necessarily sorted).
+        """
+        if species not in self.species:
+            raise ValueError(f"Unknown species '{species}'; known: {self.species}")
+        if self.C0 is None:
+            raise RuntimeError("Call set_initial_conditions() before qssa_check().")
+
+        specs = self._param_specs()
+        if k_values is None:
+            k_map = {name: (self.k_fit[name] if self.k_fit is not None else guess)
+                      for name, guess in specs}
+        elif isinstance(k_values, dict):
+            k_map = k_values
+        else:
+            k_map = {name: val for (name, _), val in zip(specs, k_values)}
+
+        t = np.asarray(t, dtype=float)
+        C_at_t = self.simulate(t, k_values=k_map)
+        idx = self._idx_of[species]
+
+        ratio = np.empty(len(t))
+        for i in range(len(t)):
+            C_vec = np.array([C_at_t[sp][i] for sp in self.species])
+            dC, gross = self._gross_rhs(t[i], C_vec, k_map)
+            ratio[i] = abs(dC[idx]) / gross[idx] if gross[idx] > 0 else 0.0
+        return ratio
+
+    def fit(self, t_exp, Y_exp, weights=None, observed_species=None):
+        """
+        Fits every reaction's rate constant(s) against experimental data,
+        assuming the measured signal is a linear combination of
+        concentrations, Y_EXP(t) = sum_i eta_i * C_i(t) (see Kinetics.md,
+        4.2.1 -- the same assumption KORD relies on).
+
+        Args:
+            t_exp, Y_exp: experimental time points and measured values.
+            weights (dict, optional): {species: eta_i} linear-combination
+                weights. Use this when the signal mixes several species.
+            observed_species (str, optional): shortcut for
+                ``weights={observed_species: 1.0}``, when the signal is
+                one single species' concentration directly.
+
+        Exactly one of `weights`/`observed_species` must be given.
+
+        Returns:
+            dict: {'k': {param_name: fitted_value}, 'RMSE', 'R2', 'AIC',
+            'BIC', 'weights'}. Also stored in ``self.results``, and the
+            fitted rate constants in ``self.k_fit`` (so a later
+            ``simulate()``/``plot()`` call with no ``k_values`` argument
+            uses them automatically).
+        """
+        if observed_species is not None:
+            if weights is not None:
+                raise ValueError("Pass only one of weights= or observed_species=.")
+            weights = {observed_species: 1.0}
+        if weights is None:
+            raise ValueError("Specify either weights={...} or observed_species='X'.")
+
+        specs = self._param_specs()
+        names = [name for name, _ in specs]
+        p0 = [guess for _, guess in specs]
+
+        t_exp = np.asarray(t_exp, dtype=float)
+        Y_exp = np.asarray(Y_exp, dtype=float)
+
+        def model(t, *k_vals):
+            k_map = dict(zip(names, k_vals))
+            C = self.simulate(t, k_values=k_map)
+            return sum(w * C[sp] for sp, w in weights.items())
+
+        popt, _ = curve_fit(model, t_exp, Y_exp, p0=p0, bounds=(0, np.inf))
+        k_opt = dict(zip(names, popt))
+        Y_theo = model(t_exp, *popt)
+
+        RMSE_ = rmse(Y_exp, Y_theo)
+        R2_ = r2(Y_exp, Y_theo)
+        n, p = len(Y_exp), len(popt)
+        aic = n * np.log(RMSE_**2) + 2 * p
+        bic = n * np.log(RMSE_**2) + p * np.log(n)
+
+        self.k_fit = k_opt
+        self.results = {'k': k_opt, 'RMSE': RMSE_, 'R2': R2_, 'AIC': aic,
+                         'BIC': bic, 'weights': weights}
+
+        if self.verbose:
+            k_str = ", ".join(f"{name}={val:.4g}" for name, val in k_opt.items())
+            print(f"  FIT: {k_str}")
+            print(f"  ✅ RMSE: {RMSE_:.2e}")
+            print(f"       R2: {R2_:.2f}")
+            print(f"      AIC: {aic:.2f}")
+            print(f"      BIC: {bic:.2f}")
+
+        return self.results
+
+    def plot(self, t_exp=None, Y_exp=None, t_max=None, log_scale=False,
+             time_unit=None, species=None, save_img=None):
+        """
+        Plots simulated concentration vs. time (using the fitted rate
+        constants if `fit()` was called, otherwise the guesses),
+        optionally overlaying the experimental ``(t_exp, Y_exp)`` points
+        on the fitted observed linear combination.
+
+        ``species``: optional list of species names to plot (e.g.
+        ``net.plot(['A', 'I'])`` to zoom in on a reactant and a reaction
+        intermediate). Defaults to every species in the network. Each
+        name is checked against ``self.species`` first, with a clear
+        error listing the known species if one doesn't exist (a likely
+        typo, or a name that was never declared via `add_reaction()`).
+
+        ``log_scale=True`` switches the y-axis to log scale -- useful
+        whenever concentrations span several orders of magnitude, e.g. a
+        trace reactive intermediate alongside a bulk reactant/product
+        (species that reach exactly 0 are simply left off the log plot
+        for the points where they're non-positive, as matplotlib does).
+
+        ``time_unit``: optional string purely for the x-axis label, e.g.
+        ``time_unit="s"`` labels the axis "Time / s". `ReactionNetwork`
+        itself is unit-agnostic -- `t`, `C0` and the rate constants just
+        have to be in a mutually consistent set of units; nothing here
+        converts between units or checks them, this only labels the plot.
+
+        ``save_img``: optional file path to save the figure to (png,
+        pdf, svg, ... -- whatever matplotlib's `savefig` infers from the
+        extension), in addition to showing it. Asks before overwriting
+        an existing file.
+        """
+        if species is None:
+            species = self.species
+        else:
+            unknown = [sp for sp in species if sp not in self.species]
+            if unknown:
+                raise ValueError(f"Unknown species {unknown}; known species: {self.species}")
+
+        if t_max is None:
+            if t_exp is not None:
+                t_max = float(np.max(t_exp))
+            else:
+                raise ValueError("Pass t_max, or t_exp to infer it from.")
+
+        t_grid = np.linspace(0.0, t_max, 300)
+        C = self.simulate(t_grid)
+
+        plt.figure(figsize=(8, 5))
+        for sp in species:
+            plt.plot(t_grid, C[sp], lw=2.5, label=sp)
+
+        if t_exp is not None and Y_exp is not None:
+            if self.results is not None:
+                label = "Experimental (" + " + ".join(
+                    f"{w:.2g}·{sp}" if w != 1 else sp
+                    for sp, w in self.results['weights'].items()) + ")"
+            else:
+                label = "Experimental"
+            plt.scatter(t_exp, Y_exp, color='black', marker='x', s=35,
+                        alpha=0.7, zorder=5, label=label)
+
+        plt.xlabel(f"Time / {time_unit}" if time_unit else "Time")
+        plt.ylabel("Concentration")
+        if log_scale:
+            plt.yscale("log")
+        plt.title("Reaction network simulation")
+        plt.legend()
+        plt.grid(True, linestyle=':', alpha=0.6)
+
+        if save_img:
+            if os.path.exists(save_img):
+                print(f"{color.RED}{hl.BOLD}⚠️ File '{save_img}' already exists. Overwrite? (y/n): {color.OFF}", end="")
+                response = input().lower().strip()
+                if response != 'y':
+                    print("💾 Save cancelled. Plot not saved.")
+                    plt.show()
+                    return
+            directory = os.path.dirname(save_img)
+            if directory and not os.path.exists(directory):
+                os.makedirs(directory)
+            plt.savefig(save_img, dpi=300, bbox_inches='tight')
+            print(f"💾 Plot saved as: {hl.BOLD}{save_img}{hl.bold}")
+
+        plt.show()
+
+    def plot_qssa(self, species, t, threshold=0.1, time_unit=None, save_img=None):
+        """
+        Two-panel diagnostic plot for the quasi-steady-state approximation
+        on ``species`` (see `qssa_check()`): concentrations on top, the
+        QSSA ratio on the bottom, with the region under ``threshold``
+        shaded to mark where the approximation is a good one.
+
+        ``time_unit``: optional string purely for the (shared) x-axis
+        label, e.g. ``time_unit="s"`` -- see `plot()`'s docstring; this
+        does not convert or check units, only labels the axis.
+
+        ``save_img``: optional file path to save the figure to, in
+        addition to showing it -- see `plot()`'s docstring.
+        """
+        t = np.asarray(t, dtype=float)
+        order = np.argsort(t)
+        t_sorted = t[order]
+
+        C = self.simulate(t_sorted)
+        ratio = self.qssa_check(species, t_sorted)
+
+        fig, (ax_C, ax_r) = plt.subplots(2, 1, figsize=(8, 7), sharex=True,
+                                           gridspec_kw={'height_ratios': [1.3, 1]})
+
+        for sp in self.species:
+            lw = 3.0 if sp == species else 1.5
+            alpha = 1.0 if sp == species else 0.5
+            ax_C.plot(t_sorted, C[sp], lw=lw, alpha=alpha, label=sp)
+        ax_C.set_ylabel("Concentration")
+        ax_C.set_title(f"Quasi-steady-state check for '{species}'")
+        ax_C.legend()
+        ax_C.grid(True, linestyle=':', alpha=0.6)
+
+        ax_r.axhspan(0, threshold, color='green', alpha=0.15,
+                     label=f"QSSA valid (ratio < {threshold:g})")
+        ax_r.plot(t_sorted, ratio, color='black', lw=2.0)
+        ax_r.set_xlabel(f"Time / {time_unit}" if time_unit else "Time")
+        ax_r.set_ylabel(f"QSSA ratio for '{species}'")
+        ax_r.set_ylim(0, max(1.0, float(np.max(ratio)) * 1.05))
+        ax_r.legend()
+        ax_r.grid(True, linestyle=':', alpha=0.6)
+
+        if save_img:
+            if os.path.exists(save_img):
+                print(f"{color.RED}{hl.BOLD}⚠️ File '{save_img}' already exists. Overwrite? (y/n): {color.OFF}", end="")
+                response = input().lower().strip()
+                if response != 'y':
+                    print("💾 Save cancelled. Plot not saved.")
+                    plt.show()
+                    return
+            directory = os.path.dirname(save_img)
+            if directory and not os.path.exists(directory):
+                os.makedirs(directory)
+            plt.savefig(save_img, dpi=300, bbox_inches='tight')
+            print(f"💾 Plot saved as: {hl.BOLD}{save_img}{hl.bold}")
+
+        plt.show()
+
+    def summary(self):
+        """Prints each reaction with its (fitted, if available, else
+        guessed) rate constant(s)."""
+        for i, r in enumerate(self.reactions, start=1):
+            if r['reversible']:
+                kf = self.k_fit[r['kf_name']] if self.k_fit else r['kf_guess']
+                kr = self.k_fit[r['kr_name']] if self.k_fit else r['kr_guess']
+                tag = "fitted" if self.k_fit else "guess"
+                print(f"  {i}. {r['equation']}   {r['kf_name']}={kf:.4g} ({tag}), "
+                      f"{r['kr_name']}={kr:.4g} ({tag})")
+            else:
+                k = self.k_fit[r['k_name']] if self.k_fit else r['k_guess']
+                tag = "fitted" if self.k_fit else "guess"
+                print(f"  {i}. {r['equation']}   {r['k_name']}={k:.4g} ({tag})")

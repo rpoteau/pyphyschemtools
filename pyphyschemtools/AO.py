@@ -27,8 +27,8 @@ from .visualID_Eng import fg, hl, bg, color
 ORBITAL_LETTERS = {0: "s", 1: "p", 2: "d", 3: "f", 4: "g", 5: "h"}
 
 
-def plot_radial(orbitals, Z=1, density=False, show_formula=False, r_max=None, n_points=500,
-                 size=(9, 5), save_as=None):
+def plot_radial(orbitals, Z=1, density=False, show_formula=False, show_mean_r=False,
+                 r_max=None, n_points=500, size=(9, 5), save_as=None):
     '''
     Plot the radial part R_nl(r) (default) or the radial probability
     density r^2 R_nl(r)^2 of one or several hydrogenic atomic orbitals, as
@@ -40,6 +40,7 @@ def plot_radial(orbitals, Z=1, density=False, show_formula=False, r_max=None, n_
     - Z        = nuclear charge (default: 1 for hydrogen)
     - density  = if False (default), plot R_nl(r); if True, plot the radial probability density r^2 R_nl(r)^2 (probability of finding the electron in a thin spherical shell at r)
     - show_formula = if True, display (via IPython) the symbolic expression of the quantity plotted (and its squared/density form if density=True); default: False
+    - show_mean_r = if True, overlay the mean radius <r> (dashed vertical line), the ±sigma_r range shaded in grey under the curve, and an error bar for each orbital, computed numerically from the plotted density as <r> = integral of r*P_nl(r) dr and sigma_r = sqrt(<r^2> - <r>^2); error bars are nudged upward if they would overlap another orbital's; requires density=True; default: False
     - r_max    = largest r shown, in units of a0/Z; if None (default), set automatically from the largest n among orbitals
     - n_points = number of points used to sample r
     - size     = (width, height) in inches for the figure
@@ -48,6 +49,9 @@ def plot_radial(orbitals, Z=1, density=False, show_formula=False, r_max=None, n_
     output: None (the figure is drawn and shown, and saved if save_as is
     given)
     '''
+    if show_mean_r and not density:
+        raise ValueError("show_mean_r=True requires density=True")
+
     r = sp.symbols('r', positive=True)
     if r_max is None:
         n_max = max(n for n, l in orbitals)
@@ -55,6 +59,7 @@ def plot_radial(orbitals, Z=1, density=False, show_formula=False, r_max=None, n_
     r_vals = np.linspace(1e-6, r_max, n_points)
 
     fig, ax = plt.subplots(figsize=size)
+    curves = []   # (y_vals, color), in the same order as orbitals
     for n, l in orbitals:
         Rnl_expr = R_nl(n, l, r, Z)
         label = f"{n}{ORBITAL_LETTERS.get(l, f'(l={l})')}"
@@ -66,7 +71,37 @@ def plot_radial(orbitals, Z=1, density=False, show_formula=False, r_max=None, n_
         Rnl_func = sp.lambdify(r, Rnl_expr, "numpy")
         Rnl_vals = Rnl_func(r_vals)
         y_vals = r_vals**2 * Rnl_vals**2 if density else Rnl_vals
-        ax.plot(r_vals, y_vals, label=label)
+        line, = ax.plot(r_vals, y_vals, label=label)
+        curves.append((y_vals, line.get_color()))
+
+    if show_mean_r:
+        global_max = max(np.max(y_vals) for y_vals, _ in curves)
+        step = 0.08 * global_max
+        placed = []     # (x_low, x_high, y) of error bars already placed
+        for y_vals, color in curves:
+            mean_r = np.trapezoid(r_vals * y_vals, r_vals)
+            mean_r2 = np.trapezoid(r_vals**2 * y_vals, r_vals)
+            sigma_r = np.sqrt(max(mean_r2 - mean_r**2, 0.0))
+            x_lo, x_hi = mean_r - sigma_r, mean_r + sigma_r
+
+            # grey out the +/- sigma_r region under the curve
+            mask = (r_vals >= x_lo) & (r_vals <= x_hi)
+            ax.fill_between(r_vals[mask], 0, y_vals[mask], color=color, alpha=0.2)
+            ax.axvline(mean_r, color=color, ls="--", lw=1)
+
+            # pick a y position for the error bar, nudged up if it would
+            # overlap a previously placed one (overlapping x-range and close y)
+            y_marker = 1.05 * np.max(y_vals)
+            while any(x_lo <= hi and x_hi >= lo and abs(y_marker - y) < step
+                      for lo, hi, y in placed):
+                y_marker += step
+            placed.append((x_lo, x_hi, y_marker))
+
+            ax.errorbar(mean_r, y_marker, xerr=sigma_r, fmt="o", color=color,
+                        capsize=4, markersize=4)
+            ax.annotate(rf"$\langle r\rangle$ = {mean_r:.2f} $\pm$ {sigma_r:.2f} $a_0$",
+                        xy=(mean_r, y_marker), xytext=(5, 5),
+                        textcoords="offset points", color=color, fontsize=8)
 
     ax.axhline(0, color="black", lw=0.5)
     ax.set_xlabel(r"$r$ / $a_0$")

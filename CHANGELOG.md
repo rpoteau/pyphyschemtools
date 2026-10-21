@@ -12,7 +12,7 @@
 
 # Changelog pyphyschemtools
 
-# [0.12.3] - 2026-10-21 "Quick start"
+# [0.12.3], [0.12.4] - 2026-10-21 "Quick start"
 
 ### Added
 

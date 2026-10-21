@@ -3,8 +3,8 @@
 The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.
 """
 
-__version__ = "0.12.1"
-__last_update__ = "2026-10-20"
+__version__ = "0.12.2"
+__last_update__ = "2026-10-21"
 
 import importlib
 import importlib.util

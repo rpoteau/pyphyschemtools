@@ -8,8 +8,6 @@ The units converters are defined as classes: `PhysicalQuantity`, `Energy`, `Pres
 
 ## Quick Start
 
-<div class="intro">
-    
 ### Initialization
 
 Users must first import the appropriate class from `tools4pyPhysChem`, e.g.:
@@ -145,12 +143,7 @@ print(Etab_hartree) # Formatted output: Energy Array (hartree, shape=(5,))
 print(Etab_hartree.value) # Formatted output: [-0.49973345 -0.12493336 -0.05552594 -0.03123334 -0.01998934]
 ```
 
-
-</div>
-
 ## Energy
-
-<div class="intro">
 
 ### Mathematical relationships
 
@@ -206,11 +199,7 @@ print(Energy.parse("1 kcal/mol").to('kJ/mol')) # Thermochemical conversion
 | `unit-1` | Any reciprocal `unit` length |
 | `unit/mol` | Molar units |
 
-</div>
-
 ## Pressure
-
-<div class="intro">
 
 ### Standard & Industrial Units
 
@@ -247,11 +236,8 @@ print(p_gauge)
 p_deep = Pressure(3000, 'psi').to('atm')
 print(p_deep)
 ```
-</div>
 
 ## Length
-
-<div class="intro">
 
 ### From Atomic to Macroscopic Scales
 
@@ -291,11 +277,7 @@ dist = Length(10, 'km').to('mi')
 print(dist)
 ```
 
-</div>
-
 ## Area
-
-<div class="intro">
 
 ### Surface and Interface Dimensions
 
@@ -338,11 +320,7 @@ field = Area.parse("2.5 ha").to('acre')
 print(field)
 ```
 
-</div>
-
 ## Volume
-
-<div class="intro">
 
 ### Three-Dimensional Capacity
 
@@ -386,11 +364,7 @@ v_tank = Volume(55, 'gal').to('L')
 print(v_tank)
 ```
 
-</div>
-
 ## Mass
-
-<div class="intro">
 
 ### From Subatomic to Industrial Scales
 
@@ -431,11 +405,7 @@ shipping_wt = Mass(25, 'kg').to('lb')
 print(shipping_wt)
 ```
 
-</div>
-
 ## Molar Mass
-
-<div class="intro">
 
 ### The Stoichiometric Bridge
 
@@ -472,11 +442,7 @@ c12_mass = MolarMass(12.000, 'u').to('g/mol')
 print(c12_mass)
 ```
 
-</div>
-
 ## Density
-
-<div class="intro">
 
 ### Mass per Volume Relationships
 
@@ -514,11 +480,7 @@ rho_sol = Density(150, 'g/L').to('g/mL')
 print(rho_sol)
 ```
 
-</div>
-
 ## Temperature
-
-<div class="intro">
 
 ### Absolute and Relative Scales
 
@@ -554,8 +516,6 @@ print(t_body)
 t_liquid_N2 = Temperature(77, 'K').to('°C')
 print(t_liquid_N2)
 ```
-
-</div>
 
 ## API reference
 

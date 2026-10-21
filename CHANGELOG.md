@@ -12,11 +12,17 @@
 
 # Changelog pyphyschemtools
 
+# [0.12.2] - 2026-10-20 "units.md"
+
+### Fixed
+
+- removed stray <div class="intro"> wrappers in **`theoryDocs/Units.md`** that broke the page layout from the Pressure section onward (unclosed div due to a missing blank line before </div>)
+
 # [0.12.1] - 2026-10-20 "AO"
 
 ### Changed
 
-- `AO.md`: expanded the "Physical background" section (Hamiltonian, separation of variables, radial/angular equations, real vs. complex spherical harmonics) and added a link to the SymPy physics documentation.
+- **`theoryDocs/AO.md`**: expanded the "Physical background" section (Hamiltonian, separation of variables, radial/angular equations, real vs. complex spherical harmonics) and added a link to the SymPy physics documentation.
 
 - in **`AO.py`**, `plot_radial` can also overlay, for each orbital, the mean radius and its
 dispersion, computed numerically from the already-normalized probability

@@ -12,10 +12,19 @@
 
 # Changelog pyphyschemtools
 
-## [0.12.15] - 2026-10-21 "kinetics.py: fix `ReactionNetwork` species-name normalization"
+## [0.12.5]-[0.12.6] - 2026-10-21 "kinetics.py: fix `ReactionNetwork` species-name normalization & Kinetics.md"
 
 ### Fixed
 - **`ReactionNetwork` species-name normalization**: a short chemical formula with no digit in it — `"NO"` (nitric oxide), `"CO"`, `"OH"`, `"HCl"`, `"HCN"`... — was silently mangled into Title Case (`"NO"` → `"No"`, indistinguishable from the element symbol for Nobelium) by the species-name normalization introduced in 0.12.0. That normalization assumed a purely-alphabetic name (no digit) was always a spelled-out word (`"ethylene"`, `"ETHYLENE"` → `"Ethylene"`) and title-cased it accordingly — which is wrong for a formula that happens to contain no digit. There is no way to tell the two apart from the text alone, so `_normalize_species_name()` no longer title-cases anything: it only strips accents and forces the first character to uppercase, never touching a letter the caller actually typed in uppercase. Recognizing the same species across different spellings (`"ethylene"`/`"ETHYLENE"`/`"éthylène"`, or `"NO"`/`"no"`) is now handled separately by a new case-insensitive registry, `ReactionNetwork._canonical_species()` (backed by a new `self._canon_of` attribute): the first spelling seen for a species becomes its canonical one for the rest of that network, applied uniformly to parsed reactants/products and to `order`/`order_back` dict keys.
+
+### Added
+- **`kbasic.fit()`**: now also computes, prints and stores R2 (`kb.r2`) alongside the RMSE it already reported, as a quick check of goodness of fit beyond RMSE alone. `fit()`'s return value (`k_optimal, rmse_at_minimum`) is unchanged, for backward compatibility — R2 is read off the instance (`kb.r2`), not the return tuple. AIC/BIC were deliberately left out: `kbasic` fits one order at a time with no automatic model-selection verdict across orders (unlike `KORD.get_best_order()`), so an AIC/BIC pair with nothing to compare it to would have added a number without adding insight.
+
+### Changed
+- **`Kinetics.md`, documentation only (no code change)**:
+  - Section 1 ("Finding a Mathematical Model That Fits the Data") now has two subsections, 1.1 RMSE and 1.2 R2, the latter new — it explains the $R^2$ formula and what a negative $R^2$ means (not a converged fit on the same data it was fitted on; check the starting guesses, or it's a fixed-parameter/held-out-data case).
+  - KORD's section 4 is reorganized: the former "4.2 Principle" (scope/limitations, Experimental Measurements, Theoretical Model) now comes first, as "4.1 Basic principle", before the Quick Start (now 4.2). Its Fixed Parameters/Adjustable Variables are now a single table with a Name/Default column, double-checked against `KORD.fit()`'s actual code (`k`, `Y0`, `Yinf` are the only adjustable variables; `binf` is always derived, never free). The former 4.2's remaining tail (the `fix_Y0`/`fix_Yinf`/`binf` rationale) is now its own section, "4.3 Fixing parameters". Input and Model Selection move to 4.4/4.5, and the old "4.3 Theoretical Model" (the $a(t)$/$b(t)$ derivation) becomes "4.6 Derivation of the theoretical model" to avoid duplicating the "Theoretical Model" title used at 4.1.2. Advanced use becomes 4.7.
+  - Fixed a few stale cross-references left over from earlier renumbering (section 5's "Units"/"Quasi-steady-state check" links pointed to the wrong subsection numbers) and made the $\hat{Y}_\mathrm{THEO}$ "hat" notation consistent throughout.
 
 # [0.12.3], [0.12.4] - 2026-10-21 "Quick start"
 

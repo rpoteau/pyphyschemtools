@@ -20,11 +20,13 @@ This module contains three classes and one standalone function:
 * **`superpose_plots()`** — the module's only standalone function (not a
   method of any class): overlays the fitted curves of several `KORD`
   studies on one plot, e.g. to compare the same data fitted freely vs. with
-  `fix_Y0`/`fix_Yinf`. See [4.4.1 Comparing several fits](kord-advanced-compare).
+  `fix_Y0`/`fix_Yinf`. See [4.7.1 Comparing several fits](kord-advanced-compare).
 
 ## Table of Contents
 
 * [1. Finding a Mathematical Model That Fits the Data](rmsd)
+  * [1.1 RMSE](rmse)
+  * [1.2 R2](r2)
 * [2. Integrated rate laws: $a(t)$, $b(t)$ and half-lives for orders 0, 1, 2](rate-laws)
   * [2.1 Reactant Expression $a(t)$](rate-laws-a)
   * [2.2 Product Expression $b(t)$](rate-laws-b)
@@ -35,16 +37,21 @@ This module contains three classes and one standalone function:
   * [3.3 Quick Start](kbasic-quickstart)
   * [3.4 Theory](kbasic-theory)
 * [4. `KORD`: Kinetic Order of Reaction Determination](kord)
-  * [4.1 Quick Start](kord-quickstart)
-    * [4.1.1 Basic use](kord-quickstart-basic)
-    * [4.1.2 Specific fit](kord-quickstart-specific)
-    * [4.1.3 With your own file](kord-quickstart-own)
-  * [4.2 Principle](principle)
-  * [4.3 Theoretical Model](theoretical-model)
-  * [4.4 Advanced use](kord-advanced)
-    * [4.4.1 Comparing several fits](kord-advanced-compare)
-    * [4.4.2 `from_spreadsheet` vs `load_from_spreadsheet`](kord-advanced-loading)
-    * [4.4.3 Reading a different sheet / experiment](kord-advanced-sheet)
+  * [4.1 Basic principle](principle)
+    * [4.1.1 Experimental Measurements](experimental-measurements)
+    * [4.1.2 Theoretical Model](theo-model-def)
+  * [4.2 Quick Start](kord-quickstart)
+    * [4.2.1 Basic use](kord-quickstart-basic)
+    * [4.2.2 Specific fit](kord-quickstart-specific)
+    * [4.2.3 With your own file](kord-quickstart-own)
+  * [4.3 Fixing parameters: `fix_Y0`, `fix_Yinf`, and why $b_\infty$ never is](kord-fixing-parameters)
+  * [4.4 Input](input)
+  * [4.5 Model Selection: `get_best_order()` and $\Delta$BIC](model-selection)
+  * [4.6 Derivation of the theoretical model](theoretical-model)
+  * [4.7 Advanced use](kord-advanced)
+    * [4.7.1 Comparing several fits](kord-advanced-compare)
+    * [4.7.2 `from_spreadsheet` vs `load_from_spreadsheet`](kord-advanced-loading)
+    * [4.7.3 Reading a different sheet / experiment](kord-advanced-sheet)
 * [5. `ReactionNetwork`: general reaction networks](reaction-network)
   * [5.1 Purpose and scope](reaction-network-purpose)
   * [5.2 Quick Start](reaction-network-quickstart)
@@ -67,7 +74,16 @@ Curve fitting, in general, is the search for the free parameters — generically
 $a, b, c, \ldots$ (not to be confused with this module's own $a_0$, $\alpha$,
 $\beta$) — of a mathematical model $Y_\mathrm{THEO}(t;\, a, b, c, \ldots)$ that
 make it track the measured data $Y_\mathrm{EXP}(t)$ as closely as possible.
-"As closely as possible" needs a single number to minimize, and that number is
+"As closely as possible" needs a single number to judge by. This module uses
+two, for two different jobs: the **RMSE**, which is what `scipy.optimize`
+actually minimizes during the fit itself, and the **R2**, computed afterward
+as a normalized, easier-to-interpret check on the result.
+
+(rmse)=
+### 1.1 RMSE
+
+The number both `kbasic.fit()` (via `scipy.optimize.minimize`) and
+`KORD.fit()` (via `scipy.optimize.curve_fit`) actually search to minimize is
 the **Root-Mean-Square Deviation** between the measured values and the model
 evaluated at its best-fit parameters, $\hat{Y}_\mathrm{THEO}(t)$ (the hat marks
 a *prediction*, exactly as in the usual machine-learning notation), over the
@@ -81,18 +97,62 @@ Square* ***E****rror, the name used throughout this module and by
 scikit-learn's `root_mean_squared_error` — is the same formula, just the name
 preferred in statistics/ML.)*
 
-Both `kbasic.fit()` and `KORD.fit()` work exactly this way: they search — via
-`scipy.optimize.minimize` (`kbasic`) or `scipy.optimize.curve_fit` (`KORD`) —
-for the parameter values that make the RMSE as small as possible.
-
 The RMSE should tend toward 0 as the fit improves, and it will, **provided
 the chosen mathematical model is the right one for the data**: a correct
 model, once its parameters are optimized, reproduces the measurements almost
 exactly. A wrong model (the wrong reaction order, say) cannot be pushed to a
 near-zero RMSE no matter how its parameters are tuned, simply because its
 shape doesn't match the data's. `KORD` builds on this further — see
-[4.2.4 Model Selection](model-selection) — to compare reaction orders
+[4.5 Model Selection](model-selection) — to compare reaction orders
 against each other, not just to fit one order's parameters.
+
+Being an *absolute* deviation, expressed in $Y_\mathrm{EXP}$'s own units, the
+RMSE alone doesn't say whether a given value is a good or a bad fit — that
+depends on the scale of the data itself (an RMSE of 0.02 is excellent against
+values around 1.4, much less so against values around 0.05). $R^2$, below,
+fixes that by being unitless.
+
+(r2)=
+### 1.2 R2
+
+$R^2$ (the **coefficient of determination**) rescales the fit's error into a
+dimensionless number that doesn't depend on the units or the scale of
+$Y_\mathrm{EXP}$, by comparing the model's squared error against the squared
+error of the simplest possible "model" — just predicting the mean
+$\bar{Y}_\mathrm{EXP}$ for every point:
+
+$$R^{2} = 1 - \frac{\sum_{k=1}^{n}\{Y_\mathrm{EXP}(t_k) - \hat{Y}_\mathrm{THEO}(t_k)\}^{2}}{\sum_{k=1}^{n}\{Y_\mathrm{EXP}(t_k) - \bar{Y}_\mathrm{EXP}\}^{2}}$$
+
+Both `kbasic.fit()` (`kb.r2`) and `KORD.fit()`
+(`study.results[order]['R2']`) compute this with scikit-learn's `r2_score`,
+alongside the RMSE they already minimize:
+
+* **$R^2 = 1$**: a perfect fit — the model reproduces every data point exactly.
+* **$R^2$ close to 1** (e.g. 0.9997 in the `kbasic` example in
+  [3.3 Quick Start](kbasic-quickstart)): the model explains almost all of the
+  variation in the data — the usual sign of a good fit.
+* **$R^2 = 0$**: the model does no better than just predicting the mean of
+  the data for every point — it has explained none of the variation.
+* **$R^2 < 0$**: the model does *worse* than that flat, mean-value line.
+
+  For a fit obtained by actually minimizing the squared error against *this
+  same* data (a plain, unconstrained `fit()`/`kb.fit()` call), this should not
+  happen: the mean-value line is itself reachable within `KORD`'s model
+  family (set $Y_0 = Y_\infty = \bar{Y}_\mathrm{EXP}$, any $k$), so the true
+  least-squares optimum can only do at least as well. A negative $R^2$
+  straight out of such a fit is therefore a red flag that the optimizer did
+  **not** converge to the actual optimum — check the starting guesses ($k$,
+  $Y_0$, $Y_\infty$) and the bounds — rather than a sign that the chosen
+  reaction order is merely a poor one (a poor-but-converged fit shows up as
+  $R^2$ positive but low, not negative).
+
+  A legitimate negative $R^2$ *can* occur in two other situations: when
+  `fix_Y0`/`fix_Yinf` pins a parameter away from $\bar{Y}_\mathrm{EXP}$,
+  shrinking the model family so that the mean-value line is no longer
+  reachable at all; or when $Y_\mathrm{THEO}$ is evaluated on data it was
+  **not** fitted on (e.g. a held-out test set, or the raw guess curve from
+  `simulate_plot()` before any `fit()` call) — there, nothing guarantees the
+  model beats the mean.
 
 ---
 
@@ -123,7 +183,7 @@ product expression $b(t)=[B](t)$, and the resulting half-life, for
 $n \in \{0,1,2\}$. `kbasic` (section 3) and `KORD` (section 4) both build on
 these — `kbasic` as the special case $\alpha=1$, $Y_\infty=0$ (see
 [3.4 Theory](kbasic-theory)), `KORD` directly (see
-[4.3 Theoretical Model](theoretical-model)).
+[4.6 Derivation of the theoretical model](theoretical-model)).
 
 (rate-laws-a)=
 ### 2.1 Reactant Expression $a(t)$
@@ -210,9 +270,11 @@ not, and these are real **limitations**, not just simplifications:
   always taken from the data (first point) or supplied by the user, never
   fitted — `kbasic` already does, permanently, what `KORD.fit(fix_Y0=True)`
   does on request.
-* **One order at a time, no model comparison**: unlike `KORD.get_best_order()`,
-  there is no AIC/BIC-based verdict. You pick the order yourself, and `kbasic`
-  only reports the RMSE for that one choice.
+* **One order at a time, no automatic model comparison**: `fit()` does report
+  RMSE and R2 (see [3.3 Quick Start](kbasic-quickstart)), but unlike
+  `KORD.get_best_order()` there is no AIC/BIC-based verdict across orders —
+  you pick the order yourself, and `kbasic` only reports those two numbers
+  for that one choice.
 * **Order 2 gives an apparent $k$, not the true rate constant**: see
   [3.4 Theory](kbasic-theory) below for why, and how to recover the true
   value if you need it.
@@ -238,7 +300,7 @@ default labels "Temps"/"Y" are used.
 | ... | ... |
 
 There are no parameter rows here (unlike `KORD`'s format, see
-[4.2.3 Input](input) below) — `kbasic` has no $\alpha$, $\beta$ or $a_0$ to
+[4.4 Input](input) below) — `kbasic` has no $\alpha$, $\beta$ or $a_0$ to
 read from the file.
 
 (kbasic-quickstart)=
@@ -258,6 +320,15 @@ inverts the chosen order's $Y(t)$ equation (see [3.4 Theory](kbasic-theory)
 below) at one reference point, rather than always starting from an arbitrary
 constant. You can still impose your own starting value with `k_depart=...`
 if needed.
+
+Alongside the RMSE, `fit()` also prints and stores the fit's R2 (`kb.r2`),
+a quick check of goodness of fit beyond the RMSE alone:
+
+```
+Ordre 1 : k optimal = 2.9937e-01  (t1/2 = 2.3154e+00)
+  ✅ RMSE: 2.36e-02
+       R2: 0.9997
+```
 
 **With your own file.** Where your file lives decides how to read it, and the
 difference between "Google Colab" and "my own computer" matters here, even
@@ -327,11 +398,107 @@ result by $Y_0$, or use `KORD` instead, which tracks $a_0$ explicitly.
 (kord)=
 ## 4. `KORD`: Kinetic Order of Reaction Determination
 
+(principle)=
+### 4.1 Basic principle
+
+<div class="rqE">
+
+**Scope and limitations.** KORD only models the transformation of a single
+followed species, $\alpha A \rightarrow \beta B$, with rate law
+$v=k[A]^n$ ($n \in \{0,1,2\}$). This covers:
+
+* a genuine unimolecular transformation of A (most order-1 cases);
+* a genuine bimolecular reaction **of A with itself**, $2A \rightarrow \text{products}$
+  ($n=2$), since there is still only one concentration, $[A]$, varying;
+* a mixed bimolecular reaction between two *different* species, $A+B\rightarrow\ldots$,
+  only in the **pseudo-order approximation**: one reactant held in large
+  excess so its concentration stays essentially constant (the "isolation
+  method"/Ostwald method, "flooding", or *dégénérescence de l'ordre* in
+  French). The apparent order and $k$ obtained then describe the minority
+  reactant only.
+
+KORD does **not** correctly describe a true mixed second-order reaction where
+both $[A]_0$ and $[B]_0$ are comparable and both vary independently — that
+needs the (different, more complex) two-species integrated rate law, which
+this module does not implement.
+
+$\alpha$ and $\beta$ are plain stoichiometric coefficients of $\alpha A
+\rightarrow \beta B$, not "association" vs. "dissociation": $\alpha=2$ means
+2 molecules of A are consumed per reaction event (e.g. $2A\rightarrow P$),
+$\beta=2$ means each event produces 2 molecules of B (e.g. $A\rightarrow 2B$,
+a fragmentation).
+
+</div>
+
+(experimental-measurements)=
+#### 4.1.1 Experimental Measurements ($Y_\mathrm{EXP}$)
+
+In chemical kinetics, we track the evolution of molar concentrations over time: $C_{i}(t)$. Experimentally, we measure a physical quantity proportional to these concentrations: $Y_\mathrm{EXP}(t)$.
+
+* **Spectrophotometry**: $Y_\mathrm{EXP} = A = \sum_{i} \epsilon_{i} \cdot l \cdot C_{i}$, where $A$ is the absorbance
+* **Polarimetry**: $Y_\mathrm{EXP} = \alpha = \sum_{i} [\alpha]_{i} \cdot l \cdot C_{i}^{w}$
+* **Conductivity**: $Y_\mathrm{EXP} = \sigma = \sum_{i} \lambda_{i} \cdot C_{i}$
+
+**General Form:** $Y_\mathrm{EXP}(t) = \sum_{i} \eta_{i} \cdot C_{i}(t)$
+
+(theo-model-def)=
+#### 4.1.2 Theoretical Model ($Y_\mathrm{THEO}$)
+
+The model has three different expressions (see
+[4.6 Derivation of the theoretical model](theoretical-model)), depending on
+the order of the reaction:
+
+**Standard Formula for Order 0**:
+
+$$\hat{Y}^{[0]}(t)=\begin{cases}
+Y_{0}+\beta\dfrac{kt}{b_{\infty}}\left(Y_{\infty}-Y_{0}\right) & t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
+Y_{\infty} & t>\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
+\end{cases}$$
+
+**Standard Formula for Order 1**:
+
+$$\hat{Y}^{[1]}(t)=Y_{\infty}+\exp\left(-\alpha kt\right)\left(Y_{0}-Y_{\infty}\right)$$
+
+**Standard Formula for Order 2**:
+
+$$\hat{Y}^{[2]}(t)=
+Y_{0}+\dfrac{\left(Y_{\infty}-Y_{0}\right)}{1+\dfrac{\beta}{b_{\infty}\alpha^{2}kt}}=Y_{0}+\frac{\left(Y_{\infty}-Y_{0}\right)b_{\infty}\alpha^{2}kt}{b_{\infty}\alpha^{2}kt+\beta}$$
+
+$\hat{Y}_\mathrm{THEO}$ is defined by two types of values: **fixed parameters**
+(input by the user) and **adjustable variables** (optimized by the algorithm,
+unless held fixed — see [4.3](kord-fixing-parameters) below). $b_\infty$ is
+neither: it is always *derived*, never a free fit parameter.
+
+| Type | Symbol | Name | Default | Notes |
+|---|---|---|---|---|
+| Fixed | $n$ | Reaction order | — (chosen via `fit(order=...)`) | 0, 1 or 2; one order at a time |
+| Fixed | $\alpha$, $\beta$ | Stoichiometric coefficients | — (user-provided) | smallest possible positive integers |
+| Fixed | $a_{0}$ | Initial concentration of A | — (user-provided) | $\hat{Y}_\mathrm{THEO}$ is independent of $a_0$ for Order 1 |
+| *Derived* | $b_{\infty}$ | Final concentration of B | $b_{\infty}=a_{0}\,\beta/\alpha$ | **never free** — see [4.3](kord-fixing-parameters) for why |
+| Adjustable | $k$ | Rate constant | smart guess from the initial slope (`k_guess`) | always free |
+| Adjustable | $Y_{0}$ | Initial value of $Y$ | `Y_exp[0]` (`Y0_guess`) | free unless `fix_Y0=True` |
+| Adjustable | $Y_{\infty}$ | Final value of $Y$ | `Y_exp[-1]` (`Yinf_guess`) | free unless `fix_Yinf=True` |
+
+So, by default — no switch passed — exactly three parameters are optimized:
+$k$, $Y_0$ and $Y_\infty$ ($b_\infty$ is never among them, for any order).
+`fix_Y0`/`fix_Yinf` remove $Y_0$/$Y_\infty$ from that list, leaving as few as
+just $k$ when both are set.
+
+The optimization is performed for a specific reaction order at a time to determine which model best describes the experimental data.
+
+<div class="rqE">
+
+By default, KORD chooses the first and last $Y_\mathrm{EXP}$ values as $Y_{0}$ and $Y_{\infty}$. And a default $k$ value is also setup by KORD. If you need to change that because of a convergence issue, ensure your starting values for $k$, $Y_{0}$ and $Y_{\infty}$ are realistic to help the algorithm converge. 
+
+</div>
+
+---
+
 (kord-quickstart)=
-### 4.1 Quick Start
+### 4.2 Quick Start
 
 (kord-quickstart-basic)=
-#### 4.1.1 Basic use
+#### 4.2.1 Basic use
 
 ```python
 from pyphyschemtools import KORD, get_ppct_data
@@ -356,11 +523,11 @@ same rule, and the same warning, apply to
 [`superpose_plots()`](kord-advanced-compare) below.
 
 (kord-quickstart-specific)=
-#### 4.1.2 Specific fit
+#### 4.2.2 Specific fit
 
 You can also fix $Y_0$ (or $Y_\infty$) at a chosen value instead of letting
 the optimizer adjust it freely — fully explained in
-[4.2 Principle](principle) below:
+[4.3](kord-fixing-parameters) below:
 
 ```python
 # A better starting point than the raw first data point (e.g. because it's
@@ -388,11 +555,11 @@ numbers in `study.results[order]`; `plot_all_fits()` (above) or
 draw a figure.
 
 (kord-quickstart-own)=
-#### 4.1.3 With your own file
+#### 4.2.3 With your own file
 
 As for `kbasic` (see [3.3 Quick Start](kbasic-quickstart)), it depends on
 where the notebook runs. The file must follow the format described in
-[4.2.3 Input](input).
+[4.4 Input](input).
 
 ```python
 from pyphyschemtools import KORD
@@ -426,98 +593,8 @@ study = KORD.from_spreadsheet("my_kinetics.xlsx", exp_number=1,
 
 ---
 
-(principle)=
-### 4.2 Principle
-
-<div class="rqE">
-
-**Scope and limitations.** KORD only models the transformation of a single
-followed species, $\alpha A \rightarrow \beta B$, with rate law
-$v=k[A]^n$ ($n \in \{0,1,2\}$). This covers:
-
-* a genuine unimolecular transformation of A (most order-1 cases);
-* a genuine bimolecular reaction **of A with itself**, $2A \rightarrow \text{products}$
-  ($n=2$), since there is still only one concentration, $[A]$, varying;
-* a mixed bimolecular reaction between two *different* species, $A+B\rightarrow\ldots$,
-  only in the **pseudo-order approximation**: one reactant held in large
-  excess so its concentration stays essentially constant (the "isolation
-  method"/Ostwald method, "flooding", or *dégénérescence de l'ordre* in
-  French). The apparent order and $k$ obtained then describe the minority
-  reactant only.
-
-KORD does **not** correctly describe a true mixed second-order reaction where
-both $[A]_0$ and $[B]_0$ are comparable and both vary independently — that
-needs the (different, more complex) two-species integrated rate law, which
-this module does not implement.
-
-$\alpha$ and $\beta$ are plain stoichiometric coefficients of $\alpha A
-\rightarrow \beta B$, not "association" vs. "dissociation": $\alpha=2$ means
-2 molecules of A are consumed per reaction event (e.g. $2A\rightarrow P$),
-$\beta=2$ means each event produces 2 molecules of B (e.g. $A\rightarrow 2B$,
-a fragmentation).
-
-</div>
-
-(experimental-measurements)=
-#### 4.2.1 Experimental Measurements ($Y_\mathrm{EXP}$)
-
-In chemical kinetics, we track the evolution of molar concentrations over time: $C_{i}(t)$. Experimentally, we measure a physical quantity proportional to these concentrations: $Y_\mathrm{EXP}(t)$.
-
-* **Spectrophotometry**: $Y_\mathrm{EXP} = A = \sum_{i} \epsilon_{i} \cdot l \cdot C_{i}$, where $A$ is the absorbance
-* **Polarimetry**: $Y_\mathrm{EXP} = \alpha = \sum_{i} [\alpha]_{i} \cdot l \cdot C_{i}^{w}$
-* **Conductivity**: $Y_\mathrm{EXP} = \sigma = \sum_{i} \lambda_{i} \cdot C_{i}$
-
-**General Form:** $Y_\mathrm{EXP}(t) = \sum_{i} \eta_{i} \cdot C_{i}(t)$
-
-(theo-model-def)=
-#### 4.2.2 Theoretical Model ($Y_\mathrm{THEO}$)
-
-The model has three different expressions (see <a href="#theoretical-model">Theoretical model section</a>), depending on the order of the reaction:
-
-**Standard Formula for Order 0**:
-
-$$\hat{Y}^{[0]}(t)=\begin{cases}
-Y_{0}+\beta\dfrac{kt}{b_{\infty}}\left(Y_{\infty}-Y_{0}\right) & t\leq\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}\\
-Y_{\infty} & t>\dfrac{a_{0}}{\alpha k}=\dfrac{b_{\infty}}{\beta k}
-\end{cases}$$
-
-**Standard Formula for Order 1**:
-
-$$\hat{Y}^{[1]}(t)=Y_{\infty}+\exp\left(-\alpha kt\right)\left(Y_{0}-Y_{\infty}\right)$$
-
-**Standard Formula for Order 2**:
-
-$$\hat{Y}^{[2]}(t)=
-Y_{0}+\dfrac{\left(Y_{\infty}-Y_{0}\right)}{1+\dfrac{\beta}{b_{\infty}\alpha^{2}kt}}=Y_{0}+\frac{\left(Y_{\infty}-Y_{0}\right)b_{\infty}\alpha^{2}kt}{b_{\infty}\alpha^{2}kt+\beta}$$
-
-
-$Y_\mathrm{THEO}$ is defined by two types of values: **fixed parameters** (input by the user) and **adjustable variables** (optimized by the algorithm).
-
-**<u>Fixed Parameters</u>:**
-* **Reaction Order**: $n \in \{0, 1, 2\}$ (The user selects the order to test).
-* **Stoichiometry**: $\alpha$ and $\beta$ are known constants, provided by the user.
-      
-  $\alpha$ and $\beta$ must be the smallest possible positive integers
-
-* **Initial Concentration**: $a_{0}$ (Note: For Order 1, $\hat{Y}_\mathrm{THEO}$ is independent of $a_{0}$). The concentration must also be provided by the user
-
-  The final concentration of B, $b_{\infty}$ is related to $a_0$ by the relation:
-
-  $$\frac{a_0}{\alpha} = \frac{b_{\infty}}{\beta}$$
-
-**<u>Adjustable Variables</u>:**
-By default, the model fits the experimental data by adjusting the following:
-* **Rate Constant**: $k$
-* **Final Value**: $Y_{\infty}$
-* **Initial Value**: $Y_{0}$ (While $Y_{0}$ is measured, the algorithm also adjusts it by default to ensure the best fit starting point).
-
-The optimization is performed for a specific reaction order at a time to determine which model best describes the experimental data.
-
-<div class="rqE">
-
-By default, KORD chooses the first and last $Y_\mathrm{EXP}$ values as $Y_{0}$ and $Y_{\infty}$. And a default $k$ value is also setup by KORD. If you need to change that because of a convergence issue, ensure your starting values for $k$, $Y_{0}$ and $Y_{\infty}$ are realistic to help the algorithm converge. 
-
-</div>
+(kord-fixing-parameters)=
+### 4.3 Fixing parameters: `fix_Y0`, `fix_Yinf`, and why $b_\infty$ never is
 
 Letting the optimizer adjust $Y_0$ freely can let it drift away from the actually
 measured starting point just to minimize the RMSE — which defeats the purpose of
@@ -530,7 +607,7 @@ and leaving it free can make the optimizer report a spurious non-zero plateau.
 below, which is never a free fit parameter for any order). BIC is computed
 using the actual number of free parameters, so
 model comparison across orders stays meaningful whichever switches are used
-(see [4.2.4 Model Selection](model-selection) below — `fit()` also stores an
+(see [4.5 Model Selection](model-selection) below — `fit()` also stores an
 AIC for reference in `study.results[order]['AIC']`, but the printed verdict
 is based on BIC only).
 
@@ -545,7 +622,7 @@ or merely as the optimizer's starting point.
 `Yinf_guess`/`binf_guess` as arguments: it always reads the current
 `self.k_guess`, `self.Y0_guess`, `self.Yinf_guess`, `self.binf_guess` —
 set once at `KORD(...)`/`from_spreadsheet(...)` creation time, or changed
-later by assigning the attribute directly. See [4.1.2](kord-quickstart-specific)
+later by assigning the attribute directly. See [4.2.2](kord-quickstart-specific)
 above for an example.
 
 **There is no `fix_binf` switch, because $b_\infty$ is never a free fit
@@ -579,12 +656,12 @@ that could identify it — `fit()` always derives $b_\infty$ from $a_0$,
 $\alpha$, $\beta$ instead of optimizing it, for order 1 only.
 
 (input)=
-#### 4.2.3 Input
+### 4.4 Input
 
 Data input is performed through a structured spreadsheet file (`.xlsx`, `.ods`,
 ...), read by `KORD.load_from_spreadsheet(file_path, exp_number, sheet_name=0)`
 — or, more conveniently, by `KORD.from_spreadsheet(...)`, which calls it for
-you (see [4.1 Quick Start](kord-quickstart)). Within the chosen sheet, each
+you (see [4.2 Quick Start](kord-quickstart)). Within the chosen sheet, each
 experiment occupies a pair of columns (t, Y), laid out like this:
 
 | Row | Column $2k{-}1$ (t) | Column $2k$ (Y) |
@@ -610,7 +687,7 @@ doesn't follow the layout above (e.g. actual $(t,Y)$ data starting at row 2
 instead of row 5).
 
 (model-selection)=
-#### 4.2.4 Model Selection: `get_best_order()` and $\Delta$BIC
+### 4.5 Model Selection: `get_best_order()` and $\Delta$BIC
 
 `get_best_order()` fits orders 0, 1 and 2 (any order not already in
 `study.results`) and prints a conclusion, in two separate steps:
@@ -676,9 +753,9 @@ instead of row 5).
 ---
 
 (theoretical-model)=
-### 4.3 Theoretical Model
+### 4.6 Derivation of the theoretical model
 
-$Y_\mathrm{THEO}(t)$ is built directly from the integrated rate laws of
+$\hat{Y}_\mathrm{THEO}(t)$ is built directly from the integrated rate laws of
 [section 2](rate-laws): it is a linear combination of the reactant
 expression [$a(t)$](rate-laws-a) and the product expression
 [$b(t)$](rate-laws-b) introduced there, under the same assumptions
@@ -686,8 +763,8 @@ expression [$a(t)$](rate-laws-a) and the product expression
 
 $$\hat{Y}_\mathrm{THEO}(t) = \frac{Y_{0}}{a_{0}} \cdot a(t) + \frac{Y_{\infty}}{b_{\infty}} \cdot b(t)$$
 
-Compte tenu des équations de $a(t)$ et $b(t)$ pour les ordres 0, 1 et 2, il
-vient :
+Given the expressions for $a(t)$ and $b(t)$ at orders 0, 1 and 2 (see
+[2.1](rate-laws-a) and [2.2](rate-laws-b)), this gives:
 
 **Standard Formula for Order 0**:
 
@@ -713,10 +790,10 @@ $$\hat{Y}^{[2]}(t)=
 Y_{0}+\dfrac{\left(Y_{\infty}-Y_{0}\right)}{1+\dfrac{\beta}{b_{\infty}\alpha^{2}kt}}=Y_{0}+\frac{\left(Y_{\infty}-Y_{0}\right)b_{\infty}\alpha^{2}kt}{b_{\infty}\alpha^{2}kt+\beta}$$
 
 (kord-advanced)=
-### 4.4 Advanced use
+### 4.7 Advanced use
 
 (kord-advanced-compare)=
-#### 4.4.1 Comparing several fits
+#### 4.7.1 Comparing several fits
 
 `superpose_plots(studies, order=1, show_experimental=True, labels=None,
 fix_Y0=False, fix_Yinf=False, save_img=None)` is a standalone function (not
@@ -753,11 +830,11 @@ Each study's legend entry is tagged automatically (`free fit`, `Y0 fixed`,
 If an order isn't fitted yet for a given study, it is fitted now with
 `fix_Y0`/`fix_Yinf`; if it's already cached under *different* settings,
 the cache is kept as-is (same rule as `plot_all_fits()`, see
-[4.1.1](kord-quickstart-basic) above) and a warning is printed for that
+[4.2.1](kord-quickstart-basic) above) and a warning is printed for that
 study.
 
 (kord-advanced-loading)=
-#### 4.4.2 `from_spreadsheet` vs `load_from_spreadsheet`
+#### 4.7.2 `from_spreadsheet` vs `load_from_spreadsheet`
 
 `from_spreadsheet(file_path, exp_number, sheet_name=0, show_data=True, colab=False, **kwargs)`
 is a convenience constructor: it reads the experiment with
@@ -788,7 +865,7 @@ study = KORD(t, Y, headers, a0=parameters[0], alpha=parameters[1], beta=paramete
 ```
 
 (kord-advanced-sheet)=
-#### 4.4.3 Reading a different sheet / experiment
+#### 4.7.3 Reading a different sheet / experiment
 
 `load_from_spreadsheet(file_path, exp_number, sheet_name=0, show_data=True)`
 (formerly named `load_from_excel` — same method; it reads with
@@ -798,7 +875,7 @@ works, as a deprecated alias.) reads **one** sheet (`sheet_name`, by index or
 by name — the first sheet by default) and, within that sheet, picks the
 column pair identified by `exp_number` (1 for the first pair of columns, 2
 for the next pair, etc. — see the data format in
-[4.2.3 Input](input) above). `from_spreadsheet` takes the exact same
+[4.4 Input](input) above). `from_spreadsheet` takes the exact same
 `sheet_name`/`exp_number` arguments and forwards them:
 
 * If every experiment lives in its own pair of columns **within the same
@@ -847,7 +924,7 @@ coefficient), integrates it numerically with
 and fits the rate constant(s) against experimental data the same way `KORD`
 does — a measured signal as a linear combination of concentrations,
 $Y_\mathrm{EXP}(t) = \sum_i \eta_i\, C_i(t)$ (see
-[4.2.1 Experimental Measurements](experimental-measurements)).
+[4.1.1 Experimental Measurements](experimental-measurements)).
 
 This is a genuine generalization: `kbasic`/`KORD`'s orders 0/1/2 are just the
 special case of a single $A \rightarrow B$ reaction, and the quasi-steady-state
@@ -957,7 +1034,7 @@ one `fit()` call overwriting the other's `results`.
 with `save_img="path/to/figure.png"` (any extension matplotlib's `savefig`
 understands — png, pdf, svg...); both ask before overwriting a file that
 already exists. Pass `time_unit="s"` (or `"min"`, `"h"`, `"yr"`...) to label
-the x-axis "Time / s" — see [5.3 Units](reaction-network-units) for why this
+the x-axis "Time / s" — see [5.4 Units](reaction-network-units) for why this
 is just a label and not an actual unit conversion.
 
 (reaction-network-syntax)=
@@ -1006,7 +1083,7 @@ order_back=...)` parses a plain chemical-equation string:
   `order={"A": 1.5}` (forward) and/or `order_back={"B": 2}` (backward,
   reversible only) to override this species by species, when the actual
   kinetic order differs from the written stoichiometry (the same caveat
-  [4.2 Principle](principle) raises for `KORD`'s pseudo-order case) — e.g. a
+  [4.1 Basic principle](principle) raises for `KORD`'s pseudo-order case) — e.g. a
   reversible reaction that is first order forward but second order
   backward: `net.add_reaction("A <=> 2 B", kf_guess=0.5, kr_guess=0.2,
   order_back={"B": 2})` (this one actually matches the stoichiometry, so
@@ -1134,7 +1211,7 @@ exactly the kind of mistake this check catches before any fitting happens.
 Note that a reversible reaction contributes its forward stoichiometry only
 (this is about the mechanism's bookkeeping across the whole sequence, not
 about net flux at a given time, which depends on the actual rate constants
-and concentrations — see [5.7 Quasi-steady-state check](reaction-network-qssa)
+and concentrations — see [5.8 Quasi-steady-state check](reaction-network-qssa)
 for that).
 
 (reaction-network-qssa)=
@@ -1245,7 +1322,7 @@ A second worked example, this time exercising `fit()` rather than
 `qssa_check()`: the classic two-step consecutive mechanism
 $A\rightarrow I\rightarrow P$, where only the intermediate $I$ is
 experimentally observed (e.g. a UV-Vis absorbing species, as in
-[4.2 Experimental Measurements](experimental-measurements) for `KORD`) —
+[4.1.1 Experimental Measurements](experimental-measurements) for `KORD`) —
 the exact setting `observed_species=` is for.
 
 `ReactionNetwork` has no built-in `read()`/`load_from_excel()` of its own

@@ -23,6 +23,12 @@ The package provides a versatile ecosystem for researchers:
 * **CLI Tools**: A robust set of command-line utilities for rapid post-processing and job management in VASP and Gaussian environments. For more details on computational workflows and tool usage, please see the :doc:`theoryDocs/QuantumChemCorner`.
 
 .. toctree::
+   :maxdepth: 1
+   :caption: ⚡ Quick Start
+
+   quickstart
+
+.. toctree::
    :maxdepth: 2
    :caption: 📚 Docs and Theory
 

@@ -12,6 +12,12 @@
 
 # Changelog pyphyschemtools
 
+# [0.12.3] - 2026-10-21 "Quick start"
+
+### Added
+
+- **Quick start** section in `README.md` and new documentation page `docs/source/quickstart.md` (added to the index toctree): installation in a notebook (`!pip install`) or without the `!` syntax (`subprocess`), first steps with lazy loading (`Energy`, `plot_radial`, `HMO`, `get_ppct_data`), and a `kbasic` kinetics example with file upload on Google Colab.
+
 # [0.12.2] - 2026-10-20 "units.md"
 
 ### Fixed

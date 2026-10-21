@@ -1437,23 +1437,30 @@ def superpose_plots(studies, order=1, show_experimental=True, labels=None,
 # =====================================================================
 
 def _normalize_species_name(name):
-    """Canonicalizes a parsed species name so that the same compound is
-    recognized as the same species no matter how it was typed across
-    different `add_reaction()` calls: accents are stripped (NFKD
-    decomposition, dropping the combining marks -- "e'" -> "e", etc.,
-    covering e/a/o/i/u with any accent) and, for a purely-alphabetic
-    name, only the first letter is kept uppercase and the rest is
-    lowercased ("ETHYLENE", "ethylene", "Ethylene" all become
-    "Ethylene"). A name containing digits is treated as a chemical
-    formula rather than a spelled-out word (e.g. "O3", "CO2", "H2O"):
-    only its first character is forced to uppercase, the rest is left
-    exactly as typed, so formula case is never mangled."""
+    """Strips accents (NFKD decomposition, dropping the combining marks
+    -- "e" with an acute accent becomes a plain "e", etc., covering
+    e/a/o/i/u with any accent) and forces the first character to
+    uppercase; every other character is left exactly as typed.
+
+    This only normalizes a single spelling in isolation ("ethylene" ->
+    "Ethylene", a convenience for a lazily-typed lowercase name). It
+    deliberately does NOT title-case the rest of the name the way an
+    earlier version of this function did: that mangled a short
+    chemical formula with no digit in it -- "NO" (nitric oxide), "CO",
+    "OH", "HCl", "HCN"... -- into something like "No", indistinguishable
+    from the element symbol for Nobelium. There is no way to tell from
+    the text alone whether an all-letters name is a formula or a
+    spelled-out word, so this function now never lowercases a letter
+    the caller actually typed in uppercase.
+
+    Recognizing the same species across different spellings
+    ("ethylene" vs "ETHYLENE" vs "Ethylene", or "NO" vs "no") is handled
+    separately and case-insensitively, by the per-network canonical-name
+    registry in `ReactionNetwork._canonical_species()` -- see there."""
     decomposed = unicodedata.normalize('NFKD', name)
     stripped = ''.join(c for c in decomposed if not unicodedata.combining(c))
     if not stripped:
         return stripped
-    if stripped.isalpha():
-        return stripped.capitalize()
     return stripped[0].upper() + stripped[1:]
 
 
@@ -1467,11 +1474,12 @@ def _parse_reaction_side(side, equation):
     a multi-word compound to a short symbol first (A = ethylene, B =
     butadiene, then "2 A -> B"), exactly as on paper with A, B, C...
 
-    Every name is run through `_normalize_species_name()`, so "2
-    ethylene -> cyclobutane" and "2 Ethylene -> Cyclobutane" (or even
-    "2 ETHYLENE -> CYCLOBUTANE") are recognized as the exact same
-    reaction, and species are always stored/displayed as "Ethylene",
-    "Cyclobutane", etc.
+    Every name is run through `_normalize_species_name()` (accents
+    stripped, first letter forced uppercase). Recognizing "2 ethylene ->
+    cyclobutane" and "2 Ethylene -> Cyclobutane" (or "2 ETHYLENE ->
+    CYCLOBUTANE") as the exact same reaction -- without ever mangling a
+    short formula like "NO" or "HCl" in the process -- is handled
+    case-insensitively one level up, in `ReactionNetwork.add_reaction()`.
     """
     terms = {}
     for term in side.split("+"):
@@ -1579,6 +1587,7 @@ class ReactionNetwork:
         self.results = None
         self.verbose = verbose
         self._idx_of = {}
+        self._canon_of = {}   # case-insensitive species registry, see _canonical_species()
         self._initialized = True   # see __setattr__ below
 
     def __setattr__(self, name, value):
@@ -1614,6 +1623,35 @@ class ReactionNetwork:
             # net_B_only.results and net_mixed.results can now be compared
         """
         return _copy.deepcopy(self)
+
+    def _canonical_species(self, raw_name, register=True):
+        """Resolves a parsed/user-supplied species name to this network's
+        canonical spelling for that species, matching case-insensitively
+        (after `_normalize_species_name()`'s accent-stripping) against
+        every species already known to this network: "ethylene",
+        "ETHYLENE" and "Ethylene" all resolve to whichever spelling was
+        registered first, and so do "NO" and "no" -- without ever
+        lowercasing a letter the caller typed in uppercase (that was the
+        earlier bug: it turned the formula "NO" into "No", identical to
+        the symbol for Nobelium).
+
+        ``register=True`` (the default, used for a reaction's own
+        reactants/products): if this is the first time this species is
+        seen, its (accent-stripped, first-letter-capitalized) spelling
+        becomes the canonical one going forward. ``register=False`` (used
+        for `order`/`order_back`, which must refer to species already
+        declared by the very same reaction): an unseen name is returned
+        as-is, without being added to the registry -- it's about to fail
+        the "is this one of this reaction's reactants/products" check in
+        `add_reaction()` anyway, and shouldn't leave a stray entry behind.
+        """
+        name = _normalize_species_name(raw_name)
+        key = name.upper()
+        if key in self._canon_of:
+            return self._canon_of[key]
+        if register:
+            self._canon_of[key] = name
+        return name
 
     def add_reaction(self, equation, k_guess=None, kf_guess=None, kr_guess=None,
                       order=None, order_back=None):
@@ -1656,6 +1694,25 @@ class ReactionNetwork:
         automatically, in order of first appearance.
         """
         reactants, products, reversible = _parse_reaction(equation)
+
+        # Resolve every species name against this network's case-insensitive
+        # registry, so "ethylene"/"ETHYLENE"/"Ethylene" (or "NO"/"no") all
+        # land on the same species, however they were typed in a previous
+        # add_reaction() call -- see _canonical_species()'s docstring.
+        def _merge_canonical(terms):
+            merged = {}
+            for sp, c in terms.items():
+                canon = self._canonical_species(sp, register=True)
+                merged[canon] = merged.get(canon, 0) + c
+            return merged
+        reactants = _merge_canonical(reactants)
+        products = _merge_canonical(products)
+
+        if order is not None:
+            order = {self._canonical_species(sp, register=False): v for sp, v in order.items()}
+        if order_back is not None:
+            order_back = {self._canonical_species(sp, register=False): v
+                           for sp, v in order_back.items()}
 
         if order is not None and not set(order) <= set(reactants):
             raise ValueError(

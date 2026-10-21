@@ -38,6 +38,7 @@ This module contains three classes and one standalone function:
   * [4.1 Quick Start](kord-quickstart)
     * [4.1.1 Basic use](kord-quickstart-basic)
     * [4.1.2 Specific fit](kord-quickstart-specific)
+    * [4.1.3 With your own file](kord-quickstart-own)
   * [4.2 Principle](principle)
   * [4.3 Theoretical Model](theoretical-model)
   * [4.4 Advanced use](kord-advanced)
@@ -258,6 +259,34 @@ below) at one reference point, rather than always starting from an arbitrary
 constant. You can still impose your own starting value with `k_depart=...`
 if needed.
 
+**With your own file.** Where your file lives decides how to read it, and the
+difference between "Google Colab" and "my own computer" matters here, even
+if both look like a notebook in a browser: on Colab, the notebook runs on a
+Google machine, which cannot see the files of your PC.
+
+```python
+# On Google Colab: an upload button appears, pick your Excel file
+kb = kbasic()
+kb.read(colab=True)
+
+# On your own PC: give the name (or the full path) of the file
+kb = kbasic()
+kb.read("measurements.xlsx")           # file in the same folder as the notebook
+kb.read("C:/Users/me/data/kin.xlsx")   # or anywhere else, with its path
+```
+
+`kb.read(colab=True)` is a convenience built into `kbasic`. The same upload
+can be done in two explicit steps with the generic `colab_upload()` function
+(it returns the path of the uploaded file, which you can also pass to
+`pandas`):
+
+```python
+from pyphyschemtools import colab_upload
+
+path = colab_upload()    # upload button, returns the file path
+kb.read(path)            # same as kb.read(colab=True)
+```
+
 (kbasic-theory)=
 ### 3.4 Theory
 
@@ -357,6 +386,43 @@ Note that `fit()` itself never plots anything — it only computes and stores
 numbers in `study.results[order]`; `plot_all_fits()` (above) or
 `simulate_plot()` (just for the initial guesses, before any fit) are what
 draw a figure.
+
+(kord-quickstart-own)=
+#### 4.1.3 With your own file
+
+As for `kbasic` (see [3.3 Quick Start](kbasic-quickstart)), it depends on
+where the notebook runs. The file must follow the format described in
+[4.2.3 Input](input).
+
+```python
+from pyphyschemtools import KORD
+
+# On Google Colab: an upload button appears, pick your spreadsheet
+study = KORD.from_spreadsheet(exp_number=1, colab=True)
+
+# On your own PC: give the name (or the full path) of the file
+study = KORD.from_spreadsheet("my_kinetics.xlsx", exp_number=1)
+
+study.get_best_order()
+study.plot_all_fits()
+```
+
+The two-step version also works, with `colab_upload()`:
+
+```python
+from pyphyschemtools import KORD, colab_upload
+
+path = colab_upload()    # Colab only: upload button, returns the file path
+study = KORD.from_spreadsheet(path, exp_number=1)
+```
+
+And a line that works in both environments:
+
+```python
+import sys
+study = KORD.from_spreadsheet("my_kinetics.xlsx", exp_number=1,
+                              colab="google.colab" in sys.modules)
+```
 
 ---
 
@@ -798,8 +864,44 @@ shortcut lumped equation, if you want physically meaningful rate constants.
 (reaction-network-quickstart)=
 ### 5.2 Quick Start
 
-Three steps, in order: declare the reactions, set the initial concentrations,
-then either `fit()` against data or `simulate()`/`plot()` directly.
+Four steps, in order: read the experimental data, declare the reactions, set
+the initial concentrations, then either `fit()` against the data or
+`simulate()`/`plot()` directly.
+
+**Step 1: read the data.** `fit()` just needs two plain arrays, `t_exp` (time)
+and `Y_exp` (the measured quantity), so any spreadsheet can be read with
+`pandas`. Start with the bundled example file, which works everywhere (Colab
+or your own computer):
+
+```python
+import pandas as pd
+from pyphyschemtools import get_ppct_data
+
+file = get_ppct_data("Kinetics/consecutive_fit_data.ods")
+df = pd.read_excel(file, engine="odf")   # .ods needs the odfpy package
+display(df)
+t_exp = df["Time / min"].values
+Y_exp = df["Y"].values           # the intermediate, as actually observed
+```
+
+To use **your own file** (two columns: time, then the measured quantity),
+only the first lines change. The rest of the example is identical:
+
+```python
+# On Google Colab: an upload button appears, pick your file
+from pyphyschemtools import colab_upload
+file = colab_upload()
+
+# On your own PC: give the name (or the full path) of the file
+file = "my_kinetics.xlsx"
+
+df = pd.read_excel(file)          # for an .ods file: engine="odf"
+display(df)
+t_exp = df["Time / min"].values
+Y_exp = df["Y"].values           # the intermediate, as actually observed
+```
+
+**Steps 2 to 4: build the network and fit.**
 
 ```python
 from pyphyschemtools import ReactionNetwork
@@ -811,9 +913,14 @@ net.set_initial_conditions({"A": 1.0, "B": 0.0, "C": 0.0})
 
 # If only B is measured (e.g. it's the one colored/absorbing species):
 net.fit(t_exp, Y_exp, observed_species="B")
-net.plot(t_exp, Y_exp, time_unit="s")   # all three species + the experimental overlay
-net.summary()                          # fitted k1, k2 for each reaction
+net.plot(t_exp, Y_exp, time_unit="min")   # all three species + the experimental overlay
+net.summary()                             # fitted k1, k2 for each reaction
 ```
+
+The bundled file tracks the intermediate of an $A\rightarrow I\rightarrow P$
+mechanism, which is why it is declared here as `B` (the middle species); the
+time is in minutes, hence `time_unit="min"`. [5.10 Worked example 2](reaction-network-fit-example)
+runs the same fit with the species named $A$, $I$, $P$.
 
 `plot()` draws every species by default; pass `species=[...]` to zoom in on a
 subset — handy for a reactive intermediate whose concentration is orders of
@@ -866,16 +973,20 @@ order_back=...)` parses a plain chemical-equation string:
   `net.add_reaction("2 A -> B", ...)`.
 * Every name is **normalized** on parsing, so the same compound is always
   recognized as the same species no matter how it's typed across different
-  `add_reaction()` calls: accents are stripped, and a purely alphabetic name
-  is stored with only its first letter capitalized — `"ethylene"`,
-  `"Ethylene"`, `"ETHYLENE"` and `"éthylène"` all become the single species
-  `"Ethylene"`. A name containing a digit is treated as a chemical formula
-  rather than a spelled-out word, so only its first character is forced to
-  uppercase and the rest is left exactly as typed — `"O3"`, `"CO2"`, `"H2O"`
-  keep their case. This means `"2 ethylene -> cyclobutane"` and
-  `"Cyclobutane -> 2 ETHYLENE"` are recognized as the forward/backward of the
-  very same reaction between the very same two species, not four different
-  ones.
+  `add_reaction()` calls, case-insensitively — `"ethylene"`, `"Ethylene"`,
+  `"ETHYLENE"` and `"éthylène"` all resolve to the single species
+  "Ethylene" (accents are stripped, and the very first spelling seen
+  becomes the one used for the rest of the network). This matching is
+  purely about *recognizing* the same name typed differently — it never
+  lowercases a letter you actually typed in uppercase, precisely so that
+  a short formula with no digit in it, like `"NO"` (nitric oxide),
+  `"CO"`, `"OH"`, `"HCl"` or `"HCN"`, is never mistaken for a spelled-out
+  word and mangled into something like `"No"` (indistinguishable from the
+  element symbol for Nobelium). So `"2 ethylene -> cyclobutane"` and
+  `"Cyclobutane -> 2 ETHYLENE"` are recognized as the forward/backward of
+  the very same reaction between the very same two species, while
+  `"N2O5 -> NO2 + NO3"` keeps `"NO2"`/`"NO3"` exactly as written, however
+  later reactions spell them.
 * Terms are separated by `+`, with an optional leading integer stoichiometric
   coefficient: `"A + 2 B -> C"`, or `"2 ethylene -> cyclobutane"` directly if
   you'd rather not alias.

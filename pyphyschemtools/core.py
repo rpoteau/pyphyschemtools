@@ -204,6 +204,27 @@ def save_data(df, path_with_name: str, **kwargs):
     
     print(f"✅ Data saved to: {full_path}")
 
+def save_text(path_with_name: str, text: str, encoding: str = "utf-8"):
+    """
+    Saves a text string (SVG, HTML, JSON, txt, ...) to a file, automatically
+    creating missing directories. Useful for content that is neither a
+    matplotlib figure nor a DataFrame, such as the SVG produced by RDKit's
+    FrameToGridImage / MolsToGridImage.
+
+    Args:
+        path_with_name (str): The path and filename (e.g., "images/grid.svg").
+        text (str): The content to write.
+        encoding (str): File encoding. Defaults to "utf-8".
+    """
+    from pathlib import Path
+
+    full_path = Path(path_with_name)
+    if full_path.parent:
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+
+    full_path.write_text(text, encoding=encoding)
+    print(f"✅ Text saved to: {full_path}")
+
 # --------------------------------------------------------------
 import shutil
 import sys

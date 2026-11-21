@@ -240,7 +240,7 @@ class FunctionalGroupExplorer:
         except: pass
         
         try:
-            if mol.GetNumConformers() == 0: Chem.Compute2DCoords(mol)
+            if mol.GetNumConformers() == 0: AllChem.Compute2DCoords(mol)
         except: pass
 
         if highlightAtoms:

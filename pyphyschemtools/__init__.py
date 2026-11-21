@@ -3,7 +3,7 @@
 The pyphyschemtools library provides a comprehensive suite of utilities for Physical Chemistry, ranging from spectroscopic unit management to kinetic modeling and cheminformatics.
 """
 
-__version__ = "0.12.7"
+__version__ = "0.12.8"
 __last_update__ = "2026-11-21"
 
 import importlib
@@ -13,7 +13,7 @@ from importlib import resources
 
 # 1. FAST IMPORTS
 from .visualID_Eng import fg, hl, bg, color, init, apply_css_style, chrono_start, chrono_stop, chrono_show, end
-from .core import centerTitle, centertxt, crop_images, save_fig, save_data, get_qc_examples
+from .core import centerTitle, centertxt, crop_images, save_fig, save_data, save_text, get_qc_examples
 
 # Explicitly define what is already imported so that __getattr__ does not interfere.
 _EXPLICIT_EXPORTS = {

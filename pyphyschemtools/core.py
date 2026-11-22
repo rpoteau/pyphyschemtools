@@ -173,8 +173,9 @@ def save_fig(path_with_name: str, fig=None, dpi: int = 300, **kwargs):
     target = fig if fig is not None else plt.gcf()
 
     # 4. Save the figure
-    target.savefig(full_path, dpi=dpi, bbox_inches='tight', **kwargs)
-    print(f"✅ Figure saved to: {full_path}")
+    bbox_inches = kwargs.pop("bbox_inches", "tight")
+    target.savefig(full_path, dpi=dpi, bbox_inches=bbox_inches, **kwargs)
+    print(f"✅ Figure saved to: {full_path}") 
 
 def save_data(df, path_with_name: str, **kwargs):
     """

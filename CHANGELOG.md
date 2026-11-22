@@ -12,10 +12,15 @@
 
 # Changelog pyphyschemtools
 
-## [0.12.7] - 2026-11-21 "save_txt
+## [0.12.9] - 2026-11-22 "core/save_fig"
+
+### Fixed
+- `save_fig` in **`core.py`**: `bbox_inches` was hard-coded to `'tight'` in the call to `savefig`, so it could not be overridden — and passing it among the `**kwargs` raised `TypeError: got multiple values for keyword argument 'bbox_inches'`. It is now read from the kwargs, `'tight'` remaining the default, which leaves the behaviour of existing code unchanged
+
+## [0.12.7], [0.12.8] - 2026-11-21 "save_txt"
 
 ### Added
-- `save_text(path_with_name, text, encoding="utf-8")`: writes a text string to a file, creating any missing directories — the text counterpart of `save_fig` and `save_data`. Intended for content that is neither a matplotlib figure nor a DataFrame: the SVG returned by RDKit's `FrameToGridImage` / `MolsToGridImage`, an HTML snippet, a csv-like block built by hand. Removes the need for an explicit `Path(...).mkdir(parents=True, exist_ok=True)` before every `open(...)`/`write_text(...)`, which was a recurring source of `FileNotFoundError` on Google Colab, where the repository tree is not cloned and only fetched files create their folders
+- `save_text(path_with_name, text, encoding="utf-8")` in **`core.py`**: writes a text string to a file, creating any missing directories — the text counterpart of `save_fig` and `save_data`. Intended for content that is neither a matplotlib figure nor a DataFrame: the SVG returned by RDKit's `FrameToGridImage` / `MolsToGridImage`, an HTML snippet, a csv-like block built by hand. Removes the need for an explicit `Path(...).mkdir(parents=True, exist_ok=True)` before every `open(...)`/`write_text(...)`, which was a recurring source of `FileNotFoundError` on Google Colab, where the repository tree is not cloned and only fetched files create their folders
 
 ## [0.12.5]-[0.12.6] - 2026-10-21 "kinetics.py: fix `ReactionNetwork` species-name normalization & Kinetics.md"
 
